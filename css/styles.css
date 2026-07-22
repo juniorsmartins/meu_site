@@ -48,7 +48,7 @@ i {
     background-size: cover; /* Ajusta a imagem para cobrir todo o elemento */
     background-position: center; 
     color: var(--primary-text-color);
-    margin-bottom: 2rem; /* Adiciona uma margem inferior ao cabeçalho */
+    margin-bottom: 1rem; /* Adiciona uma margem inferior ao cabeçalho */
     position: relative; /* Define o posicionamento como relativo para permitir o posicionamento absoluto do conteúdo interno */
 }
 
@@ -127,6 +127,89 @@ i {
 .dot.active {
     background-color: var(--main-color); /* Define a cor de fundo do ponto ativo */
 }
+
+/* Seção de Áreas de Atuação */
+.text-image-section {
+    display: flex; /* Define o layout como flexível */
+    flex-wrap: wrap; /* Permite que os elementos internos quebrem para a próxima linha se necessário */
+    gap: 1rem; /* Adiciona um espaçamento entre os elementos internos */
+}
+
+.text-container {
+    flex: 2 1 0; /* Define a flexibilidade do contêiner de texto */
+    display: flex; /* Define o layout como flexível */
+    gap: 2rem; /* Adiciona um espaçamento entre os elementos internos */
+    flex-direction: column; /* Define a direção dos elementos internos como coluna */
+    justify-content: center; /* Alinha os elementos internos verticalmente ao centro */
+    text-align: right; /* Alinha o texto à direita */
+}
+
+.section-subtitle {
+    text-transform: uppercase; /* Transforma o texto em letras maiúsculas */
+    font-weight: bold; /* Define a espessura da fonte como semi-negrito */
+    color: var(--main-color); /* Define a cor do texto do subtítulo */
+}
+
+.section-title {
+    font-size: 2rem; /* Define o tamanho da fonte do título da seção */
+    color: var(--secondary-text-color); /* Define a cor do texto do título da seção */
+}
+
+.btn {
+    padding: 1.2rem 1.8rem; /* Adiciona um espaçamento interno ao botão */
+    text-transform: uppercase; /* Transforma o texto do botão em letras maiúsculas */
+    font-size: 1.4rem; /* Define o tamanho da fonte do botão */
+    font-weight: bold; /* Define a espessura da fonte do botão como semi-negrito */
+    background-color: var(--main-color); /* Define a cor de fundo do botão */
+    color: var(--primary-text-color); /* Define a cor do texto do botão */
+    align-self: end; /* Alinha o botão à direita do contêiner de texto */
+}
+
+.image-container {
+    flex: 1 1 300px; /* Define a flexibilidade do contêiner de imagem */
+    position: relative; /* Define o posicionamento como relativo para permitir a sobreposição */
+}
+
+.image-container i {
+    position: absolute; /* Define o posicionamento como absoluto para permitir a sobreposição */
+}
+
+#other-services {
+    width: 100%; /* Define a largura da seção de outros serviços como 100% */ 
+    display: flex; /* Define o layout como flexível */
+    gap: 2rem; /* Adiciona um espaçamento entre os elementos internos */
+    padding: 2rem; /* Adiciona um espaçamento interno à seção de outros serviços */
+}
+
+.service {
+    position: relative; /* Define o posicionamento como relativo para permitir a sobreposição */
+}
+
+.service i {
+    position: absolute; /* Define o posicionamento como absoluto para permitir a sobreposição */
+    left: 0; /* Define a posição horizontal do ícone */
+    top: 0; /* Define a posição vertical do ícone */
+    padding: 1rem; /* Adiciona um espaçamento interno ao ícone */
+    font-size: 1.5rem; /* Define o tamanho da fonte do ícone */
+}
+
+.service-info {
+    background-color: var(--tertiary-color); /* Define a cor de fundo das informações do serviço */
+    padding: 2rem 1.4rem; /* Adiciona um espaçamento interno às informações do serviço */
+    min-height: 250px; /* Define a altura mínima das informações do serviço como 100% */
+    margin-top: -3rem; /* Adiciona uma margem superior negativa para sobrepor o ícone */
+    z-index: 2; /* Define a ordem de empilhamento das informações do serviço */
+    position: relative; /* Define o posicionamento como relativo para permitir a sobreposição */
+}
+
+.service h4 {
+    font-size: 1.8rem; /* Define o tamanho da fonte do título do serviço */
+    margin-bottom: 1rem; /* Adiciona uma margem inferior ao título do serviço */
+    text-transform: uppercase; /* Transforma o texto do título do serviço em letras maiúsculas */
+}
+
+
+
 
 
 
