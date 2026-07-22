@@ -1,0 +1,132 @@
+/* Geral */
+
+/* Variáveis CSS */
+:root {
+    --main-color: #d92123;
+    --primary-text-color: #FFF;
+    --secondary-text-color: #191919;
+    --secondary-color: #868686;
+    --tertiary-color: #eff3f4;
+}
+
+/* Reset de estilos */
+* { 
+    font-family: Inter;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* Estilo para links */
+a { 
+    text-decoration: none;
+}
+
+/* Estilo para imagens */
+img { 
+    max-width: 100%;
+    display: block;
+}
+
+/* Estilo para inputs */
+input [type="submit"] {
+    cursor: pointer;
+}
+
+/* Estilo para ícones */
+i {
+    background-color: var(--main-color);
+    color: var(--primary-text-color);
+    font-size: 2.5rem;
+    padding: 2rem;
+}
+
+/* Cabeçalho e Banner */
+#header {
+    min-height: 90vh; /* Define a altura mínima do cabeçalho como 90% da altura da viewport */
+    background-image: url('../img/banner1.png');
+    background-size: cover; /* Ajusta a imagem para cobrir todo o elemento */
+    background-position: center; 
+    color: var(--primary-text-color);
+    margin-bottom: 2rem; /* Adiciona uma margem inferior ao cabeçalho */
+    position: relative; /* Define o posicionamento como relativo para permitir o posicionamento absoluto do conteúdo interno */
+}
+
+#inner-header {
+    display: flex; /* Define o layout como flexível */
+    justify-content: space-between; /* Distribui os elementos com espaço entre eles */
+    align-items: center; /* Alinha os elementos verticalmente ao centro */
+}
+
+#brand {
+    background-color: var(--main-color);
+    padding: 1rem;
+}
+
+#navbar {
+    display: flex; /* Define o layout como flexível */
+    gap: 4rem; /* Adiciona um espaçamento entre os itens do menu */
+    text-transform: uppercase; /* Transforma o texto em letras maiúsculas */
+    margin-right: 2rem; /* Adiciona uma margem à direita do menu */
+}
+
+#navbar a {
+    color: var(--primary-text-color); /* Define a cor do texto dos links do menu */
+    font-weight: 600; /* Define a espessura da fonte como semi-negrito */
+    padding: 1rem; /* Adiciona um espaçamento interno aos links do menu */
+}
+
+.banner {
+    max-width: 50%; /* Define a largura máxima do banner */
+    padding: 4rem; /* Adiciona um espaçamento interno ao banner */
+    opacity: 0; /* Define a opacidade dos banners no geral */
+    position: absolute; /* Define o posicionamento como absoluto para permitir a sobreposição */
+    transition: 0.6s; /* Adiciona uma transição suave para a opacidade */
+}
+
+.banner.active {
+    opacity: 1; /* Define a opacidade do banner ativo */
+}
+
+.banner h2 {
+    font-size: 4rem; /* Define o tamanho da fonte do título do banner */
+    margin-bottom: 1.2rem; /* Adiciona uma margem inferior ao título do banner */
+    position: relative; /* Define o posicionamento como relativo para permitir a sobreposição */
+    z-index: 2; /* Define a ordem de empilhamento do título do banner */
+}
+
+.banner p {
+    font-size: 1.5rem; /* Define o tamanho da fonte do parágrafo do banner */
+}
+
+.square {
+    display: block; /* Define o elemento como bloco */
+    width: 150px; /* Define a largura do quadrado */
+    height: 150px; /* Define a altura do quadrado */
+    background-color: var(--main-color); /* Define a cor de fundo do quadrado */
+    position: absolute; /* Define o posicionamento como absoluto para permitir a sobreposição */
+    z-index: 1; /* Define a ordem de empilhamento do quadrado */
+    left: 20px; /* Define a posição horizontal do quadrado */
+    top: 40px; /* Define a posição vertical do quadrado */
+}
+
+.dots {
+    display: flex; /* Define o layout como flexível */
+    gap: 2rem; /* Adiciona um espaçamento entre os pontos */
+    position: absolute; /* Define o posicionamento como absoluto para permitir a sobreposição */
+    bottom: 3rem; /* Define a posição vertical dos pontos */
+    left: 3rem; /* Define a posição horizontal dos pontos */
+}
+
+.dot {
+    width: 20px; /* Define a largura do ponto */
+    height: 20px; /* Define a altura do ponto */
+    background-color: var(--secondary-color); /* Define a cor de fundo do ponto */
+}
+
+.dot.active {
+    background-color: var(--main-color); /* Define a cor de fundo do ponto ativo */
+}
+
+
+
