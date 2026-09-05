@@ -30,11 +30,6 @@ img {
     display: block;
 }
 
-/* Estilo para inputs */
-input [type="submit"] {
-    cursor: pointer;
-}
-
 /* Estilo para ícones */
 i {
     background-color: var(--cor-principal-dois);
@@ -43,14 +38,11 @@ i {
     padding: 2rem;
 }
 
-/* Cabeçalho e Banner */
+/* Cabeçalho */
 #header {
     width: 100%; /* Define a largura do cabeçalho como 100% da largura da viewport */
     min-height: 10vh; /* Define a altura mínima do cabeçalho como 90% da altura da viewport */
     background-color: var(--cor-principal-um);
-/*    background-image: url('../img/banner1.png');
-/*    background-size: cover; /* Ajusta a imagem para cobrir todo o elemento */
-    background-position: center; 
     color: var(--primary-text-color);
     margin-bottom: 1rem; /* Adiciona uma margem inferior ao cabeçalho */
     padding: 0 2%; /* Adiciona um espaçamento interno horizontal ao cabeçalho */
@@ -79,40 +71,6 @@ i {
 .logo {
     background-color: var(--cor-principal-tres);
     margin: 0.5rem;
-}
-
-.banner {
-    max-width: 50%; /* Define a largura máxima do banner */
-    padding: 4rem; /* Adiciona um espaçamento interno ao banner */
-    opacity: 0; /* Define a opacidade dos banners no geral */
-    position: absolute; /* Define o posicionamento como absoluto para permitir a sobreposição */
-    transition: 0.6s; /* Adiciona uma transição suave para a opacidade */
-}
-
-.banner.active {
-    opacity: 1; /* Define a opacidade do banner ativo */
-}
-
-.banner h2 {
-    font-size: 4rem; /* Define o tamanho da fonte do título do banner */
-    margin-bottom: 1.2rem; /* Adiciona uma margem inferior ao título do banner */
-    position: relative; /* Define o posicionamento como relativo para permitir a sobreposição */
-    z-index: 2; /* Define a ordem de empilhamento do título do banner */
-}
-
-.banner p {
-    font-size: 1.5rem; /* Define o tamanho da fonte do parágrafo do banner */
-}
-
-.square {
-    display: block; /* Define o elemento como bloco */
-    width: 150px; /* Define a largura do quadrado */
-    height: 150px; /* Define a altura do quadrado */
-    background-color: var(--cor-principal-dois); /* Define a cor de fundo do quadrado */
-    position: absolute; /* Define o posicionamento como absoluto para permitir a sobreposição */
-    z-index: 1; /* Define a ordem de empilhamento do quadrado */
-    left: 20px; /* Define a posição horizontal do quadrado */
-    top: 40px; /* Define a posição vertical do quadrado */
 }
 
 /* Seção de Áreas de Atuação */
