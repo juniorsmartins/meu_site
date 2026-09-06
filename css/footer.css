@@ -1,0 +1,31 @@
+#footer {
+    width: 100%; /* Define a largura do rodapé como 100% da largura da viewport */
+    background-color: var(--cor-principal-um); /* Define a cor de fundo do rodapé */
+    color: var(--primary-text-color); /* Define a cor do texto do rodapé */
+    padding: 2rem; /* Adiciona um espaçamento interno ao rodapé */
+}
+
+.footer-content {
+    text-align: center; /* Alinha o conteúdo do rodapé ao centro */
+}
+
+.footer-social {
+    display: flex; /* Define o layout como flexível */
+    justify-content: center; /* Alinha os elementos internos ao centro */
+    gap: 0.5rem; /* Adiciona um espaçamento entre os elementos internos */
+    margin-top: 2rem; /* Adiciona uma margem superior ao rodapé */
+}
+
+a i {
+    font-size: 1rem; /* Define o tamanho da fonte dos ícones do rodapé */
+    margin: 0.5rem; /* Adiciona uma margem ao redor dos ícones do rodapé */;
+    padding: 0.5rem; /* Adiciona um espaçamento interno aos ícones do rodapé */
+}
+
+
+
+
+
+
+
+

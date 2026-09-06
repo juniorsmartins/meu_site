@@ -1,0 +1,45 @@
+/* Geral */
+
+/* Variáveis CSS */
+:root {
+    --cor-principal-um: #191919;
+    --cor-principal-dois: #188ceb;
+    --cor-principal-tres: #f5f5f5;
+    --primary-text-color: #FFF;
+    --secondary-text-color: #191919;
+    --secondary-color: #868686;
+    --tertiary-color: #eff3f4;
+}
+
+/* Reset de estilos */
+* { 
+    font-family: "Outfit", sans-serif;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* Estilo para links */
+a { 
+    text-decoration: none;
+}
+
+/* Estilo para imagens */
+img { 
+    max-width: 100%;
+    display: block;
+}
+
+/* Estilo para ícones */
+i {
+    background-color: var(--cor-principal-dois);
+    color: var(--primary-text-color);
+    font-size: 2.5rem;
+    padding: 2rem;
+}
+
+
+
+
+
+
