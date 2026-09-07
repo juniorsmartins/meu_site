@@ -7,20 +7,23 @@
     --cor-principal-tres: #f5f5f5;
     --primary-text-color: #FFF;
     --secondary-text-color: #191919;
-    --secondary-color: #868686;
-    --tertiary-color: #eff3f4;
+    --tertiary-text-color: #868686;
+    --quaternary-text-color: #f30b0b;
+    --primary-button-color: #e40c0c;
+    --cor-linha-divisoria: #7b7d81;
 }
 
 /* Reset de estilos */
 * { 
-    font-family: "Outfit", sans-serif;
+    font-family: "Playfair Display", serif;
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
 
-/* Estilo para links */
-a { 
+/* Estilo para links e botões */
+a, button { 
+    font-family: "Merriweather", serif;
     text-decoration: none;
 }
 
@@ -37,9 +40,6 @@ i {
     font-size: 2.5rem;
     padding: 2rem;
 }
-
-
-
 
 
 

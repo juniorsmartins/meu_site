@@ -5,32 +5,85 @@
     background-color: var(--cor-principal-um);
     color: var(--primary-text-color);
     margin-bottom: 1rem; /* Adiciona uma margem inferior ao cabeçalho */
-    padding: 0 2%; /* Adiciona um espaçamento interno horizontal ao cabeçalho */
     position: relative; /* Define o posicionamento como relativo para permitir o posicionamento absoluto do conteúdo interno */
+}
+
+#header-topo {
+    display: flex; /* Define o layout como flexível */
+    justify-content: flex-start; /* Alinha os elementos horizontalmente ao início */
+    align-items: flex-start; /* Alinha os elementos verticalmente ao início */
+    padding: 1rem 2%; /* Adiciona um espaçamento interno ao topo do cabeçalho */
+    border-bottom: 0.5px solid var(--cor-linha-divisoria); /* Adiciona uma borda inferior ao topo do cabeçalho */
+}
+
+#header-topo p {
+    color: var(--tertiary-text-color); /* Define a cor do texto do parágrafo */
+    margin-right: 1.5rem; /* Adiciona uma margem à direita do parágrafo */
+    font-size: 1rem; /* Define o tamanho da fonte do parágrafo */
+}
+
+#header-apresentacao {
+    display: flex; /* Define o layout como flexível */
+    justify-content: space-between; /* Distribui os elementos com espaço entre eles */  
+    align-items: center; /* Alinha os elementos verticalmente ao centro */
+}
+
+.header-apresentacao-itens {
+    text-align: center; /* Alinha o texto ao centro */
+    margin: 2rem;
+}
+
+#header-apresentacao-nome-titulo {
+    font-size: 3.5rem;
+    color: var(--primary-text-color);
+    text-transform: uppercase; /* Transforma o texto em letras maiúsculas */
+}
+
+#header-apresentacao-nome-subtitulo {
+    font-family: "Montserrat Alternates", sans-serif;
+    font-weight: 300;
+    font-size: 1.2rem;
+    color: var(--quaternary-text-color);
+}
+
+.btn-entrar {
+    background-color: var(--primary-button-color);
+    color: var(--primary-text-color);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 0.5rem 1.2rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.btn-entrar:hover {
+    opacity: 0.9;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
 }
 
 #header-menu {
     display: flex; /* Define o layout como flexível */
     justify-content: space-between; /* Distribui os elementos com espaço entre eles */
     align-items: center; /* Alinha os elementos verticalmente ao centro */
+    border-top: 0.5px solid var(--cor-linha-divisoria); /* Adiciona uma borda superior ao menu */
 }
 
 #header-menu-navbar {
     display: flex; /* Define o layout como flexível */
-    gap: 4rem; /* Adiciona um espaçamento entre os itens do menu */
+    justify-content: center; /* Alinha os elementos horizontalmente ao centro */
+    align-items: center; /* Alinha os elementos verticalmente ao centro */
+    gap: 3rem; /* Adiciona um espaçamento entre os itens do menu */
+    width: 100%; /* Define a largura do menu como 100% da largura do cabeçalho */
     text-transform: uppercase; /* Transforma o texto em letras maiúsculas */
-    margin-right: 2rem; /* Adiciona uma margem à direita do menu */
+    margin: 0 auto; /* Centraliza o menu horizontalmente */
 }
 
 #header-menu-navbar a {
     color: var(--primary-text-color); /* Define a cor do texto dos links do menu */
     font-weight: 600; /* Define a espessura da fonte como semi-negrito */
-    padding: 1rem; /* Adiciona um espaçamento interno aos links do menu */
+    padding: 0.75rem; /* Adiciona um espaçamento interno aos links do menu */
 }
-
-.logo {
-    background-color: var(--cor-principal-tres);
-    margin: 0.5rem;
-}
-
 
