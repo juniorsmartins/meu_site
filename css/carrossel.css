@@ -1,5 +1,56 @@
 #noticias-1 {
-    padding: 2rem; /* Adiciona um espaçamento interno */
+    padding: 1rem; /* Adiciona um espaçamento interno */
 }
 
+#noticias-wraper-1 {
+    display: flex; /* Define o contêiner como flexível */
+    width: 100%; /* Ocupa toda a largura disponível */
+}
+
+#destaque-principal {
+    width: 60%; /* Ocupa porcentagem da largura do contêiner */
+    padding-top: 20%; /* Adiciona espaçamento superior */
+    background-color: var(--cor-principal-um); /* Cor de fundo para destaque */
+    border: 1px solid rgb(252, 248, 248); /* Borda */
+    position: relative; /* Permite posicionamento relativo para elementos internos */
+}
+
+#destaque-principal-1 {
+    left: 0; /* Alinha à esquerda */
+    top: 0; /* Alinha ao topo */
+    position: absolute; /* Permite posicionamento absoluto em relação ao contêiner pai */
+    width: 100%; /* Ocupa toda a largura do contêiner pai */
+    height: 100%; /* Ocupa toda a altura do contêiner pai */
+    background-size: cover; /* Ajusta a imagem de fundo para cobrir o contêiner */
+    background-position: center; /* Centraliza a imagem de fundo */
+}
+
+#destaque-principal-1 h3 {
+    padding: 10px; /* Adiciona espaçamento interno */
+    color: var(--primary-text-color); /* Cor do texto */
+}
+
+#destaque-secundario {
+    width: 40%; /* Ocupa porcentagem da largura do contêiner */
+    display: flex; /* Define o contêiner como flexível */
+    flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
+}
+
+.destaque-secundario-1 {
+    width: 50%; /* Ocupa metade da largura do contêiner pai */
+    padding-top: 30%; /* Adiciona espaçamento superior */
+    background-size: cover; /* Ajusta a imagem de fundo para cobrir o contêiner */
+    background-position: center; /* Centraliza a imagem de fundo */
+    border: 1px solid rgb(252, 248, 248); /* Borda */
+    background-color: var(--cor-principal-um); /* Cor de fundo */
+    position: relative; /* Permite posicionamento relativo para elementos internos */
+}
+
+.destaque-secundario-1 h3 {
+    padding: 10px; /* Adiciona espaçamento interno */
+    color: var(--primary-text-color); /* Cor do texto */
+    width: 100%; /* Ocupa toda a largura do contêiner */
+    height: 100%; /* Ocupa toda a altura do contêiner */
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente para melhor legibilidade */
+}
 
