@@ -4,7 +4,7 @@
     min-height: 10vh; /* Define a altura mínima do cabeçalho como 90% da altura da viewport */
     background-color: var(--cor-principal-um);
     color: var(--primary-text-color);
-    margin-bottom: 1rem; /* Adiciona uma margem inferior ao cabeçalho */
+    margin-bottom: 0.5rem; /* Adiciona uma margem inferior ao cabeçalho */
     position: relative; /* Define o posicionamento como relativo para permitir o posicionamento absoluto do conteúdo interno */
 }
 

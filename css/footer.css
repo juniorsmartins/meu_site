@@ -2,7 +2,7 @@
     width: 100%; /* Define a largura do rodapé como 100% da largura da viewport */
     background-color: var(--cor-principal-um); /* Define a cor de fundo do rodapé */
     color: var(--primary-text-color); /* Define a cor do texto do rodapé */
-    margin-top: 1rem; /* Adiciona uma margem superior ao rodapé */
+    margin-top: 0.5rem; /* Adiciona uma margem superior ao rodapé */
     padding: 2rem; /* Adiciona um espaçamento interno ao rodapé */
 }
 
