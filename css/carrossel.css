@@ -25,6 +25,7 @@
     position: absolute; /* Permite posicionamento absoluto em relação ao contêiner pai */
     display: flex;
     align-items: flex-end;
+    cursor: pointer; /* Altera o cursor para indicar interatividade */
 }
 
 #destaque-principal-1 h2 {
@@ -49,6 +50,7 @@
     border: 1px solid rgb(252, 248, 248); /* Borda */
     background-color: var(--cor-principal-um); /* Cor de fundo */
     position: relative; /* Permite posicionamento relativo para elementos internos */
+    cursor: pointer; /* Altera o cursor para indicar interatividade */
 }
 
 .destaque-secundario-1 h3, .destaque-terceario-1 h3 {
@@ -72,5 +74,6 @@
     border: 1px solid rgb(252, 248, 248); /* Borda */
     background-color: var(--cor-principal-um); /* Cor de fundo */
     position: relative; /* Permite posicionamento relativo para elementos internos */
+    cursor: pointer; /* Altera o cursor para indicar interatividade */
 }
 
