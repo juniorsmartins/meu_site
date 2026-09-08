@@ -1,0 +1,45 @@
+#noticias-2 {
+    margin: 1.5rem 1rem; /* Adiciona margem superior e inferior */
+}
+
+.noticias-por-editoria {
+    display: flex; /* Define o contêiner como flexível */
+    width: 100%; /* Ocupa toda a largura disponível */
+    flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
+}
+
+.noticias-por-editoria h2 {
+    position: relative;
+    display: flex;
+    color: var(--quaternary-text-color); /* Cor do texto */
+    letter-spacing: 0.04em; /* Espaçamento entre letras */
+}
+
+.noticias-por-editoria h2::after {
+    content: ""; /* Conteúdo vazio para o pseudo-elemento */
+    position: absolute; /* Posicionamento absoluto em relação ao elemento pai */
+    width: 100%; /* Ocupa toda a largura do elemento pai */
+    height: 2px; /* Define a altura da linha */
+    background-color: var(--quaternary-text-color); /* Cor de fundo */
+    border-radius: 2px; /* Arredonda os cantos da borda */
+}
+
+.noticias-por-editoria-1 {
+    width: 80%; /* Ocupa metade da largura do contêiner pai */
+    margin: 0.75rem; /* Adiciona margem ao redor do contêiner */
+    background-size: cover; /* Ajusta a imagem de fundo para cobrir o contêiner */
+    background-position: center; /* Centraliza a imagem de fundo */
+    border: 1px solid rgb(252, 248, 248); /* Borda */
+    position: relative; /* Permite posicionamento relativo para elementos internos */
+    cursor: pointer; /* Altera o cursor para indicar interatividade */
+}
+
+#noticias-por-editoria-1 h3 {
+    padding: 10px; /* Adiciona espaçamento interno */
+    color: var(--primary-text-color); /* Cor do texto */
+    width: 100%; /* Ocupa toda a largura do contêiner */
+    height: 100%; /* Ocupa toda a altura do contêiner */
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente para melhor legibilidade */
+}
+
+
