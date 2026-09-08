@@ -2,7 +2,7 @@
     margin: 1.5rem 1rem; /* Adiciona margem superior e inferior */
 }
 
-#noticias-wraper-1 {
+#noticias-wraper {
     display: flex; /* Define o contêiner como flexível */
     width: 100%; /* Ocupa toda a largura disponível */
 }
@@ -51,11 +51,26 @@
     position: relative; /* Permite posicionamento relativo para elementos internos */
 }
 
-.destaque-secundario-1 h3 {
+.destaque-secundario-1 h3, .destaque-terceario-1 h3 {
     padding: 10px; /* Adiciona espaçamento interno */
     color: var(--primary-text-color); /* Cor do texto */
     width: 100%; /* Ocupa toda a largura do contêiner */
     height: 100%; /* Ocupa toda a altura do contêiner */
     background-color: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente para melhor legibilidade */
+}
+
+#destaque-terceario {
+    width: 100%; /* Ocupa porcentagem da largura do contêiner */
+    display: flex; /* Define o contêiner como flexível */
+}
+
+.destaque-terceario-1 {
+    width: 100%; /* Ocupa metade da largura do contêiner pai */
+    padding-top: 10%; /* Adiciona espaçamento superior */
+    background-size: cover; /* Ajusta a imagem de fundo para cobrir o contêiner */
+    background-position: center; /* Centraliza a imagem de fundo */
+    border: 1px solid rgb(252, 248, 248); /* Borda */
+    background-color: var(--cor-principal-um); /* Cor de fundo */
+    position: relative; /* Permite posicionamento relativo para elementos internos */
 }
 
