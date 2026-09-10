@@ -33,7 +33,7 @@
     width: 100%; /* Ocupa toda a largura do contêiner */
     padding: 10px; /* Adiciona espaçamento interno */
     color: var(--primary-text-color); /* Cor do texto */
-    background-color: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente para melhor legibilidade */
+    background-color: var(--cor-transparencia); /* Fundo semi-transparente para melhor legibilidade */
 }
 
 #destaque-secundario {
@@ -58,7 +58,7 @@
     color: var(--primary-text-color); /* Cor do texto */
     width: 100%; /* Ocupa toda a largura do contêiner */
     height: 100%; /* Ocupa toda a altura do contêiner */
-    background-color: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente para melhor legibilidade */
+    background-color: var(--cor-transparencia); /* Fundo semi-transparente para melhor legibilidade */
 }
 
 #destaque-terceario {

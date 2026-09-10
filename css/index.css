@@ -11,6 +11,7 @@
     --quaternary-text-color: #f30b0b;
     --primary-button-color: #e40c0c;
     --cor-linha-divisoria: #7b7d81;
+    --cor-transparencia: rgba(0, 0, 0, 0.5); 
 }
 
 /* Reset de estilos */
