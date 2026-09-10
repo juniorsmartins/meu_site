@@ -2,7 +2,7 @@
     margin: 1.5rem 1rem; /* Adiciona margem superior e inferior */
 }
 
-#noticias-wraper {
+.noticias-wraper-1 {
     display: flex; /* Define o contêiner como flexível */
     width: 100%; /* Ocupa toda a largura disponível */
 }
