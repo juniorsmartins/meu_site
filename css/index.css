@@ -14,12 +14,27 @@
     --cor-transparencia: rgba(0, 0, 0, 0.5); 
 }
 
-/* Reset de estilos */
+/* Reset de estilos - IMPORTANTE */
 * { 
     font-family: "Playfair Display", serif;
     padding: 0; /* Remove padding padrão */
     margin: 0; /* Remove margin padrão */
     box-sizing: border-box; /* Inclui padding e border na largura e altura totais */
+}
+
+/* Estilo para o corpo */
+body {
+    width: 100vw; /* Define a largura do corpo como 100% da largura da viewport */
+    height: 100vh; /* Define a altura do corpo como 100% da altura da viewport */
+}
+
+.flex {
+    display: flex; /* Define o layout como flexível */
+}
+
+.center {
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
 }
 
 /* Estilo para links e botões */
