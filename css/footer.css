@@ -11,8 +11,6 @@
 }
 
 .footer-social {
-    display: flex; /* Define o layout como flexível */
-    justify-content: center; /* Alinha os elementos internos ao centro */
     gap: 0.5rem; /* Adiciona um espaçamento entre os elementos internos */
     margin-top: 2rem; /* Adiciona uma margem superior ao rodapé */
 }

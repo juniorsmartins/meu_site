@@ -9,21 +9,14 @@
 }
 
 #header-topo {
-    justify-content: flex-start; /* Alinha os elementos horizontalmente ao início */
-    align-items: flex-start; /* Alinha os elementos verticalmente ao início */
     padding: 0.5rem 2rem; /* Adiciona um espaçamento interno ao topo do cabeçalho */
     border-bottom: 0.05rem solid var(--cor-linha-divisoria); /* Adiciona uma borda inferior ao topo do cabeçalho */
 }
 
 #header-topo p {
-    color: var(--tertiary-text-color); /* Define a cor do texto do parágrafo */
     margin-right: 2rem; /* Adiciona uma margem à direita do parágrafo */
     font-size: 1rem; /* Define o tamanho da fonte do parágrafo */
-}
-
-#header-apresentacao {
-    justify-content: space-between; /* Distribui os elementos com espaço entre eles */  
-    align-items: center; /* Alinha os elementos verticalmente ao centro */
+    color: var(--tertiary-text-color); /* Define a cor do texto do parágrafo */
 }
 
 .header-apresentacao-itens {
