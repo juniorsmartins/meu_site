@@ -16,15 +16,15 @@
 /* Reset de estilos */
 * { 
     font-family: "Playfair Display", serif;
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+    padding: 0; /* Remove padding padrão */
+    margin: 0; /* Remove margin padrão */
+    box-sizing: border-box; /* Inclui padding e border na largura e altura totais */
 }
 
 /* Estilo para links e botões */
 a, button { 
     font-family: "Merriweather", serif;
-    text-decoration: none;
+    text-decoration: none; /* Remove sublinhado padrão de links e botões */
 }
 
 /* Estilo para imagens */
