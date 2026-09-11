@@ -14,7 +14,6 @@
 
 #header-topo p {
     margin-right: 2rem; /* Adiciona uma margem à direita do parágrafo */
-    font-size: 1rem; /* Define o tamanho da fonte do parágrafo */
     color: var(--tertiary-text-color); /* Define a cor do texto do parágrafo */
 }
 

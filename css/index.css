@@ -31,6 +31,26 @@ body {
     height: 100vh; /* Define a altura do corpo como 100% da altura da viewport */
 }
 
+h1 {
+    font-size: 2.5rem; /* Define o tamanho da fonte */
+    font-weight: 800; /* Define o peso da fonte */
+}
+
+h2 {
+    font-size: 1.7rem; /* Define o tamanho da fonte */
+    font-weight: 600; /* Define o peso da fonte */
+}
+
+h3 {
+    font-size: 1.3rem; /* Define o tamanho da fonte */
+    font-weight: 400; /* Define o peso da fonte */
+}
+
+p {
+    font-size: 1rem; /* Define o tamanho da fonte */
+    font-weight: 200; /* Define o peso da fonte */
+}
+
 .flex {
     display: flex; /* Define o layout como flexível */
 }
