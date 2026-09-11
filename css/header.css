@@ -34,12 +34,12 @@
     font-family: "Montserrat Alternates", sans-serif;
     font-weight: 300;
     font-size: 1.2rem;
-    color: var(--quaternary-text-color);
+    color: var(--cor-principal-seis);
 }
 
 .btn-entrar {
     border-radius: 1rem;
-    border: 0.05rem solid var(--primary-button-color);
+    border: 0.05rem solid var(--cor-principal-cinco);
     padding: 0.5rem 1.2rem;
     font-size: 0.8rem;
     font-weight: 700;
@@ -47,7 +47,7 @@
     transition: all 0.2s ease;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     color: var(--primary-text-color);
-    background-color: var(--primary-button-color);
+    background-color: var(--cor-principal-cinco);
 }
 
 .btn-entrar:hover {

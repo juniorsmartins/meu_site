@@ -22,7 +22,7 @@
 .noticias-por-editoria h2 {
     position: relative;
     display: flex;
-    color: var(--quaternary-text-color); /* Cor do texto */
+    color: var(--cor-principal-seis); /* Cor do texto */
     letter-spacing: 0.04em; /* Espaçamento entre letras */
 }
 
@@ -31,7 +31,7 @@
     position: absolute; /* Posicionamento absoluto em relação ao elemento pai */
     width: 100%; /* Ocupa toda a largura do elemento pai */
     height: 2px; /* Define a altura da linha */
-    background-color: var(--quaternary-text-color); /* Cor de fundo */
+    background-color: var(--cor-principal-seis); /* Cor de fundo */
     border-radius: 2px; /* Arredonda os cantos da borda */
 }
 
