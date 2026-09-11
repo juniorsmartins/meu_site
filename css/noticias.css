@@ -1,15 +1,11 @@
 #noticias-2 {
-    width: 95%;
-    margin: 2rem 0;
+    width: 92%;
+    margin: 2rem auto;
 }
 
 #noticias-wraper-2 {
-    display: grid; /* Define o contêiner como grid */
-    grid-template-columns: repeat(4, minmax(220px, 1fr)); /* Define quatro colunas com largura mínima de 220px e máxima de 1fr */
     gap: 3rem; /* Espaçamento entre os itens do grid */
-    width: min(1200px, calc(100% - 32px));
     margin: 0 auto; /* Centraliza o contêiner na página */
-    box-sizing: border-box; /* Inclui o padding e a borda na largura e altura totais */
 }
 
 .noticias-por-editoria {
@@ -44,5 +40,6 @@
     height: 100%; /* Ocupa toda a altura do contêiner */
     background-color: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente para melhor legibilidade */
 }
+
 
 
