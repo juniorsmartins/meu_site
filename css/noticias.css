@@ -13,9 +13,7 @@
 }
 
 .noticias-por-editoria {
-    display: flex; /* Define o contêiner como flexível */
     flex-direction: column; /* Organiza os itens em coluna */
-    width: 100%;
     text-align: center; /* Alinha o texto ao centro */
 }
 
@@ -36,7 +34,6 @@
 }
 
 .noticias-por-editoria-1 {
-    width: 100%;
     margin: 0.5rem 0;
     box-sizing: border-box;
 }
@@ -44,7 +41,6 @@
 #noticias-por-editoria-1 h3 {
     padding: 10px; /* Adiciona espaçamento interno */
     color: var(--primary-text-color); /* Cor do texto */
-    width: 100%; /* Ocupa toda a largura do contêiner */
     height: 100%; /* Ocupa toda a altura do contêiner */
     background-color: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente para melhor legibilidade */
 }

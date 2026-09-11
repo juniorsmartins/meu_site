@@ -1,6 +1,5 @@
 /* Cabeçalho */
 #header {
-    width: 100%; /* Define a largura do cabeçalho como 100% da largura da viewport */
     min-height: 10vh; /* Define a altura mínima do cabeçalho como 90% da altura da viewport */
     border: 0; /* Remove a borda padrão do cabeçalho */
     color: var(--primary-text-color);
@@ -57,7 +56,6 @@
 }
 
 #header-navbar {
-    width: 100%; /* Define a largura do menu como 100% da largura do cabeçalho */
     border-top: 0.05rem solid var(--cor-linha-divisoria); /* Adiciona uma borda superior ao menu */
     gap: 3rem; /* Adiciona um espaçamento entre os itens do menu */
     text-transform: uppercase; /* Transforma o texto em letras maiúsculas */

@@ -45,6 +45,10 @@ body {
     align-items: center; /* Alinha os elementos verticalmente ao centro */
 }
 
+.width-100 {
+    width: 100%; /* Define a largura como 100% */
+}
+
 /* Estilo para links e botões */
 a, button { 
     font-family: "Merriweather", serif;

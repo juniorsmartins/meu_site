@@ -2,11 +2,6 @@
     margin: 1.5rem 1rem; /* Adiciona margem superior e inferior */
 }
 
-.noticias-wraper-1 {
-    display: flex; /* Define o contêiner como flexível */
-    width: 100%; /* Ocupa toda a largura disponível */
-}
-
 #destaque-principal {
     width: 60%; /* Ocupa porcentagem da largura do contêiner */ 
     padding-top: 20%; /* Adiciona espaçamento superior */
@@ -16,21 +11,18 @@
 }
 
 #destaque-principal-1 {
-    width: 100%; /* Ocupa toda a largura do contêiner pai */
     height: 100%; /* Ocupa toda a altura do contêiner pai */
     background-size: cover; /* Ajusta a imagem de fundo para cobrir o contêiner */
     background-position: center; /* Centraliza a imagem de fundo */
     left: 0; /* Alinha à esquerda */
     top: 0; /* Alinha ao topo */
     position: absolute; /* Permite posicionamento absoluto em relação ao contêiner pai */
-    display: flex;
     align-items: flex-end;
     cursor: pointer; /* Altera o cursor para indicar interatividade */
 }
 
 #destaque-principal-1 h2 {
     margin: 0; /* Remove margem */
-    width: 100%; /* Ocupa toda a largura do contêiner */
     padding: 10px; /* Adiciona espaçamento interno */
     color: var(--primary-text-color); /* Cor do texto */
     background-color: var(--cor-transparencia); /* Fundo semi-transparente para melhor legibilidade */
@@ -38,7 +30,6 @@
 
 #destaque-secundario {
     width: 40%; /* Ocupa porcentagem da largura do contêiner */
-    display: flex; /* Define o contêiner como flexível */
     flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
 }
 
@@ -56,18 +47,11 @@
 .destaque-secundario-1 h3, .destaque-terceario-1 h3 {
     padding: 10px; /* Adiciona espaçamento interno */
     color: var(--primary-text-color); /* Cor do texto */
-    width: 100%; /* Ocupa toda a largura do contêiner */
     height: 100%; /* Ocupa toda a altura do contêiner */
     background-color: var(--cor-transparencia); /* Fundo semi-transparente para melhor legibilidade */
 }
 
-#destaque-terceario {
-    width: 100%; /* Ocupa porcentagem da largura do contêiner */
-    display: flex; /* Define o contêiner como flexível */
-}
-
 .destaque-terceario-1 {
-    width: 100%; /* Ocupa metade da largura do contêiner pai */
     padding-top: 10%; /* Adiciona espaçamento superior */
     background-size: cover; /* Ajusta a imagem de fundo para cobrir o contêiner */
     background-position: center; /* Centraliza a imagem de fundo */
