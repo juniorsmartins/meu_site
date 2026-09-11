@@ -61,3 +61,14 @@
     cursor: pointer; /* Altera o cursor para indicar interatividade */
 }
 
+@media (max-width: 768px) {
+
+    #destaque-principal, #destaque-secundario {
+        width: 100%; 
+    }
+
+    .destaque-secundario-1 {
+        width: 100%; 
+    }
+}
+

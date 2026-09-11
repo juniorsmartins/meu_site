@@ -43,12 +43,12 @@ h2 {
 
 h3 {
     font-size: 1.3rem; /* Define o tamanho da fonte */
-    font-weight: 400; /* Define o peso da fonte */
+    font-weight: 500; /* Define o peso da fonte */
 }
 
 p {
     font-size: 1rem; /* Define o tamanho da fonte */
-    font-weight: 200; /* Define o peso da fonte */
+    font-weight: 300; /* Define o peso da fonte */
 }
 
 .flex {
@@ -89,5 +89,11 @@ i {
     padding: 2rem;
 }
 
+@media (max-width: 768px) {
+
+    .flex {
+        flex-direction: column; /* Alinha os itens em coluna para telas menores */
+    }
+}
 
 
