@@ -70,7 +70,7 @@ p {
 }
 
 /* Estilo para links e botões */
-a, button { 
+button { 
     font-family: "Merriweather", serif;
     text-decoration: none; /* Remove sublinhado padrão de links e botões */
 }
