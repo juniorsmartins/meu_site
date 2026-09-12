@@ -58,11 +58,13 @@ p {
 .flex-center {
     justify-content: center; /* Centraliza horizontalmente */
     align-items: center; /* Centraliza verticalmente */
+    align-content: center; /* Centraliza o conteúdo quando há múltiplas linhas de itens flexíveis */
 }
 
 .flex-between {
     justify-content: space-between; /* Distribui os elementos com espaço entre eles */
     align-items: center; /* Alinha os elementos verticalmente ao centro */
+    align-content: center; /* Centraliza o conteúdo quando há múltiplas linhas de itens flexíveis */
 }
 
 .width-100 {

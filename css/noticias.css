@@ -6,6 +6,7 @@
 #noticias-wraper-2 {
     gap: 3rem; /* Espaçamento entre os itens do grid */
     margin: 0 auto; /* Centraliza o contêiner na página */
+    padding: 1.5rem; /* Adiciona espaçamento interno */
 }
 
 .noticias-por-editoria {
