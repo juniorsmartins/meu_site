@@ -1,0 +1,33 @@
+form {
+    margin: 1rem;
+    padding: 1rem 5rem;
+    border-radius: 1rem;
+    background-color: var(--cor-principal-dois); /* Define a cor de fundo do formulário */
+}
+
+.form-itens {
+    margin: 0.5rem auto;
+    padding: 0.5rem;
+}
+
+label {
+    padding: 0 0.5rem;
+}
+
+#label-mensagem {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+

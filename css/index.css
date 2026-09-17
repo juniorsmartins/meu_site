@@ -71,12 +71,6 @@ p {
     width: 100%; /* Define a largura como 100% */
 }
 
-/* Estilo para links e botões */
-button { 
-    font-family: "Merriweather", serif;
-    text-decoration: none; /* Remove sublinhado padrão de links e botões */
-}
-
 /* Estilo para imagens */
 img { 
     max-width: 100%;
@@ -89,6 +83,31 @@ i {
     color: var(--primary-text-color);
     font-size: 2.5rem;
     padding: 2rem;
+}
+
+/* Estilo para links e botões */
+button { 
+    font-family: "Merriweather", serif;
+    text-decoration: none; /* Remove sublinhado padrão de links e botões */
+}
+
+.btn-padrao {
+    border-radius: 1rem;
+    border: 0.05rem solid var(--cor-principal-cinco);
+    padding: 0.5rem 1.2rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    color: var(--primary-text-color);
+    background-color: var(--cor-principal-cinco);
+}
+
+.btn-padrao:hover {
+    border: 0.05rem solid var(--cor-principal-tres);
+    opacity: 0.9;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width: 768px) {

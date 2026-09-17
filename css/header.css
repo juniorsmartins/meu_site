@@ -34,25 +34,6 @@
     color: var(--cor-principal-seis);
 }
 
-.btn-entrar {
-    border-radius: 1rem;
-    border: 0.05rem solid var(--cor-principal-cinco);
-    padding: 0.5rem 1.2rem;
-    font-size: 0.8rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-    color: var(--primary-text-color);
-    background-color: var(--cor-principal-cinco);
-}
-
-.btn-entrar:hover {
-    border: 0.05rem solid var(--cor-principal-tres);
-    opacity: 0.9;
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
-}
-
 #header-navbar {
     border-top: 0.05rem solid var(--cor-linha-divisoria); /* Adiciona uma borda superior ao menu */
     gap: 3rem; /* Adiciona um espaçamento entre os itens do menu */
