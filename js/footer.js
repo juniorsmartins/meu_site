@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-        const response = await fetch("footer.html");
+        const response = await fetch("../html/footer.html");
 
         if (!response.ok) {
             throw new Error(`Erro ao carregar footer.html: ${response.status}`);
