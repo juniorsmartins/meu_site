@@ -13,9 +13,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function contato(event) {
     event.preventDefault();
-    const nome = document.getElementById('nome').value;
-    const email = document.getElementById('email').value;
-    const mensagem = document.getElementById('mensagem').value;
+    
+    // const nome = document.getElementById('nome').value;
+    // const email = document.getElementById('email').value;
+    // const mensagem = document.getElementById('mensagem').value;
+
+    const formData = new FormData(event.target);
+    const nome = formData.get('nome');
+    const email = formData.get('email');
+    const mensagem = formData.get('mensagem');
 
     console.log('Nome:', nome);
     console.log('Email:', email);
