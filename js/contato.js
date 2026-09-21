@@ -13,10 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function contato(event) {
     event.preventDefault();
-    
-    // const nome = document.getElementById('nome').value;
-    // const email = document.getElementById('email').value;
-    // const mensagem = document.getElementById('mensagem').value;
 
     const formData = new FormData(event.target);
     const nome = formData.get('nome');
