@@ -12,5 +12,15 @@ export function createRandomUser() {
   };
 }
 
+export function createRandomUsers(amount = 2) {
+  const total = Number(amount);
+
+  if (!Number.isInteger(total) || total < 1) {
+    throw new Error('amount precisa ser um numero inteiro maior que 0');
+  }
+
+  return Array.from({ length: total }, () => createRandomUser());
+}
+
 
 
