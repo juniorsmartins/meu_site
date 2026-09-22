@@ -16,8 +16,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 		headerContainer.innerHTML = await response.text();
 
-		document.getElementById("data-extenso").textContent = getDatePorExtenso();
-		document.getElementById("hora-extenso").textContent = getTimeHM();
+		const dataExtensa = getDatePorExtenso(); /* Usa função importada da utils.js */
+		const horaMinutos = getTimeHM(); /* Formato HH:MM. Usa uma função do utils.js */
+
+		document.getElementById("data-extenso").textContent = dataExtensa;
+		document.getElementById("hora-extenso").textContent = horaMinutos;
 		document.getElementById("localizacao-extenso").textContent = "Cuiabá, Mato Grosso, Brasil";
 
 	} catch (error) {
