@@ -18,7 +18,7 @@ app.use("/name", nameRouter);
 app.use("/user", userRouter);
 
 app.get("/multi", (request, response) => {
-    
+
     try {
         const quantia = request.query.quantia ?? 2;
         response.status(200).json(createRandomUsers(quantia));
@@ -29,6 +29,29 @@ app.get("/multi", (request, response) => {
     }
 });
 
+app.get("/multi/:quantia", (request, response) => {
+
+    try {
+        const quantia = request.params.quantia ?? 2;
+        response.status(200).json(createRandomUsers(quantia));
+    } catch (error) {
+        response.status(400).json({
+            error: 'Parametro "quantia" precisa ser um numero inteiro maior que 0',
+        });
+    }
+});
+
+app.use(express.json());
+app.post("/criar", (request, response) => {
+
+    const { password } = request.body;
+
+    if(password.length >= 5) {
+        response.status(200).send("Senha válida: " + password);
+    } else {
+        response.status(400).send("Senha inválida");
+    }
+});
 
 
 

@@ -1,0 +1,11 @@
+### Criar senha
+POST http://localhost:3000/criar
+Content-Type: application/json
+
+{
+    "password": "1023458"
+}
+
+### Buscar olá mundo
+GET http://localhost:3000/
+
