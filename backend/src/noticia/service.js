@@ -1,12 +1,19 @@
-const noticiasGetService = async (request, response) => {
+const noticiasGetService = async () => {
 
     const noticia = {
-        title: "Notícia 1",
-        content: "Conteúdo da notícia 1"
+        title: "Notícia 2",
+        content: "Conteúdo da notícia"
     }
 
     return noticia;
 };
 
-export { noticiasGetService };
+const noticiasPostService = async (noticia) => {
+
+    noticia.id = 1;
+
+    return noticia;
+};
+
+export { noticiasGetService, noticiasPostService };
 

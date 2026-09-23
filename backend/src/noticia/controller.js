@@ -1,4 +1,4 @@
-import { noticiasGetService } from './service.js';
+import { noticiasGetService, noticiasPostService } from './service.js';
 
 const noticiasGetController = async (request, response) => {
 
@@ -7,6 +7,14 @@ const noticiasGetController = async (request, response) => {
     response.status(200).send(noticia);
 };
 
-export { noticiasGetController };
+const noticiasPostController = async (request, response) => {
+
+    const noticia = request.body;
+    const noticiaCriada = await noticiasPostService(noticia);
+
+    response.status(201).send(noticiaCriada);
+};
+
+export { noticiasGetController, noticiasPostController };
 
 

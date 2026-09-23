@@ -9,3 +9,16 @@ Content-Type: application/json
 ### Teste para buscar "olá mundo"
 GET http://localhost:3000/
 
+## Teste para buscar notícias
+GET http://localhost:3000/noticias
+
+## Teste para criar notícia
+POST http://localhost:3000/noticias
+Content-Type: application/json
+
+{
+    "title": "Notícia 1",
+    "content": "Conteúdo da notícia"
+}
+
+
