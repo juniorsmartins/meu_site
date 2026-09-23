@@ -1,14 +1,22 @@
 import express from 'express';
+import cors from 'cors';
 import { nameRouter, userRouter } from './routes.js';
 import { createRandomUsers } from './mocks/mocks.js';
 
-const app = express();
+const app = express(); /* Cria uma instância do aplicativo Express */
 const PORT = 3000;
+
+app.use(express.json()); /* Middleware para parsear JSON. Necessário para que o corpo das requisições POST seja interpretado corretamente. */
+
+app.use(
+    cors({
+        origin: '*', /* Permite requisições de qualquer origem */
+    })
+); /* Middleware para habilitar CORS */
 
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
 });
-
 
 app.get("/", (request, response) => {
     response.status(200).send("Olá, mundo!");
@@ -41,7 +49,6 @@ app.get("/multi/:quantia", (request, response) => {
     }
 });
 
-app.use(express.json());
 app.post("/criar", (request, response) => {
 
     const { password } = request.body;
