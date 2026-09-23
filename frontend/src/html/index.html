@@ -10,7 +10,8 @@
         <!-- Estilos -->
         <link rel="stylesheet" href="../css/index.css">
         <link rel="stylesheet" href="../css/header.css">
-        <link rel="stylesheet" href="../css/formulario.css">
+        <link rel="stylesheet" href="../css/carrossel.css">
+        <link rel="stylesheet" href="../css/noticias.css">
         <link rel="stylesheet" href="../css/footer.css">
         <!-- Favicon -->
         <link rel="shortcut icon" type="image/png" href="../img/favicon.png">
@@ -26,43 +27,25 @@
     <body>
 
         <!-- JavaScript -->
-        <script src="../js/header.js"></script>
+        <script src="../js/index.js"></script>
+        <script type="module" src="../js/header.js"></script>
+        <script src="../js/carrossel.js"></script>
+        <script src="../js/noticias.js"></script>
         <script src="../js/footer.js"></script>
-        <script src="../js/contato.js"></script>
-        
 
         <!-- Cabeçalho -->
-        <div id="header-container"></div>
+        <div id="header-container"></div> 
 
+        <!-- Carrossel -->
+        <div id="carrossel-container"></div>
 
-        <!-- Conteúdo da Página -->
-        <section>
-
-            <form onsubmit="contato(event)" class="flex flex-center">
-                <div>
-                    <div class="form-itens">
-                        <label for="nome">Nome:</label>
-                        <input id="nome" name="nome" type="text" placeholder="Digite seu nome" />
-                    </div>
-                    <div class="form-itens">
-                        <label for="email">Email:</label>
-                        <input id="email" name="email" type="email" placeholder="Digite seu email" />
-                    </div>
-                </div>
-                <div class="form-itens flex flex-center">
-                    <label for="mensagem">Motivo do contato:</label>
-                    <textarea id="mensagem" name="mensagem" rows="8" cols="50" placeholder="Digite sua mensagem"></textarea>
-                </div>
-                <button type="submit" class="btn-padrao">Enviar</button>
-            </form>
-
-        </section>
-
+        <!-- Notícias -->
+        <div id="noticias-container"></div>
 
         <!-- Rodapé -->
         <div id="footer-container"></div>
 
     </body>
-</html>
 
+</html>
 
