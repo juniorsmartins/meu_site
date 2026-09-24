@@ -6,7 +6,11 @@ const fetchData = async () => {
     }
 
     try {
-        const response = await fetch("http://localhost:3000/noticias");
+        const apiBase = window.location.hostname === "localhost"
+            ? "http://localhost:3000"
+            : "/api";
+
+        const response = await fetch(`${apiBase}/noticias`);
 
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
