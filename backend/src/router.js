@@ -1,10 +1,10 @@
 import express from 'express';
-import { noticiasGetController, noticiasPostController } from './controllers/noticiaController.js';
+import { noticiaBuscarController, noticiaCriarController } from './controllers/noticiaController.js';
 
-const noticiasRouter = express.Router();
+const noticiaRouter = express.Router();
 
-noticiasRouter.get("/", noticiasGetController);
-noticiasRouter.post("/", noticiasPostController);
+noticiaRouter.get("/", noticiaBuscarController);
+noticiaRouter.post("/", noticiaCriarController);
 
-export { noticiasRouter };
+export { noticiaRouter };
 

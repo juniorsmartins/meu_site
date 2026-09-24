@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { noticiasRouter } from './router.js';
+import { noticiaRouter } from './router.js';
 import { createRandomUsers } from './mocks/mocks.js';
 
 const app = express(); /* Cria uma instância do aplicativo Express */
@@ -18,7 +18,7 @@ app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
 });
 
-app.use("/noticias", noticiasRouter);
+app.use("/noticias", noticiaRouter);
 
 app.get("/", (request, response) => {
     response.status(200).send("Olá, mundo!");

@@ -1,20 +1,20 @@
-import { noticiasGetService, noticiasPostService } from '../services/noticiaService.js';
+import { noticiaBuscarService, noticiaCriarService } from '../services/noticiaService.js';
 
-const noticiasGetController = async (request, response) => {
+const noticiaBuscarController = async (request, response) => {
 
-    const noticia = await noticiasGetService();
+    const noticia = await noticiaBuscarService();
 
     response.status(200).send(noticia);
 };
 
-const noticiasPostController = async (request, response) => {
+const noticiaCriarController = async (request, response) => {
 
     const noticia = request.body;
-    const noticiaCriada = await noticiasPostService(noticia);
+    const noticiaCriada = await noticiaCriarService(noticia);
 
     response.status(201).send(noticiaCriada);
 };
 
-export { noticiasGetController, noticiasPostController };
+export { noticiaBuscarController, noticiaCriarController };
 
 
