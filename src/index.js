@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import { noticiaRouter } from './router.js';
-import { createRandomUsers } from './mocks/mocks.js';
 
 const app = express(); /* Cria uma instância do aplicativo Express */
 
@@ -17,41 +16,6 @@ app.use("/noticias", noticiaRouter);
 
 app.get("/", (request, response) => {
     response.status(200).send("Olá, mundo!");
-});
-
-app.get("/multi", (request, response) => {
-
-    try {
-        const quantia = request.query.quantia ?? 2;
-        response.status(200).json(createRandomUsers(quantia));
-    } catch (error) {
-        response.status(400).json({
-            error: 'Parametro "quantia" precisa ser um numero inteiro maior que 0',
-        });
-    }
-});
-
-app.get("/multi/:quantia", (request, response) => {
-
-    try {
-        const quantia = request.params.quantia ?? 2;
-        response.status(200).json(createRandomUsers(quantia));
-    } catch (error) {
-        response.status(400).json({
-            error: 'Parametro "quantia" precisa ser um numero inteiro maior que 0',
-        });
-    }
-});
-
-app.post("/criar", (request, response) => {
-
-    const { password } = request.body;
-
-    if(password.length >= 5) {
-        response.status(200).send("Senha válida: " + password);
-    } else {
-        response.status(400).send("Senha inválida");
-    }
 });
 
 export { app };
