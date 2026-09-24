@@ -1,7 +1,21 @@
+# Environment files
 .env
 .env.*
 !.env.example
 
+# Node modules
+node_modules/
 
+# System files 
+.DS_Store
+Thumbs.db
+
+# Package manager files
+yarn.lock
+
+# IDE files
+.idea
+.vscode
+*.iml
 
 
