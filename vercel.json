@@ -2,8 +2,8 @@
   "outputDirectory": "frontend/src",
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "/api/"
+      "source": "/",
+      "destination": "/html/index.html"
     }
   ]
 }

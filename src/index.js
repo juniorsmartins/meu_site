@@ -4,7 +4,6 @@ import { noticiaRouter } from './router.js';
 import { createRandomUsers } from './mocks/mocks.js';
 
 const app = express(); /* Cria uma instância do aplicativo Express */
-const PORT = 3000;
 
 app.use(express.json()); /* Middleware para parsear JSON. Necessário para que o corpo das requisições POST seja interpretado corretamente. */
 
@@ -13,10 +12,6 @@ app.use(
         origin: '*', /* Permite requisições de qualquer origem */
     })
 ); /* Middleware para habilitar CORS */
-
-app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`);
-});
 
 app.use("/noticias", noticiaRouter);
 
