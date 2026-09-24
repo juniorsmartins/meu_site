@@ -1,21 +1,10 @@
 import express from 'express';
-import { createRandomUser, createRandomUsers } from './mocks/mocks.js';
-import { noticiasGetController } from './noticia/controller.js';
+import { noticiaBuscarController, noticiaCriarController } from './controllers/noticiaController.js';
 
-const nameRouter = express.Router();
-const userRouter = express.Router();
-const noticiasRouter = express.Router();
+const noticiaRouter = express.Router();
 
-noticiasRouter.get("/", noticiasGetController);
+noticiaRouter.get("/", noticiaBuscarController);
+noticiaRouter.post("/", noticiaCriarController);
 
-nameRouter.get("/", (request, response) => {
-    response.status(200).send("Olá, galáxia!");
-});
-
-userRouter.get("/", (request, response) => {
-    response.status(200).send(createRandomUser());
-});
-
-
-export { nameRouter, userRouter, noticiasRouter };
+export { noticiaRouter };
 

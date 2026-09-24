@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { nameRouter, userRouter, noticiasRouter } from './router.js';
+import { noticiaRouter } from './router.js';
 import { createRandomUsers } from './mocks/mocks.js';
 
 const app = express(); /* Cria uma instância do aplicativo Express */
@@ -18,13 +18,11 @@ app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
 });
 
+app.use("/noticias", noticiaRouter);
+
 app.get("/", (request, response) => {
     response.status(200).send("Olá, mundo!");
 });
-
-app.use("/name", nameRouter);
-app.use("/user", userRouter);
-app.use("/noticias", noticiasRouter);
 
 app.get("/multi", (request, response) => {
 
@@ -60,5 +58,8 @@ app.post("/criar", (request, response) => {
         response.status(400).send("Senha inválida");
     }
 });
+
+export { app };
+
 
 
