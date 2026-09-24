@@ -6,10 +6,12 @@ const fetchData = async () => {
     }
 
     try {
-        const apiBase = window.location.hostname === "localhost"
-            ? "http://localhost:3000"
-            : "/api";
+        
+        const localHosts = ["localhost", "127.0.0.1", "::1"];
+        const isLocal = localHosts.includes(window.location.hostname);
 
+        const localApiHost = window.location.hostname === "127.0.0.1" ? "127.0.0.1" : "localhost";
+        const apiBase = isLocal ? `http://${localApiHost}:3000` : "/api";
         const response = await fetch(`${apiBase}/noticias`);
 
         if (!response.ok) {
