@@ -59,4 +59,7 @@ app.post("/criar", (request, response) => {
     }
 });
 
+export { app };
+
+
 
