@@ -1,18 +1,15 @@
+import { Noticia } from '../database/schema/Noticia.js';
+
 const noticiaBuscarService = async () => {
 
-    const noticia = {
-        title: "Notícia 2",
-        content: "Conteúdo da notícia"
-    }
-
+    const noticia = await Noticia.find();
     return noticia;
 };
 
 const noticiaCriarService = async (noticia) => {
 
-    noticia.id = 1;
-
-    return noticia;
+    const novaNoticia = await Noticia.create(noticia);
+    return novaNoticia;
 };
 
 export { noticiaBuscarService, noticiaCriarService };
