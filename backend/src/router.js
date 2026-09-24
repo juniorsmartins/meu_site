@@ -1,6 +1,5 @@
 import express from 'express';
-import { createRandomUser, createRandomUsers } from './mocks/mocks.js';
-import { noticiasGetController, noticiasPostController } from './noticia/controller.js';
+import { noticiasGetController, noticiasPostController } from './controllers/noticiaController.js';
 
 const noticiasRouter = express.Router();
 

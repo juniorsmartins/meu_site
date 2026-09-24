@@ -1,4 +1,4 @@
-import { noticiasGetService, noticiasPostService } from './service.js';
+import { noticiasGetService, noticiasPostService } from '../services/noticiaService.js';
 
 const noticiasGetController = async (request, response) => {
 
