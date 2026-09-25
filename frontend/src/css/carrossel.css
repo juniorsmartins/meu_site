@@ -2,7 +2,7 @@
     margin: 1.5rem 1rem; /* Adiciona margem superior e inferior */
 }
 
-#destaque-principal {
+#carrossel-1 {
     width: 60%; /* Ocupa porcentagem da largura do contêiner */ 
     padding-top: 20%; /* Adiciona espaçamento superior */
     position: relative; /* Permite posicionamento relativo para elementos internos */
@@ -10,7 +10,7 @@
     border: 1px solid rgb(252, 248, 248); /* Borda */
 }
 
-#destaque-principal-1 {
+#carrossel-1-item {
     height: 100%; /* Ocupa toda a altura do contêiner pai */
     background-size: cover; /* Ajusta a imagem de fundo para cobrir o contêiner */
     background-position: center; /* Centraliza a imagem de fundo */
@@ -21,19 +21,19 @@
     cursor: pointer; /* Altera o cursor para indicar interatividade */
 }
 
-#destaque-principal-1 h2 {
+#carrossel-1-item h2 {
     margin: 0; /* Remove margem */
     padding: 10px; /* Adiciona espaçamento interno */
     color: var(--primary-text-color); /* Cor do texto */
     background-color: var(--cor-transparencia); /* Fundo semi-transparente para melhor legibilidade */
 }
 
-#destaque-secundario {
+#carrossel-2 {
     width: 40%; /* Ocupa porcentagem da largura do contêiner */
     flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
 }
 
-.destaque-secundario-1 {
+.carrossel-2-itens {
     width: 50%; /* Ocupa metade da largura do contêiner pai */
     padding-top: 30%; /* Adiciona espaçamento superior */
     background-size: cover; /* Ajusta a imagem de fundo para cobrir o contêiner */
@@ -44,14 +44,14 @@
     cursor: pointer; /* Altera o cursor para indicar interatividade */
 }
 
-.destaque-secundario-1 h3, .destaque-terceario-1 h3 {
+.carrossel-2-itens h3, .carrossel-3-itens h3 {
     padding: 10px; /* Adiciona espaçamento interno */
     color: var(--primary-text-color); /* Cor do texto */
     height: 100%; /* Ocupa toda a altura do contêiner */
     background-color: var(--cor-transparencia); /* Fundo semi-transparente para melhor legibilidade */
 }
 
-.destaque-terceario-1 {
+.carrossel-3-itens {
     padding-top: 10%; /* Adiciona espaçamento superior */
     background-size: cover; /* Ajusta a imagem de fundo para cobrir o contêiner */
     background-position: center; /* Centraliza a imagem de fundo */
@@ -61,7 +61,7 @@
     cursor: pointer; /* Altera o cursor para indicar interatividade */
 }
 
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
 
     #destaque-principal, #destaque-secundario {
         width: 100%; 
@@ -70,5 +70,6 @@
     .destaque-secundario-1 {
         width: 100%; 
     }
-}
+} */
+
 
