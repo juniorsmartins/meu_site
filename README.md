@@ -34,6 +34,7 @@ npm install --save-dev @faker-js/faker
 npm i express
 npm install mongoose 
 npm install cors 
+npm install --save-dev eslint
 
 
 -> Comandos para acionar
