@@ -14,41 +14,62 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         carrosselContainer.innerHTML = await response.text();
 
-        await carregarCarrosselDestaque3();
+        await carregarCarrossel3();
 
     } catch (error) {
         console.error("Erro no fluxo do carrossel", error);
     }
 });
 
-async function carregarCarrosselDestaque3() {
+async function carregarCarrossel3() {
 
-    const carrosselDestaque3 = document.getElementById("carrossel-destaque-3-itens");
+    const carrossel3 = document.getElementById("carrossel-3-itens");
+    const template = document.getElementById("template-carrossel-3-itens");
 
-    if(!carrosselDestaque3) {
+    if(!carrossel3 || !template) {
         return;
     }
 
     const API_URL = "https://meu-site-ashy-omega.vercel.app/api/noticias";
     
     try {
+        /* O Frontend busca as notícias no endpoint da API do backend */ 
         const response = await fetch(API_URL);
 
         if (!response.ok) {
             throw new Error(`Erro ao carregar notícias: ${response.status}`);
         }
 
+        /* Converte a resposta em JSON */
         const noticias = await response.json();
+        /* Pega as últimas 3 notícias */
         const ultimasNoticias = noticias.slice(0, 3);
 
-        const htmlNoticias = ultimasNoticias.map(noticia => `
-            <div class="carrossel-destaque-3-itens width-100" style="background-image: url('https://s2-oglobo.glbimg.com/ZGl4RjcFS85aNx33zUp2r7HJ5qE=/0x0:3188x2125/888x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_da025474c0c44edd99332dddb09cabe8/internal_photos/bs/2025/U/R/rphcytREGRgm1VnZ4GwA/bre14243.jpg')">
-                <h3>${noticia.titulo}</h3>
-            </div>
-        `).join("");
+        /* Limpa o conteúdo anterior */
+        carrossel3.innerHTML = ""; 
+        /* Cria fragmento de documento para otimizar inserção de múltiplos elementos */
+        const fragment = document.createDocumentFragment(); 
 
-        carrosselDestaque3.innerHTML = htmlNoticias;
-        
+        ultimasNoticias.forEach(noticia => {
+            /* Clona o template para cada notícia */
+            const clone = template.content.cloneNode(true);
+
+            /* Atualiza o conteúdo do card com os dados da notícia */
+            const card = clone.querySelector(".carrossel-3-itens");
+            /* Atualiza o título da notícia */
+            const titulo = clone.querySelector(".noticia-titulo");
+            titulo.textContent = noticia.titulo;
+            /* Atualiza a imagem de fundo do card */
+            const imagem = noticia.imagemUrl || noticia.imagem;
+            card.style.backgroundImage = `url('${imagem}')`;
+
+            /* Adiciona o clone ao fragmento */
+            fragment.appendChild(clone);
+        });
+
+        /* Adiciona o fragmento ao carrossel */
+        carrossel3.appendChild(fragment);        
+
     } 
     catch (error) {
         console.error("Erro ao carregar notícias secundárias", error);
