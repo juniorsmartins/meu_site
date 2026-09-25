@@ -32,6 +32,9 @@ import { createRandomUser } from './js/mocks/mocks.js';
 npm i nodemon -D
 npm install --save-dev @faker-js/faker
 npm i express
+npm install mongoose 
+npm install cors 
+npm install --save-dev eslint
 
 
 -> Comandos para acionar
@@ -40,7 +43,9 @@ npm run dev
 
 
 
-
+app.get("/", (request, response) => {
+    response.status(200).send("Olá, mundo!");
+});
 
 app.get("/multi", (request, response) => {
 

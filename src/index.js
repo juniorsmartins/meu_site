@@ -1,8 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import { noticiaRouter } from './router.js';
+import { connectToMongo } from './database/index.js';
 
 const app = express(); /* Cria uma instância do aplicativo Express */
+connectToMongo(); /* Conecta ao MongoDB */
 
 app.use(express.json()); /* Middleware para parsear JSON. Necessário para que o corpo das requisições POST seja interpretado corretamente. */
 
@@ -13,10 +15,6 @@ app.use(
 ); /* Middleware para habilitar CORS */
 
 app.use("/noticias", noticiaRouter);
-
-app.get("/", (request, response) => {
-    response.status(200).send("Olá, mundo!");
-});
 
 export { app };
 
