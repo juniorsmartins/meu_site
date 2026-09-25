@@ -14,12 +14,46 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         carrosselContainer.innerHTML = await response.text();
 
+        await carregarCarrossel1();
         await carregarCarrossel3();
 
     } catch (error) {
         console.error("Erro no fluxo do carrossel", error);
     }
 });
+
+async function carregarCarrossel1() {
+    const carrossel1 = document.getElementById("carrossel-1-item");
+
+    if (!carrossel1) {
+        return;
+    }
+
+    const tituloElemento = carrossel1.querySelector(".noticia-titulo");
+
+    const API_URL = "https://meu-site-ashy-omega.vercel.app/api/noticias";
+
+    try {
+        const response = await fetch(API_URL);
+
+        if (!response.ok) {
+            throw new Error(`Erro ao carregar notícias: ${response.status}`);
+        }
+
+        const noticias = await response.json();
+        const noticiaPrincipal = noticias[0];
+
+        if (noticiaPrincipal) {
+            tituloElemento.textContent = noticiaPrincipal.titulo;
+        }
+
+        const imagem = noticiaPrincipal.imagemUrl || noticiaPrincipal.imagem;
+        carrossel1.style.backgroundImage = `url('${imagem}')`;
+
+    } catch (error) {
+        console.error("Erro ao carregar carrossel 1", error);
+    }
+}
 
 async function carregarCarrossel3() {
 
@@ -43,7 +77,7 @@ async function carregarCarrossel3() {
         /* Converte a resposta em JSON */
         const noticias = await response.json();
         /* Pega as últimas 3 notícias */
-        const ultimasNoticias = noticias.slice(0, 3);
+        const ultimasNoticias = noticias.slice(1, 4);
 
         /* Limpa o conteúdo anterior */
         carrossel3.innerHTML = ""; 
