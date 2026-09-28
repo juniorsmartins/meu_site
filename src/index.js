@@ -14,9 +14,7 @@ app.use(
     })
 ); /* Middleware para habilitar CORS */
 
-app.use("/noticias", noticiaRouter);
+app.use("/api/noticias", noticiaRouter);
 
 export { app };
-
-
 

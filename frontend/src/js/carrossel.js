@@ -49,16 +49,18 @@ async function carregarCarrosselCompleto() {
     }
 }
 
+function abrirNoticia(id) {
+    if (id) {
+        window.location.href = '../html/noticia-pagina.html?id=${id}';
+    }
+}
+
 function renderizarCarrossel1(noticia) {
 
-    if (!noticia) {
-        return;
-    }
+    if (!noticia) return;
 
     const carrossel1 = document.getElementById("carrossel-1-item");
-    if (!carrossel1) {
-        return;
-    }
+    if (!carrossel1) return;
 
     const tituloElemento = carrossel1.querySelector(".noticia-titulo");
     if (tituloElemento) {
@@ -69,13 +71,15 @@ function renderizarCarrossel1(noticia) {
     if (imagem) {
         carrossel1.style.backgroundImage = `url('${imagem}')`;
     }
+
+    // Adiciona o evento de clique para abrir a notícia
+    carrossel1.onclick = () => abrirNoticia(noticia._id);
 }
 
 function renderizarCarrossel2(noticias) {
 
     const carrossel2 = document.getElementById("carrossel-2");
     const template = document.getElementById("template-carrossel-2-itens");
-
     if (!carrossel2 || !template || !noticias.length) {
         return;
     }
@@ -84,35 +88,45 @@ function renderizarCarrossel2(noticias) {
     const fragment = document.createDocumentFragment();
 
     noticias.forEach(noticia => {
+        
+        // Clona o template para cada notícia
         const clone = template.content.cloneNode(true);
 
+        // Seleciona o card dentro do clone
         const card = clone.querySelector(".carrossel-2-itens");
-        const titulo = clone.querySelector(".noticia-titulo");
 
+        // Seleciona o título dentro do clone
+        const titulo = clone.querySelector(".noticia-titulo");
         titulo.textContent = noticia.titulo;
+
+        // Seleciona a imagem dentro do clone
         const imagem = noticia.imagemUrl || noticia.imagem;
         if (imagem) {
             card.style.backgroundImage = `url('${imagem}')`;
         }
 
+        // Adiciona o evento de clique para abrir a notícia
+        card.onclick = () => abrirNoticia(noticia._id);
+
+        // Adiciona o clone ao fragmento
         fragment.appendChild(clone);
     });
 
+    // Adiciona o fragmento ao carrossel
     carrossel2.appendChild(fragment);
 }
 
 function renderizarCarrossel3(noticias) {
 
     const carrossel3 = document.getElementById("carrossel-3");
+    // Seleciona o template do carrossel 3
     const template = document.getElementById("template-carrossel-3-itens");
-
     if (!carrossel3 || !template || !noticias.length) {
         return;
     }
 
     /* Limpa o conteúdo anterior */
     carrossel3.innerHTML = ""; 
-
     /* Cria fragmento de documento para otimizar inserção de múltiplos elementos */
     const fragment = document.createDocumentFragment(); 
 
@@ -132,6 +146,9 @@ function renderizarCarrossel3(noticias) {
         if (imagem) {
             card.style.backgroundImage = `url('${imagem}')`;
         }
+
+        // Adiciona o evento de clique para abrir a notícia
+        card.onclick = () => abrirNoticia(noticia._id);
 
         /* Adiciona o clone ao fragmento */
         fragment.appendChild(clone);
