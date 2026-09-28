@@ -26,7 +26,9 @@ async function carregarCarrosselCompleto() {
 
     try {
 
-        const response = await fetch(API_URL);
+        // Faz a requisição para a API de notícias
+        // Desativa o cache da requisição para sempre buscar os dados atualizados do MongoDB
+        const response = await fetch(API_URL, { cache: "no-store" });
 
         if (!response.ok) {
             throw new Error(`Erro ao carregar notícias: ${response.status}`);

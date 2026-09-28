@@ -7,7 +7,7 @@ const noticiaSchema = new mongoose.Schema(
         linhaFina: { type: String, required: true },
         conteudo: { type: String, required: true },
         autor: { type: String, required: true },
-        imagemUrl: { type: String }
+        imagemUrl: { type: String, required: true }
     },
     { timestamps: true } /* Habilita timestamps automáticos para createdAt e updatedAt */
 );
