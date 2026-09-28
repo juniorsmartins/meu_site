@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Gazeta Central - Notícia</title>
+        <!-- Estilos -->
+        <link rel="stylesheet" href="../css/index.css">
+        <link rel="stylesheet" href="../css/header.css">
+        <link rel="stylesheet" href="../css/noticia-pagina.css">
+        <link rel="stylesheet" href="../css/footer.css">
+        <!-- Favicon -->
+        <link rel="shortcut icon" type="image/png" href="../img/favicon.png">
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+        <!-- Bootstrap Icons -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    </head>
+
+    <body>
+
+        <!-- Scripts do Cabeçalho/Rodapé e do Leitor de Notícia -->
+        <script type="module" src="../js/header.js"></script>
+        <script src="../js/footer.js"></script>
+        <script src="../js/noticia-pagina.js"></script>
+
+        <!-- Cabeçalho Reutilizado -->
+        <div id="header-container"></div>
+
+        <!-- Conteúdo da Notícia Completa -->
+        <main class="noticia-container flex flex-center">
+            <!-- Chapéu -->
+            <span id="noticia-chapeu"></span>
+
+            <!-- Título -->
+            <h1 id="noticia-titulo"></h1>
+
+            <!-- Linha Fina -->
+            <p id="noticia-linha-fina"></p>
+
+            <!-- Autor e Data -->
+            <div class="noticia-meta">
+                <span id="noticia-autor"></span>
+                <span id="noticia-data"></span>
+            </div>
+
+            <!-- Imagem Principal abaixo do Chapéu/Cabeçalho -->
+            <div class="noticia-imagem-container">
+                <img id="noticia-imagem" src="" alt="Imagem da notícia">
+            </div>
+
+            <!-- Conteúdo/Texto da Notícia -->
+            <article id="noticia-conteudo"></article>
+        </main>
+
+        <!-- Rodapé Reutilizado -->
+        <div id="footer-container"></div>
+
+    </body>
+
+</html>
+
+
+

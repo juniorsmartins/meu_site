@@ -1,8 +1,9 @@
 import express from 'express';
-import { noticiaBuscarController, noticiaCriarController } from './controllers/noticiaController.js';
+import { noticiaConsultarPorIdController, noticiaBuscarController, noticiaCriarController } from './controllers/noticiaController.js';
 
 const noticiaRouter = express.Router();
 
+noticiaRouter.get("/:id", noticiaConsultarPorIdController);
 noticiaRouter.get("/", noticiaBuscarController);
 noticiaRouter.post("/", noticiaCriarController);
 
