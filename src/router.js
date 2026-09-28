@@ -3,8 +3,8 @@ import { noticiaConsultarPorIdController, noticiaBuscarController, noticiaCriarC
 
 const noticiaRouter = express.Router();
 
-noticiaRouter.get("/:id", noticiaConsultarPorIdController);
 noticiaRouter.get("/", noticiaBuscarController);
+noticiaRouter.get("/:id", noticiaConsultarPorIdController);
 noticiaRouter.post("/", noticiaCriarController);
 
 export { noticiaRouter };
