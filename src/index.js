@@ -18,5 +18,3 @@ app.use("/noticias", noticiaRouter);
 
 export { app };
 
-
-
