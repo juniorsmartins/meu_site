@@ -2,7 +2,7 @@ import { Noticia } from '../database/schema/Noticia.js';
 
 const noticiaBuscarService = async () => {
 
-    const noticia = await Noticia.find();
+    const noticia = await Noticia.find().sort({ createdAt: -1 }).limit(8);
     return noticia;
 };
 
