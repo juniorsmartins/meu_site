@@ -1,7 +1,11 @@
+/* Container Principal */
 .noticia-container {
-    max-width: 800px;
-    margin: 2rem auto;
+    max-width: 840px;
+    margin: 2.5rem auto;
     padding: 0 1.5rem;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
 }
 
 #noticia-chapeu {
