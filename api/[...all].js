@@ -1,4 +1,4 @@
-import app from '../index.js';
+import app from '../src/index.js';
 
 export default async function handler(request, response) {
     // Garante que a URL seja limpa mantendo a rota do Express
