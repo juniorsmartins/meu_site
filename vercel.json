@@ -1,27 +1,13 @@
 {
-  "version": 2,
-  "builds": [
+  "outputDirectory": "frontend/src",
+  "rewrites": [
     {
-      "src": "index.js",
-      "use": "@vercel/node"
+      "source": "/api/(.*)",
+      "destination": "/api/[...all]"
     },
     {
-      "src": "frontend/src/**/*",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/noticias(.*)",
-      "dest": "index.js"
-    },
-    {
-      "src": "/",
-      "dest": "frontend/src/html/index.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "frontend/src/$1"
+      "source": "/",
+      "destination": "/html/index.html"
     }
   ]
 }
