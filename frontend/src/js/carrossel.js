@@ -51,7 +51,7 @@ async function carregarCarrosselCompleto() {
 
 function abrirNoticia(id) {
     if (id) {
-        window.location.href = '../html/noticia-pagina.html?id=${id}';
+        window.location.href = `../html/noticia-pagina.html?id=${id}`;
     }
 }
 
