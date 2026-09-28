@@ -1,4 +1,4 @@
-import { app } from '../src/index.js';
+import { app } from '../index.js';
 
 export default (request, response) => {
     request.url = request.url.replace(/^\/api/, '') || '/';
