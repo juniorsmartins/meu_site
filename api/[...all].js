@@ -1,8 +1,10 @@
 import app from '../src/index.js';
 
-export default async function handler(request, response) {
-    // Garante que a URL seja limpa mantendo a rota do Express
-    request.url = request.url.replace(/^\/api/, '') || '/';
-    return app(request, response);
-}
+export default (req, res) => {
+    // Remove o prefixo /api da URL para que o Express entenda a rota /noticias
+    if (req.url.startsWith('/api')) {
+        req.url = req.url.replace('/api', '');
+    }
+    return app(req, res);
+};
 
