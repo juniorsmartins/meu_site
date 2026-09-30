@@ -47,7 +47,7 @@ async function carregarNoticiasPorEditoria() {
         const editoria = coluna.getAttribute("data-editoria");
 
         // Busca a div interna com a classe '.noticias-lista' que irá armazenar os cards de notícias daquela coluna específica
-        const listaContainer = coluna.querySelector(".lista-noticias"); 
+        const listaContainer = coluna.querySelector(".noticias-lista"); 
 
         // Salta para a próxima coluna do loop caso a categoria não tenha sido informada ou a div contêiner não exista
         if (!editoria || !listaContainer) continue;
