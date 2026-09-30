@@ -22,6 +22,7 @@ const noticiaSchema = new mongoose.Schema(
 // Índice para otimizar consultas por editoria e data de criação
 noticiaSchema.index({ editoria: 1, createdAt: -1 });
 
+// Cria o modelo de notícia a partir do schema
 const Noticia = mongoose.model("Noticia", noticiaSchema);
 
 export { Noticia };
