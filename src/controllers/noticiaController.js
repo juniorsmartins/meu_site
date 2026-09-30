@@ -24,9 +24,17 @@ const noticiaConsultarPorIdController = async (request, response) => {
 
 const noticiaBuscarController = async (request, response) => {
 
-    const noticia = await noticiaBuscarService();
+    try {
+        // Extrai os parâmetros de consulta da requisição
+        const { editoria, limit } = request.query;
+        // Chama o serviço para buscar notícias com base na editoria e limite
+        const noticias = await noticiaBuscarService(editoria, Number(limit));
 
-    response.status(200).send(noticia);
+        response.status(200).send(noticias);
+
+    } catch (error) {
+        response.status(500).send({ error: "Erro ao buscar notícias" });
+    }
 };
 
 const noticiaCriarController = async (request, response) => {
