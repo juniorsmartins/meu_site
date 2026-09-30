@@ -24,5 +24,5 @@ noticiaSchema.index({ editoria: 1, createdAt: -1 });
 
 const Noticia = mongoose.model("Noticia", noticiaSchema);
 
-export { noticiaSchema };
+export { Noticia };
 

@@ -16,18 +16,6 @@ const connectToMongo = async () => {
     // Aguarda a conexão ser estabelecida antes de prosseguir
     await mongoose.connect(dbKey);
 
-    // mongoose.connection.on("connected", () => {
-    //     console.log("Conectado ao MongoDB com sucesso.");
-    // });
-
-    // mongoose.connection.on("error", (err) => {
-    //     console.error("Erro ao conectar ao MongoDB:", err);
-    // });
-
-    // mongoose.connection.on("disconnected", () => {
-    //     console.log("Desconectado do MongoDB.");
-    // });
-
     console.log("Conectado ao MongoDB com sucesso.");
 }
 
