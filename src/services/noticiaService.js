@@ -10,7 +10,7 @@ const noticiaConsultarPorIdService = async (id) => {
 const noticiaBuscarService = async (editoria, limit = 8) => {
 
     const filtro = editoria ? { editoria } : {};
-    const noticias = (await Noticia.find(filtro)).toSorted({ createdAt: -1 }).limit(limit);
+    const noticias = await Noticia.find(filtro).sort({ createdAt: -1 }).limit(limit);
     return noticias;
 };
 
