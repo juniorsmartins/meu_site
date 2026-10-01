@@ -22,3 +22,4 @@ const noticiaCriarService = async (noticia) => {
 
 export { noticiaConsultarPorIdService, noticiaBuscarService, noticiaCriarService };
 
+

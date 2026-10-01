@@ -47,4 +47,3 @@ const noticiaCriarController = async (request, response) => {
 
 export { noticiaConsultarPorIdController, noticiaBuscarController, noticiaCriarController };
 
-

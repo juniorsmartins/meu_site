@@ -30,3 +30,4 @@ export default app;
 // Exportação nomeada do aplicativo Express, útil para testes ou outros usos fora do ambiente Serverless
 export { app };
 
+
