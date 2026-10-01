@@ -1,10 +1,10 @@
 import express from 'express';
 import { 
-    noticiaConsultarPorIdController, 
     noticiaBuscarController, 
     noticiaCriarController
 } from './controllers/noticiaController.js';
 import { noticiaDeletarPorIdController } from './controllers/noticiaDeleteController.js';
+import { noticiaConsultarPorIdController } from './controllers/noticiaConsultarController.js';
 
 const noticiaRouter = express.Router();
 
