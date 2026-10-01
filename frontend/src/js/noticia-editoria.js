@@ -93,7 +93,7 @@ function renderizarListaNoticias(containerDaListaDeNoticiasDaEditoria, listaNoti
 
     containerDaListaDeNoticiasDaEditoria.innerHTML = ""; // Limpa o conteúdo antigo
 
-    if (noticias.length === 0) {
+    if (listaNoticiasPorEditoria.length === 0) {
         containerDaListaDeNoticiasDaEditoria.innerHTML = "<p class='sem-noticias'>Nenhuma notícia encontrada.</p>";
         return;
     }
