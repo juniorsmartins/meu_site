@@ -1,14 +1,16 @@
 import express from 'express';
-import { noticiaPesquisarController } from './controllers/noticiaPesquisarController.js';
 import { noticiaCriarController } from './controllers/noticiaCriarController.js';
-import { noticiaDeletarPorIdController } from './controllers/noticiaDeleteController.js';
+import { noticiaPesquisarController } from './controllers/noticiaPesquisarController.js';
 import { noticiaConsultarPorIdController } from './controllers/noticiaConsultarController.js';
+import { noticiaAtualizarController } from './controllers/noticiaAtualizarController.js';
+import { noticiaDeletarPorIdController } from './controllers/noticiaDeleteController.js';
 
 const noticiaRouter = express.Router();
 
+noticiaRouter.post("/", noticiaCriarController);
 noticiaRouter.get("/", noticiaPesquisarController);
 noticiaRouter.get("/:id", noticiaConsultarPorIdController);
-noticiaRouter.post("/", noticiaCriarController);
+noticiaRouter.put("/:id", noticiaAtualizarController);
 noticiaRouter.delete("/:id", noticiaDeletarPorIdController);
 
 export { noticiaRouter };
