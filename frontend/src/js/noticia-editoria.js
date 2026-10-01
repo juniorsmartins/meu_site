@@ -76,10 +76,10 @@ async function processarColunaEditoria(coluna, template) {
 }
 
 // Busca as notícias de uma categoria na API
-async function buscarNoticiasPorEditoria(editoria) {
+async function buscarNoticiasPorEditoria(nomeEditoria) {
 
     // Constrói a URL da API para buscar notícias da editoria específica no backend
-    const url = `/api/noticias?editoria=${encodeURIComponent(editoria)}&limit=${LIMITE_NOTICIAS_POR_COLUNA}`; 
+    const url = `/api/noticias?editoria=${encodeURIComponent(nomeEditoria)}&limit=${LIMITE_NOTICIAS_POR_COLUNA}`; 
     const resposta = await fetch(url);
 
     if (!resposta.ok) return [];
