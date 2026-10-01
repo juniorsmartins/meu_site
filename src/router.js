@@ -2,9 +2,9 @@ import express from 'express';
 import { 
     noticiaConsultarPorIdController, 
     noticiaBuscarController, 
-    noticiaCriarController,
-    noticiaDeletarPorIdController
+    noticiaCriarController
 } from './controllers/noticiaController.js';
+import { noticiaDeletarPorIdController } from './controllers/noticiaDeleteController.js';
 
 const noticiaRouter = express.Router();
 
