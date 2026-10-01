@@ -20,16 +20,9 @@ const noticiaCriarService = async (noticia) => {
     return novaNoticia;
 };
 
-const noticiaDeletarPorIdService = async (id) => {
-
-    const noticiaDeletada = await Noticia.findByIdAndDelete(id).lean();
-    return noticiaDeletada;
-}
-
 export { 
     noticiaConsultarPorIdService, 
     noticiaBuscarService, 
-    noticiaCriarService, 
-    noticiaDeletarPorIdService 
+    noticiaCriarService
 };
 

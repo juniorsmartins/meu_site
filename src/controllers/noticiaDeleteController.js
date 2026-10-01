@@ -1,4 +1,4 @@
-import { noticiaDeletarPorIdService } from '../services/noticiaService.js';
+import { noticiaDeletarPorIdService } from '../services/noticiaDeleteService.js';
 
 const noticiaDeletarPorIdController = async (request, response) => {
 
