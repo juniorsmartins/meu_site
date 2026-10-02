@@ -18,4 +18,3 @@ const noticiaPesquisarController = async (request, response) => {
 export { 
     noticiaPesquisarController
 };
-
