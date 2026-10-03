@@ -1,0 +1,24 @@
+#container-tabela-noticias {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse; /* Remove espaços entre as células */
+    background: var(--cor-principal-dois); /* Define o fundo da tabela como branco */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra sutil à tabela */
+}
+
+th, td {
+    padding: 0.75rem 1rem; /* Adiciona espaçamento interno às células */
+    text-align: left; /* Alinha o texto à esquerda */
+    border-bottom: 1px solid var(--cor-principal-um); /* Adiciona uma borda inferior às células */
+    font-size: 0.9rem; /* Define o tamanho da fonte das células */
+}
+
+th {
+    background: var(--cor-principal-um); /* Define o fundo do cabeçalho da tabela */
+    color: var(--cor-principal-tres); /* Define a cor do texto do cabeçalho da tabela */
+    font-weight: 600; /* Define o peso da fonte do cabeçalho da tabela */
+}
+
