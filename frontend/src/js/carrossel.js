@@ -22,8 +22,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 async function carregarCarrosselCompleto() {
-//    const API_URL = "https://meu-site-ashy-omega.vercel.app/api/noticias";
-    const API_URL = "/api/noticias";
+
+    const API_URL = "/api/noticias?limite=8";
 
     try {
 
