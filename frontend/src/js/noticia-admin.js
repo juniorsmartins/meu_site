@@ -2,7 +2,7 @@ const API_URL = `/api/noticias`;
 
 let paginaAtual = 1;
 let totalPaginas = 1;
-const LIMITE_POR_PAGINA = 5;
+const LIMITE_POR_PAGINA = 10;
 
 document.addEventListener(`DOMContentLoaded`, async () => {
     configurarEventosPaginacao();
