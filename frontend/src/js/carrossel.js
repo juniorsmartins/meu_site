@@ -35,7 +35,8 @@ async function carregarCarrosselCompleto() {
             throw new Error(`Erro ao carregar notícias: ${response.status}`);
         }
 
-        const noticias = await response.json();
+        const dados = await response.json();
+        const noticias = Array.isArray(dados) ? dados : (dados.noticias || []);
 
         if (!noticias || noticias.length === 0) {
             throw new Error("Nenhuma notícia encontrada");

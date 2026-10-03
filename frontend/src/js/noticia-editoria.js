@@ -84,8 +84,10 @@ async function buscarNoticiasPorEditoria(nomeEditoria) {
 
     if (!resposta.ok) return [];
 
-    // Retorna os dados da resposta em formato JSON
-    return await resposta.json();
+    const dados = await resposta.json();
+    const noticias = Array.isArray(dados) ? dados : (dados.noticias || []);
+    
+    return noticias;
 }
 
 // Desenha as notícias na tela ou exibe mensagem de lista vazia
