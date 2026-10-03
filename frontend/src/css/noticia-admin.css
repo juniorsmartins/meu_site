@@ -1,5 +1,5 @@
 #container-tabela-noticias {
-    width: 80%;
+    width: 85%;
     overflow-x: auto;
 }
 
@@ -21,5 +21,40 @@ th {
     background: var(--cor-principal-um); /* Define o fundo do cabeçalho da tabela */
     color: var(--cor-principal-tres); /* Define a cor do texto do cabeçalho da tabela */
     font-weight: 600; /* Define o peso da fonte do cabeçalho da tabela */
+}
+
+
+.paginacao-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    padding: 0.5rem 0;
+}
+
+.paginacao-flex button {
+    background-color: var(--cor-principal-um);
+    color: var(--cor-principal-tres);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: opacity 0.2s ease;
+}
+
+.paginacao-flex button:hover:not(:disabled) {
+    opacity: 0.85;
+}
+
+.paginacao-flex button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+#info-paginacao {
+    font-size: 0.9rem;
+    color: var(--secondary-text-color);
+    font-weight: 600;
 }
 

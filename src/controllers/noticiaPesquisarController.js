@@ -4,15 +4,21 @@ const noticiaPesquisarController = async (request, response) => {
 
     try {
         // Extrai os parâmetros de consulta da requisição
-        const { editoria, buscaTitulo, limit } = request.query;
+        const { editoria, buscaTitulo, pagina, limite } = request.query;
 
-        // Chama o serviço para buscar notícias com base na editoria, no título e no limite
-        const noticias = await noticiaPesquisarService(editoria, buscaTitulo, Number(limit));
+        
+        const resultadoPaginado = await noticiaPesquisarService({
+            editoria, 
+            buscaTitulo, 
+            pagina: pagina ? Number(pagina) : 1, 
+            limit: limite ? Number(limite) : 8
+        });
 
-        response.status(200).send(noticias);
+        response.status(200).send(resultadoPaginado);
 
     } catch (error) {
-        response.status(500).send({ error: "Erro ao buscar notícias." });
+        console.error("Erro ao pesquisar notícias:", error);
+        response.status(500).send({ error: "Erro ao buscar notícias" });
     }
 };
 
