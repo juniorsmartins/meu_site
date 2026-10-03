@@ -1,4 +1,5 @@
 #container-tabela-noticias {
+    width: 80%;
     overflow-x: auto;
 }
 

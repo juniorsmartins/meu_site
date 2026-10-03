@@ -62,11 +62,15 @@ function criarLinhaNoticia(noticia) {
         ? noticia.conteudo.substring(0, 40) + '...' 
         : noticia.conteudo;
 
+    const linhaFinaResumida = noticia.linhaFina && noticia.linhaFina.length > 20
+        ? noticia.linhaFina.substring(0, 20) + '...'
+        : noticia.linhaFina; 
+
     tr.innerHTML = `
-        <td><strong>${noticia.editoria || 'Geral'}</strong></td>
+        <td>${noticia.editoria || 'Geral'}</td>
         <td>${noticia.chapeu || '-'}</td>
         <td>${noticia.titulo || '-'}</td>
-        <td>${noticia.linhaFina || '-'}</td>
+        <td>${linhaFinaResumida || '-'}</td>
         <td>${noticia.autor || '-'}</td>
         <td>${conteudoResumido}</td>
     `;
