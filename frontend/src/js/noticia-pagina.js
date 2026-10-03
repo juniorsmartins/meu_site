@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // 2. Busca a notícia na API
-//    const API_URL = `https://meu-site-ashy-omega.vercel.app/api/noticias/${noticiaId}`;
     const API_URL = `/api/noticias/${noticiaId}`;
 
     try {
