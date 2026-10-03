@@ -10,7 +10,7 @@ const noticiaPesquisarController = async (request, response) => {
             editoria, 
             buscaTitulo, 
             pagina: pagina ? Number(pagina) : 1, 
-            limit: limite ? Number(limite) : 8
+            limite: limite ? Number(limite) : 8
         });
 
         response.status(200).send(resultadoPaginado);
