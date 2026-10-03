@@ -1,16 +1,3 @@
-/** 
-document.addEventListener('DOMContentLoaded', () => {
-    const form = document.querySelector('form');
-
-    if (!form) return;
-
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
-        contato(event);
-    });
-});
-*/
-
 function contato(event) {
     event.preventDefault(); /* Impede o envio padrão do formulário */
 
@@ -26,8 +13,5 @@ function contato(event) {
     alert("Contato enviado com sucesso!"); /* Exibe uma mensagem de sucesso */
     event.target.reset(); /* Limpa o formulário após o envio */
 }
-
-
-
 
 

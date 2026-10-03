@@ -79,13 +79,15 @@ async function processarColunaEditoria(coluna, template) {
 async function buscarNoticiasPorEditoria(nomeEditoria) {
 
     // Constrói a URL da API para buscar notícias da editoria específica no backend
-    const url = `/api/noticias?editoria=${encodeURIComponent(nomeEditoria)}&limit=${LIMITE_NOTICIAS_POR_COLUNA}`; 
+    const url = `/api/noticias?editoria=${encodeURIComponent(nomeEditoria)}&limite=${LIMITE_NOTICIAS_POR_COLUNA}`; 
     const resposta = await fetch(url);
 
     if (!resposta.ok) return [];
 
-    // Retorna os dados da resposta em formato JSON
-    return await resposta.json();
+    const dados = await resposta.json();
+    const noticias = Array.isArray(dados) ? dados : (dados.noticias || []);
+
+    return noticias;
 }
 
 // Desenha as notícias na tela ou exibe mensagem de lista vazia
