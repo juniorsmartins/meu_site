@@ -1,0 +1,60 @@
+#container-tabela-noticias {
+    width: 85%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse; /* Remove espaços entre as células */
+    background: var(--cor-principal-dois); /* Define o fundo da tabela como branco */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra sutil à tabela */
+}
+
+th, td {
+    padding: 0.75rem 1rem; /* Adiciona espaçamento interno às células */
+    text-align: left; /* Alinha o texto à esquerda */
+    border-bottom: 1px solid var(--cor-principal-um); /* Adiciona uma borda inferior às células */
+    font-size: 0.9rem; /* Define o tamanho da fonte das células */
+}
+
+th {
+    background: var(--cor-principal-um); /* Define o fundo do cabeçalho da tabela */
+    color: var(--cor-principal-tres); /* Define a cor do texto do cabeçalho da tabela */
+    font-weight: 600; /* Define o peso da fonte do cabeçalho da tabela */
+}
+
+
+.paginacao-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    padding: 0.5rem 0;
+}
+
+.paginacao-flex button {
+    background-color: var(--cor-principal-um);
+    color: var(--cor-principal-tres);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: opacity 0.2s ease;
+}
+
+.paginacao-flex button:hover:not(:disabled) {
+    opacity: 0.85;
+}
+
+.paginacao-flex button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+#info-paginacao {
+    font-size: 0.9rem;
+    color: var(--secondary-text-color);
+    font-weight: 600;
+}
+

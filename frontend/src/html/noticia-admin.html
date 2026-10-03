@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Gazeta Central - Notícia</title>
+        <!-- Estilos -->
+        <link rel="stylesheet" href="../css/index.css">
+        <link rel="stylesheet" href="../css/header.css">
+        <link rel="stylesheet" href="../css/noticia-admin.css">
+        <link rel="stylesheet" href="../css/footer.css">
+        <!-- Favicon -->
+        <link rel="shortcut icon" type="image/png" href="../img/favicon.png">
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+        <!-- Bootstrap Icons -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    </head>
+
+    <body>
+
+        <!-- Scripts do Cabeçalho/Rodapé e do Leitor de Notícia -->
+        <script type="module" src="../js/header.js"></script>
+        <script src="../js/footer.js"></script>
+        <script src="../js/noticia-admin.js"></script>
+
+        <!-- Cabeçalho Reutilizado -->
+        <div id="header-container"></div>
+
+        <!-- Conteúdo da Notícia Completa -->
+        <main id="container-noticia-admin" class="flex flex-center">
+
+            <section id="container-tabela-noticias">
+                <h3>Notícias Cadastradas</h3>
+                <br/>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Editoria</th>
+                            <th>Chapéu</th>
+                            <th>Título</th>
+                            <th>Linha Fina</th>
+                            <th>Autor</th>
+                            <th>Conteúdo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpo-tabela-noticias">
+                        <tr>
+                            <td colspan="6" style="text-align: center;">Carregando notícias...</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Paginação -->
+                <div id="container-paginacao-noticias" class="paginacao-flex">
+                    <button id="btn-pagina-anterior" disabled>&laquo; Anterior</button>
+                    <span id="info-paginacao">Página 1 de 1</span>
+                    <button id="btn-pagina-proxima" disabled>Próxima &raquo;</button>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Rodapé Reutilizado -->
+        <div id="footer-container"></div>
+
+    </body>
+
+</html>
+
+
