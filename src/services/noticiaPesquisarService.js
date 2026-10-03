@@ -1,6 +1,6 @@
 import { Noticia } from '../database/schema/noticiaSchema.js';
 
-const noticiaPesquisarService = async (editoria, buscaTitulo, pagina = 1, limit = 8) => {
+const noticiaPesquisarService = async (editoria, buscaTitulo, pagina = 1, limite = 8) => {
 
     const filtro = {};
 
@@ -15,8 +15,8 @@ const noticiaPesquisarService = async (editoria, buscaTitulo, pagina = 1, limit 
     }
 
     // Garante números inteiros válidos
-    const paginaAtual = Math.max(1, Number(pagina)); // Garante que a página atual seja pelo menos 1
-    const limitePorPagina = Math.max(1, Number(limit)); // Garante que o limite por página seja pelo menos 1
+    const paginaAtual = Math.max(1, Number(pagina) || 1); // Garante que a página atual seja pelo menos 1
+    const limitePorPagina = Math.max(1, Number(limite) || 8); // Garante que o limite por página seja pelo menos 1
 
     // Calcula quantos documentos ignorar (skip)
     const pular = (paginaAtual - 1) * limitePorPagina; // Calcula quantos documentos pular com base na página atual e no limite por página
@@ -32,13 +32,13 @@ const noticiaPesquisarService = async (editoria, buscaTitulo, pagina = 1, limit 
     ]);
 
     // Calcula o total de páginas com base no total de notícias e no limite por página
-    const totalPaginas = Math.ceil(totalNoticias / limitePorPagina); 
+    const totalPaginas = Math.ceil(totalNoticias / limitePorPagina) || 1;
 
     return {
-        noticias, 
-        totalNoticias,
-        paginaAtual, 
-        totalPaginas, 
+        noticias: noticias || [],
+        totalNoticias: totalNoticias || 0,
+        paginaAtual,
+        totalPaginas,
         limitePorPagina
     };
 };

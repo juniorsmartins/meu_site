@@ -6,7 +6,6 @@ const noticiaPesquisarController = async (request, response) => {
         // Extrai os parâmetros de consulta da requisição
         const { editoria, buscaTitulo, pagina, limite } = request.query;
 
-        
         const resultadoPaginado = await noticiaPesquisarService({
             editoria, 
             buscaTitulo, 
