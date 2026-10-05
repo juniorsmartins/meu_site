@@ -24,6 +24,7 @@ th {
 }
 
 
+/* Container de Paginação */
 .paginacao-flex {
     display: flex;
     justify-content: space-between;
@@ -56,5 +57,57 @@ th {
     font-size: 0.9rem;
     color: var(--secondary-text-color);
     font-weight: 600;
+}
+
+/* Botões de Ação na Tabela */
+.col-acoes {
+    display: flex;
+    gap: 0.4rem;
+    white-space: nowrap;
+}
+
+.btn-acao {
+    border: none;
+    padding: 0.35rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.btn-acao:hover {
+    opacity: 0.85;
+}
+
+.btn-editar {
+    background-color: var(--cor-principal-cinco, #f4a261);
+    color: white;
+}
+
+.btn-deletar {
+    background-color: var(--cor-principal-seis, #e76f51);
+    color: white;
+}
+
+.btn-salvar {
+    background-color: var(--cor-principal-dois, #2a9d8f);
+    color: white;
+}
+
+.btn-cancelar {
+    background-color: #6c757d;
+    color: white;
+}
+
+/* Inputs de Edição em Linha */
+table td input,
+table td select {
+    width: 100%;
+    padding: 0.3rem;
+    font-size: 0.85rem;
+    border: 1px solid var(--cor-principal-um);
+    border-radius: 3px;
+    box-sizing: border-box;
 }
 
