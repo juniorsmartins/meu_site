@@ -18,7 +18,7 @@ export const OPCOES_EDITORIA = [
 
 // Dados Centrais do Portal
 export const SITE_CONFIG = {
-    nome: "Gazeta Centralllllllllllllll",
+    nome: "Gazeta Central",
     slogan: "A tecnologia em favor do jornalismo independente",
     localizacaoPadrao: "Cuiabá, Mato Grosso, Brasil"
 };
