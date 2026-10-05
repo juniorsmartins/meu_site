@@ -1,29 +1,210 @@
+/* Estrutura Principal do Rodapé */
 #footer {
-    background-color: var(--cor-principal-um); /* Define a cor de fundo do rodapé */
-    color: var(--primary-text-color); /* Define a cor do texto do rodapé */
-    margin-top: 1rem; /* Adiciona uma margem superior ao rodapé */
-    padding: 2rem; /* Adiciona um espaçamento interno ao rodapé */
+    background-color: var(--blue-900);
+    color: #FFFFFF;
+    margin-top: 3rem;
+    padding: 3rem 1.5rem 1.5rem 1.5rem;
+    font-family: 'Inter', sans-serif;
 }
 
-.footer-content {
-    text-align: center; /* Alinha o conteúdo do rodapé ao centro */
+.footer-container-top {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2.5rem;
+    flex-wrap: wrap;
 }
 
-.footer-social {
-    gap: 0.5rem; /* Adiciona um espaçamento entre os elementos internos */
-    margin-top: 2rem; /* Adiciona uma margem superior ao rodapé */
+/* Newsletter (Sugestão 4) */
+.footer-newsletter {
+    flex: 1;
+    min-width: 280px;
 }
 
-a i {
-    font-size: 1rem; /* Define o tamanho da fonte dos ícones do rodapé */
-    margin: 0.5rem; /* Adiciona uma margem ao redor dos ícones do rodapé */;
-    padding: 0.5rem; /* Adiciona um espaçamento interno aos ícones do rodapé */
+.footer-newsletter h4,
+.footer-social-section h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: #FFFFFF;
 }
 
+.footer-newsletter p {
+    font-size: 0.9rem;
+    color: var(--blue-100);
+    margin-bottom: 1rem;
+}
 
+/* Mensagem de Feedback da Newsletter */
+.newsletter-msg {
+    font-size: 0.85rem;
+    margin-top: 0.6rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    display: none; /* Inicia oculto */
+    transition: all 0.3s ease;
+}
 
+.newsletter-msg.sucesso {
+    display: block;
+    background-color: rgba(39, 174, 96, 0.15);
+    color: #2ecc71;
+    border: 1px solid #2ecc71;
+}
 
+.newsletter-msg.erro {
+    display: block;
+    background-color: rgba(231, 76, 60, 0.15);
+    color: #e74c3c;
+    border: 1px solid #e74c3c;
+}
 
+.newsletter-form {
+    display: flex;
+    gap: 0.5rem;
+    max-width: 420px;
+}
 
+.newsletter-form input {
+    flex: 1;
+    padding: 0.6rem 0.9rem;
+    border-radius: 6px;
+    border: 1px solid var(--blue-300);
+    font-size: 0.85rem;
+    outline: none;
+    font-family: 'Inter', sans-serif;
+}
 
+.newsletter-form input:focus {
+    border-color: var(--blue-500);
+}
+
+.newsletter-form button {
+    background-color: var(--blue-500);
+    color: #FFFFFF;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.newsletter-form button:hover {
+    background-color: var(--blue-600);
+}
+
+/* Redes Sociais com Botões Circulares (Sugestão 2) */
+.footer-social-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.footer-social-links {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.footer-social-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #FFFFFF;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.footer-social-links a i {
+    font-size: 1rem;
+    padding: 0;
+    background: transparent;
+    margin: 0;
+}
+
+.footer-social-links a:hover {
+    background-color: var(--blue-500);
+    transform: translateY(-3px);
+}
+
+/* Divisor Visual */
+.footer-divider {
+    max-width: 1200px;
+    margin: 2rem auto 1.5rem auto;
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Barra Inferior & Copyright (Sugestão 3) */
+.footer-container-bottom {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.85rem;
+    color: var(--blue-100);
+}
+
+.copyright-info p {
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.developer-credit strong {
+    color: #FFFFFF;
+}
+
+/* Botão Voltar ao Topo (Sugestão 5) */
+.btn-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 0.9rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-top i {
+    font-size: 0.9rem;
+    background: transparent;
+    padding: 0;
+}
+
+.btn-top:hover {
+    background-color: var(--blue-500);
+    border-color: var(--blue-500);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .footer-container-top {
+        flex-direction: column;
+    }
+
+    .newsletter-form {
+        width: 100%;
+    }
+
+    .footer-container-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.2rem;
+    }
+}
 

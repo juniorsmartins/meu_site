@@ -1,46 +1,42 @@
 <!-- Cabeçalho -->
 <header id="header" class="width-100">
 
-
-    <div id="header-topo" class="flex">
-        <p id="data-extenso"></p>
-        <p id="hora-extenso"></p>
-        <p id="localizacao-extenso"></p>
+    <div id="header-topo" class="flex flex-between">
+        <div class="header-topo-info flex">
+            <p id="data-extenso"></p>
+            <p id="hora-extenso"></p>
+            <p id="localizacao-extenso"></p>
+        </div>
     </div>
 
-    <div class="flex flex-between">
-        <p class="header-apresentacao-itens">Menu</p>
-        <div class="header-apresentacao-itens">
-            <h1 id="header-apresentacao-nome-titulo">Gazeta Central</h1>
-            <h3 id="header-apresentacao-nome-subtitulo">A tecnologia em favor do jornalismo independente</h3>
+    <!-- Apresentação Centralizada e Compacta (Sugestão 3) -->
+    <div class="flex flex-between header-conteudo-central">
+        <div class="header-lado-esquerdo">
+            <p class="header-btn-menu"><i class="bi bi-list"></i> Menu</p>
         </div>
-        <button type="button" class="btn-padrao header-apresentacao-itens">Entrar</button>
+
+        <div class="header-apresentacao-branding">
+            <h1 id="header-apresentacao-nome-titulo"></h1>
+            <h3 id="header-apresentacao-nome-subtitulo"></h3>
+        </div>
+
+        <div class="header-lado-direito">
+            <button type="button" class="btn-padrao btn-entrar">
+                <i class="bi bi-person-circle"></i> Entrar
+            </button>
+        </div>
     </div>
 
     <nav id="header-navbar"> 
         <ul class="flex flex-center">
-            <li>
-                <a href="../html/index.html">Home</a>
-            </li>
-            <li>
-                <a href="../html/sobre.html">Sobre</a>
-            </li>
-            <li>
-                <a href="../html/noticia-admin.html">Teste</a>
-            </li>
-            <li>
-                <a href="../html/servicos.html">Serviços</a>
-            </li>
-            <li>
-                <a href="#portfolio">Portfólio</a>
-            </li>
-            <li>
-                <a href="../html/contato.html">Contato</a>
-            </li>
+            <li><a href="../html/index.html" class="nav-link">Home</a></li>
+            <li><a href="../html/sobre.html" class="nav-link">Sobre</a></li>
+            <li><a href="../html/noticia-admin.html" class="nav-link">Teste</a></li>
+            <li><a href="../html/servicos.html" class="nav-link">Serviços</a></li>
+            <li><a href="#portfolio" class="nav-link">Portfólio</a></li>
+            <li><a href="../html/contato.html" class="nav-link">Contato</a></li>
         </ul>
     </nav>
 
-
 </header>
-
 
