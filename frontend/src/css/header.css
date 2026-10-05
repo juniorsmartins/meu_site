@@ -1,4 +1,6 @@
-/* Cabeçalho Geral */
+/* ====================================================
+   1. Estrutura Principal e Topo
+   ==================================================== */
 #header {
     color: var(--primary-text-color);
     background-color: var(--cor-principal-um);
@@ -10,37 +12,80 @@
     padding: 0.5rem 2rem;
     border-bottom: 1px solid var(--blue-700);
     font-size: 0.8rem;
+    background-color: var(--blue-900);
 }
 
-#header-topo p {
+.header-topo-info p {
     margin-right: 1.5rem;
     color: var(--blue-100);
 }
 
-.header-apresentacao-itens {
+/* ====================================================
+   2. Conteúdo Central (Logo, Botões e Alinhamentos)
+   ==================================================== */
+.header-conteudo-central {
+    padding: 1.25rem 2rem;
+    align-items: center;
+}
+
+.header-lado-esquerdo, 
+.header-lado-direito {
+    flex: 1;
+    display: flex;
+}
+
+.header-lado-direito {
+    justify-content: flex-end;
+}
+
+.header-btn-menu {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--blue-100);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.header-apresentacao-branding {
     text-align: center;
-    margin: 1rem 2rem;
+    flex: 2;
 }
 
 #header-apresentacao-nome-titulo {
     font-family: 'Playfair Display', serif;
-    font-size: 3rem;
-    color: var(--primary-text-color);
+    font-size: 2.5rem; /* Proporção ideal para o título central */
+    color: #FFFFFF;
     text-transform: uppercase;
     letter-spacing: 1px;
+    line-height: 1.1;
 }
 
 #header-apresentacao-nome-subtitulo {
     font-family: 'Inter', sans-serif;
     font-weight: 300;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     color: var(--blue-100);
-    margin-top: 0.2rem;
+    margin-top: 0.3rem;
 }
 
-/* ----------------------------------------------------
-   Navegação e Menu Principal (Sugestão 4)
----------------------------------------------------- */
+.btn-entrar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background-color: var(--blue-700);
+    border: 1px solid var(--blue-500);
+}
+
+.btn-entrar:hover {
+    background-color: var(--blue-500);
+}
+
+/* ====================================================
+   3. Navegação e Menu Principal
+   ==================================================== */
 #header-navbar {
     border-top: 1px solid var(--blue-700);
     background-color: var(--blue-900);

@@ -1,4 +1,5 @@
 import { getDatePorExtenso, getTimeHM } from "./utils.js";
+import { SITE_CONFIG } from "./config.js"; // Importa a variável global
 
 document.addEventListener("DOMContentLoaded", async () => {
     const headerContainer = document.getElementById("header-container");
@@ -14,18 +15,25 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         headerContainer.innerHTML = await response.text();
 
-        const dataExtensa = getDatePorExtenso();
-        const horaMinutos = getTimeHM();
+        // Injeção dinâmica a partir da variável SITE_CONFIG
+        const tituloEl = document.getElementById("header-apresentacao-nome-titulo");
+        const subtituloEl = document.getElementById("header-apresentacao-nome-subtitulo");
+        
+        if (tituloEl) tituloEl.textContent = SITE_CONFIG.nome;
+        if (subtituloEl) subtituloEl.textContent = SITE_CONFIG.slogan;
 
-        document.getElementById("data-extenso").textContent = dataExtensa;
-        document.getElementById("hora-extenso").textContent = horaMinutos;
-        document.getElementById("localizacao-extenso").textContent = "Cuiabá, Mato Grosso, Brasil";
+        // Atualiza a tag <title> do navegador automaticamente
+        document.title = `${SITE_CONFIG.nome} - Jornalismo Independente`;
 
-        // Ativa automaticamente o item do menu referente à página atual
+        // Preenche Data, Hora e Localização
+        document.getElementById("data-extenso").textContent = getDatePorExtenso();
+        document.getElementById("hora-extenso").textContent = getTimeHM();
+        document.getElementById("localizacao-extenso").textContent = SITE_CONFIG.localizacaoPadrao;
+
         destacarPaginaAtiva();
 
     } catch (error) {
-        console.error(error);
+        console.error("Erro ao inicializar o cabeçalho:", error);
     }
 });
 
@@ -35,8 +43,6 @@ function destacarPaginaAtiva() {
 
     navLinks.forEach(link => {
         const href = link.getAttribute("href");
-        
-        // Compara se o caminho da URL termina com o href do link
         if (href && caminhoAtual.includes(href.replace("..", ""))) {
             link.classList.add("active");
         } else if (caminhoAtual === "/" || caminhoAtual.endsWith("index.html")) {

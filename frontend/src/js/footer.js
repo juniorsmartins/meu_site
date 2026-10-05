@@ -1,3 +1,11 @@
+import { SITE_CONFIG } from "./config.js";
+
+// No momento de renderizar o footer.html:
+const copyrightEl = document.querySelector(".copyright-info p");
+if (copyrightEl) {
+    copyrightEl.innerHTML = `&copy; ${new Date().getFullYear()} ${SITE_CONFIG.nome}. Todos os direitos reservados.`;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     // Carrega o HTML do rodapé dinamicamente se necessário
     carregarFooter();
