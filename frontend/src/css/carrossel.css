@@ -1,75 +1,196 @@
+/* Seção Geral dos Carrosséis / Destaques */
 #noticias-1 {
-    margin: 1.5rem 1rem; /* Adiciona margem superior e inferior */
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
+/* Container Superior (Carrossel 1 + Carrossel 2) */
+#noticias-1 > .flex {
+    display: flex;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+/* ----------------------------------------------------
+   1. Carrossel 1 (Destaque Principal)
+---------------------------------------------------- */
 #carrossel-1 {
-    width: 60%; /* Ocupa porcentagem da largura do contêiner */ 
-    padding-top: 20%; /* Adiciona espaçamento superior */
-    position: relative; /* Permite posicionamento relativo para elementos internos */
-    background-color: var(--cor-principal-um); /* Cor de fundo para destaque */
-    border: 1px solid rgb(252, 248, 248); /* Borda */
+    width: 60%;
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--blue-900);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--blue-100);
+    min-height: 380px;
 }
 
 #carrossel-1-item {
-    height: 100%; /* Ocupa toda a altura do contêiner pai */
-    background-size: cover; /* Ajusta a imagem de fundo para cobrir o contêiner */
-    background-position: center; /* Centraliza a imagem de fundo */
-    left: 0; /* Alinha à esquerda */
-    top: 0; /* Alinha ao topo */
-    position: absolute; /* Permite posicionamento absoluto em relação ao contêiner pai */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    display: flex;
     align-items: flex-end;
-    cursor: pointer; /* Altera o cursor para indicar interatividade */
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+#carrossel-1:hover #carrossel-1-item {
+    transform: scale(1.02);
 }
 
 #carrossel-1-item h2 {
-    margin: 0; /* Remove margem */
-    padding: 10px; /* Adiciona espaçamento interno */
-    color: var(--primary-text-color); /* Cor do texto */
-    background-color: var(--cor-transparencia); /* Fundo semi-transparente para melhor legibilidade */
+    width: 100%;
+    margin: 0;
+    padding: 2rem 1.25rem 1.25rem 1.25rem;
+    color: #FFFFFF;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+    line-height: 1.3;
+    /* Gradiente suave de leitura que substitui a caixa preta sólida */
+    background: linear-gradient(180deg, transparent 0%, rgba(13, 71, 161, 0.92) 100%);
+    box-sizing: border-box;
 }
 
+/* ----------------------------------------------------
+   2. Carrossel 2 (Grade de Destaques Secundários)
+---------------------------------------------------- */
 #carrossel-2 {
-    width: 40%; /* Ocupa porcentagem da largura do contêiner */
-    flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
+    width: 40%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .carrossel-2-itens {
-    width: 50%; /* Ocupa metade da largura do contêiner pai */
-    padding-top: 30%; /* Adiciona espaçamento superior */
-    background-size: cover; /* Ajusta a imagem de fundo para cobrir o contêiner */
-    background-position: center; /* Centraliza a imagem de fundo */
-    border: 1px solid rgb(252, 248, 248); /* Borda */
-    background-color: var(--cor-principal-um); /* Cor de fundo */
-    position: relative; /* Permite posicionamento relativo para elementos internos */
-    cursor: pointer; /* Altera o cursor para indicar interatividade */
+    width: calc(50% - 0.5rem);
+    height: 180px;
+    position: relative;
+    border-radius: 6px;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    background-color: var(--blue-900);
+    border: 1px solid var(--blue-100);
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.carrossel-2-itens h3, .carrossel-3-itens h3 {
-    padding: 10px; /* Adiciona espaçamento interno */
-    color: var(--primary-text-color); /* Cor do texto */
-    height: 100%; /* Ocupa toda a altura do contêiner */
-    background-color: var(--cor-transparencia); /* Fundo semi-transparente para melhor legibilidade */
+.carrossel-2-itens:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.carrossel-2-itens h3 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    padding: 1.25rem 0.75rem 0.75rem 0.75rem;
+    color: #FFFFFF;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1.3;
+    background: linear-gradient(180deg, transparent 0%, rgba(13, 71, 161, 0.9) 100%);
+    box-sizing: border-box;
+    /* Limita o texto a no máximo 3 linhas */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* ----------------------------------------------------
+   3. Carrossel 3 (Faixa Inferior de Destaques)
+---------------------------------------------------- */
+#carrossel-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    width: 100%;
 }
 
 .carrossel-3-itens {
-    padding-top: 10%; /* Adiciona espaçamento superior */
-    background-size: cover; /* Ajusta a imagem de fundo para cobrir o contêiner */
-    background-position: center; /* Centraliza a imagem de fundo */
-    border: 1px solid rgb(252, 248, 248); /* Borda */
-    background-color: var(--cor-principal-um); /* Cor de fundo */
-    position: relative; /* Permite posicionamento relativo para elementos internos */
-    cursor: pointer; /* Altera o cursor para indicar interatividade */
+    width: 100%;
+    height: 140px;
+    position: relative;
+    border-radius: 6px;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    background-color: var(--blue-900);
+    border: 1px solid var(--blue-100);
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s ease;
 }
 
-/* @media (max-width: 768px) {
+.carrossel-3-itens:hover {
+    transform: translateY(-2px);
+}
 
-    #destaque-principal, #destaque-secundario {
-        width: 100%; 
+.carrossel-3-itens h3 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    padding: 1.25rem 0.75rem 0.75rem 0.75rem;
+    color: #FFFFFF;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.3;
+    background: linear-gradient(180deg, transparent 0%, rgba(13, 71, 161, 0.9) 100%);
+    box-sizing: border-box;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* ----------------------------------------------------
+   4. Responsividade do Carrossel
+---------------------------------------------------- */
+@media (max-width: 900px) {
+    #noticias-1 > .flex {
+        flex-direction: column;
     }
 
-    .destaque-secundario-1 {
-        width: 100%; 
+    #carrossel-1, 
+    #carrossel-2 {
+        width: 100%;
     }
-} */
 
+    #carrossel-1 {
+        min-height: 300px;
+    }
+
+    #carrossel-3 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .carrossel-2-itens {
+        width: 100%;
+        height: 160px;
+    }
+
+    #carrossel-3 {
+        grid-template-columns: 1fr;
+    }
+}
 
