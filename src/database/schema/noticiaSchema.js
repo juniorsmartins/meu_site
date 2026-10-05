@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { EDITORIAS } from '../../constants/editorias.js';
 
 const noticiaSchema = new mongoose.Schema(
     {
@@ -8,12 +9,13 @@ const noticiaSchema = new mongoose.Schema(
         conteudo: { type: String, required: true },
         autor: { type: String, required: true },
         imagemUrl: { type: String, required: true },
-        editoria: {
+        editoria: { 
             type: String, 
-            required: true,
-            enum: ["política", "esportes", "entretenimento", "tecnologia", "saúde", "economia", "opinião", "editorial", "turismo", "cultura"],
-            lowercase: true, 
-            trim: true
+            required: true, 
+            enum: {
+                values: EDITORIAS,
+                message: '{VALUE} não é uma editoria válida.'
+            }
         }
     },
     { timestamps: true } /* Habilita timestamps automáticos para createdAt e updatedAt */

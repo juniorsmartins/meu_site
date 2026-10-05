@@ -15,6 +15,7 @@ th, td {
     text-align: left; /* Alinha o texto à esquerda */
     border-bottom: 1px solid var(--cor-principal-um); /* Adiciona uma borda inferior às células */
     font-size: 0.9rem; /* Define o tamanho da fonte das células */
+    vertical-align: middle; /* Centraliza todo o conteúdo das células verticalmente */
 }
 
 th {
@@ -24,6 +25,7 @@ th {
 }
 
 
+/* Container de Paginação */
 .paginacao-flex {
     display: flex;
     justify-content: space-between;
@@ -57,4 +59,101 @@ th {
     color: var(--secondary-text-color);
     font-weight: 600;
 }
+
+/* Botões de Ação na Tabela */
+.col-acoes {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 0.5rem !important;
+}
+
+/* Coluna de Ações */
+td.col-acoes {
+    white-space: nowrap;
+    width: 1%; /* Força a coluna a ocupar apenas o espaço necessário */
+    padding: 0.5rem;
+}
+
+/* Botões de Ação - Reset Rígido contra regras globais do index.css */
+.btn-acao {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.35rem !important;
+    
+    width: auto !important;
+    height: 32px !important;
+    min-height: 32px !important;
+    max-height: 32px !important;
+    padding: 0 0.75rem !important;
+    margin: 0 !important;
+    
+    border: none !important;
+    border-radius: 4px !important;
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    line-height: 1 !important;
+    box-sizing: border-box !important;
+    transition: opacity 0.2s ease;
+}
+
+/* Reset do Ícone interno do botão */
+.btn-acao i {
+    display: inline-block !important;
+    font-size: 0.9rem !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.btn-acao:hover {
+    opacity: 0.85;
+}
+
+/* Cores dos Botões de Ação com Alto Contraste */
+.btn-editar {
+    background-color: #f39c12 !important; /* Laranja vibrante */
+    color: var(--cor-principal-tres) !important;
+}
+
+.btn-editar i {
+    background-color: #f39c12 !important; /* Laranja vibrante */
+    color: var(--cor-principal-tres) !important;
+}
+
+.btn-deletar {
+    background-color: #e74c3c !important; /* Vermelho */
+    color: var(--cor-principal-tres) !important;
+}
+
+.btn-deletar i {
+    background-color: #e74c3c !important; /* Vermelho */
+    color: var(--cor-principal-tres) !important;
+}
+
+.btn-salvar {
+    background-color: #27ae60 !important; /* Verde */
+    color: var(--cor-principal-tres) !important;
+}
+
+.btn-cancelar {
+    background-color: #7f8c8d !important; /* Cinza */
+    color: var(--cor-principal-tres) !important;
+}
+
+/* Inputs de Edição em Linha */
+table td input,
+table td select {
+    width: 100%;
+    padding: 0.4rem;
+    font-size: 0.85rem;
+    border: 1px solid var(--cor-principal-um);
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
 

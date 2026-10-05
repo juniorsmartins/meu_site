@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Gazeta Central - Notícia</title>
+        <title>Gazeta Central - Admin Notícias</title>
         <!-- Estilos -->
         <link rel="stylesheet" href="../css/index.css">
         <link rel="stylesheet" href="../css/header.css">
@@ -25,8 +25,8 @@
 
         <!-- Scripts do Cabeçalho/Rodapé e do Leitor de Notícia -->
         <script type="module" src="../js/header.js"></script>
+        <script type="module" src="../js/noticia-admin.js"></script>
         <script src="../js/footer.js"></script>
-        <script src="../js/noticia-admin.js"></script>
 
         <!-- Cabeçalho Reutilizado -->
         <div id="header-container"></div>
@@ -46,11 +46,12 @@
                             <th>Linha Fina</th>
                             <th>Autor</th>
                             <th>Conteúdo</th>
+                            <th>Ações</th> <!-- Coluna para botões de ação (editar, excluir e etc) -->
                         </tr>
                     </thead>
                     <tbody id="corpo-tabela-noticias">
                         <tr>
-                            <td colspan="6" style="text-align: center;">Carregando notícias...</td>
+                            <td colspan="7" style="text-align: center;">Carregando notícias...</td>
                         </tr>
                     </tbody>
                 </table>

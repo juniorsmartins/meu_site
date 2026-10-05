@@ -1,0 +1,17 @@
+// URL base centralizada da API
+export const API_URL = '/api/noticias';
+
+// Lista única das editorias usadas no frontend
+export const OPCOES_EDITORIA = [
+    "política", 
+    "esportes", 
+    "entretenimento", 
+    "tecnologia", 
+    "saúde", 
+    "economia", 
+    "opinião", 
+    "editorial", 
+    "turismo", 
+    "cultura", 
+    "polícia"
+];
