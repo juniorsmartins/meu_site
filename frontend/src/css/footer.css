@@ -37,6 +37,30 @@
     margin-bottom: 1rem;
 }
 
+/* Mensagem de Feedback da Newsletter */
+.newsletter-msg {
+    font-size: 0.85rem;
+    margin-top: 0.6rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    display: none; /* Inicia oculto */
+    transition: all 0.3s ease;
+}
+
+.newsletter-msg.sucesso {
+    display: block;
+    background-color: rgba(39, 174, 96, 0.15);
+    color: #2ecc71;
+    border: 1px solid #2ecc71;
+}
+
+.newsletter-msg.erro {
+    display: block;
+    background-color: rgba(231, 76, 60, 0.15);
+    color: #e74c3c;
+    border: 1px solid #e74c3c;
+}
+
 .newsletter-form {
     display: flex;
     gap: 0.5rem;

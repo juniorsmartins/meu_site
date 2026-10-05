@@ -21,6 +21,7 @@ async function carregarFooter() {
 
 function configurarFormularioNewsletter() {
     const form = document.querySelector(".newsletter-form");
+    const msgContainer = document.getElementById("newsletter-mensagem");
     if (!form) return;
 
     form.addEventListener("submit", async (event) => {
@@ -32,6 +33,12 @@ function configurarFormularioNewsletter() {
         if (!inputEmail || !inputEmail.value) return;
 
         const email = inputEmail.value.trim();
+
+        // Oculta mensagens anteriores
+        if (msgContainer) {
+            msgContainer.className = "newsletter-msg";
+            msgContainer.style.display = "none";
+        }
 
         try {
             btnSubmit.disabled = true;
@@ -45,17 +52,25 @@ function configurarFormularioNewsletter() {
 
             const resultado = await response.json();
 
-            if (response.ok) {
-                alert(resultado.message);
-                inputEmail.value = "";
-            } else {
-                alert(resultado.message || resultado.error || "Não foi possível realizar a inscrição.");
+            if (msgContainer) {
+                if (response.ok) {
+                    msgContainer.textContent = resultado.message || "Inscrição realizada com sucesso!";
+                    msgContainer.classList.add("sucesso");
+                    inputEmail.value = "";
+                } else {
+                    msgContainer.textContent = resultado.message || resultado.error || "Não foi possível realizar a inscrição.";
+                    msgContainer.classList.add("erro");
+                }
+                msgContainer.style.display = "block";
             }
 
         } catch (error) {
             console.error("Erro ao enviar e-mail:", error);
-            alert("Erro ao se conectar ao servidor. Tente novamente mais tarde.");
-            
+            if (msgContainer) {
+                msgContainer.textContent = "Erro ao se conectar ao servidor. Tente novamente mais tarde.";
+                msgContainer.classList.add("erro");
+                msgContainer.style.display = "block";
+            }
         } finally {
             btnSubmit.disabled = false;
             btnSubmit.textContent = "Assinar";
