@@ -31,7 +31,7 @@
     font-family: "Montserrat Alternates", sans-serif;
     font-weight: 300;
     font-size: 1.2rem;
-    color: var(--cor-principal-seis);
+    color: var(--primary-text-color);
 }
 
 #header-navbar {
