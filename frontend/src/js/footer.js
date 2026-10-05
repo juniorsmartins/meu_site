@@ -1,13 +1,6 @@
 import { SITE_CONFIG } from "./config.js";
 
-// No momento de renderizar o footer.html:
-const copyrightEl = document.querySelector(".copyright-info p");
-if (copyrightEl) {
-    copyrightEl.innerHTML = `&copy; ${new Date().getFullYear()} ${SITE_CONFIG.nome}. Todos os direitos reservados.`;
-}
-
 document.addEventListener("DOMContentLoaded", () => {
-    // Carrega o HTML do rodapé dinamicamente se necessário
     carregarFooter();
 });
 
@@ -19,11 +12,24 @@ async function carregarFooter() {
         const response = await fetch("../html/footer.html");
         if (!response.ok) throw new Error("Erro ao carregar footer.html");
 
+        // 1. Injeta o HTML no contêiner
         footerContainer.innerHTML = await response.text();
+
+        // 2. Atualiza o copyright dinamicamente com o nome vindo do config.js
+        atualizarCopyright();
+
+        // 3. Ativa o ouvinte de eventos do formulário de Newsletter
         configurarFormularioNewsletter();
 
     } catch (error) {
         console.error("Erro ao inicializar o rodapé:", error);
+    }
+}
+
+function atualizarCopyright() {
+    const copyrightEl = document.querySelector(".copyright-info p");
+    if (copyrightEl) {
+        copyrightEl.innerHTML = `&copy; ${new Date().getFullYear()} ${SITE_CONFIG.nome}. Todos os direitos reservados.`;
     }
 }
 
