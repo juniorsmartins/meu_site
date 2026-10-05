@@ -20,7 +20,7 @@
 .noticias-por-editoria h2 {
     position: relative;
     display: block;
-    color: var(--cor-principal-um);
+    color: var(--secondary-text-color);
     font-size: 1.3rem;
     letter-spacing: 0.04em;
     padding-bottom: 0.4rem;
