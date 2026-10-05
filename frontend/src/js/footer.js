@@ -16,7 +16,8 @@ async function carregarFooter() {
         footerContainer.innerHTML = await response.text();
 
         // 2. Atualiza o copyright dinamicamente com o nome vindo do config.js
-        atualizarCopyright();
+        // Atualiza todos os pontos de branding do rodapé
+        atualizarTextosBranding();
 
         // 3. Ativa o ouvinte de eventos do formulário de Newsletter
         configurarFormularioNewsletter();
