@@ -1,6 +1,5 @@
 #noticias-2 {
     width: 92%;
-/*    max-width: 1200px; /* Define a largura máxima do contêiner */
     margin: 2rem auto;
 }
 
@@ -21,9 +20,9 @@
 .noticias-por-editoria h2 {
     position: relative;
     display: block;
-    color: var(--cor-principal-seis);
+    color: var(--secondary-text-color);
     font-size: 1.3rem;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.04em; /* Define o espaçamento entre as letras */
     padding-bottom: 0.4rem;
     margin-bottom: 1rem;
 }
@@ -35,7 +34,7 @@
     left: 0;
     width: 100%;
     height: 2px;
-    background-color: var(--cor-principal-seis);
+    background-color: var(--cor-principal-dois);
     border-radius: 2px; /* Arredonda os cantos da linha */
 }
 
@@ -43,9 +42,9 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    overflow: hidden;
-    border-radius: 4px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    overflow: hidden; /* Esconde o conteúdo que ultrapassa os limites do contêiner */
+    border-radius: 4px; /* Arredonda os cantos do contêiner */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Adiciona uma transição suave ao transformar e aplicar sombra */
 }
 
 .noticia-por-editoria-1:hover {

@@ -13,7 +13,7 @@
 
 #header-topo p {
     margin-right: 2rem; /* Adiciona uma margem à direita do parágrafo */
-    color: var(--tertiary-text-color); /* Define a cor do texto do parágrafo */
+    color: var(--primary-text-color); /* Define a cor do texto do parágrafo */
 }
 
 .header-apresentacao-itens {
@@ -31,7 +31,7 @@
     font-family: "Montserrat Alternates", sans-serif;
     font-weight: 300;
     font-size: 1.2rem;
-    color: var(--cor-principal-seis);
+    color: var(--primary-text-color);
 }
 
 #header-navbar {
