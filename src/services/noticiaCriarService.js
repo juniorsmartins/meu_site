@@ -9,3 +9,4 @@ const noticiaCriarService = async (noticia) => {
 export { 
     noticiaCriarService
 };
+

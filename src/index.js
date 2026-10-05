@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { noticiaRouter } from './router.js';
+import { noticiaRouter, newsletterRouter } from './router.js';
 import { connectToMongo } from './database/index.js';
 
 const app = express(); /* Cria uma instância do aplicativo Express */
@@ -23,10 +23,13 @@ app.use(async (request, response, next) => {
     }
 });
 
+// Definição das rotas da API
 app.use("/noticias", noticiaRouter);
+app.use("/newsletter", newsletterRouter); 
 
 // Exportação padrão necessária para Serverless na Vercel
 export default app;
 // Exportação nomeada do aplicativo Express, útil para testes ou outros usos fora do ambiente Serverless
 export { app };
+
 
