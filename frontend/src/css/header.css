@@ -13,7 +13,7 @@
 
 #header-topo p {
     margin-right: 2rem; /* Adiciona uma margem à direita do parágrafo */
-    color: var(--tertiary-text-color); /* Define a cor do texto do parágrafo */
+    color: var(--primary-text-color); /* Define a cor do texto do parágrafo */
 }
 
 .header-apresentacao-itens {
