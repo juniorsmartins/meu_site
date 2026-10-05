@@ -26,10 +26,17 @@ async function carregarFooter() {
     }
 }
 
-function atualizarCopyright() {
+function atualizarTextosBranding() {
+    // 1. Atualiza o copyright na barra inferior
     const copyrightEl = document.querySelector(".copyright-info p");
     if (copyrightEl) {
         copyrightEl.innerHTML = `&copy; ${new Date().getFullYear()} ${SITE_CONFIG.nome}. Todos os direitos reservados.`;
+    }
+
+    // 2. Atualiza o título da seção de redes sociais
+    const socialTituloEl = document.getElementById("footer-social-titulo");
+    if (socialTituloEl) {
+        socialTituloEl.textContent = `Siga a ${SITE_CONFIG.nome}`;
     }
 }
 
