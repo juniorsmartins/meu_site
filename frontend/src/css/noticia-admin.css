@@ -120,7 +120,17 @@ td.col-acoes {
     color: var(--cor-principal-tres) !important;
 }
 
+.btn-editar i {
+    background-color: #f39c12 !important; /* Laranja vibrante */
+    color: var(--cor-principal-tres) !important;
+}
+
 .btn-deletar {
+    background-color: #e74c3c !important; /* Vermelho */
+    color: var(--cor-principal-tres) !important;
+}
+
+.btn-deletar i {
     background-color: #e74c3c !important; /* Vermelho */
     color: var(--cor-principal-tres) !important;
 }
