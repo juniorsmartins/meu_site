@@ -15,6 +15,7 @@ th, td {
     text-align: left; /* Alinha o texto à esquerda */
     border-bottom: 1px solid var(--cor-principal-um); /* Adiciona uma borda inferior às células */
     font-size: 0.9rem; /* Define o tamanho da fonte das células */
+    vertical-align: middle; /* Centraliza todo o conteúdo das células verticalmente */
 }
 
 th {
