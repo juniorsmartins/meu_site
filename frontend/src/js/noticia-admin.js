@@ -101,19 +101,18 @@ function renderizarLinhasTabela(corpoTabela, listaNoticias) {
     });
 }
 
-// Constrói a linha com os botões de ação e anexa os manipuladores de evento no JS
+// Constrói a linha com os botões de ação e anexa os eventos
 function criarLinhaNoticia(noticia) {
-
-    const tr = document.createElement(`tr`); // Cria a linha da tabela
-    tr.id = `linha-noticia-${noticia._id}`; // Define um ID único para a linha da tabela
-
-    const linhaFinaResumida = noticia.linhaFina && noticia.linhaFina.length > 20
-        ? noticia.linhaFina.substring(0, 20) + '...'
-        : noticia.linhaFina; 
+    const tr = document.createElement("tr");
+    tr.id = `linha-noticia-${noticia._id}`;
 
     const conteudoResumido = noticia.conteudo && noticia.conteudo.length > 40 
-        ? noticia.conteudo.substring(0, 40) + '...' 
-        : noticia.conteudo;
+        ? noticia.conteudo.substring(0, 40) + "..." 
+        : (noticia.conteudo || "");
+
+    const linhaFinaResumida = noticia.linhaFina && noticia.linhaFina.length > 20
+        ? noticia.linhaFina.substring(0, 20) + "..."
+        : (noticia.linhaFina || ""); 
 
     tr.innerHTML = `
         <td class="col-editoria">${noticia.editoria || 'Geral'}</td>
@@ -132,10 +131,10 @@ function criarLinhaNoticia(noticia) {
         </td>
     `;
 
-    // Armazena o objeto completo na linha
+    // Armazena a notícia tratando valores nulos
     tr.dataset.noticia = JSON.stringify(noticia);
 
-    // Associa os eventos aos botões
+    // Eventos dos botões
     const btnEditar = tr.querySelector(".btn-editar");
     const btnDeletar = tr.querySelector(".btn-deletar");
 
@@ -145,21 +144,34 @@ function criarLinhaNoticia(noticia) {
     return tr;
 }
 
-// 1. Ativa o modo de edição transformando as células em inputs
-function ativarModoEdicao(idNoticia) {
+// 1. Ativa o modo de edição
+function ativarModoEdicao(id) {
+    const tr = document.getElementById(`linha-noticia-${id}`);
+    if (!tr) return;
 
-    const tr = document.getElementById(`linha-noticia-${idNoticia}`);
-    if (!tr) return; // Se a linha não existir, sai da função
+    let noticia;
+    try {
+        noticia = JSON.parse(tr.dataset.noticia);
+    } catch (e) {
+        console.error("Erro ao ler dados da notícia:", e);
+        return;
+    }
 
-    const noticia = JSON.parse(tr.dataset.noticia); // Recupera o objeto completo da linha
-
-    // Guarda o HTML original caso a edição seja cancelada
+    // Salva o HTML original caso cancele
     linhasEmEdicao[id] = tr.innerHTML;
 
-    // Gera o <select> com as opções vindas do config.js
+    // Constrói o <select>
+    const editoriaAtual = (noticia.editoria || "").toLowerCase();
     const opcoesSelect = OPCOES_EDITORIA.map(ed => 
-        `<option value="${ed}" ${noticia.editoria === ed ? 'selected' : ''}>${ed}</option>`
+        `<option value="${ed}" ${editoriaAtual === ed.toLowerCase() ? 'selected' : ''}>${ed}</option>`
     ).join("");
+
+    // Trata aspas duplas nos textos para não quebrar os inputs
+    const chapeu = (noticia.chapeu || "").replace(/"/g, '&quot;');
+    const titulo = (noticia.titulo || "").replace(/"/g, '&quot;');
+    const linhaFina = (noticia.linhaFina || "").replace(/"/g, '&quot;');
+    const autor = (noticia.autor || "").replace(/"/g, '&quot;');
+    const conteudo = (noticia.conteudo || "").replace(/"/g, '&quot;');
 
     tr.innerHTML = `
         <td>
@@ -167,11 +179,11 @@ function ativarModoEdicao(idNoticia) {
                 ${opcoesSelect}
             </select>
         </td>
-        <td><input type="text" id="edit-chapeu-${id}" value="${noticia.chapeu || ''}"></td>
-        <td><input type="text" id="edit-titulo-${id}" value="${noticia.titulo || ''}"></td>
-        <td><input type="text" id="edit-linhaFina-${id}" value="${noticia.linhaFina || ''}"></td>
-        <td><input type="text" id="edit-autor-${id}" value="${noticia.autor || ''}"></td>
-        <td><input type="text" id="edit-conteudo-${id}" value="${noticia.conteudo || ''}"></td>
+        <td><input type="text" id="edit-chapeu-${id}" value="${chapeu}"></td>
+        <td><input type="text" id="edit-titulo-${id}" value="${titulo}"></td>
+        <td><input type="text" id="edit-linhaFina-${id}" value="${linhaFina}"></td>
+        <td><input type="text" id="edit-autor-${id}" value="${autor}"></td>
+        <td><input type="text" id="edit-conteudo-${id}" value="${conteudo}"></td>
         <td class="col-acoes">
             <button class="btn-acao btn-salvar">
                 <i class="bi bi-check-circle"></i> Salvar
@@ -182,7 +194,7 @@ function ativarModoEdicao(idNoticia) {
         </td>
     `;
 
-    // Associa os eventos de Salvar e Cancelar aos novos botões
+    // Eventos de Salvar e Cancelar
     const btnSalvar = tr.querySelector(".btn-salvar");
     const btnCancelar = tr.querySelector(".btn-cancelar");
 

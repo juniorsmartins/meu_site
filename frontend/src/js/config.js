@@ -12,5 +12,6 @@ export const OPCOES_EDITORIA = [
     "opinião", 
     "editorial", 
     "turismo", 
-    "cultura"
+    "cultura", 
+    "polícia"
 ];

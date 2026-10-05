@@ -8,6 +8,7 @@ export const EDITORIAS = [
     "opinião", 
     "editorial", 
     "turismo", 
-    "cultura"
+    "cultura",
+    "polícia"
 ];
 
