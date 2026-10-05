@@ -62,52 +62,66 @@ th {
 /* Botões de Ação na Tabela */
 .col-acoes {
     display: flex;
-    gap: 0.4rem;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
     white-space: nowrap;
 }
 
 .btn-acao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem; /* Espaço entre o ícone e o texto */
     border: none;
-    padding: 0.35rem 0.6rem;
+    padding: 0.4rem 0.75rem;
     border-radius: 4px;
     font-size: 0.8rem;
     font-weight: 600;
     cursor: pointer;
-    transition: opacity 0.2s ease;
+    line-height: 1; /* Evita que o ícone ou texto estiquem o botão */
+    height: 32px; /* Define uma altura fixa e elegante para os botões */
+    transition: opacity 0.2s ease, transform 0.1s ease;
+}
+
+.btn-acao i {
+    font-size: 0.9rem;
+    line-height: 1;
 }
 
 .btn-acao:hover {
-    opacity: 0.85;
+    opacity: 0.88;
+    transform: translateY(-1px);
 }
 
 .btn-editar {
     background-color: var(--cor-principal-cinco, #f4a261);
-    color: white;
+    color: var(--cor-principal-tres);
 }
 
 .btn-deletar {
     background-color: var(--cor-principal-seis, #e76f51);
-    color: white;
+    color: var(--cor-principal-tres);
 }
 
 .btn-salvar {
     background-color: var(--cor-principal-dois, #2a9d8f);
-    color: white;
+    color: var(--cor-principal-tres);
 }
 
 .btn-cancelar {
     background-color: #6c757d;
-    color: white;
+    color: var(--cor-principal-tres);
 }
 
 /* Inputs de Edição em Linha */
 table td input,
 table td select {
     width: 100%;
-    padding: 0.3rem;
+    padding: 0.4rem;
     font-size: 0.85rem;
     border: 1px solid var(--cor-principal-um);
-    border-radius: 3px;
+    border-radius: 4px;
     box-sizing: border-box;
 }
 
