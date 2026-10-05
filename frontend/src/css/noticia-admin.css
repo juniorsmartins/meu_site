@@ -114,24 +114,25 @@ td.col-acoes {
     opacity: 0.85;
 }
 
+/* Cores dos Botões de Ação com Alto Contraste */
 .btn-editar {
-    background-color: var(--cor-principal-cinco, #f4a261) !important;
-    color: var(--cor-principal-tres, #ffffff) !important;
+    background-color: #f39c12 !important; /* Laranja vibrante */
+    color: var(--cor-principal-tres) !important;
 }
 
 .btn-deletar {
-    background-color: var(--cor-principal-seis, #e76f51) !important;
-    color: var(--cor-principal-tres, #ffffff) !important;
+    background-color: #e74c3c !important; /* Vermelho */
+    color: var(--cor-principal-tres) !important;
 }
 
 .btn-salvar {
-    background-color: var(--cor-principal-dois, #2a9d8f) !important;
-    color: var(--cor-principal-tres, #ffffff) !important;
+    background-color: #27ae60 !important; /* Verde */
+    color: var(--cor-principal-tres) !important;
 }
 
 .btn-cancelar {
-    background-color: #6c757d !important;
-    color: var(--cor-principal-tres, #ffffff) !important;
+    background-color: #7f8c8d !important; /* Cinza */
+    color: var(--cor-principal-tres) !important;
 }
 
 /* Inputs de Edição em Linha */
