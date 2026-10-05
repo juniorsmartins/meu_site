@@ -2,118 +2,123 @@
 
 /* Variáveis CSS */
 :root {
-    --cor-principal-um: #264653;
-    --cor-principal-dois: #2a9d8f;
-    --cor-principal-tres: #f5f5f5;
-    --cor-principal-quatro: #e9c46a;
-    --cor-principal-cinco: #f4a261;
-    --cor-principal-seis: #e76f51;
+    /* Paleta Oficial de Azuis - Gazeta Central */
+    --blue-50: #E3F2FD;
+    --blue-100: #BBDEFB;
+    --blue-200: #90CAF9;
+    --blue-300: #64B5F6;
+    --blue-400: #42A5F5;
+    --blue-500: #2196F3;
+    --blue-600: #1E88E5;
+    --blue-700: #1976D2;
+    --blue-800: #1565C0;
+    --blue-900: #0D47A1;
 
-    --primary-text-color: #FFF;
-    --secondary-text-color: #191919;
-    --tertiary-text-color: #868686;
+    /* Mapeamento de Variáveis do Projeto */
+    --cor-principal-um: var(--blue-900);     /* #0D47A1 - Cabeçalho e barras principais */
+    --cor-principal-dois: var(--blue-500);   /* #2196F3 - Destaques e links ativos */
+    --cor-principal-tres: #FFFFFF;           /* Fundo branco limpo */
+    --cor-principal-quatro: var(--blue-100); /* #BBDEFB - Fundos alternativos e hover */
+    --cor-principal-cinco: var(--blue-600);  /* #1E88E5 - Botões secundários */
+    --cor-principal-seis: #D32F2F;           /* Vermelho de alerta para exclusão */
 
-    --cor-linha-divisoria: #7b7d81;
-    --cor-transparencia: rgba(0, 0, 0, 0.5); 
+    /* Tipografia e Cores de Texto */
+    --primary-text-color: #FFFFFF;
+    --secondary-text-color: #1A202C;         /* Texto de leitura (alto contraste) */
+    --tertiary-text-color: #5A6A85;          /* Metadados: autor, data */
+
+    /* Estrutura e Linhas */
+    --cor-fundo-site: #F8FAFC;
+    --cor-linha-divisoria: var(--blue-100);
+    --cor-transparencia: rgba(13, 71, 161, 0.6);
 }
 
-/* Reset de estilos - IMPORTANTE */
-* { 
-    font-family: "Playfair Display", serif;
-    padding: 0; /* Remove padding padrão */
-    margin: 0; /* Remove margin padrão */
-    box-sizing: border-box; /* Inclui padding e border na largura e altura totais */
+/* Reset de estilos - Limpo e sem forçar tipografia global */
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
 }
 
-/* Estilo para o corpo */
+/* Regras Globais de Tipografia e Fundo */
 body {
-    width: 100vw; /* Define a largura do corpo como 100% da largura da viewport */
-    height: 100vh; /* Define a altura do corpo como 100% da altura da viewport */
+    background-color: var(--cor-fundo-site);
+    color: var(--secondary-text-color);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    line-height: 1.5;
 }
 
-h1 {
-    font-size: 2.5rem; /* Define o tamanho da fonte */
-    font-weight: 800; /* Define o peso da fonte */
-}
-
-h2 {
-    font-size: 1.7rem; /* Define o tamanho da fonte */
-    font-weight: 600; /* Define o peso da fonte */
-}
-
-h3 {
-    font-size: 1.3rem; /* Define o tamanho da fonte */
-    font-weight: 500; /* Define o peso da fonte */
+/* Manchetes e Títulos de Notícias */
+h1, h2, h3, .noticia-titulo, .titulo-principal {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: var(--blue-900);
+    line-height: 1.25;
 }
 
 p {
-    font-size: 1rem; /* Define o tamanho da fonte */
-    font-weight: 300; /* Define o peso da fonte */
+    font-size: 1rem;
+    font-weight: 400;
 }
 
+/* Categorias, Autores, Datas e Navegação */
+.badge-editoria, .categoria-tag, .meta-info, nav, button, input, select {
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.3px;
+}
+
+/* Classes Utilitárias de Flexbox */
 .flex {
-    display: flex; /* Define o layout como flexível */
+    display: flex;
 }
 
 .flex-center {
-    justify-content: center; /* Centraliza horizontalmente */
-    align-items: center; /* Centraliza verticalmente */
-    align-content: center; /* Centraliza o conteúdo quando há múltiplas linhas de itens flexíveis */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .flex-between {
-    justify-content: space-between; /* Distribui os elementos com espaço entre eles */
-    align-items: center; /* Alinha os elementos verticalmente ao centro */
-    align-content: center; /* Centraliza o conteúdo quando há múltiplas linhas de itens flexíveis */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .width-100 {
-    width: 100%; /* Define a largura como 100% */
+    width: 100%;
 }
 
-/* Estilo para imagens */
-img { 
+img {
     max-width: 100%;
     display: block;
 }
 
-/* Estilo para ícones */
-i {
-    background-color: var(--cor-principal-dois);
-    color: var(--primary-text-color);
-    font-size: 2.5rem;
-    padding: 2rem;
-}
-
-/* Estilo para links e botões */
-button { 
-    font-family: "Merriweather", serif;
-    text-decoration: none; /* Remove sublinhado padrão de links e botões */
+/* Botão Padrão do Sistema */
+button {
+    text-decoration: none;
+    border: none;
 }
 
 .btn-padrao {
-    border-radius: 1rem;
-    border: 0.05rem solid var(--cor-principal-cinco);
-    padding: 0.5rem 1.2rem;
-    font-size: 0.8rem;
-    font-weight: 700;
+    border-radius: 0.5rem;
+    border: 1px solid var(--cor-principal-cinco);
+    padding: 0.6rem 1.2rem;
+    font-size: 0.85rem;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     color: var(--primary-text-color);
     background-color: var(--cor-principal-cinco);
 }
 
 .btn-padrao:hover {
-    border: 0.05rem solid var(--cor-principal-tres);
-    opacity: 0.9;
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+    background-color: var(--blue-700);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 @media (max-width: 768px) {
-
     .flex {
-        flex-direction: column; /* Alinha os itens em coluna para telas menores */
+        flex-direction: column;
     }
 }
 

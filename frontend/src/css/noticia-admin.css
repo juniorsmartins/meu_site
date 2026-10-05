@@ -1,56 +1,66 @@
 #container-tabela-noticias {
-    width: 85%;
+    width: 90%;
+    max-width: 1200px;
+    margin: 2rem auto;
     overflow-x: auto;
+}
+
+#container-tabela-noticias h3 {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
 }
 
 table {
     width: 100%;
-    border-collapse: collapse; /* Remove espaços entre as células */
-    background: var(--cor-principal-dois); /* Define o fundo da tabela como branco */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra sutil à tabela */
+    border-collapse: collapse;
+    background: #FFFFFF; /* Fundo branco para garantir leitura dos dados */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 th, td {
-    padding: 0.75rem 1rem; /* Adiciona espaçamento interno às células */
-    text-align: left; /* Alinha o texto à esquerda */
-    border-bottom: 1px solid var(--cor-principal-um); /* Adiciona uma borda inferior às células */
-    font-size: 0.9rem; /* Define o tamanho da fonte das células */
-    vertical-align: middle; /* Centraliza todo o conteúdo das células verticalmente */
+    padding: 0.85rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--blue-100);
+    font-size: 0.9rem;
+    vertical-align: middle;
 }
 
 th {
-    background: var(--cor-principal-um); /* Define o fundo do cabeçalho da tabela */
-    color: var(--cor-principal-tres); /* Define a cor do texto do cabeçalho da tabela */
-    font-weight: 600; /* Define o peso da fonte do cabeçalho da tabela */
+    background: var(--blue-900);
+    color: #FFFFFF;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
 }
-
 
 /* Container de Paginação */
 .paginacao-flex {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 1rem;
+    margin-top: 1.2rem;
     padding: 0.5rem 0;
 }
 
 .paginacao-flex button {
-    background-color: var(--cor-principal-um);
-    color: var(--cor-principal-tres);
+    background-color: var(--blue-800);
+    color: #FFFFFF;
     border: none;
     padding: 0.5rem 1rem;
     border-radius: 4px;
     cursor: pointer;
     font-size: 0.85rem;
-    transition: opacity 0.2s ease;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
 }
 
 .paginacao-flex button:hover:not(:disabled) {
-    opacity: 0.85;
+    background-color: var(--blue-600);
 }
 
 .paginacao-flex button:disabled {
-    background-color: #ccc;
+    background-color: #CBD5E1;
     cursor: not-allowed;
 }
 
@@ -60,89 +70,68 @@ th {
     font-weight: 600;
 }
 
-/* Botões de Ação na Tabela */
-.col-acoes {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    gap: 0.5rem !important;
-}
-
 /* Coluna de Ações */
 td.col-acoes {
     white-space: nowrap;
-    width: 1%; /* Força a coluna a ocupar apenas o espaço necessário */
+    width: 1%;
     padding: 0.5rem;
 }
 
-/* Botões de Ação - Reset Rígido contra regras globais do index.css */
+.col-acoes {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Botões de Ação na Tabela */
 .btn-acao {
-    display: inline-flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 0.35rem !important;
-    
-    width: auto !important;
-    height: 32px !important;
-    min-height: 32px !important;
-    max-height: 32px !important;
-    padding: 0 0.75rem !important;
-    margin: 0 !important;
-    
-    border: none !important;
-    border-radius: 4px !important;
-    font-size: 0.8rem !important;
-    font-weight: 600 !important;
-    cursor: pointer !important;
-    line-height: 1 !important;
-    box-sizing: border-box !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    width: auto;
+    height: 32px;
+    padding: 0 0.75rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    line-height: 1;
+    box-sizing: border-box;
     transition: opacity 0.2s ease;
 }
 
-/* Reset do Ícone interno do botão */
 .btn-acao i {
-    display: inline-block !important;
-    font-size: 0.9rem !important;
-    line-height: 1 !important;
-    margin: 0 !important;
-    padding: 0 !important;
+    font-size: 0.9rem;
+    background: transparent;
+    padding: 0;
+    color: inherit;
 }
 
 .btn-acao:hover {
     opacity: 0.85;
 }
 
-/* Cores dos Botões de Ação com Alto Contraste */
 .btn-editar {
-    background-color: #f39c12 !important; /* Laranja vibrante */
-    color: var(--cor-principal-tres) !important;
-}
-
-.btn-editar i {
-    background-color: #f39c12 !important; /* Laranja vibrante */
-    color: var(--cor-principal-tres) !important;
+    background-color: #F39C12;
+    color: #FFFFFF;
 }
 
 .btn-deletar {
-    background-color: #e74c3c !important; /* Vermelho */
-    color: var(--cor-principal-tres) !important;
-}
-
-.btn-deletar i {
-    background-color: #e74c3c !important; /* Vermelho */
-    color: var(--cor-principal-tres) !important;
+    background-color: #E74C3C;
+    color: #FFFFFF;
 }
 
 .btn-salvar {
-    background-color: #27ae60 !important; /* Verde */
-    color: var(--cor-principal-tres) !important;
+    background-color: #27AE60;
+    color: #FFFFFF;
 }
 
 .btn-cancelar {
-    background-color: #7f8c8d !important; /* Cinza */
-    color: var(--cor-principal-tres) !important;
+    background-color: #7F8C8D;
+    color: #FFFFFF;
 }
 
 /* Inputs de Edição em Linha */
@@ -151,9 +140,10 @@ table td select {
     width: 100%;
     padding: 0.4rem;
     font-size: 0.85rem;
-    border: 1px solid var(--cor-principal-um);
+    border: 1px solid var(--blue-300);
     border-radius: 4px;
     box-sizing: border-box;
+    background-color: #FFFFFF;
 }
 
 

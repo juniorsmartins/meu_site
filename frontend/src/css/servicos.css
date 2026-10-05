@@ -1,80 +1,85 @@
-/* Seção de Áreas de Atuação */
 .text-image-section {
-    display: flex; /* Define o layout como flexível */
-    flex-wrap: wrap; /* Permite que os elementos internos quebrem para a próxima linha se necessário */
-    gap: 1rem; /* Adiciona um espaçamento entre os elementos internos */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 3rem auto;
+    padding: 0 1.5rem;
 }
 
 .text-container {
-    flex: 2 1 0; /* Define a flexibilidade do contêiner de texto */
-    display: flex; /* Define o layout como flexível */
-    gap: 2rem; /* Adiciona um espaçamento entre os elementos internos */
-    flex-direction: column; /* Define a direção dos elementos internos como coluna */
-    justify-content: center; /* Alinha os elementos internos verticalmente ao centro */
-    text-align: right; /* Alinha o texto à direita */
+    flex: 2 1 400px;
+    display: flex;
+    gap: 1.5rem;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .section-subtitle {
-    text-transform: uppercase; /* Transforma o texto em letras maiúsculas */
-    font-weight: bold; /* Define a espessura da fonte como semi-negrito */
-    color: var(--cor-principal-um); /* Define a cor do texto do subtítulo */
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--blue-700);
+    letter-spacing: 1px;
+    font-size: 0.85rem;
 }
 
 .section-title {
-    font-size: 2rem; /* Define o tamanho da fonte do título da seção */
-    color: var(--secondary-text-color); /* Define a cor do texto do título da seção */
+    font-size: 2.2rem;
+    color: var(--blue-900);
+    font-family: 'Playfair Display', serif;
 }
 
 .btn {
-    padding: 1.2rem 1.8rem; /* Adiciona um espaçamento interno ao botão */
-    text-transform: uppercase; /* Transforma o texto do botão em letras maiúsculas */
-    font-size: 1.4rem; /* Define o tamanho da fonte do botão */
-    font-weight: bold; /* Define a espessura da fonte do botão como semi-negrito */
-    background-color: var(--cor-principal-um); /* Define a cor de fundo do botão */
-    color: var(--primary-text-color); /* Define a cor do texto do botão */
-    align-self: end; /* Alinha o botão à direita do contêiner de texto */
+    display: inline-block;
+    padding: 0.8rem 1.6rem;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    font-weight: 700;
+    background-color: var(--blue-700);
+    color: #FFFFFF;
+    border-radius: 6px;
+    text-decoration: none;
+    align-self: flex-start;
+    transition: background-color 0.2s ease;
+}
+
+.btn:hover {
+    background-color: var(--blue-900);
 }
 
 .image-container {
-    flex: 1 1 300px; /* Define a flexibilidade do contêiner de imagem */
-    position: relative; /* Define o posicionamento como relativo para permitir a sobreposição */
-}
-
-.image-container i {
-    position: absolute; /* Define o posicionamento como absoluto para permitir a sobreposição */
+    flex: 1 1 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #other-services {
-    width: 100%; /* Define a largura da seção de outros serviços como 100% */ 
-    display: flex; /* Define o layout como flexível */
-    gap: 2rem; /* Adiciona um espaçamento entre os elementos internos */
-    padding: 2rem; /* Adiciona um espaçamento interno à seção de outros serviços */
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
 }
 
 .service {
-    position: relative; /* Define o posicionamento como relativo para permitir a sobreposição */
+    background: #FFFFFF;
+    border: 1px solid var(--blue-100);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
-.service i {
-    position: absolute; /* Define o posicionamento como absoluto para permitir a sobreposição */
-    left: 0; /* Define a posição horizontal do ícone */
-    top: 0; /* Define a posição vertical do ícone */
-    padding: 1rem; /* Adiciona um espaçamento interno ao ícone */
-    font-size: 1.5rem; /* Define o tamanho da fonte do ícone */
+.service-info h4 {
+    font-size: 1.2rem;
+    color: var(--blue-900);
+    margin-bottom: 0.5rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
 }
 
-.service-info {
-    background-color: var(--tertiary-color); /* Define a cor de fundo das informações do serviço */
-    padding: 2rem 1.4rem; /* Adiciona um espaçamento interno às informações do serviço */
-    min-height: 250px; /* Define a altura mínima das informações do serviço como 100% */
-    margin-top: -3rem; /* Adiciona uma margem superior negativa para sobrepor o ícone */
-    z-index: 2; /* Define a ordem de empilhamento das informações do serviço */
-    position: relative; /* Define o posicionamento como relativo para permitir a sobreposição */
-}
-
-.service h4 {
-    font-size: 1.8rem; /* Define o tamanho da fonte do título do serviço */
-    margin-bottom: 1rem; /* Adiciona uma margem inferior ao título do serviço */
-    text-transform: uppercase; /* Transforma o texto do título do serviço em letras maiúsculas */
+.service-info p {
+    color: var(--tertiary-text-color);
+    font-size: 0.95rem;
 }
 
