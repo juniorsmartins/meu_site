@@ -20,6 +20,9 @@ export const OPCOES_EDITORIA = [
 export const SITE_CONFIG = {
     nome: "Gazeta Central",
     slogan: "A tecnologia em favor do jornalismo independente",
-    localizacaoPadrao: "Cuiabá, Mato Grosso, Brasil"
+    fundador: "Junior Martins",
+    cargoFundador: "Fundador & Diretor de Tecnologia",
+    emailRedacao: "contato@gazetacentral.com.br",
+    localizacaoPadrao: "Cuiabá - Mato Grosso, Brasil"
 };
 

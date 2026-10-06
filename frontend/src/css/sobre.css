@@ -1,4 +1,4 @@
-/* Container Geral da Página Sobre */
+/* Container Geral */
 .sobre-container {
     max-width: 1000px;
     margin: 2.5rem auto;
@@ -6,9 +6,7 @@
     font-family: 'Inter', sans-serif;
 }
 
-/* ----------------------------------------------------
-   1. Hero / Manifesto
----------------------------------------------------- */
+/* 1. Hero / Manifesto */
 .sobre-hero {
     text-align: center;
     background: #FFFFFF;
@@ -65,9 +63,7 @@
     color: var(--blue-900);
 }
 
-/* ----------------------------------------------------
-   2. Grid de Pilares
----------------------------------------------------- */
+/* 2. Grid de Pilares */
 .sobre-pilares {
     margin-top: 2rem;
 }
@@ -122,16 +118,46 @@
 
 .card-pilar h3 {
     font-family: 'Inter', sans-serif;
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     font-weight: 700;
     color: var(--blue-900);
     margin-bottom: 0.75rem;
+    line-height: 1.3;
 }
 
 .card-pilar p {
     font-size: 0.95rem;
     color: var(--tertiary-text-color);
     line-height: 1.6;
+}
+
+/* 3. Seção Expediente */
+.sobre-expediente {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: #FFFFFF;
+    border: 1px solid var(--blue-100);
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.titulo-expediente {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--blue-900);
+    margin-bottom: 1rem;
+}
+
+.expediente-conteudo p {
+    font-size: 0.95rem;
+    color: var(--tertiary-text-color);
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+.expediente-conteudo strong {
+    color: var(--secondary-text-color);
 }
 
 /* Responsividade */
