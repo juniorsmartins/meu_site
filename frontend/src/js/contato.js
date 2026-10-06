@@ -38,7 +38,7 @@ function configurarEnvioContato() {
             btnSubmit.disabled = true;
             btnSubmit.innerHTML = `<i class="bi bi-hourglass-split"></i> Enviando...`;
 
-            const response = await fetch("/api/contato", {
+            const response = await fetch("/api/contato-leitor", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)
