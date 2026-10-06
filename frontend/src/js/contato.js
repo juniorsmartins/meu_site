@@ -21,29 +21,50 @@ function configurarEnvioContato() {
 
     if (!form) return;
 
-    form.addEventListener("submit", (event) => {
+    form.addEventListener("submit", async (event) => {
         event.preventDefault();
 
         const formData = new FormData(form);
-        const nome = formData.get("nome");
-        const email = formData.get("email");
-        const assunto = formData.get("assunto");
-        const mensagem = formData.get("mensagem");
+        const payload = {
+            nome: formData.get("nome"),
+            email: formData.get("email"),
+            assunto: formData.get("assunto"),
+            mensagem: formData.get("mensagem")
+        };
 
-        console.log("Formulário de Contato enviado:", { nome, email, assunto, mensagem });
+        const btnSubmit = form.querySelector("button[type='submit']");
 
-        // Feedback visual na tela
-        if (msgFeedback) {
-            msgFeedback.className = "contato-msg-feedback sucesso";
-            msgFeedback.textContent = "Sua mensagem foi enviada com sucesso! Em breve a redação responderá seu contato.";
+        try {
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = `<i class="bi bi-hourglass-split"></i> Enviando...`;
+
+            const response = await fetch("/api/contato", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+
+            const resultado = await response.json();
+
+            if (response.ok) {
+                msgFeedback.className = "contato-msg-feedback sucesso";
+                msgFeedback.textContent = resultado.message || "Sua mensagem foi enviada com sucesso!";
+                form.reset();
+            } else {
+                msgFeedback.className = "contato-msg-feedback erro";
+                msgFeedback.textContent = resultado.error || "Não foi possível enviar sua mensagem.";
+            }
             msgFeedback.style.display = "block";
+
+        } catch (error) {
+            console.error("Erro na requisição:", error);
+            msgFeedback.className = "contato-msg-feedback erro";
+            msgFeedback.textContent = "Erro de conexão ao enviar a mensagem. Tente novamente mais tarde.";
+            msgFeedback.style.display = "block";
+        } finally {
+            btnSubmit.disabled = false;
+            btnSubmit.innerHTML = `<i class="bi bi-send-fill"></i> Enviar Mensagem`;
         }
-
-        form.reset();
-
-        setTimeout(() => {
-            if (msgFeedback) msgFeedback.style.display = "none";
-        }, 6000);
     });
 }
 
