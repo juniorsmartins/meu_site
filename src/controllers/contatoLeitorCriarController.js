@@ -14,14 +14,18 @@ const contatoLeitorCriarController = async (request, response) => {
         // 1. Salva no banco de dados primeiro
         const contatoLeitorSalvo = await contatoLeitorCriarService({ nome, email, assunto, mensagem, ipRemetente });
 
-        // 2. Dispara os e-mails em segundo plano sem bloquear o retorno HTTP para o leitor
-        Promise.all([
-            EmailEnviarService.notificarRedacao({ nome, email, assunto, mensagem, ipRemetente }),
-            EmailEnviarService.confirmarRecebimentoLeitor({ nome, email })
-        ]).catch(err => {
-            console.error("Erro no envio do e-mail em segundo plano:", err);
-        });
+        // 2. Dispara e aguarda o envio dos e-mails (Essencial para Vercel Serverless)
+        try {
+            await Promise.all([
+                EmailEnviarService.notificarRedacao({ nome, email, assunto, mensagem, ipRemetente }),
+                EmailEnviarService.confirmarRecebimentoLeitor({ nome, email })
+            ]);
+        } catch (emailError) {
+            // Registra o erro de e-mail no log da Vercel, mas não impede a confirmação para o leitor pois já salvou no MongoDB
+            console.error("Erro ao disparar e-mails via Nodemailer:", emailError);
+        }
 
+        // 3. Retorna a resposta HTTP somente após o salvamento e envio concluídos
         return response.status(201).json({
             success: true,
             message: "Mensagem recebida e registrada com sucesso!",
@@ -34,5 +38,7 @@ const contatoLeitorCriarController = async (request, response) => {
     }
 };
 
-export { contatoLeitorCriarController };
+export { 
+    contatoLeitorCriarController 
+};
 
