@@ -1,30 +1,24 @@
-const testeBackendResponse = document.getElementById("teste-backend-response");
+import { SITE_CONFIG } from "./config.js";
 
-const fetchData = async () => {
-    if (!testeBackendResponse) {
-        return;
-    }
+document.addEventListener("DOMContentLoaded", () => {
+    preencherInformacoesDinamicas();
+});
 
-    try {
-        
-        const localHosts = ["localhost", "127.0.0.1", "::1"];
-        const isLocal = localHosts.includes(window.location.hostname);
+function preencherInformacoesDinamicas() {
+    // 1. Título e Slogan Principal
+    const tituloEl = document.getElementById("sobre-titulo-principal");
+    const sloganEl = document.getElementById("sobre-slogan-destaque");
 
-        const localApiHost = window.location.hostname === "127.0.0.1" ? "127.0.0.1" : "localhost";
-        const apiBase = isLocal ? `http://${localApiHost}:3000` : "/api";
-        const response = await fetch(`${apiBase}/noticias`);
+    if (tituloEl) tituloEl.textContent = `Sobre a ${SITE_CONFIG.nome}`;
+    if (sloganEl) sloganEl.textContent = SITE_CONFIG.slogan;
 
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
+    // 2. Preenche o nome da marca em todas as tags do texto marcadas com a classe .nome-site-dinamico
+    const elementosNomeSite = document.querySelectorAll(".nome-site-dinamico");
+    elementosNomeSite.forEach(el => {
+        el.textContent = SITE_CONFIG.nome;
+    });
 
-        const data = await response.json();
-        testeBackendResponse.textContent = JSON.stringify(data, null, 2);
-        
-    } catch (error) {
-        testeBackendResponse.textContent = "Erro ao buscar dados do backend.";
-        console.error("Erro ao buscar dados:", error);
-    }
-};
+    // 3. Atualiza a aba do navegador
+    document.title = `Sobre - ${SITE_CONFIG.nome}`;
+}
 
-fetchData();
