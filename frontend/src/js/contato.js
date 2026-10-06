@@ -6,14 +6,12 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function preencherInformacoesDinamicas() {
-    // 1. Atualiza e-mail e localização com base no config.js
-    const emailEl = document.getElementById("contato-info-email");
-    const localizacaoEl = document.getElementById("contato-info-localizacao");
+    // Leitura direta e estrita de SITE_CONFIG
+    document.getElementById("contato-info-email").textContent = SITE_CONFIG.emailRedacao;
+    document.getElementById("contato-info-localizacao").textContent = SITE_CONFIG.localizacaoPadrao;
+    document.getElementById("contato-info-atendimento").textContent = SITE_CONFIG.horarioAtendimento;
 
-    if (emailEl) emailEl.textContent = SITE_CONFIG.emailRedacao || "contato@gazetacentral.com.br";
-    if (localizacaoEl) localizacaoEl.textContent = SITE_CONFIG.localizacaoPadrao || "Cuiabá - Mato Grosso, Brasil";
-
-    // 2. Atualiza título da aba no navegador
+    // Título da aba do navegador dinâmico
     document.title = `Contato - ${SITE_CONFIG.nome}`;
 }
 
@@ -34,7 +32,7 @@ function configurarEnvioContato() {
 
         console.log("Formulário de Contato enviado:", { nome, email, assunto, mensagem });
 
-        // Exibe mensagem de sucesso visual na tela (sem alert)
+        // Feedback visual na tela
         if (msgFeedback) {
             msgFeedback.className = "contato-msg-feedback sucesso";
             msgFeedback.textContent = "Sua mensagem foi enviada com sucesso! Em breve a redação responderá seu contato.";
@@ -43,11 +41,9 @@ function configurarEnvioContato() {
 
         form.reset();
 
-        // Oculta a mensagem de sucesso após 6 segundos
         setTimeout(() => {
             if (msgFeedback) msgFeedback.style.display = "none";
         }, 6000);
     });
 }
-
 
