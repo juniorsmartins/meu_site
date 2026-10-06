@@ -6,7 +6,7 @@
         <meta charset="UTF-8"> 
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-        <title>Gazeta Central</title>
+        <title>Sobre Nós - Gazeta Central</title>
 
         <!-- Estilos -->
         <link rel="stylesheet" href="../css/index.css">
@@ -34,17 +34,76 @@
         <script type="module" src="../js/sobre.js"></script>
         <script type="module" src="../js/footer.js"></script>
 
-        <!-- Cabeçalho -->
+        <!-- Cabeçalho Reutilizado -->
         <div id="header-container"></div>
 
-        <div>
-            <h1>Sobre Nós</h1>
-            <p id="teste-backend-response"></p>
-        </div>
+        <main class="sobre-container">
 
-        <!-- Rodapé -->
+            <!-- Hero / Manifesto (Sugestão 1) -->
+            <section class="sobre-hero">
+                <span class="badge-tag">Quem Somos</span>
+                <h1 id="sobre-titulo-principal"></h1>
+                <p id="sobre-slogan-destaque" class="slogan-destaque"></p>
+
+                <div class="sobre-manifesto-texto">
+                    <p>
+                        A <strong class="nome-site-dinamico"></strong> nasceu da união estratégica entre o <strong>jornalismo investigativo tradicional</strong> e o <strong>desenvolvimento de software moderno</strong>. Fundado por quem atua na interseção das duas áreas — como jornalista e desenvolvedor de software —, nosso portal foi concebido para responder aos desafios da era digital com rigor técnico e ético.
+                    </p>
+                    <p>
+                        Acreditamos que a tecnologia deve ser uma aliada da transparência e da velocidade, e não um vetor de desinformação. Por isso, desenvolvemos nossas próprias soluções para entregar notícias checadas, com máxima usabilidade, alta performance e total independência editorial.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Pilares e Compromisso Ético (Sugestão 2) -->
+            <section class="sobre-pilares">
+                <h2 class="titulo-secao">Nossos Pilares</h2>
+                
+                <div class="grid-pilares">
+                    <div class="card-pilar">
+                        <div class="icone-pilar">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <h3>Independência & Ética</h3>
+                        <p>Compromisso inegociável com a verdade factual, apuração rigorosa e isenção de interesses políticos ou corporativos.</p>
+                    </div>
+
+                    <div class="card-pilar">
+                        <div class="icone-pilar">
+                            <i class="bi bi-code-slash"></i>
+                        </div>
+                        <h3>Tecnologia de Ponta</h3>
+                        <p>Sistemas próprios desenvolvidos para otimizar o fluxo de apuração, garantir tempo de resposta veloz e proporcionar uma leitura fluida sem poluição visual.</p>
+                    </div>
+
+                    <div class="card-pilar">
+                        <div class="icone-pilar">
+                            <i class="bi bi-eye-fill"></i>
+                        </div>
+                        <h3>Fiscalizar Poderes com Inovação Contínua</h3>
+                        <p>
+                            A tecnologia a serviço do escrutínio público. Nossas ferramentas aceleram a análise de dados governamentais e ampliam o alcance do jornalismo, garantindo cobrança constante por transparência.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Expediente com Valores Dinâmicos do config.js -->
+            <section class="sobre-expediente">
+                <h3 class="titulo-expediente">Expediente</h3>
+                <div class="expediente-conteudo">
+                    <p><strong id="expediente-cargo"></strong>: <span id="expediente-fundador"></span></p>
+                    <p><strong>Redação & Suporte:</strong> <span id="expediente-email"></span></p>
+                    <p><strong>Localização:</strong> <span id="expediente-localizacao"></span></p>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Rodapé Reutilizado -->
         <div id="footer-container"></div>
 
     </body>
 </html>
+
 

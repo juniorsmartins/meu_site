@@ -1,0 +1,206 @@
+/* Container Principal */
+.contato-container {
+    max-width: 1100px;
+    margin: 2.5rem auto;
+    padding: 0 1.5rem;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Cabeçalho do Contato */
+.contato-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.contato-header h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2.5rem;
+    color: var(--blue-900);
+    margin-top: 0.5rem;
+    margin-bottom: 0.4rem;
+}
+
+#contato-subtitulo {
+    font-size: 1.05rem;
+    color: var(--tertiary-text-color);
+}
+
+/* Grid de 2 Colunas */
+.contato-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.8fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+/* Coluna 1: Informações Diretas (Card da Esquerda) */
+.contato-info-card {
+    background: #FFFFFF;
+    border: 1px solid var(--blue-100);
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.contato-info-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: var(--blue-900);
+    margin-bottom: 0.5rem;
+}
+
+.contato-info-desc {
+    font-size: 0.9rem;
+    color: var(--tertiary-text-color);
+    margin-bottom: 1.8rem;
+    line-height: 1.5;
+}
+
+.info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.info-icone {
+    width: 40px;
+    height: 40px;
+    background-color: var(--blue-50);
+    color: var(--blue-700);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.info-icone i {
+    font-size: 1.1rem;
+    background: transparent;
+    padding: 0;
+    color: inherit;
+}
+
+.info-item strong {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--blue-900);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.2rem;
+}
+
+.info-item p {
+    font-size: 0.95rem;
+    color: var(--secondary-text-color);
+    margin: 0;
+}
+
+/* Coluna 2: Formulário (Card Branco da Direita) */
+.contato-form-card {
+    background: #FFFFFF;
+    border: 1px solid var(--blue-100);
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--blue-900);
+    margin-bottom: 0.4rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--blue-200);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-family: 'Inter', sans-serif;
+    color: var(--secondary-text-color);
+    background-color: #FFFFFF;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--blue-500);
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.15);
+}
+
+.btn-enviar-contato {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.85rem;
+    background-color: var(--blue-700);
+    color: #FFFFFF;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-enviar-contato:hover {
+    background-color: var(--blue-900);
+}
+
+/* Feedback Visual */
+.contato-msg-feedback {
+    font-size: 0.85rem;
+    margin-top: 1rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: 6px;
+    display: none;
+    text-align: center;
+}
+
+.contato-msg-feedback.sucesso {
+    display: block;
+    background-color: rgba(39, 174, 96, 0.12);
+    color: #27ae60;
+    border: 1px solid #27ae60;
+}
+
+.contato-msg-feedback.erro {
+    display: block;
+    background-color: rgba(231, 76, 60, 0.12);
+    color: #e74c3c;
+    border: 1px solid #e74c3c;
+}
+
+/* Responsividade */
+@media (max-width: 850px) {
+    .contato-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+

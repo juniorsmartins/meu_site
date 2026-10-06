@@ -1,1 +1,177 @@
+/* Container Geral */
+.sobre-container {
+    max-width: 1000px;
+    margin: 2.5rem auto;
+    padding: 0 1.5rem;
+    font-family: 'Inter', sans-serif;
+}
+
+/* 1. Hero / Manifesto */
+.sobre-hero {
+    text-align: center;
+    background: #FFFFFF;
+    border: 1px solid var(--blue-100);
+    border-radius: 12px;
+    padding: 3rem 2rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+    margin-bottom: 3rem;
+}
+
+.badge-tag {
+    display: inline-block;
+    background-color: var(--blue-50);
+    color: var(--blue-800);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0.35rem 0.8rem;
+    border-radius: 20px;
+    letter-spacing: 0.8px;
+    margin-bottom: 1rem;
+}
+
+.sobre-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2.8rem;
+    color: var(--blue-900);
+    margin-bottom: 0.5rem;
+}
+
+.slogan-destaque {
+    font-size: 1.25rem;
+    color: var(--blue-600);
+    font-weight: 500;
+    margin-bottom: 2rem;
+}
+
+.sobre-manifesto-texto {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.sobre-manifesto-texto p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--secondary-text-color);
+}
+
+.sobre-manifesto-texto strong {
+    color: var(--blue-900);
+}
+
+/* 2. Grid de Pilares */
+.sobre-pilares {
+    margin-top: 2rem;
+}
+
+.titulo-secao {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--blue-900);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.grid-pilares {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.card-pilar {
+    background: #FFFFFF;
+    border: 1px solid var(--blue-100);
+    border-radius: 8px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-pilar:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.icone-pilar {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 1.25rem auto;
+    background-color: var(--blue-50);
+    color: var(--blue-700);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icone-pilar i {
+    font-size: 1.75rem;
+    background: transparent;
+    padding: 0;
+    color: inherit;
+}
+
+.card-pilar h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--blue-900);
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+}
+
+.card-pilar p {
+    font-size: 0.95rem;
+    color: var(--tertiary-text-color);
+    line-height: 1.6;
+}
+
+/* 3. Seção Expediente */
+.sobre-expediente {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: #FFFFFF;
+    border: 1px solid var(--blue-100);
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.titulo-expediente {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--blue-900);
+    margin-bottom: 1rem;
+}
+
+.expediente-conteudo p {
+    font-size: 0.95rem;
+    color: var(--tertiary-text-color);
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+.expediente-conteudo strong {
+    color: var(--secondary-text-color);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .sobre-hero {
+        padding: 2rem 1rem;
+    }
+
+    .sobre-hero h1 {
+        font-size: 2rem;
+    }
+
+    .slogan-destaque {
+        font-size: 1.05rem;
+    }
+}
 

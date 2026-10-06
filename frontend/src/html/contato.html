@@ -1,71 +1,125 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 
-    <!-- Cabeçalho do Documento (título, meta tags, links para estilos, fontes e scripts) -->
-    <head>
-        <meta charset="UTF-8"> 
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-        <title>Gazeta Central</title>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contato - Gazeta Central</title>
 
-        <!-- Estilos -->
-        <link rel="stylesheet" href="../css/index.css">
-        <link rel="stylesheet" href="../css/header.css">
-        <link rel="stylesheet" href="../css/formulario.css">
-        <link rel="stylesheet" href="../css/footer.css">
+    <!-- Estilos -->
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/contato.css">
+    <link rel="stylesheet" href="../css/footer.css">
 
-        <!-- Favicon -->
-        <link rel="shortcut icon" type="image/png" href="../img/favicon.png">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" href="../img/favicon.png">
 
-        <!-- Google Fonts: Inter (Sans-serif moderna) + Playfair Display (Serifada elegante para manchetes) -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair Display:wght@600;700;800&display=swap" rel="stylesheet">
 
-        <!-- Bootstrap Icons -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    </head>
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
 
-    <!-- Corpo do Documento -->
-    <body>
+<body>
 
-        <!-- JavaScript -->
-        <script type="module" src="../js/header.js"></script>
-        <script src="../js/contato.js"></script>
-        <script type="module" src="../js/footer.js"></script>        
+    <!-- Scripts -->
+    <script type="module" src="../js/header.js"></script>
+    <script type="module" src="../js/contato.js"></script>
+    <script type="module" src="../js/footer.js"></script>
 
-        <!-- Cabeçalho -->
-        <div id="header-container"></div>
+    <!-- Cabeçalho Reutilizado -->
+    <div id="header-container"></div>
 
+    <!-- Conteúdo Principal -->
+    <main class="contato-container">
+        <!-- Cabeçalho da Página -->
+        <div class="contato-header">
+            <span class="badge-tag">Atendimento & Redação</span>
+            <h1 id="contato-titulo-principal">Fale Conosco</h1>
+            <p id="contato-subtitulo">Sua opinião, sugestão de pauta ou dúvida é fundamental para o nosso trabalho.</p>
+        </div>
 
-        <!-- Conteúdo da Página -->
-        <section>
+        <div class="contato-grid">
+            <!-- Coluna 1: Informações Diretas de Contato -->
+            <aside class="contato-info-card">
+                <h3>Informações da Redação</h3>
+                <p class="contato-info-desc">Entre em contato diretamente pelos nossos canais oficiais ou utilize o formulário ao lado.</p>
 
-            <form onsubmit="contato(event)" class="flex flex-center">
-                <div>
-                    <div class="form-itens">
-                        <label for="nome">Nome:</label>
-                        <input id="nome" name="nome" type="text" placeholder="Digite seu nome" required />
-                    </div>
-                    <div class="form-itens">
-                        <label for="email">Email:</label>
-                        <input id="email" name="email" type="email" placeholder="Digite seu email" required />
+                <div class="info-item">
+                    <div class="info-icone"><i class="bi bi-envelope-fill"></i></div>
+                    <div>
+                        <strong>E-mail da Redação</strong>
+                        <p id="contato-info-email"></p>
                     </div>
                 </div>
-                <div class="form-itens flex flex-center">
-                    <label for="mensagem">Motivo do contato:</label>
-                    <textarea id="mensagem" name="mensagem" rows="8" cols="50" placeholder="Digite sua mensagem" required ></textarea>
+
+                <div class="info-item">
+                    <div class="info-icone"><i class="bi bi-geo-alt-fill"></i></div>
+                    <div>
+                        <strong>Localização</strong>
+                        <p id="contato-info-localizacao"></p>
+                    </div>
                 </div>
-                <button type="submit" class="btn-padrao">Enviar</button>
-            </form>
 
-        </section>
+                <div class="info-item">
+                    <div class="info-icone"><i class="bi bi-clock-fill"></i></div>
+                    <div>
+                        <strong>Atendimento</strong>
+                        <p id="contato-info-atendimento"></p>
+                    </div>
+                </div>
+            </aside>
 
+            <!-- Coluna 2: Formulário em Card Branco Limpo -->
+            <section class="contato-form-card">
+                <form id="form-contato">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nome">Seu Nome *</label>
+                            <input id="nome" name="nome" type="text" placeholder="Digite seu nome completo" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Seu E-mail *</label>
+                            <input id="email" name="email" type="email" placeholder="Digite seu e-mail" required />
+                        </div>
+                    </div>
 
-        <!-- Rodapé -->
-        <div id="footer-container"></div>
+                    <div class="form-group">
+                        <label for="assunto">Motivo do Contato *</label>
+                        <select id="assunto" name="assunto" required>
+                            <option value="" disabled selected>Selecione uma opção</option>
+                            <option value="sugestao-pauta">Sugestão de Pauta / Denúncia</option>
+                            <option value="correcao">Correção de Conteúdo</option>
+                            <option value="publicidade">Publicidade / Comercial</option>
+                            <option value="duvida">Dúvidas Gerais</option>
+                            <option value="outro">Outro Assunto</option>
+                        </select>
+                    </div>
 
-    </body>
+                    <div class="form-group">
+                        <label for="mensagem">Sua Mensagem *</label>
+                        <textarea id="mensagem" name="mensagem" rows="6" placeholder="Escreva aqui os detalhes da sua mensagem..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-enviar-contato">
+                        <i class="bi bi-send-fill"></i> Enviar Mensagem
+                    </button>
+
+                    <!-- Feedback Visual sem alert() -->
+                    <div id="contato-mensagem-feedback" class="contato-msg-feedback"></div>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <!-- Rodapé Reutilizado -->
+    <div id="footer-container"></div>
+
+</body>
 </html>
-
 
