@@ -1,4 +1,4 @@
-import { contatoLeitorCriarService } from "../services/ContatoLeitorCriarService.js";
+import { contatoLeitorCriarService } from "../services/contatoLeitorCriarService.js";
 
 const contatoLeitorCriarController = async (request, response) => {
 
