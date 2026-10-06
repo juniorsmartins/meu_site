@@ -16,10 +16,14 @@ export const OPCOES_EDITORIA = [
     "polícia"
 ];
 
-// Dados Centrais do Portal
+// Dados Centrais do Portal (Fonte Única de Verdade)
 export const SITE_CONFIG = {
     nome: "Gazeta Central",
     slogan: "A tecnologia em favor do jornalismo independente",
-    localizacaoPadrao: "Cuiabá, Mato Grosso, Brasil"
+    fundador: "Junior Martins",
+    cargoFundador: "Fundador & Diretor de Tecnologia",
+    emailRedacao: "contato@gazetacentral.com.br",
+    localizacaoPadrao: "Cuiabá - Mato Grosso, Brasil",
+    horarioAtendimento: "Segunda a Sexta, das 08h às 18h"
 };
 
