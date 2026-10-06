@@ -2,11 +2,11 @@ import nodemailer from "nodemailer";
 import { SITE_CONFIG } from "../constants/siteConfig.js";
 
 const transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST || "smtp.resend.com",
-    port: process.env.EMAIL_PORT || 465,
-    secure: true,
+    host: process.env.EMAIL_HOST || "smtp.gmail.com",
+    port: Number(process.env.EMAIL_PORT) || 465,
+    secure: true, // true para porta 465
     auth: {
-        user: process.env.EMAIL_USER || "resend",
+        user: process.env.EMAIL_USER || SITE_CONFIG.emailRedacao,
         pass: process.env.EMAIL_PASS
     }
 });
@@ -16,15 +16,16 @@ export class EmailEnviarService {
     // 1. Notificação enviada para a Redação
     static async notificarRedacao({ nome, email, assunto, mensagem, ipRemetente }) {
         const mailOptions = {
-            from: `Portal ${SITE_CONFIG.nome} <notificacoes@suadominio.com>`,
+            from: `"${SITE_CONFIG.nome}" <${SITE_CONFIG.emailRedacao}>`,
             to: SITE_CONFIG.emailRedacao,
+            replyTo: email, // Permite responder diretamente ao e-mail do leitor ao clicar em "Responder"
             subject: `[NOVO CONTATO - ${assunto.toUpperCase()}] Mensagem de ${nome}`,
             html: `
                 <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
                     <h2 style="color: #003366;">Nova mensagem recebida no ${SITE_CONFIG.nome}</h2>
                     <hr />
                     <p><strong>Nome:</strong> ${nome}</p>
-                    <p><strong>E-mail:</strong> ${email}</p>
+                    <p><strong>E-mail do Leitor:</strong> ${email}</p>
                     <p><strong>Assunto:</strong> ${assunto}</p>
                     <p><strong>IP do Remetente:</strong> ${ipRemetente}</p>
                     <hr />
@@ -42,7 +43,7 @@ export class EmailEnviarService {
     // 2. E-mail de confirmação enviado para o leitor
     static async confirmarRecebimentoLeitor({ nome, email }) {
         const mailOptions = {
-            from: `${SITE_CONFIG.nome} <nao-responda@suadominio.com>`,
+            from: `"${SITE_CONFIG.nome}" <${SITE_CONFIG.emailRedacao}>`,
             to: email,
             subject: `Recebemos sua mensagem - ${SITE_CONFIG.nome}`,
             html: `
