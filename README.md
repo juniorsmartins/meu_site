@@ -26,6 +26,7 @@ import { createRandomUser } from './js/mocks/mocks.js';
 * nodemon (executar script para desenvolvimento);
 * faker-js/faker (serve para gerar grandes volumes de dados fictícios);
 * express (biblioteca mais popular do Node para criar aplicações web e APIs. Cria servidor web);
+* nodemailer (biblioteca de envio de emails - https://nodemailer.com/); 
 
 
 -> Comandos para instalar biblibotecas
@@ -35,6 +36,7 @@ npm i express
 npm install mongoose 
 npm install cors 
 npm install --save-dev eslint
+npm install nodemailer
 
 
 -> Comandos para acionar

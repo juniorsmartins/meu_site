@@ -18,11 +18,11 @@ export const OPCOES_EDITORIA = [
 
 // Dados Centrais do Portal (Fonte Única de Verdade)
 export const SITE_CONFIG = {
-    nome: "Gazeta Central",
-    slogan: "A tecnologia em favor do jornalismo independente",
+    nome: "Gajeiro",
+    slogan: "Olhos no horizonte, pés nos fatos",
     fundador: "Junior Martins",
     cargoFundador: "Fundador & Diretor Geral",
-    emailRedacao: "contato@gazetacentral.com.br",
+    emailRedacao: "gajeiro.jor@gmail.com",
     localizacaoPadrao: "Cuiabá - Mato Grosso, Brasil",
     horarioAtendimento: "Segunda a Sexta, das 08h às 17h"
 };
