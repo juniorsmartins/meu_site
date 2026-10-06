@@ -21,9 +21,9 @@ export const SITE_CONFIG = {
     nome: "Gazeta Central",
     slogan: "A tecnologia em favor do jornalismo independente",
     fundador: "Junior Martins",
-    cargoFundador: "Fundador & Diretor de Tecnologia",
+    cargoFundador: "Fundador & Diretor Geral",
     emailRedacao: "contato@gazetacentral.com.br",
     localizacaoPadrao: "Cuiabá - Mato Grosso, Brasil",
-    horarioAtendimento: "Segunda a Sexta, das 08h às 18h"
+    horarioAtendimento: "Segunda a Sexta, das 08h às 17h"
 };
 
