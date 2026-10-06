@@ -18,16 +18,11 @@ function preencherInformacoesDinamicas() {
         el.textContent = SITE_CONFIG.nome;
     });
 
-    // 3. Injeção Dinâmica dos Dados do Expediente
-    const cargoEl = document.getElementById("expediente-cargo");
-    const fundadorEl = document.getElementById("expediente-fundador");
-    const emailEl = document.getElementById("expediente-email");
-    const localizacaoEl = document.getElementById("expediente-localizacao");
-
-    if (cargoEl) cargoEl.textContent = SITE_CONFIG.cargoFundador || "Fundador & Diretor";
-    if (fundadorEl) fundadorEl.textContent = SITE_CONFIG.fundador || "Junior Martins";
-    if (emailEl) emailEl.textContent = SITE_CONFIG.emailRedacao || "contato@gazetacentral.com.br";
-    if (localizacaoEl) localizacaoEl.textContent = SITE_CONFIG.localizacaoPadrao || "Cuiabá - Mato Grosso, Brasil";
+    // 3. Injeção Dinâmica Estrita dos Dados do Expediente
+    document.getElementById("expediente-cargo").textContent = SITE_CONFIG.cargoFundador;
+    document.getElementById("expediente-fundador").textContent = SITE_CONFIG.fundador;
+    document.getElementById("expediente-email").textContent = SITE_CONFIG.emailRedacao;
+    document.getElementById("expediente-localizacao").textContent = SITE_CONFIG.localizacaoPadrao;
 
     // 4. Atualiza a aba do navegador
     document.title = `Sobre - ${SITE_CONFIG.nome}`;
