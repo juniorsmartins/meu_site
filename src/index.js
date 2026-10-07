@@ -23,11 +23,11 @@ app.use(async (request, response, next) => {
     }
 });
 
-// Definição das rotas da API
-app.use("/noticias", noticiaRouter);
-app.use("/newsletter", newsletterRouter); 
-app.use("/contato-leitor", contatoLeitorRouter);
-app.use("/manutencao", manutencaoRouter);
+// Registrar rotas aceitando TANTO o prefixo /api QUANTO sem /api (Garante funcionamento no Vercel e Local)
+app.use(["/api/noticias", "/noticias"], noticiaRouter);
+app.use(["/api/newsletter", "/newsletter"], newsletterRouter); 
+app.use(["/api/contato-leitor", "/contato-leitor"], contatoLeitorRouter);
+app.use(["/api/manutencao", "/manutencao"], manutencaoRouter);
 
 // Exportação padrão necessária para Serverless na Vercel
 export default app;
