@@ -1,6 +1,7 @@
 import Parser from 'rss-parser';
 import { Noticia } from '../database/schema/noticiaSchema.js';
 import { EDITORIAS } from '../constants/editorias.js';
+import { FONTES_RSS } from '../constants/fontesRssConfig.js';
 
 // Instância do Parser permitindo capturar tags customizadas do XML da Agência Brasil
 const parser = new Parser({
@@ -11,84 +12,6 @@ const parser = new Parser({
         ]
     }
 });
-
-/**
- * Registro de todas as fontes de RSS com suas URLs e funções de normalização específicas.
- */
-const FONTES_RSS = [
-    {
-        chave: "CAMARA_RELACOES_EXTERIORES",
-        nome: "Câmara - Relações Exteriores",
-        url: "https://www.camara.leg.br/noticias/rss/dinamico/RELACOES-EXTERIORES",
-        normalizador: (item) => normalizarNoticiaAgenciaCamara(item, "política")
-    },
-    {
-        chave: "CAMARA_TRANSPORTE_E_TRANSITO",
-        nome: "Câmara - Transporte e Trânsito",
-        url: "https://www.camara.leg.br/noticias/rss/dinamico/TRANSPORTE-E-TRANSITO",
-        normalizador: (item) => normalizarNoticiaAgenciaCamara(item, "economia")
-    },
-    {
-        chave: "CAMARA_CONSUMIDOR",
-        nome: "Câmara - Consumidor",
-        url: "https://www.camara.leg.br/noticias/rss/dinamico/CONSUMIDOR",
-        normalizador: (item) => normalizarNoticiaAgenciaCamara(item, "economia")
-    },
-    {
-        chave: "CAMARA_ESPORTES",
-        nome: "Câmara - Esportes",
-        url: "https://www.camara.leg.br/noticias/rss/dinamico/ESPORTES",
-        normalizador: (item) => normalizarNoticiaAgenciaCamara(item, "esportes")
-    },
-    {
-        chave: "CAMARA_TRABALHO_E_PREVIDENCIA",
-        nome: "Câmara - Trabalho e Previdência",
-        url: "https://www.camara.leg.br/noticias/rss/dinamico/TRABALHO-E-PREVIDENCIA",
-        normalizador: (item) => normalizarNoticiaAgenciaCamara(item, "economia")
-    },
-    {
-        chave: "CAMARA_SAUDE",
-        nome: "Câmara - Saúde",
-        url: "https://www.camara.leg.br/noticias/rss/dinamico/SAUDE",
-        normalizador: (item) => normalizarNoticiaAgenciaCamara(item, "saúde")
-    },
-    {
-        chave: "CAMARA_TURISMO",
-        nome: "Câmara - Turismo",
-        url: "https://www.camara.leg.br/noticias/rss/dinamico/TURISMO",
-        normalizador: (item) => normalizarNoticiaAgenciaCamara(item, "turismo")
-    },
-    {
-        chave: "CAMARA_AGROPECUARIA",
-        nome: "Câmara - Agropecuária",
-        url: "https://www.camara.leg.br/noticias/rss/dinamico/AGROPECUARIA",
-        normalizador: (item) => normalizarNoticiaAgenciaCamara(item, "economia")
-    },
-    {
-        chave: "CAMARA_SEGURANCA",
-        nome: "Câmara - Segurança",
-        url: "https://www.camara.leg.br/noticias/rss/dinamico/SEGURANCA",
-        normalizador: (item) => normalizarNoticiaAgenciaCamara(item, "polícia")
-    },
-    {
-        chave: "CAMARA_INDUSTRIA_E_COMERCIO",
-        nome: "Câmara - Indústria e Comércio",
-        url: "https://www.camara.leg.br/noticias/rss/dinamico/INDUSTRIA-E-COMERCIO",
-        normalizador: (item) => normalizarNoticiaAgenciaCamara(item, "economia")
-    },
-    {
-        chave: "CAMARA_ECONOMIA",
-        nome: "Câmara - Economia",
-        url: "https://www.camara.leg.br/noticias/rss/dinamico/ECONOMIA",
-        normalizador: (item) => normalizarNoticiaAgenciaCamara(item, "economia")
-    },
-    {
-        chave: "AGENCIA_BRASIL",
-        nome: "Agência Brasil",
-        url: "https://agenciabrasil.ebc.com.br/rss/ultimasnoticias/feed.xml",
-        normalizador: (item) => normalizarNoticiaAgenciaBrasil(item)
-    }
-];
 
 // ============================================================================
 // 1. SERVIÇO PRINCIPAL (Ponto de Entrada)
@@ -186,119 +109,8 @@ const processarFeedRss = async (urlFeed, funcaoNormalizacao) => {
 // 3. PARSERS ESPECÍFICOS DE FONTES
 // ============================================================================
 
-/**
- * Transforma o item bruto do XML da Agência Brasil para o Schema do MongoDB.
- * Extrai campos específicos como <imagem-destaque>, <dc:creator> e legenda do HTML.
- */
-const normalizarNoticiaAgenciaBrasil = (item) => {
+// importações dos parsers específicos
 
-    const categoriaBruta = (item.categories && item.categories.length > 0) ? item.categories[0] : "";
-    const categoriaPrincipal = extrairTextoCategoria(categoriaBruta);
-
-    const conteudoBruto = item.description || item.content || "";
-
-    // Mapeia a editoria exata aceita pelo sistema (em minúsculas)
-    const editoriaFinal = mapearEditoriaCompativel(categoriaPrincipal);
-
-    // Define o Chapéu em caixa alta usando a editoria mapeada
-    const chapeuDinamico = editoriaFinal.toUpperCase();
-
-    // Extrai o autor da matéria exclusivamente da tag <dc:creator>
-    const autorMateria = item.creatorDinamico || item.creator || "Agência Brasil";
-
-    // Extrai a legenda/crédito da foto de dentro do HTML da <description>
-    let legendaEFotografo = "Foto: Agência Brasil / EBC";
-    const matchCaption = conteudoBruto.match(/<div class="dnd-caption-wrapper">[\s\S]*?<h6[^>]*>([\s\S]*?)<\/h6>/i);
-    if (matchCaption && matchCaption[1]) {
-        legendaEFotografo = matchCaption[1].replace(/<[^>]*>?/gm, '').replace(/\s+/g, ' ').trim();
-    } else {
-        const matchAlt = conteudoBruto.match(/alt=["']([^"']+)["']/i);
-        if (matchAlt && matchAlt[1] && !matchAlt[1].toLowerCase().includes("logo")) {
-            legendaEFotografo = matchAlt[1].replace(/\s+/g, ' ').trim();
-        }
-    }
-
-    // Limpa tags HTML para gerar uma linha fina legível de até 180 caracteres
-    const textoLimpo = conteudoBruto.replace(/<[^>]*>?/gm, '').replace(/\s+/g, ' ').trim();
-    const linhaFinaDinamica = textoLimpo.length > 180 ? textoLimpo.substring(0, 177) + "..." : textoLimpo || item.title;
-
-    return {
-        chapeu: chapeuDinamico,
-        titulo: item.title ? item.title.trim() : "",
-        linhaFina: linhaFinaDinamica,
-        conteudo: conteudoBruto,
-        autor: autorMateria,
-        editoria: editoriaFinal,
-        imagemUrl: item.imagemDestaque || item.enclosure?.url || "https://agenciabrasil.ebc.com.br/sites/default/files/ebc_logo.png",
-        imagemLegenda: legendaEFotografo,
-        linkOriginal: item.link || ""
-    };
-};
-
-/**
- * Normalizador exclusivo para os feeds RSS da Agência Câmara dos Deputados
- */
-const normalizarNoticiaAgenciaCamara = (item, editoriaPadrao = "geral") => {
-
-    // 1. O conteúdo real da Câmara vem na tag de conteúdo estendido do RSS (<content:encoded>)
-    let conteudoBruto = item['content:encoded'] || item.content || item.description || "";
-
-    // Variáveis padrão para fallback
-    let imagemUrlExtraida = "https://www.camara.leg.br/tema/assets/images/camara-social.jpg";
-    let legendaEFotografo = "Foto: Agência Câmara";
-
-    // 2. Extrai a imagem principal de dentro do bloco <div class="image-container">
-    const matchImg = conteudoBruto.match(/<div[^>]*class=["']image-container["'][\s\S]*?<img[^>]+src=["']([^"']+)["']/i);
-    if (matchImg && matchImg[1]) {
-        imagemUrlExtraida = matchImg[1];
-    } else {
-        // Fallback: busca a primeira tag <img> caso não esteja no container padrão
-        const matchAnyImg = conteudoBruto.match(/<img[^>]+src=["']([^"']+)["']/i);
-        if (matchAnyImg && matchAnyImg[1]) {
-            imagemUrlExtraida = matchAnyImg[1];
-        }
-    }
-
-    // 3. Extrai o crédito do fotógrafo e a legenda da imagem
-    const matchCredito = conteudoBruto.match(/<div class="midia-creditos">[\s\S]*?<em>([\s\S]*?)<\/em><\/div>/i);
-    const matchLegenda = conteudoBruto.match(/<div class="midia-legenda">([\s\S]*?)<\/div>/i);
-
-    const textoLegenda = matchLegenda && matchLegenda[1] 
-        ? matchLegenda[1].replace(/<[^>]*>?/gm, '').trim() 
-        : "";
-    const textoCredito = matchCredito && matchCredito[1] 
-        ? matchCredito[1].replace(/<[^>]*>?/gm, '').trim() 
-        : "Agência Câmara";
-
-    if (textoLegenda) {
-        legendaEFotografo = `${textoLegenda} - Foto: ${textoCredito}`;
-    } else {
-        legendaEFotografo = `Foto: ${textoCredito}`;
-    }
-
-    // 4. Remove o bloco da imagem principal do HTML do corpo para NÃO duplicar a foto na leitura
-    conteudoBruto = conteudoBruto.replace(/<div[^>]*class=["']image-container["'][\s\S]*?<\/div>\s*<\/div>/gi, "");
-
-    // 5. Gera a Linha Fina a partir da tag <description> ou do texto limpo
-    const descricaoLimpa = (item.description || "").replace(/<[^>]*>?/gm, '').replace(/\s+/g, ' ').trim();
-    const textoConteudoLimpo = conteudoBruto.replace(/<[^>]*>?/gm, '').replace(/\s+/g, ' ').trim();
-
-    const linhaFinaFinal = (descricaoLimpa.length > 20) 
-        ? descricaoLimpa 
-        : (textoConteudoLimpo.substring(0, 177) + "...");
-
-    return {
-        chapeu: editoriaPadrao.toUpperCase(),
-        titulo: item.title ? item.title.trim() : "",
-        linhaFina: linhaFinaFinal,
-        conteudo: conteudoBruto, // HTML limpo sem o container da imagem do topo
-        autor: "Agência Câmara",
-        editoria: mapearEditoriaCompativel(editoriaPadrao),
-        imagemUrl: imagemUrlExtraida,
-        imagemLegenda: legendaEFotografo,
-        linkOriginal: item.link || item.guid || ""
-    };
-};
 
 // ============================================================================
 // 4. FUNÇÕES UTILITÁRIAS DE BANCO DE DADOS E FORMATAÇÃO
