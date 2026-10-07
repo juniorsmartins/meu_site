@@ -17,3 +17,4 @@ const automacaoImportarNoticiaController = async (request, response) => {
 export {
     automacaoImportarNoticiaController
 };
+

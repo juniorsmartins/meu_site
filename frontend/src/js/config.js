@@ -3,6 +3,7 @@ export const API_URL = '/api/noticias';
 
 // Lista única das editorias usadas no frontend
 export const OPCOES_EDITORIA = [
+    "geral",
     "política", 
     "esportes", 
     "entretenimento", 
@@ -13,7 +14,8 @@ export const OPCOES_EDITORIA = [
     "editorial", 
     "turismo", 
     "cultura", 
-    "polícia"
+    "polícia",
+    "meio ambiente"
 ];
 
 // Dados Centrais do Portal (Fonte Única de Verdade)
