@@ -206,7 +206,7 @@ const salvarNoticiaInedita = async (dadosNoticia) => {
  * Retorna a editoria válida em minúsculas ou "geral" como fallback.
  */
 const mapearEditoriaCompativel = (categoriaRss = "") => {
-    
+
     if (!categoriaRss) return "geral";
 
     const categoriaNormalizada = removerAcentosECaixa(categoriaRss);
@@ -220,9 +220,13 @@ const mapearEditoriaCompativel = (categoriaRss = "") => {
 
 /**
  * Auxiliar: Remove acentos, caracteres especiais e converte o texto para minúsculas.
+ * Garante que o valor recebido seja convertido para String com segurança.
  */
 const removerAcentosECaixa = (texto = "") => {
-    return texto
+    if (!texto) return "";
+    
+    // Converte para String caso receba um objeto ou outro tipo de dado
+    return String(texto)
         .toLowerCase()
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
