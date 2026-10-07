@@ -39,17 +39,21 @@ document.addEventListener("DOMContentLoaded", async () => {
             document.getElementById("noticia-data").textContent = data;
         }
 
-        // Imagem Destacada e Legenda (Melhoria 4)
+        // Imagem Destacada e Legenda (Corrigido para imagemLegenda)
         const imgElement = document.getElementById("noticia-imagem");
         const containerImg = document.getElementById("container-imagem-principal");
-        
+        const legendaEl = document.getElementById("noticia-imagem-legenda");
+
         if (noticia.imagemUrl) {
             imgElement.src = noticia.imagemUrl;
             imgElement.alt = noticia.titulo;
 
-            const legendaEl = document.getElementById("noticia-imagem-legenda");
-            if (noticia.legendaImagem) {
-                legendaEl.textContent = noticia.legendaImagem;
+            // Busca pelo nome exato do campo no Mongoose: imagemLegenda
+            const textoLegenda = noticia.imagemLegenda || noticia.legendaImagem;
+
+            if (textoLegenda) {
+                legendaEl.textContent = textoLegenda;
+                legendaEl.style.display = "block";
             } else {
                 legendaEl.style.display = "none";
             }
@@ -57,25 +61,31 @@ document.addEventListener("DOMContentLoaded", async () => {
             containerImg.style.display = "none"; 
         }
 
-        // Injeção de Parágrafos Formatados no Conteúdo (Melhoria 3)
+        // Renderização do Conteúdo HTML Formatado
         const containerConteudo = document.getElementById("noticia-conteudo");
-        containerConteudo.innerHTML = ""; // Limpa conteúdo anterior
 
         if (noticia.conteudo) {
-            const paragrafos = noticia.conteudo.split("\n").filter(p => p.trim() !== "");
-            paragrafos.forEach(texto => {
-                const p = document.createElement("p");
-                p.textContent = texto;
-                containerConteudo.appendChild(p);
-            });
+            // Tratamento e limpeza do HTML bruto vindo do RSS
+            let htmlTratado = noticia.conteudo;
+
+            // 1. Remove pixels invisíveis de rastreamento do EBC
+            htmlTratado = htmlTratado.replace(/<img[^>]*ebc\.(png|gif)[^>]*>/gi, "");
+
+            // 2. Remove o bloco de logo/link inicial da Agência Brasil no topo do conteúdo
+            htmlTratado = htmlTratado.replace(/<p[^>]*style="text-align:center;"[^>]*>[\s\S]*?<\/p>/gi, "");
+
+            // 3. Renderiza o HTML interpretando as tags reais (<p>, <strong>, <a>, <h2>, etc.)
+            containerConteudo.innerHTML = htmlTratado;
+        } else {
+            containerConteudo.innerHTML = "";
         }
 
-        // Atualiza o título da aba com a marca do config.js (Melhoria 1)
+        // Atualiza o título da aba com a marca do config.js
         document.title = `${noticia.titulo} - ${SITE_CONFIG.nome}`;
 
     } catch (error) {
         console.error("Erro ao carregar a notícia:", error);
-        exibirMensagemErro(error.message); // Tratamento de Erro Elegante (Melhoria 5)
+        exibirMensagemErro(error.message);
     }
 });
 
