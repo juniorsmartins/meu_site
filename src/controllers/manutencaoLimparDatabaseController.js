@@ -1,9 +1,9 @@
-import { noticiaLimparDatabaseService } from "../services/noticiaLimparDatabaseService.js";
+import { manutencaoLimparDatabaseService } from "../services/manutencaoLimparDatabaseService.js";
 
-const noticiaLimparDatabaseController = async (request, response) => {
+const manutencaoLimparDatabaseController = async (request, response) => {
  
     try {
-        const resultado = await noticiaLimparDatabaseService();
+        const resultado = await manutencaoLimparDatabaseService();
         return response.status(200).json(resultado);
 
     } catch (error) {
@@ -13,6 +13,6 @@ const noticiaLimparDatabaseController = async (request, response) => {
 }
 
 export {
-    noticiaLimparDatabaseController
+    manutencaoLimparDatabaseController
 };
 
