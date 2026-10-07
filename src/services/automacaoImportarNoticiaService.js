@@ -1,60 +1,235 @@
 import Parser from 'rss-parser';
 import { Noticia } from '../database/schema/noticiaSchema.js';
+import { EDITORIAS } from '../constants/editorias.js';
 
-const parser = new Parser();
+// Instância do Parser permitindo capturar tags customizadas do XML da Agência Brasil
+const parser = new Parser({
+    customFields: {
+        item: [
+            ['imagem-destaque', 'imagemDestaque'],
+            ['dc:creator', 'creatorDinamico']
+        ]
+    }
+});
 
-// URL do Feed RSS oficial da Agência Brasil (Geral/Últimas notícias)
-const AGENCIA_BRASIL_RSS = "https://agenciabrasil.ebc.com.br/rss/ultimasnoticias/feed.xml";
+/**
+ * Registro de todas as fontes de RSS com suas URLs e funções de normalização específicas.
+ */
+const FONTES_RSS = [
+    {
+        chave: "AGENCIA_BRASIL",
+        nome: "Agência Brasil",
+        url: "https://agenciabrasil.ebc.com.br/rss/ultimasnoticias/feed.xml",
+        normalizador: (item) => normalizarNoticiaAgenciaBrasil(item)
+    }
+    // No futuro, basta adicionar novos objetos aqui:
+    // {
+    //     chave: "G1",
+    //     nome: "G1 - Globo",
+    //     url: "https://g1.globo.com/rss/g1/",
+    //     normalizador: (item) => normalizarNoticiaG1(item)
+    // }
+];
 
+// ============================================================================
+// 1. SERVIÇO PRINCIPAL (Ponto de Entrada)
+// ============================================================================
+
+/**
+ * Ponto de entrada chamado pelo Controller.
+ * Percorre TODAS as fontes configuradas em FONTES_RSS e executa a importação.
+ */
 const automacaoImportarNoticiaService = async () => {
 
-    // 1. Faz o download e parse do XML do Feed
-    const feed = await parser.parseURL(AGENCIA_BRASIL_RSS);
+    const relatorioFontes = [];
+    let totalGeralImportadas = 0;
+    let totalGeralIgnoradas = 0;
+    let totalGeralAnalisadas = 0;
 
-    let noticiasImportadas = 0;
-    let noticiasIgnoradas = 0;
+    // Percorre cada fonte configurada no array FONTES_RSS
+    for (const fonte of FONTES_RSS) {
 
-    // 2. Percorre as notícias retornadas no Feed
-    for (const item of feed.items) {
-        // Verifica se a matéria já foi cadastrada anteriormente buscando pelo título
-        const noticiaExistente = await Noticia.findOne({ titulo: item.title });
+        try {
+            const resultado = await processarFeedRss(fonte.url, fonte.normalizador);
 
-        if (noticiaExistente) {
-            noticiasIgnoradas++;
-            continue; // Pula para a próxima notícia sem salvar duplicado
+            totalGeralImportadas += resultado.importadas;
+            totalGeralIgnoradas += resultado.ignoradas;
+            totalGeralAnalisadas += resultado.totalAnalisadas;
+
+            relatorioFontes.push({
+                fonte: fonte.nome,
+                chave: fonte.chave,
+                sucesso: true,
+                ...resultado
+            });
+
+        } catch (error) {
+            console.error(`Erro ao processar a fonte '${fonte.nome}':`, error);
+
+            relatorioFontes.push({
+                fonte: fonte.nome,
+                chave: fonte.chave,
+                sucesso: false,
+                erro: error.message
+            });
         }
-
-        // 3. Trata e ajusta o conteúdo do RSS para o formato da sua aplicação
-        // Extrai o resumo/conteúdo limpo do feed
-        const conteudoFormatado = item.contentSnippet || item.content || item.summary || "";
-
-        // Instancia o objeto no Schema da Notícia
-        const novaNoticia = new Noticia({
-            chapeu: "AGÊNCIA BRASIL",
-            titulo: item.title,
-            linhaFina: item.contentSnippet ? item.contentSnippet.substring(0, 180) + "..." : item.title,
-            conteudo: conteudoFormatado,
-            autor: "Agência Brasil",
-            editoria: "Geral", // Você pode mapear por palavra-chave se desejar
-            imagemUrl: item.enclosure?.url || "https://agenciabrasil.ebc.com.br/sites/default/files/ebc_logo.png",
-            imagemLegenda: "Foto: Agência Brasil / EBC",
-            linkOriginal: item.link
-        });
-
-        // 4. Salva no MongoDB
-        await novaNoticia.save();
-        noticiasImportadas++;
     }
 
     return {
         sucesso: true,
-        importadas: noticiasImportadas,
-        ignoradasDuplicadas: noticiasIgnoradas,
-        totalAnalisadas: feed.items.length,
-        mensagem: `Processamento concluído. ${noticiasImportadas} notícias inéditas foram importadas da Agência Brasil.`
+        resumo: {
+            totalImportadas: totalGeralImportadas,
+            totalIgnoradas: totalGeralIgnoradas,
+            totalAnalisadas: totalGeralAnalisadas,
+            fontesProcessadas: FONTES_RSS.length
+        },
+        detalhesPorFonte: relatorioFontes,
+        mensagem: `Processamento concluído. ${totalGeralImportadas} notícias inéditas importadas no total.`
     };
+};
+
+// ============================================================================
+// 2. MOTOR GENÉRICO DE PROCESSAMENTO DE FEED
+// ============================================================================
+
+/**
+ * Faz o download do XML da URL fornecida, percorre os itens aplicando
+ * a função de normalização e persiste apenas as matérias inéditas.
+ */
+const processarFeedRss = async (urlFeed, funcaoNormalizacao) => {
+
+    // 1. Baixa e converte o XML em objetos JavaScript
+    const feed = await parser.parseURL(urlFeed);
+
+    let importadas = 0;
+    let ignoradas = 0;
+
+    // 2. Itera sobre cada notícia do feed
+    for (const item of feed.items) {
+        const dadosNoticia = funcaoNormalizacao(item);
+        const resultado = await salvarNoticiaInedita(dadosNoticia);
+
+        if (resultado.salvo) {
+            importadas++;
+        } else {
+            ignoradas++;
+        }
+    }
+
+    return {
+        importadas,
+        ignoradas,
+        totalAnalisadas: feed.items.length
+    };
+};
+
+// ============================================================================
+// 3. PARSERS ESPECÍFICOS DE FONTES (Agência Brasil)
+// ============================================================================
+
+/**
+ * Transforma o item bruto do XML da Agência Brasil para o Schema do MongoDB.
+ * Extrai campos específicos como <imagem-destaque>, <dc:creator> e legenda do HTML.
+ */
+const normalizarNoticiaAgenciaBrasil = (item) => {
+
+    const categoriaPrincipal = (item.categories && item.categories.length > 0) ? item.categories[0] : "";
+    const conteudoBruto = item.description || item.content || "";
+
+    // Mapeia a editoria exata aceita pelo sistema (em minúsculas)
+    const editoriaFinal = mapearEditoriaCompativel(categoriaPrincipal);
+
+    // Define o Chapéu em caixa alta usando a editoria mapeada
+    const chapeuDinamico = editoriaFinal.toUpperCase();
+
+    // Extrai o autor da matéria exclusivamente da tag <dc:creator>
+    const autorMateria = item.creatorDinamico || item.creator || "Agência Brasil";
+
+    // Extrai a legenda/crédito da foto de dentro do HTML da <description>
+    let legendaEFotografo = "Foto: Agência Brasil / EBC";
+    const matchCaption = conteudoBruto.match(/<div class="dnd-caption-wrapper">[\s\S]*?<h6[^>]*>([\s\S]*?)<\/h6>/i);
+    if (matchCaption && matchCaption[1]) {
+        legendaEFotografo = matchCaption[1].replace(/<[^>]*>?/gm, '').replace(/\s+/g, ' ').trim();
+    } else {
+        const matchAlt = conteudoBruto.match(/alt=["']([^"']+)["']/i);
+        if (matchAlt && matchAlt[1] && !matchAlt[1].toLowerCase().includes("logo")) {
+            legendaEFotografo = matchAlt[1].replace(/\s+/g, ' ').trim();
+        }
+    }
+
+    // Limpa tags HTML para gerar uma linha fina legível de até 180 caracteres
+    const textoLimpo = conteudoBruto.replace(/<[^>]*>?/gm, '').replace(/\s+/g, ' ').trim();
+    const linhaFinaDinamica = textoLimpo.length > 180 ? textoLimpo.substring(0, 177) + "..." : textoLimpo || item.title;
+
+    return {
+        chapeu: chapeuDinamico,
+        titulo: item.title ? item.title.trim() : "",
+        linhaFina: linhaFinaDinamica,
+        conteudo: conteudoBruto,
+        autor: autorMateria,
+        editoria: editoriaFinal,
+        imagemUrl: item.imagemDestaque || item.enclosure?.url || "https://agenciabrasil.ebc.com.br/sites/default/files/ebc_logo.png",
+        imagemLegenda: legendaEFotografo,
+        linkOriginal: item.link || ""
+    };
+};
+
+// ============================================================================
+// 4. FUNÇÕES UTILITÁRIAS DE BANCO DE DADOS E FORMATAÇÃO
+// ============================================================================
+
+/**
+ * Consulta o MongoDB para evitar duplicação por título ou linkOriginal.
+ * Se for inédita, grava o novo documento.
+ */
+const salvarNoticiaInedita = async (dadosNoticia) => {
+
+    const noticiaExistente = await Noticia.findOne({
+        $or: [
+            { titulo: dadosNoticia.titulo },
+            { linkOriginal: dadosNoticia.linkOriginal }
+        ]
+    });
+
+    if (noticiaExistente) {
+        return { salvo: false, motivo: "duplicada" };
+    }
+
+    const novaNoticia = new Noticia(dadosNoticia);
+    await novaNoticia.save();
+
+    return { salvo: true };
+};
+
+/**
+ * Compara a categoria do RSS com o array EDITORIAS do sistema (ignorando acentos e caixa).
+ * Retorna a editoria válida em minúsculas ou "geral" como fallback.
+ */
+const mapearEditoriaCompativel = (categoriaRss = "") => {
+    
+    if (!categoriaRss) return "geral";
+
+    const categoriaNormalizada = removerAcentosECaixa(categoriaRss);
+
+    const editoriaEncontrada = EDITORIAS.find(
+        (editoria) => removerAcentosECaixa(editoria) === categoriaNormalizada
+    );
+
+    return editoriaEncontrada || "geral";
+};
+
+/**
+ * Auxiliar: Remove acentos, caracteres especiais e converte o texto para minúsculas.
+ */
+const removerAcentosECaixa = (texto = "") => {
+    return texto
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim();
 };
 
 export {
     automacaoImportarNoticiaService
 };
+
