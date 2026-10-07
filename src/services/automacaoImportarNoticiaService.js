@@ -133,7 +133,9 @@ const processarFeedRss = async (urlFeed, funcaoNormalizacao) => {
  */
 const normalizarNoticiaAgenciaBrasil = (item) => {
 
-    const categoriaPrincipal = (item.categories && item.categories.length > 0) ? item.categories[0] : "";
+    const categoriaBruta = (item.categories && item.categories.length > 0) ? item.categories[0] : "";
+    const categoriaPrincipal = extrairTextoCategoria(categoriaBruta);
+
     const conteudoBruto = item.description || item.content || "";
 
     // Mapeia a editoria exata aceita pelo sistema (em minúsculas)
@@ -231,6 +233,17 @@ const removerAcentosECaixa = (texto = "") => {
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
         .trim();
+};
+
+/**
+ * Extrai o texto de uma categoria, lidando com diferentes formatos (string, objeto XML, objeto genérico).
+ */
+const extrairTextoCategoria = (categoria) => {
+    if (!categoria) return "";
+    if (typeof categoria === "string") return categoria;
+    if (typeof categoria === "object" && categoria._) return categoria._; // Tratamento de atributo XML
+    if (typeof categoria === "object" && categoria.name) return categoria.name;
+    return String(categoria);
 };
 
 export {
