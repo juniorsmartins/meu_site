@@ -100,6 +100,38 @@
     margin-bottom: 1.5rem;
 }
 
+/* Estilização para elementos internos do HTML da notícia */
+#noticia-conteudo h2, 
+#noticia-conteudo h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: var(--blue-900);
+    margin: 2rem 0 1rem 0;
+    font-weight: 700;
+}
+
+#noticia-conteudo a {
+    color: var(--blue-700);
+    text-decoration: underline;
+}
+
+#noticia-conteudo a:hover {
+    color: var(--blue-900);
+}
+
+#noticia-conteudo ul, 
+#noticia-conteudo ol {
+    margin: 1rem 0 1.5rem 2rem;
+}
+
+#noticia-conteudo li {
+    margin-bottom: 0.5rem;
+}
+
+/* Oculta qualquer bloco de imagem/legenda duplicado vindo dentro do corpo do HTML */
+#noticia-conteudo .dnd-widget-wrapper {
+    margin: 2rem 0;
+}
+
 @media (max-width: 768px) {
     .noticia-container {
         margin: 1.5rem auto;
@@ -120,4 +152,5 @@
         gap: 0.4rem;
     }
 }
+
 
