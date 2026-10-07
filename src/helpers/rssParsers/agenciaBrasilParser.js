@@ -1,3 +1,4 @@
+import { mapearEditoriaCompativel, extrairTextoCategoria } from '../editoriaHelper.js';
 
 /**
  * Transforma o item bruto do XML da Agência Brasil para o Schema do MongoDB.
