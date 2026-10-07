@@ -120,6 +120,12 @@ const FONTES_RSS = [
         normalizador: (item) => normalizarNoticiaAgenciaCamara(item, "tecnologia")
     },
     {
+        chave: "CAMARA_POLITICA",
+        nome: "Câmara - Política",
+        url: "https://www.camara.leg.br/noticias/rss/dinamico/POLITICA",
+        normalizador: (item) => normalizarNoticiaAgenciaCamara(item, "política")
+    },
+    {
         chave: "CAMARA_ELEICOES",
         nome: "Câmara - Eleições",
         url: "https://www.camara.leg.br/noticias/rss/dinamico/ELEICOES",
