@@ -17,18 +17,25 @@ const noticiaLimparDatabaseService = async () => {
     // Calcula a quantidade de notícias que precisam ser removidas para ficar dentro do limite
     const quantidadeParaRemover = totalNoticias - LIMITE_MAXIMO_NOTICIAS_DATABASE;
 
-    // Remove as notícias mais antigas para ficar dentro do limite
-    const noticiasRemovidas = await Noticia.find()
-        .sort({ createdAt: 1 }) // 1 = Ordem ascendente (mais antigas primeiro)
+    // Busca os IDs das notícias mais antigas
+    const noticiasAntigas = await Noticia.find()
+        .sort({ createdAt: 1 }) // Mais antigas primeiro
         .limit(quantidadeParaRemover)
-        .deleteMany();
+        .select("_id");
+
+    // Extrai os IDs das notícias antigas para remoção
+    const idsParaRemover = noticiasAntigas.map(n => n._id); 
+
+    // Executa o deleteMany no Model com o filtro $in
+    const resultadoDelete = await Noticia.deleteMany({ _id: { $in: idsParaRemover } });
+
+    const totalAtualizado = await Noticia.countDocuments();
 
     return {
-        removidas: noticiasRemovidas.deletedCount,
-        totalAtual: totalNoticias - noticiasRemovidas.deletedCount,
-        mensagem: `${noticiasRemovidas.deletedCount} notícias foram removidas para manter o limite de ${LIMITE_MAXIMO_NOTICIAS_DATABASE}.`
+        removidas: resultadoDelete.deletedCount,
+        totalAtual: totalAtualizado,
+        mensagem: `${resultadoDelete.deletedCount} notícias foram removidas para manter o limite de ${LIMITE_MAXIMO_NOTICIAS_DATABASE}.`
     };
-
 }
 
 export {
