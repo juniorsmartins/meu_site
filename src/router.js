@@ -17,7 +17,7 @@ noticiaRouter.put("/:id", noticiaAtualizarController);
 noticiaRouter.delete("/:id", noticiaDeletarPorIdController);
 
 // MANUTENÇÃO - Rota para limpar banco de dados de notícias
-noticiaRouter.delete("/", noticiaLimparDatabaseController);
+noticiaRouter.delete("/limpar", noticiaLimparDatabaseController);
 
 // Rotas de Newsletter
 const newsletterRouter = express.Router();
