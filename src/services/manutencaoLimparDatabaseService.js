@@ -1,7 +1,7 @@
 import { Noticia } from "../database/schema/noticiaSchema.js"; // Importe seu schema de Notícia
 import { LIMITE_MAXIMO_NOTICIAS_DATABASE } from "../constants/geralConstants.js";
 
-const noticiaLimparDatabaseService = async () => {
+const manutencaoLimparDatabaseService = async () => {
 
     // Conta o total de notícias no banco de dados
     const totalNoticias = await Noticia.countDocuments();
@@ -10,7 +10,7 @@ const noticiaLimparDatabaseService = async () => {
         return {
             removidas: 0,
             totalAtual: totalNoticias,
-            mensagem: `Nenhuma notícia foi removida. O total (${totalNoticias}) está dentro do limite de ${LIMITE_MAXIMO_NOTICIAS}.`
+            mensagem: `Nenhuma notícia foi removida. O total (${totalNoticias}) está dentro do limite de ${LIMITE_MAXIMO_NOTICIAS_DATABASE}.`
         };
     }
 
@@ -39,7 +39,7 @@ const noticiaLimparDatabaseService = async () => {
 }
 
 export {
-    noticiaLimparDatabaseService
+    manutencaoLimparDatabaseService
 };
 
 
