@@ -6,14 +6,12 @@ import { noticiaAtualizarController } from './controllers/noticiaAtualizarContro
 import { noticiaDeletarPorIdController } from './controllers/noticiaDeleteController.js';
 import { newsletterCriarController } from './controllers/newsletterCriarController.js';
 import { contatoLeitorCriarController } from './controllers/contatoLeitorCriarController.js';
-import { noticiaLimparDatabaseController } from './controllers/noticiaLimparDatabaseController.js';
+import { manutencaoLimparDatabaseController } from './controllers/manutencaoLimparDatabaseController.js';
 
 const noticiaRouter = express.Router();
 const newsletterRouter = express.Router();
 const contatoLeitorRouter = express.Router();
-
-// MANUTENÇÃO - Rota para limpar banco de dados de notícias
-noticiaRouter.delete("/limpar", noticiaLimparDatabaseController);
+const manutencaoRouter = express.Router();
 
 // Rotas de Notícias
 noticiaRouter.post("/", noticiaCriarController);
@@ -28,5 +26,13 @@ newsletterRouter.post("/", newsletterCriarController);
 // Rotas de Contato do Leitor
 contatoLeitorRouter.post("/", contatoLeitorCriarController);
 
-export { noticiaRouter, newsletterRouter, contatoLeitorRouter };
+// MANUTENÇÃO - Rota para limpar banco de dados 
+manutencaoRouter.delete("/limpar-database", manutencaoLimparDatabaseController);
+
+export { 
+    noticiaRouter, 
+    newsletterRouter, 
+    contatoLeitorRouter, 
+    manutencaoRouter 
+};
 
