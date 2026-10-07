@@ -1,70 +1,72 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Gazeta Central - Notícia</title>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gajeiro - Notícia</title>
 
-        <!-- Estilos -->
-        <link rel="stylesheet" href="../css/index.css">
-        <link rel="stylesheet" href="../css/header.css">
-        <link rel="stylesheet" href="../css/noticia-pagina.css">
-        <link rel="stylesheet" href="../css/footer.css">
+    <!-- Estilos -->
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/noticia-pagina.css">
+    <link rel="stylesheet" href="../css/footer.css">
 
-        <!-- Favicon -->
-        <link rel="shortcut icon" type="image/png" href="../img/favicon.png">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" href="../img/favicon.png">
 
-        <!-- Google Fonts: Inter (Sans-serif moderna) + Playfair Display (Serifada elegante para manchetes) -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
 
-        <!-- Bootstrap Icons -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    </head>
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
 
-    <body>
+<body>
 
-        <!-- Scripts do Cabeçalho/Rodapé e do Leitor de Notícia -->
-        <script type="module" src="../js/header.js"></script>
-        <script src="../js/noticia-pagina.js"></script>
-        <script type="module" src="../js/footer.js"></script> 
+    <!-- Scripts com type="module" -->
+    <script type="module" src="../js/header.js"></script>
+    <script type="module" src="../js/noticia-pagina.js"></script>
+    <script type="module" src="../js/footer.js"></script> 
 
-        <!-- Cabeçalho Reutilizado -->
-        <div id="header-container"></div>
+    <!-- Cabeçalho Reutilizado -->
+    <div id="header-container"></div>
 
-        <!-- Conteúdo da Notícia Completa -->
-        <main class="noticia-container">
-            <!-- Chapéu -->
-            <span id="noticia-chapeu"></span>
+    <!-- Conteúdo da Notícia Completa -->
+    <main class="noticia-container">
+        <!-- Chapéu -->
+        <span id="noticia-chapeu"></span>
 
-            <!-- Título -->
-            <h1 id="noticia-titulo"></h1>
+        <!-- Título -->
+        <h1 id="noticia-titulo"></h1>
 
-            <!-- Linha Fina -->
-            <p id="noticia-linha-fina"></p>
+        <!-- Linha Fina -->
+        <p id="noticia-linha-fina"></p>
 
-            <!-- Autor e Data -->
-            <div class="noticia-meta">
-                <span id="noticia-autor"></span>
-                <span id="noticia-data"></span>
-            </div>
+        <!-- Autor e Data -->
+        <div class="noticia-meta">
+            <span id="noticia-autor"></span>
+            <span id="noticia-data"></span>
+        </div>
 
-            <!-- Imagem Principal abaixo do Chapéu/Cabeçalho -->
-            <div class="noticia-imagem-container">
-                <img id="noticia-imagem" src="" alt="Imagem da notícia">
-            </div>
+        <!-- Imagem Principal abaixo do Chapéu/Cabeçalho com Legenda -->
+        <figure class="noticia-imagem-container" id="container-imagem-principal">
+            <img id="noticia-imagem" src="" alt="Imagem da notícia">
+            <figcaption id="noticia-imagem-legenda"></figcaption>
+        </figure>
 
-            <!-- Conteúdo/Texto da Notícia -->
-            <article id="noticia-conteudo"></article>
-        </main>
+        <!-- Conteúdo/Texto da Notícia -->
+        <article id="noticia-conteudo"></article>
+    </main>
 
-        <!-- Rodapé Reutilizado -->
-        <div id="footer-container"></div>
+    <!-- Rodapé Reutilizado -->
+    <div id="footer-container"></div>
 
-    </body>
+</body>
 
 </html>
+
 

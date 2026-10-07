@@ -1,39 +1,35 @@
+import { SITE_CONFIG } from "./config.js";
+
 document.addEventListener("DOMContentLoaded", async () => {
     
-    // Obtém o ID da notícia a partir dos parâmetros da URL
+    // Obtém o ID da notícia na URL
     const urlParams = new URLSearchParams(window.location.search);
-    // Obtém o ID da notícia a partir dos parâmetros da URL
     const noticiaId = urlParams.get("id");
 
     if (!noticiaId) {
-        // Exibe um alerta informando que a notícia não foi encontrada
-        alert("Notícia não encontrada");
-        // Redireciona para a página inicial se o ID da notícia não for encontrado
-        window.location.href = "../html/index.html";
+        exibirMensagemErro("Notícia não encontrada ou parâmetro inválido.");
         return;
     }
 
-    // 2. Busca a notícia na API
+    // Busca a notícia na API
     const API_URL = `/api/noticias/${noticiaId}`;
 
     try {
-        // Faz a requisição para a API para obter os dados da notícia
         const response = await fetch(API_URL, { cache: "no-store" });
 
-        // Verifica se a resposta da API foi bem-sucedida
         if (!response.ok) {
-            throw new Error(`Erro ao carregar a notícia: ${response.status}`);
+            throw new Error(`Erro ao carregar a notícia (Status: ${response.status})`);
         }
 
         const noticia = await response.json();
 
-        // Preenche os elementos da página com os dados da notícia
-        document.getElementById("noticia-chapeu").textContent = noticia.chapeu;
+        // Preenche os dados básicos
+        document.getElementById("noticia-chapeu").textContent = noticia.chapeu || "";
         document.getElementById("noticia-titulo").textContent = noticia.titulo;
-        document.getElementById("noticia-linha-fina").textContent = noticia.linhaFina;
-        document.getElementById("noticia-autor").textContent = noticia.autor;
+        document.getElementById("noticia-linha-fina").textContent = noticia.linhaFina || "";
+        document.getElementById("noticia-autor").textContent = noticia.autor || SITE_CONFIG.fundador;
 
-        // Formata e exibe a data de criação da notícia
+        // Formata e exibe a data de criação
         if (noticia.createdAt) {
             const data = new Date(noticia.createdAt).toLocaleDateString("pt-BR", {
                 day: "2-digit", 
@@ -43,28 +39,57 @@ document.addEventListener("DOMContentLoaded", async () => {
             document.getElementById("noticia-data").textContent = data;
         }
 
-        // Exibe a imagem da notícia, se disponível
+        // Imagem Destacada e Legenda (Melhoria 4)
         const imgElement = document.getElementById("noticia-imagem");
+        const containerImg = document.getElementById("container-imagem-principal");
+        
         if (noticia.imagemUrl) {
             imgElement.src = noticia.imagemUrl;
             imgElement.alt = noticia.titulo;
-        } else {
-            // Oculta o elemento de imagem se não houver URL da imagem disponível
-            imgElement.style.display = "none"; 
+
+            const legendaEl = document.getElementById("noticia-imagem-legenda");
+            if (noticia.legendaImagem) {
+                legendaEl.textContent = noticia.legendaImagem;
+            } else {
+                legendaEl.style.display = "none";
+            }
+        } else if (containerImg) {
+            containerImg.style.display = "none"; 
         }
 
-        // Exibe o conteúdo da notícia
-        document.getElementById("noticia-conteudo").textContent = noticia.conteudo;
+        // Injeção de Parágrafos Formatados no Conteúdo (Melhoria 3)
+        const containerConteudo = document.getElementById("noticia-conteudo");
+        containerConteudo.innerHTML = ""; // Limpa conteúdo anterior
 
-        // Atualiza o título da página com o título da notícia
-        document.title = `${noticia.titulo} - Gazeta Central`;
+        if (noticia.conteudo) {
+            const paragrafos = noticia.conteudo.split("\n").filter(p => p.trim() !== "");
+            paragrafos.forEach(texto => {
+                const p = document.createElement("p");
+                p.textContent = texto;
+                containerConteudo.appendChild(p);
+            });
+        }
+
+        // Atualiza o título da aba com a marca do config.js (Melhoria 1)
+        document.title = `${noticia.titulo} - ${SITE_CONFIG.nome}`;
 
     } catch (error) {
-    console.error("Erro detalhado ao carregar a notícia:", error);
-    document.querySelector(".noticia-container").innerHTML = `
-        <h2>Erro ao carregar o conteúdo da notícia</h2>
-        <p style="color: red; margin-top: 10px;">Detalhes: ${error.message}</p>
-    `;
+        console.error("Erro ao carregar a notícia:", error);
+        exibirMensagemErro(error.message); // Tratamento de Erro Elegante (Melhoria 5)
+    }
+});
+
+function exibirMensagemErro(mensagem) {
+    const container = document.querySelector(".noticia-container");
+    if (container) {
+        container.innerHTML = `
+            <div style="text-align: center; padding: 3rem 1rem;">
+                <i class="bi bi-exclamation-triangle" style="font-size: 3rem; color: #e74c3c;"></i>
+                <h2 style="margin-top: 1rem; color: var(--blue-900);">Não foi possível exibir a notícia</h2>
+                <p style="color: var(--tertiary-text-color); margin-top: 0.5rem;">${mensagem}</p>
+                <a href="../html/index.html" style="display: inline-block; margin-top: 1.5rem; color: var(--blue-700); font-weight: 600;">← Voltar para a Página Inicial</a>
+            </div>
+        `;
+    }
 }
-})
 
