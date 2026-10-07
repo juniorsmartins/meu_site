@@ -28,6 +28,7 @@
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "mongoose": "^9.10.2",
-    "nodemailer": "^10.0.15"
+    "nodemailer": "^10.0.15",
+    "rss-parser": "^3.13.0"
   }
 }

@@ -7,11 +7,13 @@ import { noticiaDeletarPorIdController } from './controllers/noticiaDeleteContro
 import { newsletterCriarController } from './controllers/newsletterCriarController.js';
 import { contatoLeitorCriarController } from './controllers/contatoLeitorCriarController.js';
 import { manutencaoLimparDatabaseController } from './controllers/manutencaoLimparDatabaseController.js';
+import { automacaoImportarNoticiaController } from './controllers/automacaoImportarNoticiaController.js';
 
 const noticiaRouter = express.Router();
 const newsletterRouter = express.Router();
 const contatoLeitorRouter = express.Router();
 const manutencaoRouter = express.Router();
+const automacaoRouter = express.Router();
 
 // Rotas de Notícias
 noticiaRouter.post("/", noticiaCriarController);
@@ -27,12 +29,16 @@ newsletterRouter.post("/", newsletterCriarController);
 contatoLeitorRouter.post("/", contatoLeitorCriarController);
 
 // MANUTENÇÃO - Rota para limpar banco de dados 
-manutencaoRouter.post("/limpar-database", manutencaoLimparDatabaseController);
+manutencaoRouter.delete("/limpar-database", manutencaoLimparDatabaseController);
+
+// AUTOMAÇÃO - Rota para disparar a automação de RSS
+automacaoRouter.post("/importar", automacaoImportarNoticiaController);
 
 export { 
     noticiaRouter, 
     newsletterRouter, 
     contatoLeitorRouter, 
-    manutencaoRouter 
+    manutencaoRouter,
+    automacaoRouter
 };
 

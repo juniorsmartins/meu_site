@@ -9,6 +9,8 @@ const noticiaSchema = new mongoose.Schema(
         conteudo: { type: String, required: true },
         autor: { type: String, required: true },
         imagemUrl: { type: String, required: true },
+        imagemLegenda: { type: String, default: "" },
+        linkOriginal: { type: String, default: "" },
         editoria: { 
             type: String, 
             required: true, 

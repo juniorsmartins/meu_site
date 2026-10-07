@@ -1,4 +1,5 @@
 export const EDITORIAS = [
+    "geral",
     "política", 
     "esportes", 
     "entretenimento", 
