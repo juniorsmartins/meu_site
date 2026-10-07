@@ -22,7 +22,7 @@ const noticiaConsultarPorIdController = async (request, response) => {
     // Define cabeçalhos de cache para evitar que a resposta seja armazenada em cache
     response.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
     // Envia a notícia como resposta
-    response.status(200).send(noticia);
+    response.status(200).json(noticia);
 }
 
 export { 

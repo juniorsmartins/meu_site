@@ -6,6 +6,7 @@ import { noticiaAtualizarController } from './controllers/noticiaAtualizarContro
 import { noticiaDeletarPorIdController } from './controllers/noticiaDeleteController.js';
 import { newsletterCriarController } from './controllers/newsletterCriarController.js';
 import { contatoLeitorCriarController } from './controllers/contatoLeitorCriarController.js';
+import { noticiaLimparDatabaseController } from './controllers/noticiaLimparDatabaseController.js';
 
 // Rotas de Notícias
 const noticiaRouter = express.Router();
@@ -14,6 +15,9 @@ noticiaRouter.get("/", noticiaPesquisarController);
 noticiaRouter.get("/:id", noticiaConsultarPorIdController);
 noticiaRouter.put("/:id", noticiaAtualizarController);
 noticiaRouter.delete("/:id", noticiaDeletarPorIdController);
+
+// MANUTENÇÃO - Rota para limpar banco de dados de notícias
+noticiaRouter.delete("/", noticiaLimparDatabaseController);
 
 // Rotas de Newsletter
 const newsletterRouter = express.Router();
