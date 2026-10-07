@@ -27,7 +27,7 @@ newsletterRouter.post("/", newsletterCriarController);
 contatoLeitorRouter.post("/", contatoLeitorCriarController);
 
 // MANUTENÇÃO - Rota para limpar banco de dados 
-manutencaoRouter.delete("/limpar-database", manutencaoLimparDatabaseController);
+manutencaoRouter.post("/limpar-database", manutencaoLimparDatabaseController);
 
 export { 
     noticiaRouter, 
