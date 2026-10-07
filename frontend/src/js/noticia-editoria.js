@@ -1,6 +1,6 @@
 // Configurações globais fixas do sistema
 const IMAGEM_PLACEHOLDER = "https://us.123rf.com/450wm/koblizeek/koblizeek2204/koblizeek220400315/185376169-nenhum-s%C3%ADmbolo-do-vetor-da-imagem-%C3%ADcone-dispon%C3%ADvel-ausente-nenhuma-galeria-para-este-espa%C3%A7o.jpg?ver=6";
-const LIMITE_NOTICIAS_POR_COLUNA = 3;
+const LIMITE_NOTICIAS_POR_COLUNA = 4;
 
 // Ponto de entrada: roda assim que a página carregar
 document.addEventListener("DOMContentLoaded", async () => {
