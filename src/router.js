@@ -8,23 +8,24 @@ import { newsletterCriarController } from './controllers/newsletterCriarControll
 import { contatoLeitorCriarController } from './controllers/contatoLeitorCriarController.js';
 import { noticiaLimparDatabaseController } from './controllers/noticiaLimparDatabaseController.js';
 
-// Rotas de Notícias
 const noticiaRouter = express.Router();
+const newsletterRouter = express.Router();
+const contatoLeitorRouter = express.Router();
+
+// MANUTENÇÃO - Rota para limpar banco de dados de notícias
+noticiaRouter.delete("/limpar", noticiaLimparDatabaseController);
+
+// Rotas de Notícias
 noticiaRouter.post("/", noticiaCriarController);
 noticiaRouter.get("/", noticiaPesquisarController);
 noticiaRouter.get("/:id", noticiaConsultarPorIdController);
 noticiaRouter.put("/:id", noticiaAtualizarController);
 noticiaRouter.delete("/:id", noticiaDeletarPorIdController);
 
-// MANUTENÇÃO - Rota para limpar banco de dados de notícias
-noticiaRouter.delete("/limpar", noticiaLimparDatabaseController);
-
 // Rotas de Newsletter
-const newsletterRouter = express.Router();
 newsletterRouter.post("/", newsletterCriarController);
 
 // Rotas de Contato do Leitor
-const contatoLeitorRouter = express.Router();
 contatoLeitorRouter.post("/", contatoLeitorCriarController);
 
 export { noticiaRouter, newsletterRouter, contatoLeitorRouter };
