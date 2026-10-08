@@ -3,7 +3,22 @@ import { Noticia } from '../database/schema/noticiaSchema.js';
 import { EDITORIAS } from '../constants/editorias.js';
 import { FONTES_RSS } from '../constants/fontesRssConfig.js';
 
+// const parser = new Parser({
+//     customFields: {
+//         item: [
+//             ['imagem-destaque', 'imagemDestaque'],
+//             ['dc:creator', 'creatorDinamico']
+//         ]
+//     }
+// });
+
 const parser = new Parser({
+    requestOptions: {
+        headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+        }
+    },
     customFields: {
         item: [
             ['imagem-destaque', 'imagemDestaque'],
