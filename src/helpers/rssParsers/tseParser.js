@@ -1,61 +1,74 @@
 import { mapearEditoriaCompativel } from '../editoriaHelper.js';
 
 /**
- * Normalizador exclusivo para o feed RDF/RSS 1.0 do Tribunal Superior Eleitoral (TSE)
+ * Módulo Específico para o TSE (Trata a estrutura RDF/RSS 1.0)
  */
-const normalizarNoticiaTse = (item, editoriaPadrao = "política") => {
-
-    // 1. O conteúdo do TSE vem acumulado dentro da tag <description>
-    let conteudoBruto = item.description || item.content || "";
-
-    // Imagem e legenda padrão (Fallback)
-    let imagemUrlExtraida = "https://www.tse.jus.br/logo.png";
-    let legendaEFotografo = "Foto: Ascom / TSE";
-
-    // 2. Extrai a imagem principal do TSE (<img src="..." alt="...">)
-    const matchImg = conteudoBruto.match(/<img[^>]+src=["']([^"']+)["'][^>]*alt=["']([^"']+)["']/i) 
-                  || conteudoBruto.match(/<img[^>]+src=["']([^"']+)["']/i);
-
-    if (matchImg && matchImg[1]) {
-        imagemUrlExtraida = matchImg[1];
-        if (matchImg[2]) {
-            legendaEFotografo = `Foto: ${matchImg[2].trim()} - TSE`;
+export const buscarEParsearTse = async (urlFeed, editoriaPadrao = "política") => {
+    // 1. Fetch com User-Agent para evitar bloqueio 403
+    const resposta = await fetch(urlFeed, {
+        headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0 Safari/537.36',
+            'Accept': 'application/rdf+xml, application/xml, text/xml'
         }
+    });
+
+    if (!resposta.ok) {
+        throw new Error(`Status code ${resposta.status}`);
     }
 
-    // 3. Remove a primeira tag <img> do corpo para não duplicar no leitor de notícia
-    conteudoBruto = conteudoBruto.replace(/<img[^>]*>/i, "");
+    const xmlTexto = await resposta.text();
 
-    // 4. Remove o link final "Veja mais" inserido pelo CMS do TSE
-    conteudoBruto = conteudoBruto.replace(/<p><a[^>]*>Veja mais<\/a><\/p>/gi, "");
+    // 2. Extrai os blocos <item>...</item> via Regex/Parser direto
+    const itensMatches = xmlTexto.match(/<item[\s\S]*?<\/item>/gi) || [];
 
-    // 5. Extrai a Linha Fina (primeiro parágrafo limpo do texto)
-    const matchParagrafo = conteudoBruto.match(/<p[^>]*>([\s\S]*?)<\/p>/i);
-    let linhaFinaFinal = "";
+    const noticiasNormalizadas = itensMatches.map(itemXml => {
+        const titleMatch = itemXml.match(/<title>([\s\S]*?)<\/title>/i);
+        const linkMatch = itemXml.match(/<link>([\s\S]*?)<\/link>/i);
+        const descMatch = itemXml.match(/<description>([\s\S]*?)<\/description>/i);
 
-    if (matchParagrafo && matchParagrafo[1]) {
-        linhaFinaFinal = matchParagrafo[1].replace(/<[^>]*>?/gm, '').replace(/\s+/g, ' ').trim();
-    }
+        const titulo = titleMatch ? titleMatch[1].trim() : "";
+        const link = linkMatch ? linkMatch[1].trim() : "";
+        let conteudoBruto = descMatch ? descMatch[1].trim() : "";
 
-    if (!linhaFinaFinal || linhaFinaFinal.length < 15) {
-        const textoLimpo = conteudoBruto.replace(/<[^>]*>?/gm, '').replace(/\s+/g, ' ').trim();
-        linhaFinaFinal = textoLimpo.length > 180 ? textoLimpo.substring(0, 177) + "..." : textoLimpo;
-    }
+        // Extrai a imagem
+        let imagemUrlExtraida = "https://www.tse.jus.br/logo.png";
+        let legendaEFotografo = "Foto: Ascom / TSE";
 
-    return {
-        chapeu: "JUSTIÇA ELEITORAL",
-        titulo: item.title ? item.title.trim() : "",
-        linhaFina: linhaFinaFinal,
-        conteudo: conteudoBruto,
-        autor: "Tribunal Superior Eleitoral",
-        editoria: mapearEditoriaCompativel(editoriaPadrao),
-        imagemUrl: imagemUrlExtraida,
-        imagemLegenda: legendaEFotografo,
-        linkOriginal: item.link || item['rdf:about'] || ""
-    };
-};
+        const matchImg = conteudoBruto.match(/<img[^>]+src=["']([^"']+)["'][^>]*alt=["']([^"']+)["']/i) 
+                      || conteudoBruto.match(/<img[^>]+src=["']([^"']+)["']/i);
 
-export {
-    normalizarNoticiaTse
+        if (matchImg && matchImg[1]) {
+            imagemUrlExtraida = matchImg[1];
+            if (matchImg[2]) legendaEFotografo = `Foto: ${matchImg[2].trim()} - TSE`;
+        }
+
+        // Limpa o HTML do corpo
+        conteudoBruto = conteudoBruto
+            .replace(/<img[^>]*>/i, "")
+            .replace(/<p><a[^>]*>Veja mais<\/a><\/p>/gi, "");
+
+        // Linha Fina
+        const matchParagrafo = conteudoBruto.match(/<p[^>]*>([\s\S]*?)<\/p>/i);
+        let linhaFinaFinal = matchParagrafo ? matchParagrafo[1].replace(/<[^>]*>?/gm, '').replace(/\s+/g, ' ').trim() : "";
+
+        if (!linhaFinaFinal || linhaFinaFinal.length < 15) {
+            const textoLimpo = conteudoBruto.replace(/<[^>]*>?/gm, '').replace(/\s+/g, ' ').trim();
+            linhaFinaFinal = textoLimpo.length > 180 ? textoLimpo.substring(0, 177) + "..." : textoLimpo;
+        }
+
+        return {
+            chapeu: "JUSTIÇA ELEITORAL",
+            titulo: titulo,
+            linhaFina: linhaFinaFinal,
+            conteudo: conteudoBruto,
+            autor: "Tribunal Superior Eleitoral (TSE)",
+            editoria: mapearEditoriaCompativel(editoriaPadrao),
+            imagemUrl: imagemUrlExtraida,
+            imagemLegenda: legendaEFotografo,
+            linkOriginal: link
+        };
+    });
+
+    return noticiasNormalizadas;
 };
 

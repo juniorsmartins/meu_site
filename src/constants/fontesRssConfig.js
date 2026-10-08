@@ -202,7 +202,7 @@ const FONTES_RSS = [
         chave: "TSE_NOTICIAS",
         nome: "TSE - Notícias",
         url: "https://www.tse.jus.br/comunicacao/noticias/rss",
-        normalizador: (item) => normalizarNoticiaTse(item, "política")
+        buscarCustomizado: () => buscarEParsearTse("https://www.tse.jus.br/comunicacao/noticias/rss", "política")
     }
 ];
 
