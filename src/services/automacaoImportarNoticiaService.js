@@ -3,22 +3,7 @@ import { Noticia } from '../database/schema/noticiaSchema.js';
 import { EDITORIAS } from '../constants/editorias.js';
 import { FONTES_RSS } from '../constants/fontesRssConfig.js';
 
-// const parser = new Parser({
-//     customFields: {
-//         item: [
-//             ['imagem-destaque', 'imagemDestaque'],
-//             ['dc:creator', 'creatorDinamico']
-//         ]
-//     }
-// });
-
 const parser = new Parser({
-    requestOptions: {
-        headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
-        }
-    },
     customFields: {
         item: [
             ['imagem-destaque', 'imagemDestaque'],
@@ -80,8 +65,40 @@ const automacaoImportarNoticiaService = async () => {
 // FUNÇÕES AUXILIARES DE BANCO E ROTEAMENTO
 // ============================================================================
 
+// const processarFeedRss = async (urlFeed, funcaoNormalizacao) => {
+//     const feed = await parser.parseURL(urlFeed);
+//     let importadas = 0;
+//     let ignoradas = 0;
+
+//     for (const item of feed.items) {
+//         const dadosNoticia = funcaoNormalizacao(item);
+//         const resultado = await salvarNoticiaInedita(dadosNoticia);
+
+//         if (resultado.salvo) importadas++;
+//         else ignoradas++;
+//     }
+
+//     return { importadas, ignoradas, totalAnalisadas: feed.items.length };
+// };
 const processarFeedRss = async (urlFeed, funcaoNormalizacao) => {
-    const feed = await parser.parseURL(urlFeed);
+    // 1. Busca o XML via fetch simulando um navegador real (evita erro 403 / WAF do TSE)
+    const resposta = await fetch(urlFeed, {
+        headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,application/rss+xml,application/rdf+xml;q=0.8,*/*;q=0.7'
+        }
+    });
+
+    if (!resposta.ok) {
+        throw new Error(`Status code ${resposta.status}`);
+    }
+
+    // 2. Extrai o texto do XML
+    const xmlTexto = await resposta.text();
+
+    // 3. O rss-parser interpreta a string sem fazer a chamada de rede diretamente
+    const feed = await parser.parseString(xmlTexto);
+
     let importadas = 0;
     let ignoradas = 0;
 
