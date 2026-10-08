@@ -20,7 +20,9 @@ table {
     table-layout: fixed; /* Força o cumprimento estrito das larguras */
 }
 
-th, td {
+/* Escopado especificamente para celulas da tabela */
+table th, 
+table td {
     padding: 0.75rem 0.5rem;
     text-align: left;
     border-bottom: 1px solid var(--blue-100);
@@ -31,7 +33,7 @@ th, td {
     white-space: nowrap;
 }
 
-th {
+table th {
     background: var(--blue-900);
     color: #FFFFFF;
     font-weight: 600;
@@ -39,13 +41,13 @@ th {
 }
 
 /* Distribuição exata somando 100% */
-th:nth-child(1), td:nth-child(1) { width: 10%; } /* Editoria */
-th:nth-child(2), td:nth-child(2) { width: 10%; } /* Chapéu */
-th:nth-child(3), td:nth-child(3) { width: 26%; } /* Título */
-th:nth-child(4), td:nth-child(4) { width: 15%; } /* Linha Fina */
-th:nth-child(5), td:nth-child(5) { width: 11%; } /* Autor */
-th:nth-child(6), td:nth-child(6) { width: 12%; } /* Conteúdo */
-th:nth-child(7), td:nth-child(7) { width: 16%; text-align: center; } /* Ações */
+table th:nth-child(1), table td:nth-child(1) { width: 10%; } /* Editoria */
+table th:nth-child(2), table td:nth-child(2) { width: 10%; } /* Chapéu */
+table th:nth-child(3), table td:nth-child(3) { width: 26%; } /* Título */
+table th:nth-child(4), table td:nth-child(4) { width: 15%; } /* Linha Fina */
+table th:nth-child(5), table td:nth-child(5) { width: 11%; } /* Autor */
+table th:nth-child(6), table td:nth-child(6) { width: 12%; } /* Conteúdo */
+table th:nth-child(7), table td:nth-child(7) { width: 16%; text-align: center; } /* Ações */
 
 /* Container Flexivo dos Botões dentro da TD */
 td.col-acoes {
@@ -123,5 +125,57 @@ table td select {
     border-radius: 4px;
     box-sizing: border-box;
     background-color: #FFFFFF;
+}
+
+/* ==========================================
+   ESTILIZAÇÃO DA PAGINAÇÃO (Anterior / Próxima)
+   ========================================== */
+
+.paginacao-flex {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-top: 1.5rem;
+    padding: 0.5rem 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.paginacao-flex button {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--blue-800);
+    color: #FFFFFF;
+    border: none;
+    padding: 0.55rem 1.25rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+    white-space: nowrap !important;
+    text-decoration: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.paginacao-flex button:hover:not(:disabled) {
+    background-color: var(--blue-600);
+}
+
+.paginacao-flex button:disabled {
+    background-color: #CBD5E1 !important;
+    color: #94A3B8 !important;
+    cursor: not-allowed !important;
+    box-shadow: none;
+    opacity: 0.7;
+}
+
+#info-paginacao {
+    font-size: 0.9rem;
+    color: var(--secondary-text-color);
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap !important;
 }
 
