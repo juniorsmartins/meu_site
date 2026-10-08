@@ -47,7 +47,13 @@ table th:nth-child(3), table td:nth-child(3) { width: 30%; } /* Título (Espaço
 table th:nth-child(4), table td:nth-child(4) { width: 18%; } /* Linha Fina */
 table th:nth-child(5), table td:nth-child(5) { width: 12%; } /* Autor */
 table th:nth-child(6), table td:nth-child(6) { width: 12%; } /* Conteúdo */
-table th:nth-child(7), table td:nth-child(7) { width: 6%; min-width: 50px; text-align: center; } /* Ações super compacto */
+
+table th:nth-child(7), 
+table td:nth-child(7) { 
+    width: 9%; 
+    min-width: 80px; 
+    text-align: center; 
+}
 
 /* ==========================================
    COLUNA DE AÇÕES COM ÍCONES EMPILHADOS
@@ -59,15 +65,14 @@ td.col-acoes {
 }
 
 .acoes-wrapper {
-    display: flex;
-    flex-direction: column;
+    display: flex !important;
+    flex-direction: row !important; /* Alinha lado a lado */
     align-items: center;
     justify-content: center;
-    gap: 0.3rem;
+    gap: 0.35rem;
     width: 100%;
 }
 
-/* Botões quadrados focados em ícones */
 .btn-acao {
     display: inline-flex;
     align-items: center;
@@ -80,7 +85,7 @@ td.col-acoes {
     font-size: 0.9rem;
     cursor: pointer;
     box-sizing: border-box;
-    transition: opacity 0.2s ease, transform 0.1s ease;
+    transition: opacity 0.2s ease;
     flex-shrink: 0;
 }
 
