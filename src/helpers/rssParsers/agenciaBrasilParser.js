@@ -9,7 +9,13 @@ const normalizarNoticiaAgenciaBrasil = (item) => {
     const categoriaBruta = (item.categories && item.categories.length > 0) ? item.categories[0] : "";
     const categoriaPrincipal = extrairTextoCategoria(categoriaBruta);
 
-    const conteudoBruto = item.description || item.content || "";
+    let conteudoBruto = item.description || item.content || "";
+
+    // 1. Limpa o bloco "Notícias relacionadas:" e a lista de links subsequente (<ul> ou <ol>)
+    conteudoBruto = conteudoBruto.replace(/<(h[1-6]|p|strong|div)[^>]*>\s*Notícias relacionadas:?\s*<\/\1>\s*<(ul|ol)[\s\S]*?<\/\3>/gi, "");
+    
+    // 2. Fallback para casos em que o título esteja envolvido por <strong> ou <p> sem fechamento direto antes da lista
+    conteudoBruto = conteudoBruto.replace(/<p[^>]*>\s*<strong>\s*Notícias relacionadas:?\s*<\/strong>[\s\S]*?<\/ul>/gi, "");
 
     // Mapeia a editoria exata aceita pelo sistema (em minúsculas)
     const editoriaFinal = mapearEditoriaCompativel(categoriaPrincipal);
@@ -40,7 +46,7 @@ const normalizarNoticiaAgenciaBrasil = (item) => {
         chapeu: chapeuDinamico,
         titulo: item.title ? item.title.trim() : "",
         linhaFina: linhaFinaDinamica,
-        conteudo: conteudoBruto,
+        conteudo: conteudoBruto, // Conteúdo sanitizado sem as notícias relacionadas
         autor: autorMateria,
         editoria: editoriaFinal,
         imagemUrl: item.imagemDestaque || item.enclosure?.url || "https://agenciabrasil.ebc.com.br/sites/default/files/ebc_logo.png",
