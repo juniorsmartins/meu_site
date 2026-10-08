@@ -9,7 +9,12 @@ const normalizarNoticiaAgenciaBrasil = (item) => {
     const categoriaBruta = (item.categories && item.categories.length > 0) ? item.categories[0] : "";
     const categoriaPrincipal = extrairTextoCategoria(categoriaBruta);
 
-    const conteudoBruto = item.description || item.content || "";
+    let conteudoBruto = item.description || item.content || "";
+
+    // Limpeza Cirúrgica do Bloco "Notícias relacionadas:" + a lista <ul> com os links
+    conteudoBruto = conteudoBruto
+        .replace(/<(h[1-6]|p|strong|div)[^>]*>\s*Notícias relacionadas:?\s*<\/\1>\s*<ul[\s\S]*?<\/ul>/gi, "")
+        .replace(/<h[1-6][^>]*>\s*Notícias relacionadas:?\s*<\/h[1-6]>\s*<ul[\s\S]*?<\/ul>/gi, "");
 
     // Mapeia a editoria exata aceita pelo sistema (em minúsculas)
     const editoriaFinal = mapearEditoriaCompativel(categoriaPrincipal);
@@ -40,7 +45,7 @@ const normalizarNoticiaAgenciaBrasil = (item) => {
         chapeu: chapeuDinamico,
         titulo: item.title ? item.title.trim() : "",
         linhaFina: linhaFinaDinamica,
-        conteudo: conteudoBruto,
+        conteudo: conteudoBruto, // Salva o HTML sem o h3 e sem o ul de notícias relacionadas
         autor: autorMateria,
         editoria: editoriaFinal,
         imagemUrl: item.imagemDestaque || item.enclosure?.url || "https://agenciabrasil.ebc.com.br/sites/default/files/ebc_logo.png",
@@ -52,3 +57,4 @@ const normalizarNoticiaAgenciaBrasil = (item) => {
 export { 
     normalizarNoticiaAgenciaBrasil 
 };
+
