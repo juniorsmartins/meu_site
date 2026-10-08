@@ -13,18 +13,20 @@
 table {
     width: 100%;
     border-collapse: collapse;
-    background: #FFFFFF; /* Fundo branco para garantir leitura dos dados */
+    background: #FFFFFF;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     border-radius: 8px;
     overflow: hidden;
+    table-layout: fixed; /* 1. Garante que as colunas respeitem larguras e truncamento de texto */
 }
 
 th, td {
-    padding: 0.85rem 1rem;
+    padding: 0.85rem 0.75rem;
     text-align: left;
     border-bottom: 1px solid var(--blue-100);
     font-size: 0.9rem;
     vertical-align: middle;
+    word-wrap: break-word; /* Evita que textos longos estourem a célula */
 }
 
 th {
@@ -33,6 +35,15 @@ th {
     font-weight: 600;
     font-family: 'Inter', sans-serif;
 }
+
+/* Larguras sugeridas para manter a tabela equilibrada */
+th:nth-child(1) { width: 10%; } /* Editoria */
+th:nth-child(2) { width: 10%; } /* Chapéu */
+th:nth-child(3) { width: 25%; } /* Título */
+th:nth-child(4) { width: 15%; } /* Linha Fina */
+th:nth-child(5) { width: 12%; } /* Autor */
+th:nth-child(6) { width: 13%; } /* Conteúdo */
+th:nth-child(7) { width: 15%; text-align: center; } /* Ações */
 
 /* Container de Paginação */
 .paginacao-flex {
@@ -70,29 +81,28 @@ th {
     font-weight: 600;
 }
 
-/* Coluna de Ações */
+/* ==========================================
+   CORREÇÃO DA COLUNA DE AÇÕES (Botões)
+   ========================================== */
+
+/* Trata a célula TD como célula de tabela mantendo alinhamento sem virar flexbox */
 td.col-acoes {
     white-space: nowrap;
-    width: 1%;
+    text-align: center;
+    vertical-align: middle;
     padding: 0.5rem;
-}
-
-.col-acoes {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5rem;
 }
 
 /* Botões de Ação na Tabela */
 .btn-acao {
-    display: inline-flex;
+    display: inline-flex; /* Mantém os botões em linha sem afetar a <td> pai */
     align-items: center;
     justify-content: center;
     gap: 0.35rem;
     width: auto;
     height: 32px;
-    padding: 0 0.75rem;
+    padding: 0 0.65rem;
+    margin: 0 0.15rem; /* Substitui o gap com espaçamento suave entre os botões */
     border: none;
     border-radius: 4px;
     font-size: 0.8rem;
@@ -101,6 +111,7 @@ td.col-acoes {
     line-height: 1;
     box-sizing: border-box;
     transition: opacity 0.2s ease;
+    white-space: nowrap;
 }
 
 .btn-acao i {
@@ -145,5 +156,4 @@ table td select {
     box-sizing: border-box;
     background-color: #FFFFFF;
 }
-
 
