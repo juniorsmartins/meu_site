@@ -1,6 +1,6 @@
 #container-tabela-noticias {
-    width: 90%;
-    max-width: 1200px;
+    width: 95%;
+    max-width: 1280px;
     margin: 2rem auto;
     overflow-x: auto;
 }
@@ -17,18 +17,18 @@ table {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     border-radius: 8px;
     overflow: hidden;
-    table-layout: fixed; /* Força o cumprimento estrito das larguras definidas */
+    table-layout: fixed; /* Força o cumprimento estrito das larguras */
 }
 
 th, td {
-    padding: 0.85rem 0.5rem;
+    padding: 0.75rem 0.5rem;
     text-align: left;
     border-bottom: 1px solid var(--blue-100);
     font-size: 0.85rem;
     vertical-align: middle;
     overflow: hidden;
-    text-overflow: ellipsis; /* Coloca '...' caso o texto da célula seja maior que a coluna */
-    white-space: nowrap; /* Impede que textos longos forcem a expansão da linha */
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 th {
@@ -38,60 +38,27 @@ th {
     font-family: 'Inter', sans-serif;
 }
 
-/* Reajuste fino das larguras para evitar reticências em colunas curtas */
-th:nth-child(1), td:nth-child(1) { width: 12%; }  /* Editoria (ex: meio ambiente) */
-th:nth-child(2), td:nth-child(2) { width: 10%; }  /* Chapéu */
-th:nth-child(3), td:nth-child(3) { width: 23%; }  /* Título */
-th:nth-child(4), td:nth-child(4) { width: 14%; }  /* Linha Fina */
-th:nth-child(5), td:nth-child(5) { width: 11%; }  /* Autor */
-th:nth-child(6), td:nth-child(6) { width: 12%; }  /* Conteúdo */
-th:nth-child(7), td:nth-child(7) { width: 18%; min-width: 170px; text-align: center; } /* Ações */
+/* Distribuição exata somando 100% */
+th:nth-child(1), td:nth-child(1) { width: 10%; } /* Editoria */
+th:nth-child(2), td:nth-child(2) { width: 10%; } /* Chapéu */
+th:nth-child(3), td:nth-child(3) { width: 26%; } /* Título */
+th:nth-child(4), td:nth-child(4) { width: 15%; } /* Linha Fina */
+th:nth-child(5), td:nth-child(5) { width: 11%; } /* Autor */
+th:nth-child(6), td:nth-child(6) { width: 12%; } /* Conteúdo */
+th:nth-child(7), td:nth-child(7) { width: 16%; text-align: center; } /* Ações */
 
-/* Container de Paginação */
-.paginacao-flex {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 1.2rem;
-    padding: 0.5rem 0;
-}
-
-.paginacao-flex button {
-    background-color: var(--blue-800);
-    color: #FFFFFF;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    font-weight: 600;
-    transition: background-color 0.2s ease;
-}
-
-.paginacao-flex button:hover:not(:disabled) {
-    background-color: var(--blue-600);
-}
-
-.paginacao-flex button:disabled {
-    background-color: #CBD5E1;
-    cursor: not-allowed;
-}
-
-#info-paginacao {
-    font-size: 0.9rem;
-    color: var(--secondary-text-color);
-    font-weight: 600;
-}
-
-/* ==========================================
-   CORREÇÃO DA COLUNA DE AÇÕES (Botões)
-   ========================================== */
-
+/* Container Flexivo dos Botões dentro da TD */
 td.col-acoes {
-    white-space: nowrap !important;
+    padding: 0.4rem;
     text-align: center;
-    vertical-align: middle;
-    padding: 0.5rem 0.25rem;
+}
+
+.acoes-wrapper {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    width: 100%;
 }
 
 /* Botões de Ação na Tabela */
@@ -99,21 +66,19 @@ td.col-acoes {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.3rem;
-    width: auto;
+    gap: 0.25rem;
     height: 30px;
     padding: 0 0.5rem;
-    margin: 0 0.1rem;
     border: none;
     border-radius: 4px;
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     font-weight: 600;
     cursor: pointer;
     line-height: 1;
     box-sizing: border-box;
     transition: opacity 0.2s ease;
     white-space: nowrap;
-    flex-shrink: 0;
+    flex-shrink: 0; /* Impede o botão de encolher ou sumir */
 }
 
 .btn-acao i {
@@ -132,7 +97,8 @@ td.col-acoes {
     color: #FFFFFF;
 }
 
-.btn-deletar {
+/* Cobre tanto btn-deletar quanto btn-excluir */
+.btn-deletar, .btn-excluir {
     background-color: #E74C3C;
     color: #FFFFFF;
 }

@@ -122,12 +122,14 @@ function criarLinhaNoticia(noticia) {
         <td class="col-autor">${noticia.autor || '-'}</td>
         <td class="col-conteudo">${conteudoResumido || '-'}</td>
         <td class="col-acoes">
-            <button class="btn-acao btn-editar">
-                <i class="bi bi-pencil"></i> Editar
-            </button>
-            <button class="btn-acao btn-deletar">
-                <i class="bi bi-trash"></i> Excluir
-            </button>
+            <div class="acoes-wrapper">
+                <button class="btn-acao btn-editar">
+                    <i class="bi bi-pencil"></i> Editar
+                </button>
+                <button class="btn-acao btn-deletar">
+                    <i class="bi bi-trash"></i> Excluir
+                </button>
+            </div>
         </td>
     `;
 
@@ -185,12 +187,14 @@ function ativarModoEdicao(id) {
         <td><input type="text" id="edit-autor-${id}" value="${autor}"></td>
         <td><input type="text" id="edit-conteudo-${id}" value="${conteudo}"></td>
         <td class="col-acoes">
-            <button class="btn-acao btn-salvar">
-                <i class="bi bi-check-circle"></i> Salvar
-            </button>
-            <button class="btn-acao btn-cancelar">
-                <i class="bi bi-x-circle"></i> Cancelar
-            </button>
+            <div class="acoes-wrapper">
+                <button class="btn-acao btn-salvar">
+                    <i class="bi bi-check-circle"></i> Salvar
+                </button>
+                <button class="btn-acao btn-cancelar">
+                    <i class="bi bi-x-circle"></i> Cancelar
+                </button>
+            </div>
         </td>
     `;
 
