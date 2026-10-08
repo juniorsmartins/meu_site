@@ -23,7 +23,7 @@ const SECOES_EDITORIAS = [
     { titulo: "Esportes", editoria: "esportes", comFoto: true, limite: 3 },
 
     // --- Segunda Linha de Colunas ---
-    { titulo: "Turismo", editoria: "turismo", comFoto: true, limite: 3 },
+    { titulo: "Polícia", editoria: "polícia", comFoto: true, limite: 3 },
     { titulo: "Meio Ambiente", editoria: "meio ambiente", comFoto: true, limite: 3 },
     { titulo: "Saúde", editoria: "saúde", comFoto: true, limite: 3 },
     
@@ -31,9 +31,11 @@ const SECOES_EDITORIAS = [
     { titulo: "Últimas Notícias", editoria: "ultimas", comFoto: false, limite: 10 },
 
     // --- Terceira Linha de Colunas ---
-    { titulo: "Polícia", editoria: "polícia", comFoto: true, limite: 3 },
+    { titulo: "Turismo", editoria: "turismo", comFoto: true, limite: 3 },    
     { titulo: "Cultura", editoria: "cultura", comFoto: true, limite: 3 },
-    { titulo: "Entretenimento", editoria: "entretenimento", comFoto: true, limite: 3 }
+    { titulo: "Entretenimento", editoria: "entretenimento", comFoto: true, limite: 3 },
+    { titulo: "Geral", editoria: "geral", comFoto: true, limite: 3 }
+
 ];
 
 // ============================================================================
