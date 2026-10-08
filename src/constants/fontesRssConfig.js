@@ -1,11 +1,21 @@
 import { normalizarNoticiaAgenciaBrasil } from '../helpers/rssParsers/agenciaBrasilParser.js';
 import { normalizarNoticiaAgenciaCamara } from '../helpers/rssParsers/agenciaCamaraParser.js';
+import { normalizarNoticiaTse } from '../helpers/rssParsers/tseParser.js';
 
 /**
  * Registro de todas as fontes de RSS com suas URLs e funções de normalização específicas.
  */
 const FONTES_RSS = [
 
+    // =========================================================================
+    // Tribunal Superior Eleitoral (TSE) 
+    // =========================================================================
+    {
+        chave: "TSE_NOTICIAS",
+        nome: "TSE - Notícias",
+        url: "https://www.tse.jus.br/comunicacao/noticias/rss",
+        normalizador: (item) => normalizarNoticiaTse(item, "política")
+    },
     // =========================================================================
     // AGÊNCIA CÂMARA DE NOTÍCIAS
     // =========================================================================
@@ -43,7 +53,7 @@ const FONTES_RSS = [
         chave: "CAMARA_RELACOES_EXTERIORES",
         nome: "Câmara - Relações Exteriores",
         url: "https://www.camara.leg.br/noticias/rss/dinamico/RELACOES-EXTERIORES",
-        normalizador: (item) => normalizarNoticiaAgenciaCamara(item, "política")
+        normalizador: (item) => normalizarNoticiaAgenciaCamara(item, "internacional")
     },
     {
         chave: "CAMARA_TRANSPORTE_E_TRANSITO",
@@ -167,7 +177,7 @@ const FONTES_RSS = [
         chave: "AGENCIA_BRASIL_INTERNACIONAL",
         nome: "Agência Brasil - Internacional",
         url: "https://agenciabrasil.ebc.com.br/rss/internacional/feed.xml",
-        normalizador: (item) => normalizarNoticiaAgenciaBrasil(item, "política")
+        normalizador: (item) => normalizarNoticiaAgenciaBrasil(item, "internacional")
     },
     {
         chave: "AGENCIA_BRASIL_ESPORTES",
@@ -192,7 +202,7 @@ const FONTES_RSS = [
         nome: "Agência Brasil - Política",
         url: "https://agenciabrasil.ebc.com.br/rss/politica/feed.xml",
         normalizador: (item) => normalizarNoticiaAgenciaBrasil(item, "política")
-    },
+    }
 ];
 
 export { 
