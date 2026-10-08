@@ -28,7 +28,12 @@ const SECOES_EDITORIAS = [
     { titulo: "Saúde", editoria: "saúde", comFoto: true, limite: 3 },
     
     // Coluna especial compacta (sem imagem e com lista expandida)
-    { titulo: "Últimas Notícias", editoria: "ultimas", comFoto: false, limite: 7 }
+    { titulo: "Últimas Notícias", editoria: "ultimas", comFoto: false, limite: 10 },
+
+    // --- Terceira Linha de Colunas ---
+    { titulo: "Polícia", editoria: "polícia", comFoto: true, limite: 3 },
+    { titulo: "Cultura", editoria: "cultura", comFoto: true, limite: 3 },
+    { titulo: "Entretenimento", editoria: "entretenimento", comFoto: true, limite: 3 }
 ];
 
 // ============================================================================
