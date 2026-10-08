@@ -1,147 +1,228 @@
-// Configurações globais fixas do sistema
+// ============================================================================
+// CONFIGURAÇÕES GLOBAIS E ESTRUTURA DAS EDITORIAS (JS-FIRST)
+// ============================================================================
+
+// Imagem padrão exibida caso a notícia não possua imagem cadastrada
 const IMAGEM_PLACEHOLDER = "https://us.123rf.com/450wm/koblizeek/koblizeek2204/koblizeek220400315/185376169-nenhum-s%C3%ADmbolo-do-vetor-da-imagem-%C3%ADcone-dispon%C3%ADvel-ausente-nenhuma-galeria-para-este-espa%C3%A7o.jpg?ver=6";
-const LIMITE_NOTICIAS_POR_COLUNA = 4;
 
-// Ponto de entrada: roda assim que a página carregar
+/**
+ * Array de Configuração Central de Editorias (Estratégia JS-First)
+ * Permite adicionar, remover ou reordenar colunas do portal modificando apenas este array.
+ * 
+ * Atributos de cada seção:
+ * - titulo: Nome exibido no cabeçalho da coluna.
+ * - editoria: Chave de filtro enviada para a API backend.
+ * - comFoto: Define se o card usará template com imagem (true) ou sem imagem (false).
+ * - limite: Quantidade máxima de notícias a carregar para a coluna.
+ */
+const SECOES_EDITORIAS = [
+    // --- Primeira Linha de Colunas (Com Foto) ---
+    { titulo: "Política", editoria: "política", comFoto: true, limite: 3 },
+    { titulo: "Economia", editoria: "economia", comFoto: true, limite: 3 },
+    { titulo: "Tecnologia", editoria: "tecnologia", comFoto: true, limite: 3 },
+    { titulo: "Esportes", editoria: "esportes", comFoto: true, limite: 3 },
+
+    // --- Segunda Linha de Colunas ---
+    { titulo: "Turismo", editoria: "turismo", comFoto: true, limite: 3 },
+    { titulo: "Meio Ambiente", editoria: "meio ambiente", comFoto: true, limite: 3 },
+    { titulo: "Saúde", editoria: "saúde", comFoto: true, limite: 3 },
+    
+    // Coluna especial compacta (sem imagem e com lista expandida)
+    { titulo: "Últimas Notícias", editoria: "ultimas", comFoto: false, limite: 7 }
+];
+
+// ============================================================================
+// PONTO DE ENTRADA (CICLO DE VIDA DA PÁGINA)
+// ============================================================================
+
+// Executa a inicialização assim que todo o DOM da página principal for carregado
 document.addEventListener("DOMContentLoaded", async () => {
-
-    // Obtém o container principal de notícias
+    // Localiza o elemento container na página inicial onde o módulo será inserido
     const containerNoticiasPorEditoria = document.getElementById("container-noticias-por-editoria"); 
-    // Se não houver área de notícias, para aqui
+    
+    // Se o container não existir na página atual, interrompe a execução
     if (!containerNoticiasPorEditoria) return; 
 
     try {
-        // 1. Baixa o HTML das colunas
+        // 1. Garante o carregamento do arquivo HTML com os templates
         await garantirEstruturaEditorias(containerNoticiasPorEditoria); 
-        // 2. Preenche com os dados do banco
-        await carregarNoticiasPorEditoria();
+
+        // 2. Constrói o grid dinâmico e busca os dados de todas as colunas
+        await renderizarTodasAsEditorias();
 
     } catch (error) {
-        console.error("Erro ao inicializar o módulo de editorias:", error);
+        console.error("Erro ao inicializar o módulo de noticias por editoria:", error);
     }
 });
 
-// Baixa e injeta o HTML das editorias na tela se ainda não existir
+// ============================================================================
+// FUNÇÕES DE MONTAGEM E RENDERIZAÇÃO
+// ============================================================================
+
+/**
+ * Faz o download do arquivo HTML contendo a estrutura do grid e os templates
+ * e o injeta dinamicamente dentro do container da página inicial.
+ */
 async function garantirEstruturaEditorias(containerNoticiasPorEditoria) {
-
-    // Verifica se a estrutura das editorias já foi carregada anteriormente
+    // Verifica se o wrapper do grid já foi injetado para evitar requisições duplicadas
     const jaEstaCarregado = document.getElementById("noticias-wraper-2");
-    if (jaEstaCarregado) return; // Evita carregar duas vezes
+    if (jaEstaCarregado) return; 
 
-    // Baixa o HTML das editorias
+    // Busca o arquivo HTML que armazena as estruturas de template
     const resposta = await fetch("../html/noticia-editoria.html"); 
     if (!resposta.ok) {
-        throw new Error(`Falha ao carregar HTML: ${resposta.status}`);
+        throw new Error(`Falha ao carregar HTML das editorias: ${resposta.status}`);
     }
 
-    // Injeta o HTML baixado no container principal
+    // Injeta o conteúdo baixado no container da página
     containerNoticiasPorEditoria.innerHTML = await resposta.text();
 }
 
-// Percorre todas as colunas de notícias da página
-async function carregarNoticiasPorEditoria() {
+/**
+ * Percorre o Array de Configuração (SECOES_EDITORIAS), cria o elemento HTML de
+ * cada coluna, realiza a busca das notícias no banco e desenha os cards na tela.
+ */
+async function renderizarTodasAsEditorias() {
+    const wrapperGrid = document.getElementById("noticias-wraper-2");
+    const templateComFoto = document.getElementById("template-noticia-com-foto");
+    const templateSemFoto = document.getElementById("template-noticia-sem-foto");
 
-    // Seleciona todas as colunas de notícias por editoria
-    const colunas = document.querySelectorAll(".noticias-por-editoria"); 
-    // Obtém o template de notícia por editoria
-    const template = document.getElementById("template-noticia-editoria"); 
-    if (!template) return;
+    // Valida se a estrutura do grid e os templates existem no DOM
+    if (!wrapperGrid || !templateComFoto || !templateSemFoto) return;
 
-    // Processa cada coluna de notícias por editoria
-    for (const coluna of colunas) { 
-        // Processa a coluna atual com o template fornecido
-        await processarColunaEditoria(coluna, template); 
+    // Limpa o conteúdo do wrapper antes de iniciar a montagem
+    wrapperGrid.innerHTML = ""; 
+
+    // Itera sequencialmente sobre cada seção configurada no array JS-First
+    for (const secao of SECOES_EDITORIAS) {
+        
+        // 1. Cria a estrutura HTML da coluna (cabeçalho h2 + container da lista)
+        const colunaElement = criarElementoColuna(secao);
+        wrapperGrid.appendChild(colunaElement);
+
+        // 2. Obtém a referência interna da lista de notícias recém-criada
+        const containerLista = colunaElement.querySelector(".noticias-lista");
+        
+        // 3. Define qual template HTML será utilizado com base na propriedade comFoto
+        const templateAdequado = secao.comFoto ? templateComFoto : templateSemFoto;
+
+        // 4. Faz a requisição à API backend para buscar as notícias da coluna
+        const noticias = await buscarNoticiasDoBackend(secao);
+
+        // 5. Preenche a coluna na tela com os dados obtidos da API
+        renderizarListaEmColuna(containerLista, noticias, templateAdequado, secao.comFoto);
     }
 }
 
-// Lida com uma coluna específica (ex: Política)
-async function processarColunaEditoria(coluna, template) {
+/**
+ * Cria o elemento container <div> da coluna com seu cabeçalho de título.
+ */
+function criarElementoColuna(secao) {
+    const divColuna = document.createElement("div");
+    
+    // Adiciona a classe base e uma classe adicional caso a coluna não utilize imagem
+    divColuna.className = `noticias-por-editoria ${!secao.comFoto ? 'coluna-sem-foto' : ''}`;
+    divColuna.setAttribute("data-editoria", secao.editoria);
 
-    // Obtém o nome da editoria a partir do atributo data-editoria
-    const nomeEditoria = coluna.getAttribute("data-editoria"); 
-    // Obtém o container onde as notícias serão inseridas
-    const containerDaListaDeNoticiasDaEditoria = coluna.querySelector(".noticias-lista"); 
+    // Define a estrutura interna básica da coluna
+    divColuna.innerHTML = `
+        <div><h2>${secao.titulo}</h2></div>
+        <div class="noticias-lista"></div>
+    `;
 
-    if (!nomeEditoria || !containerDaListaDeNoticiasDaEditoria) return;
+    return divColuna;
+}
+
+// ============================================================================
+// COMUNICAÇÃO COM A API (BACKEND)
+// ============================================================================
+
+/**
+ * Monta a URL de busca adequada e consome a rota da API do MongoDB.
+ */
+async function buscarNoticiasDoBackend(secao) {
+    // URL base definindo a quantidade limite de notícias a retornar
+    let url = `/api/noticias?limite=${secao.limite}`;
+    
+    // Se a coluna for diferente de 'ultimas', inclui o filtro de editoria específica na query
+    if (secao.editoria !== "ultimas") {
+        url += `&editoria=${encodeURIComponent(secao.editoria)}`;
+    }
 
     try {
-        // Busca as notícias da editoria atual no backend
-        const listaNoticiasPorEditoria = await buscarNoticiasPorEditoria(nomeEditoria); 
+        const resposta = await fetch(url);
+        if (!resposta.ok) return [];
 
-        renderizarListaNoticias(containerDaListaDeNoticiasDaEditoria, listaNoticiasPorEditoria, template);
-
+        const dados = await resposta.json();
+        
+        // Trata o retorno aceitando tanto arrays diretos quanto objetos paginados
+        return Array.isArray(dados) ? dados : (dados.noticias || []);
     } catch (error) {
-        console.error(`Erro na editoria '${nomeEditoria}':`, error);
+        console.error(`Erro ao buscar notícias no backend para '${secao.titulo}':`, error);
+        return [];
     }
 }
 
-// Busca as notícias de uma categoria na API
-async function buscarNoticiasPorEditoria(nomeEditoria) {
+// ============================================================================
+// MONTAGEM DOS CARDS INDIVIDUAIS
+// ============================================================================
 
-    // Constrói a URL da API para buscar notícias da editoria específica no backend
-    const url = `/api/noticias?editoria=${encodeURIComponent(nomeEditoria)}&limite=${LIMITE_NOTICIAS_POR_COLUNA}`; 
-    const resposta = await fetch(url);
+/**
+ * Insere os cards de notícias clonados dentro da lista da coluna ou exibe mensagem
+ * de aviso caso não existam matérias cadastradas.
+ */
+function renderizarListaEmColuna(containerLista, noticias, template, comFoto) {
+    containerLista.innerHTML = ""; // Limpa mensagens anteriores
 
-    if (!resposta.ok) return [];
-
-    const dados = await resposta.json();
-    const noticias = Array.isArray(dados) ? dados : (dados.noticias || []);
-
-    return noticias;
-}
-
-// Desenha as notícias na tela ou exibe mensagem de lista vazia
-function renderizarListaNoticias(containerDaListaDeNoticiasDaEditoria, listaNoticiasPorEditoria, template) {
-
-    containerDaListaDeNoticiasDaEditoria.innerHTML = ""; // Limpa o conteúdo antigo
-
-    if (listaNoticiasPorEditoria.length === 0) {
-        containerDaListaDeNoticiasDaEditoria.innerHTML = "<p class='sem-noticias'>Nenhuma notícia encontrada.</p>";
+    // Tratamento para categorias sem notícias cadastradas no banco
+    if (noticias.length === 0) {
+        containerLista.innerHTML = "<p class='sem-noticias'>Nenhuma notícia encontrada.</p>";
         return;
     }
 
-    listaNoticiasPorEditoria.forEach(noticia => {
-
-        // Cria um card de notícia a partir do template e dos dados da notícia
-        const cardNoticia = criarCardNoticia(noticia, template);
-
-        // Adiciona o card na coluna
-        containerDaListaDeNoticiasDaEditoria.appendChild(cardNoticia); 
+    // Cria e anexa o card para cada notícia retornada pela API
+    noticias.forEach(noticia => {
+        const card = criarCardNoticia(noticia, template, comFoto);
+        containerLista.appendChild(card);
     });
 }
 
-// Clona o template do HTML e preenche com os dados da notícia
-function criarCardNoticia(noticia, template) {
+/**
+ * Clona o template do HTML (<template>), preenche os dados (título, foto e evento de clique)
+ * e retorna o elemento pronto para renderização.
+ */
+function criarCardNoticia(noticia, template, comFoto) {
+    // Clona a árvore de nós do template indicado
+    const clone = template.content.cloneNode(true);
+    
+    const cardElement = clone.querySelector(".noticia-card");
+    const tituloElement = clone.querySelector(".noticia-titulo");
 
-    // Clona o conteúdo do template
-    const clone = template.content.cloneNode(true); 
-    // Seleciona o elemento do card de notícia principal dentro do clone
-    const cardElement = clone.querySelector(".noticia-por-editoria-1"); 
-
-    const imagemElement = clone.querySelector("img"); 
-    const tituloElement = clone.querySelector(".noticia-titulo"); 
-
-    if (imagemElement) {
-        imagemElement.src = noticia.imagemUrl || IMAGEM_PLACEHOLDER;
-        imagemElement.alt = noticia.titulo;
-    }
-
+    // Preenche o texto do título da manchete
     if (tituloElement) {
         tituloElement.textContent = noticia.titulo;
     }
 
-    if (cardElement) {
-        // Define o comportamento de clique no card
-        // Redireciona para a página completa da notícia ao clicar no card
-        cardElement.onclick = () => navegarParaNoticia(noticia._id); 
+    // Se o card for do tipo com foto, preenche as propriedades de imagem
+    if (comFoto) {
+        const imagemElement = clone.querySelector("img");
+        if (imagemElement) {
+            imagemElement.src = noticia.imagemUrl || IMAGEM_PLACEHOLDER;
+            imagemElement.alt = noticia.titulo;
+        }
     }
 
-    // Retorna o clone do template preenchido com os dados da notícia
+    // Configura o redirecionamento ao clicar no card da notícia
+    if (cardElement) {
+        cardElement.onclick = () => navegarParaNoticia(noticia._id);
+    }
+
     return clone;
 }
 
-// Redireciona o usuário para a página completa da notícia
+/**
+ * Redireciona o navegador para a página de leitura da notícia enviando o ID por parâmetro na URL.
+ */
 function navegarParaNoticia(noticiaId) {
     window.location.href = `../html/noticia-pagina.html?id=${noticiaId}`;
 }
-

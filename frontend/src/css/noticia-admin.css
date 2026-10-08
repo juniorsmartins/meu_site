@@ -1,6 +1,6 @@
 #container-tabela-noticias {
-    width: 90%;
-    max-width: 1200px;
+    width: 95%;
+    max-width: 1280px;
     margin: 2rem auto;
     overflow-x: auto;
 }
@@ -8,103 +8,89 @@
 #container-tabela-noticias h3 {
     font-size: 1.6rem;
     margin-bottom: 1rem;
+    color: var(--blue-900);
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    background: #FFFFFF; /* Fundo branco para garantir leitura dos dados */
+    background: #FFFFFF;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     border-radius: 8px;
     overflow: hidden;
+    table-layout: fixed; /* Força cumprimento estrito das colunas */
 }
 
-th, td {
-    padding: 0.85rem 1rem;
+table th, 
+table td {
+    padding: 0.75rem 0.5rem;
     text-align: left;
     border-bottom: 1px solid var(--blue-100);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap !important; /* Trava qualquer quebra de linha vertical em textos */
 }
 
-th {
+table th {
     background: var(--blue-900);
     color: #FFFFFF;
     font-weight: 600;
     font-family: 'Inter', sans-serif;
 }
 
-/* Container de Paginação */
-.paginacao-flex {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 1.2rem;
-    padding: 0.5rem 0;
+/* Distribuição exata das 7 colunas (Soma = 100%) */
+table th:nth-child(1), table td:nth-child(1) { width: 11%; } /* Editoria */
+table th:nth-child(2), table td:nth-child(2) { width: 11%; } /* Chapéu */
+table th:nth-child(3), table td:nth-child(3) { width: 30%; } /* Título (Espaço ampliado) */
+table th:nth-child(4), table td:nth-child(4) { width: 18%; } /* Linha Fina */
+table th:nth-child(5), table td:nth-child(5) { width: 12%; } /* Autor */
+table th:nth-child(6), table td:nth-child(6) { width: 12%; } /* Conteúdo */
+
+table th:nth-child(7), 
+table td:nth-child(7) { 
+    width: 9%; 
+    min-width: 80px; 
+    text-align: center; 
 }
 
-.paginacao-flex button {
-    background-color: var(--blue-800);
-    color: #FFFFFF;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    font-weight: 600;
-    transition: background-color 0.2s ease;
-}
+/* ==========================================
+   COLUNA DE AÇÕES COM ÍCONES EMPILHADOS
+   ========================================== */
 
-.paginacao-flex button:hover:not(:disabled) {
-    background-color: var(--blue-600);
-}
-
-.paginacao-flex button:disabled {
-    background-color: #CBD5E1;
-    cursor: not-allowed;
-}
-
-#info-paginacao {
-    font-size: 0.9rem;
-    color: var(--secondary-text-color);
-    font-weight: 600;
-}
-
-/* Coluna de Ações */
 td.col-acoes {
-    white-space: nowrap;
-    width: 1%;
-    padding: 0.5rem;
+    padding: 0.4rem 0.2rem;
+    text-align: center;
 }
 
-.col-acoes {
-    display: flex;
-    flex-direction: row;
+.acoes-wrapper {
+    display: flex !important;
+    flex-direction: row !important; /* Alinha lado a lado */
     align-items: center;
-    gap: 0.5rem;
+    justify-content: center;
+    gap: 0.35rem;
+    width: 100%;
 }
 
-/* Botões de Ação na Tabela */
 .btn-acao {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.35rem;
-    width: auto;
-    height: 32px;
-    padding: 0 0.75rem;
+    width: 28px;
+    height: 28px;
+    padding: 0;
     border: none;
     border-radius: 4px;
-    font-size: 0.8rem;
-    font-weight: 600;
+    font-size: 0.9rem;
     cursor: pointer;
-    line-height: 1;
     box-sizing: border-box;
     transition: opacity 0.2s ease;
+    flex-shrink: 0;
 }
 
 .btn-acao i {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     background: transparent;
     padding: 0;
     color: inherit;
@@ -112,6 +98,7 @@ td.col-acoes {
 
 .btn-acao:hover {
     opacity: 0.85;
+    transform: scale(1.05);
 }
 
 .btn-editar {
@@ -119,7 +106,7 @@ td.col-acoes {
     color: #FFFFFF;
 }
 
-.btn-deletar {
+.btn-deletar, .btn-excluir {
     background-color: #E74C3C;
     color: #FFFFFF;
 }
@@ -138,12 +125,62 @@ td.col-acoes {
 table td input,
 table td select {
     width: 100%;
-    padding: 0.4rem;
-    font-size: 0.85rem;
+    padding: 0.35rem;
+    font-size: 0.8rem;
     border: 1px solid var(--blue-300);
     border-radius: 4px;
     box-sizing: border-box;
     background-color: #FFFFFF;
 }
 
+/* ==========================================
+   PAGINAÇÃO (RESTAURADA E ISOLADA)
+   ========================================== */
+
+.paginacao-flex {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-top: 1.5rem;
+    padding: 0.5rem 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.paginacao-flex button {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--blue-800);
+    color: #FFFFFF;
+    border: none;
+    padding: 0.55rem 1.25rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+    white-space: nowrap !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.paginacao-flex button:hover:not(:disabled) {
+    background-color: var(--blue-600);
+}
+
+.paginacao-flex button:disabled {
+    background-color: #CBD5E1 !important;
+    color: #94A3B8 !important;
+    cursor: not-allowed !important;
+    box-shadow: none;
+    opacity: 0.7;
+}
+
+#info-paginacao {
+    font-size: 0.9rem;
+    color: var(--secondary-text-color);
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap !important;
+}
 
