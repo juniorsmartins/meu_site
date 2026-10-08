@@ -11,11 +11,10 @@ const normalizarNoticiaAgenciaBrasil = (item) => {
 
     let conteudoBruto = item.description || item.content || "";
 
-    // 1. Limpa o bloco "Notícias relacionadas:" e a lista de links subsequente (<ul> ou <ol>)
-    conteudoBruto = conteudoBruto.replace(/<(h[1-6]|p|strong|div)[^>]*>\s*Notícias relacionadas:?\s*<\/\1>\s*<(ul|ol)[\s\S]*?<\/\3>/gi, "");
-    
-    // 2. Fallback para casos em que o título esteja envolvido por <strong> ou <p> sem fechamento direto antes da lista
-    conteudoBruto = conteudoBruto.replace(/<p[^>]*>\s*<strong>\s*Notícias relacionadas:?\s*<\/strong>[\s\S]*?<\/ul>/gi, "");
+    // Limpeza Cirúrgica do Bloco "Notícias relacionadas:" + a lista <ul> com os links
+    conteudoBruto = conteudoBruto
+        .replace(/<(h[1-6]|p|strong|div)[^>]*>\s*Notícias relacionadas:?\s*<\/\1>\s*<ul[\s\S]*?<\/ul>/gi, "")
+        .replace(/<h[1-6][^>]*>\s*Notícias relacionadas:?\s*<\/h[1-6]>\s*<ul[\s\S]*?<\/ul>/gi, "");
 
     // Mapeia a editoria exata aceita pelo sistema (em minúsculas)
     const editoriaFinal = mapearEditoriaCompativel(categoriaPrincipal);
@@ -46,7 +45,7 @@ const normalizarNoticiaAgenciaBrasil = (item) => {
         chapeu: chapeuDinamico,
         titulo: item.title ? item.title.trim() : "",
         linhaFina: linhaFinaDinamica,
-        conteudo: conteudoBruto, // Conteúdo sanitizado sem as notícias relacionadas
+        conteudo: conteudoBruto, // Salva o HTML sem o h3 e sem o ul de notícias relacionadas
         autor: autorMateria,
         editoria: editoriaFinal,
         imagemUrl: item.imagemDestaque || item.enclosure?.url || "https://agenciabrasil.ebc.com.br/sites/default/files/ebc_logo.png",
@@ -58,3 +57,4 @@ const normalizarNoticiaAgenciaBrasil = (item) => {
 export { 
     normalizarNoticiaAgenciaBrasil 
 };
+
