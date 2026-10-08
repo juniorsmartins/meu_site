@@ -8,7 +8,12 @@
 #container-tabela-noticias h3 {
     font-size: 1.6rem;
     margin-bottom: 1rem;
+    color: var(--blue-900);
 }
+
+/* ==========================================
+   ESTILOS DA TABELA (7 COLUNAS)
+   ========================================== */
 
 table {
     width: 100%;
@@ -20,7 +25,6 @@ table {
     table-layout: fixed; /* Força o cumprimento estrito das larguras */
 }
 
-/* Escopado especificamente para celulas da tabela */
 table th, 
 table td {
     padding: 0.75rem 0.5rem;
@@ -40,37 +44,43 @@ table th {
     font-family: 'Inter', sans-serif;
 }
 
-/* Distribuição exata somando 100% */
-table th:nth-child(1), table td:nth-child(1) { width: 10%; } /* Editoria */
-table th:nth-child(2), table td:nth-child(2) { width: 10%; } /* Chapéu */
-table th:nth-child(3), table td:nth-child(3) { width: 26%; } /* Título */
-table th:nth-child(4), table td:nth-child(4) { width: 15%; } /* Linha Fina */
-table th:nth-child(5), table td:nth-child(5) { width: 11%; } /* Autor */
+/* Distribuição de colunas com Ações em coluna (Soma = 100%) */
+table th:nth-child(1), table td:nth-child(1) { width: 11%; } /* Editoria */
+table th:nth-child(2), table td:nth-child(2) { width: 11%; } /* Chapéu */
+table th:nth-child(3), table td:nth-child(3) { width: 28%; } /* Título (Ganhou mais espaço) */
+table th:nth-child(4), table td:nth-child(4) { width: 16%; } /* Linha Fina */
+table th:nth-child(5), table td:nth-child(5) { width: 12%; } /* Autor */
 table th:nth-child(6), table td:nth-child(6) { width: 12%; } /* Conteúdo */
-table th:nth-child(7), table td:nth-child(7) { width: 16%; text-align: center; } /* Ações */
+table th:nth-child(7), table td:nth-child(7) { width: 10%; min-width: 90px; text-align: center; } /* Ações */
 
-/* Container Flexivo dos Botões dentro da TD */
+/* ==========================================
+   COLUNA E BOTÕES DE AÇÕES (EMPILHADOS)
+   ========================================== */
+
 td.col-acoes {
-    padding: 0.4rem;
+    padding: 0.5rem 0.3rem;
     text-align: center;
 }
 
+/* Flex em Coluna (Empilhamento Vertical) */
 .acoes-wrapper {
     display: flex !important;
+    flex-direction: column !important;
     align-items: center;
     justify-content: center;
     gap: 0.35rem;
     width: 100%;
 }
 
-/* Botões de Ação na Tabela */
+/* Botões ocupando toda a largura útil da célula */
 .btn-acao {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.25rem;
-    height: 30px;
-    padding: 0 0.5rem;
+    width: 100%; /* Ocupa 100% da largura do container */
+    height: 28px;
+    padding: 0 0.4rem;
     border: none;
     border-radius: 4px;
     font-size: 0.75rem;
@@ -80,11 +90,10 @@ td.col-acoes {
     box-sizing: border-box;
     transition: opacity 0.2s ease;
     white-space: nowrap;
-    flex-shrink: 0; /* Impede o botão de encolher ou sumir */
 }
 
 .btn-acao i {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     background: transparent;
     padding: 0;
     color: inherit;
@@ -99,7 +108,6 @@ td.col-acoes {
     color: #FFFFFF;
 }
 
-/* Cobre tanto btn-deletar quanto btn-excluir */
 .btn-deletar, .btn-excluir {
     background-color: #E74C3C;
     color: #FFFFFF;
@@ -128,7 +136,7 @@ table td select {
 }
 
 /* ==========================================
-   ESTILIZAÇÃO DA PAGINAÇÃO (Anterior / Próxima)
+   ESTILIZAÇÃO DA PAGINAÇÃO
    ========================================== */
 
 .paginacao-flex {
