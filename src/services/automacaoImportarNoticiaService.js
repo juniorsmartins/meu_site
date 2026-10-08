@@ -81,7 +81,7 @@ const automacaoImportarNoticiaService = async () => {
 //     return { importadas, ignoradas, totalAnalisadas: feed.items.length };
 // };
 const processarFeedRss = async (urlFeed, funcaoNormalizacao) => {
-    // 1. Busca o XML via fetch simulando um navegador real (evita erro 403 / WAF do TSE)
+    // 1. Busca o XML via fetch com User-Agent
     const resposta = await fetch(urlFeed, {
         headers: {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
@@ -93,10 +93,17 @@ const processarFeedRss = async (urlFeed, funcaoNormalizacao) => {
         throw new Error(`Status code ${resposta.status}`);
     }
 
-    // 2. Extrai o texto do XML
-    const xmlTexto = await resposta.text();
+    // 2. Extrai e limpa o texto do XML
+    let xmlTexto = await resposta.text();
 
-    // 3. O rss-parser interpreta a string sem fazer a chamada de rede diretamente
+    // Sanitização para RDF/RSS 1.0 (TSE e sistemas Legado):
+    // Remove caracteres invisíveis/BOM antes da declaração <?xml> ou <rdf:RDF>
+    xmlTexto = xmlTexto.trim().replace(/^\uFEFF/, '');
+
+    // Garante que a tag raiz <rdf:RDF> esteja em formato minúsculo aceito pelo parser
+    xmlTexto = xmlTexto.replace(/<rdf:RDF/gi, '<rdf:RDF');
+
+    // 3. O rss-parser interpreta a string sanitizada
     const feed = await parser.parseString(xmlTexto);
 
     let importadas = 0;
