@@ -1,6 +1,6 @@
 import { normalizarNoticiaAgenciaBrasil } from '../helpers/rssParsers/agenciaBrasilParser.js';
 import { normalizarNoticiaAgenciaCamara } from '../helpers/rssParsers/agenciaCamaraParser.js';
-import { normalizarNoticiaTse } from '../helpers/rssParsers/tseParser.js';
+import { buscarEParsearTse } from '../helpers/rssParsers/tseParser.js'; 
 
 /**
  * Registro de todas as fontes de RSS com suas URLs e funções de normalização específicas.

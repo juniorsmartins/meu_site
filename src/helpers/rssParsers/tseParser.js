@@ -3,7 +3,7 @@ import { mapearEditoriaCompativel } from '../editoriaHelper.js';
 /**
  * Módulo Específico para o TSE (Trata a estrutura RDF/RSS 1.0)
  */
-export const buscarEParsearTse = async (urlFeed, editoriaPadrao = "política") => {
+const buscarEParsearTse = async (urlFeed, editoriaPadrao = "política") => {
     // 1. Fetch com User-Agent para evitar bloqueio 403
     const resposta = await fetch(urlFeed, {
         headers: {
@@ -71,4 +71,6 @@ export const buscarEParsearTse = async (urlFeed, editoriaPadrao = "política") =
 
     return noticiasNormalizadas;
 };
+
+export { buscarEParsearTse };
 
