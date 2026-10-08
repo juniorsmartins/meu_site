@@ -38,12 +38,12 @@ th {
     font-family: 'Inter', sans-serif;
 }
 
-/* Aplica a largura garantida TANTO para TH quanto para TD */
-th:nth-child(1), td:nth-child(1) { width: 9%; }   /* Editoria */
-th:nth-child(2), td:nth-child(2) { width: 9%; }   /* Chapéu */
-th:nth-child(3), td:nth-child(3) { width: 25%; }  /* Título */
-th:nth-child(4), td:nth-child(4) { width: 15%; }  /* Linha Fina */
-th:nth-child(5), td:nth-child(5) { width: 12%; }  /* Autor */
+/* Reajuste fino das larguras para evitar reticências em colunas curtas */
+th:nth-child(1), td:nth-child(1) { width: 12%; }  /* Editoria (ex: meio ambiente) */
+th:nth-child(2), td:nth-child(2) { width: 10%; }  /* Chapéu */
+th:nth-child(3), td:nth-child(3) { width: 23%; }  /* Título */
+th:nth-child(4), td:nth-child(4) { width: 14%; }  /* Linha Fina */
+th:nth-child(5), td:nth-child(5) { width: 11%; }  /* Autor */
 th:nth-child(6), td:nth-child(6) { width: 12%; }  /* Conteúdo */
 th:nth-child(7), td:nth-child(7) { width: 18%; min-width: 170px; text-align: center; } /* Ações */
 
