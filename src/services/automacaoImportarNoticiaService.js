@@ -81,7 +81,7 @@ const automacaoImportarNoticiaService = async () => {
 //     return { importadas, ignoradas, totalAnalisadas: feed.items.length };
 // };
 const processarFeedRss = async (urlFeed, funcaoNormalizacao) => {
-    // 1. Busca o XML via fetch com User-Agent
+    // 1. Busca o XML via fetch nativo simulando um navegador real
     const resposta = await fetch(urlFeed, {
         headers: {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
@@ -93,17 +93,18 @@ const processarFeedRss = async (urlFeed, funcaoNormalizacao) => {
         throw new Error(`Status code ${resposta.status}`);
     }
 
-    // 2. Extrai e limpa o texto do XML
+    // 2. Extrai o texto do XML
     let xmlTexto = await resposta.text();
 
-    // Sanitização para RDF/RSS 1.0 (TSE e sistemas Legado):
-    // Remove caracteres invisíveis/BOM antes da declaração <?xml> ou <rdf:RDF>
-    xmlTexto = xmlTexto.trim().replace(/^\uFEFF/, '');
+    // 3. Sanitização genérica do XML bruto
+    xmlTexto = xmlTexto
+        .trim()
+        .replace(/^\uFEFF/, '') // Remove BOM invisível
+        .replace(/<!\[CDATA\[\s*\]\]>/g, '') // Remove blocos CDATA vazios
+        // Corrige tags <img> não auto-fechadas no HTML embutido que quebram o SAX parser
+        .replace(/<img(?![^>]*\/>)([^>]*?)>/gi, '<img$1 />');
 
-    // Garante que a tag raiz <rdf:RDF> esteja em formato minúsculo aceito pelo parser
-    xmlTexto = xmlTexto.replace(/<rdf:RDF/gi, '<rdf:RDF');
-
-    // 3. O rss-parser interpreta a string sanitizada
+    // 4. O rss-parser interpreta a string sanitizada sem erros
     const feed = await parser.parseString(xmlTexto);
 
     let importadas = 0;
