@@ -8,15 +8,6 @@ import { normalizarNoticiaTse } from '../helpers/rssParsers/tseParser.js';
 const FONTES_RSS = [
 
     // =========================================================================
-    // Tribunal Superior Eleitoral (TSE) 
-    // =========================================================================
-    {
-        chave: "TSE_NOTICIAS",
-        nome: "TSE - Notícias",
-        url: "https://www.tse.jus.br/comunicacao/noticias/rss",
-        normalizador: (item) => normalizarNoticiaTse(item, "política")
-    },
-    // =========================================================================
     // AGÊNCIA CÂMARA DE NOTÍCIAS
     // =========================================================================
     {
@@ -202,6 +193,16 @@ const FONTES_RSS = [
         nome: "Agência Brasil - Política",
         url: "https://agenciabrasil.ebc.com.br/rss/politica/feed.xml",
         normalizador: (item) => normalizarNoticiaAgenciaBrasil(item, "política")
+    },
+
+    // =========================================================================
+    // Tribunal Superior Eleitoral (TSE) 
+    // =========================================================================
+    {
+        chave: "TSE_NOTICIAS",
+        nome: "TSE - Notícias",
+        url: "https://www.tse.jus.br/comunicacao/noticias/rss",
+        normalizador: (item) => normalizarNoticiaTse(item, "política")
     }
 ];
 
