@@ -5,8 +5,9 @@ import {
     noticiaRouter, 
     newsletterRouter, 
     contatoLeitorRouter, 
+    adminRouter,
     manutencaoRouter, 
-    automacaoRouter 
+    automacaoRouter
 } from './router.js';
 
 const app = express(); /* Cria uma instância do aplicativo Express */
@@ -14,11 +15,6 @@ const app = express(); /* Cria uma instância do aplicativo Express */
 /* Middleware para parsear JSON. Necessário para que o corpo das requisições POST seja interpretado corretamente. */
 app.use(express.json()); 
 
-/* Middleware para parsear JSON sem modo estrito */
-/* app.use(express.json({ strict: false })); */
-
-// Configuração do middleware CORS. 
-// Com asterisco, permite requisições de qualquer origem (CORS)
 app.use(cors({ origin: '*' })); 
 
 // Middleware para garantir que a conexão com o MongoDB seja estabelecida antes de processar as requisições
@@ -37,6 +33,7 @@ app.use(async (request, response, next) => {
 app.use("/noticias", noticiaRouter);
 app.use("/newsletter", newsletterRouter); 
 app.use("/contato-leitor", contatoLeitorRouter);
+app.use("/admin", adminRouter);
 app.use("/manutencao", manutencaoRouter);
 app.use("/automacao", automacaoRouter);
 
@@ -44,4 +41,5 @@ app.use("/automacao", automacaoRouter);
 export default app;
 // Exportação nomeada do aplicativo Express, útil para testes ou outros usos fora do ambiente Serverless
 export { app };
+
 
