@@ -1,5 +1,6 @@
 import { API_URL, OPCOES_EDITORIA } from './config.js';
-import { LIMITE_NOTICIAS_POR_PAGINA } from '../../src/constants/geralConstants.js';
+
+const LIMITE_NOTICIAS_POR_PAGINA = 12;
 
 // Armazena o HTML original das linhas em edição para permitir a ação de cancelar
 const linhasEmEdicao = {};
@@ -408,7 +409,7 @@ async function carregarPainelMetricas() {
     const elDetalhePortais = document.getElementById("kpi-detalhe-portais");
 
     try {
-        
+
         const resposta = await fetch("/api/admin/metricas");
         if (!resposta.ok) throw new Error(`Status ${resposta.status}`);
 
