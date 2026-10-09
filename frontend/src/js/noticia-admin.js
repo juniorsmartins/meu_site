@@ -408,6 +408,7 @@ async function carregarPainelMetricas() {
     const elDetalhePortais = document.getElementById("kpi-detalhe-portais");
 
     try {
+        
         const resposta = await fetch("/api/admin/metricas");
         if (!resposta.ok) throw new Error(`Status ${resposta.status}`);
 
