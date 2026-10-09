@@ -9,7 +9,8 @@ let paginaAtual = 1;
 let totalPaginas = 1;
 
 document.addEventListener(`DOMContentLoaded`, async () => {
-    configurarEventosPaginacao();
+    configurarEventosPaginacao(); // Inicializa os botões de paginação
+    configurarEventosManutencao(); // Inicializa os botões do Painel KPI
     await carregarTabelaNoticias();
 });
 
@@ -36,11 +37,127 @@ function configurarEventosPaginacao() {
     }
 }
 
+// Configura os botões de Importar RSS e Limpar Banco
+function configurarEventosManutencao() {
+
+    const btnImportar = document.getElementById("btn-importar-rss");
+    const btnLimpar = document.getElementById("btn-limpar-banco");
+
+    if (btnImportar) {
+        btnImportar.addEventListener("click", executarImportacaoRss);
+    }
+
+    if (btnLimpar) {
+        btnLimpar.addEventListener("click", executarLimpezaBanco);
+    }
+}
+
+// 1. Ação de Importar Notícias das Fontes Oficiais (POST /automacao/importar)
+async function executarImportacaoRss() {
+
+    const btn = document.getElementById("btn-importar-rss");
+    if (!btn) return;
+
+    // Estado de Processamento (Disabled + Spinner)
+    const htmlOriginal = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = `<i class="bi bi-arrow-repeat spin"></i> Importando Notícias...`;
+
+    atualizarCardStatus("Importando...", "Buscando dados no TSE, Agência Câmara e Agência Brasil", "Processando");
+
+    try {
+
+        const resposta = await fetch("/automacao/importar", { method: "POST" });
+        if (!resposta.ok) {
+            throw new Error(`Erro na importação: ${resposta.status}`);
+        }
+
+        const dados = await resposta.json();
+
+        // Atualiza a interface com o resumo vindo do backend
+        if (dados.resumo) {
+            atualizarCardStatus(
+                `+${dados.resumo.totalImportadas} Novas`,
+                `${dados.resumo.totalAnalissadas || dados.resumo.totalAnalisadas} analisadas | ${dados.resumo.totalIgnoradas} duplicadas`,
+                "Concluído"
+            );
+        }
+
+        // Recarrega a tabela de notícias e os contadores do topo
+        paginaAtual = 1;
+        await carregarTabelaNoticias();
+
+    } catch (error) {
+        console.error("Erro ao importar notícias:", error);
+        atualizarCardStatus("Erro!", "Falha ao conectar com o serviço RSS", "Falhou");
+        alert("Não foi possível importar as notícias.");
+
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = htmlOriginal;
+    }
+}
+
+// 2. Ação de Limpar Banco Mantendo Limite definido (DELETE /manutencao/limpar-database)
+async function executarLimpezaBanco() {
+
+    if (!confirm("Deseja executar a limpeza da base de dados para manter o limite de 100 notícias?")) return;
+
+    const btn = document.getElementById("btn-limpar-banco");
+    if (!btn) return;
+
+    const htmlOriginal = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = `<i class="bi bi-arrow-repeat spin"></i> Limpando...`;
+
+    try {
+
+        const resposta = await fetch("/manutencao/limpar-database", { method: "DELETE" });
+        if (!resposta.ok) {
+            throw new Error(`Erro na limpeza: ${resposta.status}`);
+        }
+
+        const dados = await resposta.json();
+
+        // Atualiza as métricas no topo
+        atualizarCardStatus(
+            `${dados.removidas} Removidas`,
+            dados.mensagem || `Base mantida em ${dados.totalAtual} notícias`,
+            "Otimizado"
+        );
+
+        paginaAtual = 1;
+        await carregarTabelaNoticias();
+
+    } catch (error) {
+        console.error("Erro ao limpar banco:", error);
+        alert("Não foi possível executar a limpeza do banco.");
+
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = htmlOriginal;
+    }
+}
+
+// Auxiliar para atualizar o 3º Card ("Última Operação")
+function atualizarCardStatus(titulo, subtexto, badge) {
+    const elTitulo = document.getElementById("kpi-status-operacao");
+    const elSubtexto = document.getElementById("kpi-detalhe-operacao");
+    const elBadge = document.getElementById("badge-tempo-operacao");
+
+    if (elTitulo) elTitulo.textContent = titulo;
+    if (elSubtexto) elSubtexto.textContent = subtexto;
+    if (elBadge) elBadge.textContent = badge;
+}
+
 async function carregarTabelaNoticias() {
+
     const corpoTabela = document.getElementById(`corpo-tabela-noticias`);
+    const kpiTotal = document.getElementById("kpi-total-noticias");
     if (!corpoTabela) return;
 
     try {
+
         const dadosPaginados = await buscarNoticiasPaginadas(paginaAtual, LIMITE_POR_PAGINA);
 
         const listaNoticias = dadosPaginados.noticias || [];
@@ -49,7 +166,7 @@ async function carregarTabelaNoticias() {
         if (listaNoticias.length === 0) {
             corpoTabela.innerHTML = `
                 <tr>
-                    <td colspan="6" style="text-align: center;">Nenhuma notícia cadastrada.</td>
+                    <td colspan="7" style="text-align: center;">Nenhuma notícia cadastrada.</td>
                 </tr>
             `;
             atualizarControlesPaginacao(0, 1, 1);
@@ -63,15 +180,15 @@ async function carregarTabelaNoticias() {
         console.error(`Erro ao carregar tabela de notícias:`, error);
         corpoTabela.innerHTML = `
             <tr>
-                <td colspan="6" style="text-align: center; color: red;">Erro ao carregar notícias. Tente recarregar a página.</td>
+                <td colspan="7" style="text-align: center; color: red;">Erro ao carregar notícias. Tente recarregar a página.</td>
             </tr>
         `;
     }
 }
 
 async function buscarNoticiasPaginadas(pagina, limite) {
-    const response = await fetch(`${API_URL}?pagina=${pagina}&limite=${limite}`);
 
+    const response = await fetch(`${API_URL}?pagina=${pagina}&limite=${limite}`);
     if (!response.ok) {
         throw new Error(`Falha na requisição: ${response.status}`);
     }
@@ -80,6 +197,7 @@ async function buscarNoticiasPaginadas(pagina, limite) {
 }
 
 function atualizarControlesPaginacao(totalNoticias, pagina, totalDePaginas) {
+
     const btnAnterior = document.getElementById("btn-pagina-anterior");
     const btnProxima = document.getElementById("btn-pagina-proxima");
     const infoPaginacao = document.getElementById("info-paginacao");
@@ -103,6 +221,7 @@ function renderizarLinhasTabela(corpoTabela, listaNoticias) {
 
 // Constrói a linha com os botões de ação e anexa os eventos
 function criarLinhaNoticia(noticia) {
+
     const tr = document.createElement("tr");
     tr.id = `linha-noticia-${noticia._id}`;
 
@@ -148,6 +267,7 @@ function criarLinhaNoticia(noticia) {
 
 // 1. Ativa o modo de edição
 function ativarModoEdicao(id) {
+
     const tr = document.getElementById(`linha-noticia-${id}`);
     if (!tr) return;
 
@@ -263,8 +383,9 @@ async function deletarNoticia(idNoticia) {
 
     try {
         const resposta = await fetch(`${API_URL}/${idNoticia}`, { method: "DELETE" });
-
-        if (!resposta.ok) throw new Error("Erro ao excluir notícia");
+        if (!resposta.ok) {
+            throw new Error("Erro ao excluir notícia"); 
+        }
 
         await carregarTabelaNoticias();
 
@@ -273,6 +394,5 @@ async function deletarNoticia(idNoticia) {
         alert("Não foi possível excluir a notícia.");
     }
 }
-
 
 

@@ -184,3 +184,133 @@ table td select {
     white-space: nowrap !important;
 }
 
+
+/* ==========================================
+   GRID DE CARDS KPI / PAINEL DE MANUTENÇÃO
+   ========================================== */
+#container-painel-admin {
+    width: 95%;
+    max-width: 1280px;
+    margin: 2rem auto;
+}
+
+#grid-kpis-admin {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.card-kpi {
+    background: #FFFFFF;
+    border: 1px solid var(--blue-100);
+    border-radius: 8px;
+    padding: 1.25rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.kpi-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.kpi-titulo {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--secondary-text-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.kpi-icone {
+    font-size: 1.2rem;
+    color: var(--blue-600);
+}
+
+.kpi-body {
+    margin: 1rem 0;
+}
+
+.kpi-body h2 {
+    font-size: 1.8rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    color: var(--blue-900);
+    margin: 0;
+}
+
+.kpi-subtexto {
+    font-size: 0.8rem;
+    color: var(--tertiary-text-color);
+    margin-top: 0.25rem;
+}
+
+/* Botões de Ação da Manutenção */
+.btn-manutencao {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s ease, transform 0.1s ease;
+}
+
+.btn-manutencao:hover:not(:disabled) {
+    opacity: 0.9;
+}
+
+.btn-manutencao:disabled {
+    background-color: #CBD5E1 !important;
+    color: #94A3B8 !important;
+    cursor: not-allowed;
+}
+
+.btn-primario {
+    background-color: var(--blue-700);
+    color: #FFFFFF;
+}
+
+.btn-perigo {
+    background-color: #E74C3C;
+    color: #FFFFFF;
+}
+
+.kpi-badge {
+    display: inline-block;
+    padding: 0.3rem 0.6rem;
+    background-color: var(--blue-50);
+    color: var(--blue-800);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* Animação do Spinner nos Botões durante a Requisição */
+.spin {
+    animation: girar 1s infinite linear;
+}
+
+@keyframes girar {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Responsividade do Grid de KPIs */
+@media (max-width: 992px) {
+    #grid-kpis-admin {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
+
+
