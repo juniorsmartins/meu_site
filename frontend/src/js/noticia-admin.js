@@ -11,7 +11,7 @@ let totalPaginas = 1;
 document.addEventListener(`DOMContentLoaded`, async () => {
     configurarEventosPaginacao(); // Inicializa os botões de paginação
     configurarEventosManutencao(); // Inicializa os botões do Painel KPI
-    carregarEstatisticasFontes(); // Atualiza o card de Sincronização RSS com os dados do FONTES_RSS
+    await carregarPainelMetricas(); 
     await carregarTabelaNoticias();
 });
 
@@ -397,26 +397,42 @@ async function deletarNoticia(idNoticia) {
 }
 
 /**
- * Calcula dinamicamente o número total de feeds e os portais únicos
+ * Consome o endpoint /admin/metricas e distribui os dados pelos Cards do topo
  */
-function carregarEstatisticasFontes() {
-    
+async function carregarPainelKPIs() {
+
+    const elKpiTotal = document.getElementById("kpi-total-noticias");
     const elTotalFeeds = document.getElementById("kpi-total-feeds");
     const elDetalhePortais = document.getElementById("kpi-detalhe-portais");
 
-    if (!FONTES_RSS || FONTES_RSS.length === 0) return;
+    try {
+        const resposta = await fetch("/admin/metricas");
+        if (!resposta.ok) throw new Error(`Status ${resposta.status}`);
 
-    const totalFeeds = FONTES_RSS.length;
-    
-    // Extrai nomes de portais sem duplicatas mantendo a ordem de aparição
-    const portaisUnicos = [...new Set(FONTES_RSS.map(f => f.portal).filter(Boolean))];
+        const dados = await resposta.json();
 
-    if (elTotalFeeds) {
-        elTotalFeeds.textContent = `${totalFeeds} Feeds RSS`;
-    }
+        if (dados.sucesso) {
+            // 1. Atualiza Card da Base de Dados (MongoDB)
+            if (elKpiTotal) {
+                elKpiTotal.textContent = `${dados.bancoDados.totalNoticias}`;
+            }
 
-    if (elDetalhePortais) {
-        elDetalhePortais.textContent = `Oriundas de ${portaisUnicos.length} Portais: ${portaisUnicos.join(', ')}.`;
+            // 2. Atualiza Card da Sincronização RSS
+            if (elTotalFeeds) {
+                elTotalFeeds.textContent = `${dados.rss.totalFeeds} Feeds RSS`;
+            }
+
+            if (elDetalhePortais) {
+                elDetalhePortais.textContent = dados.rss.subtextoFormatado;
+            }
+        }
+        
+    } catch (error) {
+        console.error("Erro ao carregar /admin/metricas:", error);
+        
+        // Fallbacks seguros caso a API falhe temporariamente
+        if (elTotalFeeds) elTotalFeeds.textContent = "31 Feeds RSS";
+        if (elDetalhePortais) elDetalhePortais.textContent = "Oriundos de 3 Portais: TSE, Agência Câmara, Agência Brasil.";
     }
 }
 

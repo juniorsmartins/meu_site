@@ -36,7 +36,7 @@ const obterMetricasAdmin = async (req, res) => {
                 totalFeeds,
                 totalPortais: portaisUnicos.length,
                 portais: portaisUnicos,
-                subtextoFormatado: `Oriundas de ${portaisUnicos.length} Portais: ${portaisUnicos.join(', ')}.`
+                subtextoFormatado: `Oriundos de ${portaisUnicos.length} Portais: ${portaisUnicos.join(', ')}.`
             },
             // Preparado para expansões futuras (ex: estatísticas de visitas, logs de auditoria, etc.)
             sistema: {
