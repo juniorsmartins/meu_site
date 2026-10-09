@@ -7,6 +7,7 @@ const buscarEParsearTse = async (urlFeed, editoriaPadrao = "política") => {
 
     const resposta = await fetch(urlFeed, {
         headers: {
+            // Cabeçalhos simulando um navegador para evitar bloqueios do TSE (HTTP 403)
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
             'Accept': 'application/rdf+xml, application/xml, text/xml, */*',
             'Accept-Language': 'pt-BR,pt;q=0.9,en-US;q=0.8',
@@ -30,11 +31,14 @@ const buscarEParsearTse = async (urlFeed, editoriaPadrao = "política") => {
         const link = linkMatch ? linkMatch[1].trim() : "";
         let conteudoBruto = descMatch ? descMatch[1].trim() : "";
 
+        // PASSO CRÍTICO: Decodifica primeiro o HTML escapado (&lt;img...&gt; -> <img...>)
         conteudoBruto = decodificarEntidadesHTML(conteudoBruto);
 
+        // Fallbacks padrão
         let imagemUrlExtraida = "https://www.tse.jus.br/logo.png";
         let legendaEFotografo = "Foto: Ascom / TSE";
 
+        // 1. Extrai a imagem real e o atributo alt (legenda) do HTML decodificado
         const matchImg = conteudoBruto.match(/<img[^>]+src=["']([^"']+)["'][^>]*alt=["']([^"']+)["']/i) 
                       || conteudoBruto.match(/<img[^>]+src=["']([^"']+)["']/i);
 
@@ -45,13 +49,15 @@ const buscarEParsearTse = async (urlFeed, editoriaPadrao = "política") => {
             }
         }
 
+        // 2. Limpa o HTML do corpo da notícia
         conteudoBruto = conteudoBruto
-            .replace(/<img[^>]*>/gi, "")
-            .replace(/<p><a[^>]*>Veja mais<\/a><\/p>/gi, "")
-            .replace(/\]\]>/g, "")
-            .replace(/<!\[CDATA\[/g, "")
+            .replace(/<img[^>]*>/gi, "")                      // Remove a tag <img> do corpo
+            .replace(/<p><a[^>]*>Veja mais<\/a><\/p>/gi, "")  // Remove o link 'Veja mais'
+            .replace(/\]\]>/g, "")                            // Remove CDATA de fechamento
+            .replace(/<!\[CDATA\[/g, "")                      // Remove CDATA de abertura
             .trim();
 
+        // 3. Extrai o parágrafo de resumo para a Linha Fina
         const matchParagrafo = conteudoBruto.match(/<p[^>]*>([\s\S]*?)<\/p>/i);
         let linhaFinaFinal = matchParagrafo ? matchParagrafo[1].replace(/<[^>]*>?/gm, '').replace(/\s+/g, ' ').trim() : "";
 

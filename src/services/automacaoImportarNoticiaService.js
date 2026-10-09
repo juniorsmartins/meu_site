@@ -49,11 +49,10 @@ const automacaoImportarNoticiaService = async () => {
                 ...resultado
             });
 
-            // Pausa para não sobrecarregar o servidor do governo
-            await aguardarMs(150);
+            await aguardarMs(150); // Pequena pausa entre cada fonte RSS para evitar sobrecarga de requisições
 
         } catch (error) {
-            console.error(`Erro ao processar a fonte '${fonte.nome}':`, error);
+            console.error(`Erro ao processar a fonte '${fonte.nome}':`, error.message);
             relatorioFontes.push({
                 fonte: fonte.nome,
                 chave: fonte.chave,
@@ -84,13 +83,15 @@ const automacaoImportarNoticiaService = async () => {
 const processarFeedRssPadrão = async (urlFeed, funcaoNormalizacao) => {
 
     const resposta = await fetch(urlFeed, {
-        signal: controller.signal,
         headers: { 
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-            'Accept-Language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7'
+            'Accept': 'application/xml, text/xml, */*'
         }
     });
+
+    if (!resposta.ok) {
+        throw new Error(`Status code ${resposta.status}`);
+    }
 
     const xmlTexto = await resposta.text();
     const feed = await parser.parseString(xmlTexto);
