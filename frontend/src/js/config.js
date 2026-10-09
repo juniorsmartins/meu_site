@@ -15,7 +15,8 @@ export const OPCOES_EDITORIA = [
     "turismo", 
     "cultura", 
     "polícia",
-    "meio ambiente"
+    "meio ambiente", 
+    "internacional"
 ];
 
 // Dados Centrais do Portal (Fonte Única de Verdade)

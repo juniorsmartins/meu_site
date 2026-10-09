@@ -68,3 +68,4 @@ const normalizarNoticiaAgenciaCamara = (item, editoriaPadrao = "geral") => {
 export {
     normalizarNoticiaAgenciaCamara
 };
+

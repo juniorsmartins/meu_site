@@ -11,6 +11,7 @@ export const EDITORIAS = [
     "turismo", 
     "cultura",
     "polícia",
-    "meio ambiente"
+    "meio ambiente", 
+    "internacional"
 ];
 

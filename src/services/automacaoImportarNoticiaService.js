@@ -24,7 +24,14 @@ const automacaoImportarNoticiaService = async () => {
 
     for (const fonte of FONTES_RSS) {
         try {
-            const resultado = await processarFeedRss(fonte.url, (item) => fonte.normalizador(item, mapearEditoriaCompativel));
+            let resultado;
+
+            // Se a fonte possui um leitor próprio (ex: TSE), usa ele. Se não, usa o fluxo genérico do RSS Parser.
+            if (fonte.buscarCustomizado) {
+                resultado = await processarFonteCustomizada(fonte);
+            } else {
+                resultado = await processarFeedRssPadrão(fonte.url, (item) => fonte.normalizador(item, mapearEditoriaCompativel));
+            }
 
             totalGeralImportadas += resultado.importadas;
             totalGeralIgnoradas += resultado.ignoradas;
@@ -65,20 +72,40 @@ const automacaoImportarNoticiaService = async () => {
 // FUNÇÕES AUXILIARES DE BANCO E ROTEAMENTO
 // ============================================================================
 
-const processarFeedRss = async (urlFeed, funcaoNormalizacao) => {
-    const feed = await parser.parseURL(urlFeed);
+// Fluxo Padrão Genérico para RSS 2.0 (Câmara, Agência Brasil, etc.)
+const processarFeedRssPadrão = async (urlFeed, funcaoNormalizacao) => {
+    const resposta = await fetch(urlFeed, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0 Safari/537.36' }
+    });
+    const xmlTexto = await resposta.text();
+    const feed = await parser.parseString(xmlTexto);
+
     let importadas = 0;
     let ignoradas = 0;
 
     for (const item of feed.items) {
         const dadosNoticia = funcaoNormalizacao(item);
         const resultado = await salvarNoticiaInedita(dadosNoticia);
-
         if (resultado.salvo) importadas++;
         else ignoradas++;
     }
 
     return { importadas, ignoradas, totalAnalisadas: feed.items.length };
+};
+
+// Fluxo para Fontes com Leitor Customizado (ex: TSE)
+const processarFonteCustomizada = async (fonte) => {
+    const listaNoticiasNormalizadas = await fonte.buscarCustomizado();
+    let importadas = 0;
+    let ignoradas = 0;
+
+    for (const dadosNoticia of listaNoticiasNormalizadas) {
+        const resultado = await salvarNoticiaInedita(dadosNoticia);
+        if (resultado.salvo) importadas++;
+        else ignoradas++;
+    }
+
+    return { importadas, ignoradas, totalAnalisadas: listaNoticiasNormalizadas.length };
 };
 
 const salvarNoticiaInedita = async (dadosNoticia) => {
@@ -89,9 +116,7 @@ const salvarNoticiaInedita = async (dadosNoticia) => {
         ]
     });
 
-    if (noticiaExistente) {
-        return { salvo: false, motivo: "duplicada" };
-    }
+    if (noticiaExistente) return { salvo: false, motivo: "duplicada" };
 
     const novaNoticia = new Noticia(dadosNoticia);
     await novaNoticia.save();
@@ -102,11 +127,9 @@ const salvarNoticiaInedita = async (dadosNoticia) => {
 const mapearEditoriaCompativel = (categoriaRss = "") => {
     if (!categoriaRss) return "geral";
     const categoriaNormalizada = removerAcentosECaixa(categoriaRss);
-
     const editoriaEncontrada = EDITORIAS.find(
         (editoria) => removerAcentosECaixa(editoria) === categoriaNormalizada
     );
-
     return editoriaEncontrada || "geral";
 };
 
@@ -122,4 +145,5 @@ const removerAcentosECaixa = (texto = "") => {
 export {
     automacaoImportarNoticiaService
 };
+
 
