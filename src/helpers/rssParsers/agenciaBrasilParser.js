@@ -2,12 +2,13 @@ import { mapearEditoriaCompativel, extrairTextoCategoria } from '../editoriaHelp
 
 /**
  * Transforma o item bruto do XML da Agência Brasil para o Schema do MongoDB.
- * Extrai campos específicos como <imagem-destaque>, <dc:creator> e legenda do HTML.
+ * Aceita uma editoriaPadrao como fallback caso a notícia não traga categoria válida.
  */
-const normalizarNoticiaAgenciaBrasil = (item) => {
+const normalizarNoticiaAgenciaBrasil = (item, editoriaPadrao = "geral") => {
 
+    // Tenta extrair a categoria que vem no RSS da notícia
     const categoriaBruta = (item.categories && item.categories.length > 0) ? item.categories[0] : "";
-    const categoriaPrincipal = extrairTextoCategoria(categoriaBruta);
+    const categoriaExtraida = extrairTextoCategoria(categoriaBruta);
 
     let conteudoBruto = item.description || item.content || "";
 
@@ -16,10 +17,13 @@ const normalizarNoticiaAgenciaBrasil = (item) => {
         .replace(/<(h[1-6]|p|strong|div)[^>]*>\s*Notícias relacionadas:?\s*<\/\1>\s*<ul[\s\S]*?<\/ul>/gi, "")
         .replace(/<h[1-6][^>]*>\s*Notícias relacionadas:?\s*<\/h[1-6]>\s*<ul[\s\S]*?<\/ul>/gi, "");
 
-    // Mapeia a editoria exata aceita pelo sistema (em minúsculas)
-    const editoriaFinal = mapearEditoriaCompativel(categoriaPrincipal);
+    // Prioriza a categoria informada no RSS do item; se não houver ou for incompatível, usa a editoriaPadrao informada no config
+    let editoriaFinal = mapearEditoriaCompativel(categoriaExtraida);
+    if (editoriaFinal === "geral" && editoriaPadrao !== "geral") {
+        editoriaFinal = mapearEditoriaCompativel(editoriaPadrao);
+    }
 
-    // Define o Chapéu em caixa alta usando a editoria mapeada
+    // Define o Chapéu em caixa alta usando a editoria final
     const chapeuDinamico = editoriaFinal.toUpperCase();
 
     // Extrai o autor da matéria exclusivamente da tag <dc:creator>
@@ -45,7 +49,7 @@ const normalizarNoticiaAgenciaBrasil = (item) => {
         chapeu: chapeuDinamico,
         titulo: item.title ? item.title.trim() : "",
         linhaFina: linhaFinaDinamica,
-        conteudo: conteudoBruto, // Salva o HTML sem o h3 e sem o ul de notícias relacionadas
+        conteudo: conteudoBruto,
         autor: autorMateria,
         editoria: editoriaFinal,
         imagemUrl: item.imagemDestaque || item.enclosure?.url || "https://agenciabrasil.ebc.com.br/sites/default/files/ebc_logo.png",
@@ -57,4 +61,5 @@ const normalizarNoticiaAgenciaBrasil = (item) => {
 export { 
     normalizarNoticiaAgenciaBrasil 
 };
+
 
