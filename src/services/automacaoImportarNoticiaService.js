@@ -3,6 +3,8 @@ import { Noticia } from '../database/schema/noticiaSchema.js';
 import { EDITORIAS } from '../constants/editorias.js';
 import { FONTES_RSS } from '../constants/fontesRssConfig.js';
 
+process.removeAllListeners('warning');
+
 const parser = new Parser({
     customFields: {
         item: [
@@ -12,11 +14,14 @@ const parser = new Parser({
     }
 });
 
+const aguardarMs = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 // ============================================================================
 // SERVIÇO PRINCIPAL (Orquestrador)
 // ============================================================================
 
 const automacaoImportarNoticiaService = async () => {
+
     const relatorioFontes = [];
     let totalGeralImportadas = 0;
     let totalGeralIgnoradas = 0;
@@ -29,6 +34,7 @@ const automacaoImportarNoticiaService = async () => {
             // Se a fonte possui um leitor próprio (ex: TSE), usa ele. Se não, usa o fluxo genérico do RSS Parser.
             if (fonte.buscarCustomizado) {
                 resultado = await processarFonteCustomizada(fonte);
+
             } else {
                 resultado = await processarFeedRssPadrão(fonte.url, (item) => fonte.normalizador(item, mapearEditoriaCompativel));
             }
@@ -44,8 +50,10 @@ const automacaoImportarNoticiaService = async () => {
                 ...resultado
             });
 
+            await aguardarMs(150); // Pequena pausa entre cada fonte RSS para evitar sobrecarga de requisições
+
         } catch (error) {
-            console.error(`Erro ao processar a fonte '${fonte.nome}':`, error);
+            console.warn(`[Automação RSS] Aviso na fonte '${fonte.nome}': ${error.message}`);
             relatorioFontes.push({
                 fonte: fonte.nome,
                 chave: fonte.chave,
@@ -74,9 +82,18 @@ const automacaoImportarNoticiaService = async () => {
 
 // Fluxo Padrão Genérico para RSS 2.0 (Câmara, Agência Brasil, etc.)
 const processarFeedRssPadrão = async (urlFeed, funcaoNormalizacao) => {
+
     const resposta = await fetch(urlFeed, {
-        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0 Safari/537.36' }
+        headers: { 
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+            'Accept': 'application/xml, text/xml, */*'
+        }
     });
+
+    if (!resposta.ok) {
+        throw new Error(`Status code ${resposta.status}`);
+    }
+
     const xmlTexto = await resposta.text();
     const feed = await parser.parseString(xmlTexto);
 
