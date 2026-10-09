@@ -71,6 +71,20 @@
     margin-top: 0.3rem;
 }
 
+/* Estilização da Temperatura e Ícone do Tempo no Topo */
+#clima-extenso {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--blue-100);
+    font-weight: 600;
+}
+
+#clima-extenso i {
+    color: #F1C40F; /* Cor amarela dourada para o sol/clima */
+    font-size: 0.95rem;
+}
+
 .btn-entrar {
     display: inline-flex;
     align-items: center;
@@ -144,5 +158,4 @@
     background-color: var(--blue-300);
     border-radius: 2px 2px 0 0;
 }
-
 
