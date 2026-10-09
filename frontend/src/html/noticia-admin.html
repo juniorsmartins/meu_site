@@ -42,8 +42,8 @@
         
         <!-- Cabeçalho da Página Administrativa -->
         <div class="admin-header-titulo">
-            <h2>Painel de Controle e Notícias Cadastradas</h2>
-            <p>Gerencie os registros do banco e execute sincronizações com as fontes oficiais.</p>
+            <h2>Painel de Controle</h2>
+            <p>Gerencie os registros do banco e execute sincronizações com fontes oficiais.</p>
         </div>
 
         <!-- 1. Grid de Cards KPI (Acima) -->
@@ -61,7 +61,7 @@
                 </div>
                 <div class="kpi-footer">
                     <button id="btn-limpar-banco" class="btn-manutencao btn-perigo">
-                        <i class="bi bi-trash3-fill"></i> Limpar Banco (Limite 100)
+                        <i class="bi bi-trash3-fill"></i> Limpar Banco
                     </button>
                 </div>
             </div>
@@ -73,8 +73,8 @@
                     <i class="bi bi-rss-fill kpi-icone"></i>
                 </div>
                 <div class="kpi-body">
-                    <h2>31 Fontes</h2>
-                    <p class="kpi-subtexto">TSE, Agência Brasil e Câmara</p>
+                    <h2 id="kpi-total-feeds">-- Feeds RSS</h2>
+                    <p id="kpi-detalhe-portais" class="kpi-subtexto">Carregando estatísticas...</p>
                 </div>
                 <div class="kpi-footer">
                     <button id="btn-importar-rss" class="btn-manutencao btn-primario">

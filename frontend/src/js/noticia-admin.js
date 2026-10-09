@@ -11,6 +11,7 @@ let totalPaginas = 1;
 document.addEventListener(`DOMContentLoaded`, async () => {
     configurarEventosPaginacao(); // Inicializa os botões de paginação
     configurarEventosManutencao(); // Inicializa os botões do Painel KPI
+    carregarEstatisticasFontes(); // Atualiza o card de Sincronização RSS com os dados do FONTES_RSS
     await carregarTabelaNoticias();
 });
 
@@ -392,6 +393,30 @@ async function deletarNoticia(idNoticia) {
     } catch (error) {
         console.error("Erro ao deletar notícia:", error);
         alert("Não foi possível excluir a notícia.");
+    }
+}
+
+/**
+ * Calcula dinamicamente o número total de feeds e os portais únicos
+ */
+function carregarEstatisticasFontes() {
+    
+    const elTotalFeeds = document.getElementById("kpi-total-feeds");
+    const elDetalhePortais = document.getElementById("kpi-detalhe-portais");
+
+    if (!FONTES_RSS || FONTES_RSS.length === 0) return;
+
+    const totalFeeds = FONTES_RSS.length;
+    
+    // Extrai nomes de portais sem duplicatas mantendo a ordem de aparição
+    const portaisUnicos = [...new Set(FONTES_RSS.map(f => f.portal).filter(Boolean))];
+
+    if (elTotalFeeds) {
+        elTotalFeeds.textContent = `${totalFeeds} Feeds RSS`;
+    }
+
+    if (elDetalhePortais) {
+        elDetalhePortais.textContent = `Oriundas de ${portaisUnicos.length} Portais: ${portaisUnicos.join(', ')}.`;
     }
 }
 
