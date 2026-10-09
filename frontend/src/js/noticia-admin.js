@@ -399,7 +399,7 @@ async function deletarNoticia(idNoticia) {
 /**
  * Consome o endpoint /admin/metricas e distribui os dados pelos Cards do topo
  */
-async function carregarPainelKPIs() {
+async function carregarPainelMetricas() {
 
     const elKpiTotal = document.getElementById("kpi-total-noticias");
     const elTotalFeeds = document.getElementById("kpi-total-feeds");

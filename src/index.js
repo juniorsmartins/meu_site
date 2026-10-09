@@ -15,11 +15,6 @@ const app = express(); /* Cria uma instância do aplicativo Express */
 /* Middleware para parsear JSON. Necessário para que o corpo das requisições POST seja interpretado corretamente. */
 app.use(express.json()); 
 
-/* Middleware para parsear JSON sem modo estrito */
-/* app.use(express.json({ strict: false })); */
-
-// Configuração do middleware CORS. 
-// Com asterisco, permite requisições de qualquer origem (CORS)
 app.use(cors({ origin: '*' })); 
 
 // Middleware para garantir que a conexão com o MongoDB seja estabelecida antes de processar as requisições
