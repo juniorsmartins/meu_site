@@ -103,57 +103,6 @@ async function executarImportacaoRss() {
     }
 }
 
-// 2. Ação de Limpar Banco Mantendo Limite definido (DELETE /manutencao/limpar-database)
-async function executarLimpezaBanco() {
-    
-    const btn = document.getElementById("btn-limpar-banco");
-    if (!btn) return;
-
-    // Se é o primeiro clique, pede a segunda confirmação no próprio botão
-    if (!aguardandoConfirmacaoLimpeza) {
-        aguardandoConfirmacaoLimpeza = true;
-        btn.innerHTML = `<i class="bi bi-exclamation-triangle-fill"></i> Clique p/ Confirmar`;
-        btn.classList.add("btn-atencao"); // Pode adicionar um estilo destacado
-
-        // Cancela o estado de confirmação após 4 segundos se o usuário não clicar de novo
-        timerConfirmacao = setTimeout(() => {
-            aguardandoConfirmacaoLimpeza = false;
-            btn.innerHTML = `<i class="bi bi-trash3-fill"></i> Limpar Banco`;
-            btn.classList.remove("btn-atencao");
-        }, 4000);
-
-        return;
-    }
-
-    // Se deu o segundo clique dentro dos 4 segundos, executa a limpeza:
-    clearTimeout(timerConfirmacao);
-    aguardandoConfirmacaoLimpeza = false;
-
-    const htmlOriginal = `<i class="bi bi-trash3-fill"></i> Limpar Banco`;
-    btn.disabled = true;
-    btn.innerHTML = `<i class="bi bi-arrow-repeat spin"></i> Limpando...`;
-
-    try {
-        const resposta = await fetch("/api/manutencao/limpar-database", { method: "DELETE" });
-        if (!resposta.ok) throw new Error(`Erro ${resposta.status}`);
-
-        const dados = await resposta.json();
-
-        // Atualiza a tabela e as métricas dos cards
-        paginaAtual = 1;
-        await carregarPainelKPIs();
-        await carregarTabelaNoticias();
-
-    } catch (error) {
-        console.error("Erro ao limpar banco:", error);
-        alert("Não foi possível executar a limpeza do banco.");
-    } finally {
-        btn.disabled = false;
-        btn.innerHTML = htmlOriginal;
-        btn.classList.remove("btn-atencao");
-    }
-}
-
 // 2. Ação de Limpar Banco com Clique Duplo (DELETE /api/manutencao/limpar-database)
 async function executarLimpezaBanco() {
     const btn = document.getElementById("btn-limpar-banco");
