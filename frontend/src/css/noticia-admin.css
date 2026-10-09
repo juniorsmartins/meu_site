@@ -186,19 +186,52 @@ table td select {
 
 
 /* ==========================================
-   GRID DE CARDS KPI / PAINEL DE MANUTENÇÃO
+   DIAGRAMAÇÃO PRINCIPAL DO PAINEL ADMIN
    ========================================== */
-#container-painel-admin {
+
+#container-noticia-admin {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 2rem 0;
+}
+
+.admin-wrapper {
     width: 95%;
     max-width: 1280px;
-    margin: 2rem auto;
+    display: flex;
+    flex-direction: column; /* Força os elementos a ficarem um abaixo do outro */
+    gap: 1.5rem;
 }
+
+/* Novo Título Elegante do Painel */
+.admin-header-titulo {
+    margin-bottom: 0.5rem;
+}
+
+.admin-header-titulo h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--blue-900);
+    margin-bottom: 0.25rem;
+}
+
+.admin-header-titulo p {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.88rem;
+    color: var(--secondary-text-color);
+}
+
+/* ==========================================
+   GRID DE CARDS KPI
+   ========================================== */
 
 #grid-kpis-admin {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
-    margin-bottom: 2rem;
+    width: 100%;
 }
 
 .card-kpi {
@@ -219,7 +252,7 @@ table td select {
 }
 
 .kpi-titulo {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 700;
     color: var(--secondary-text-color);
     text-transform: uppercase;
@@ -232,7 +265,7 @@ table td select {
 }
 
 .kpi-body {
-    margin: 1rem 0;
+    margin: 0.85rem 0;
 }
 
 .kpi-body h2 {
@@ -249,7 +282,6 @@ table td select {
     margin-top: 0.25rem;
 }
 
-/* Botões de Ação da Manutenção */
 .btn-manutencao {
     width: 100%;
     display: inline-flex;
@@ -262,7 +294,7 @@ table td select {
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
-    transition: opacity 0.2s ease, transform 0.1s ease;
+    transition: opacity 0.2s ease;
 }
 
 .btn-manutencao:hover:not(:disabled) {
@@ -295,22 +327,12 @@ table td select {
     font-weight: 600;
 }
 
-/* Animação do Spinner nos Botões durante a Requisição */
-.spin {
-    animation: girar 1s infinite linear;
-}
+/* ==========================================
+   CONTAINER DA TABELA
+   ========================================== */
 
-@keyframes girar {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+#container-tabela-noticias {
+    width: 100%;
+    overflow-x: auto;
 }
-
-/* Responsividade do Grid de KPIs */
-@media (max-width: 992px) {
-    #grid-kpis-admin {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-}
-
 

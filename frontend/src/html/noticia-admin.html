@@ -36,95 +36,102 @@
         <div id="header-container"></div>
 
         <!-- Conteúdo da Notícia Completa -->
-        <main id="container-noticia-admin" class="flex flex-center">
-            <section id="container-painel-admin" class="width-100"></section>
+        <main id="container-noticia-admin">
 
-                <!-- GRID DE CARDS KPI / PAINEL DE MANUTENÇÃO -->
-                <div id="grid-kpis-admin">
-                    
-                    <!-- Card 1: Status da Base de Dados -->
-                    <div class="card-kpi">
-                        <div class="kpi-header">
-                            <span class="kpi-titulo">Base de Dados (MongoDB)</span>
-                            <i class="bi bi-database-fill kpi-icone"></i>
-                        </div>
-                        <div class="kpi-body">
-                            <h2 id="kpi-total-noticias">--</h2>
-                            <p class="kpi-subtexto">Cota Limite: <strong>100 Notícias</strong></p>
-                        </div>
-                        <div class="kpi-footer">
-                            <button id="btn-limpar-banco" class="btn-manutencao btn-perigo">
-                                <i class="bi bi-trash3-fill"></i> Limpar Banco (Limite 100)
-                            </button>
-                        </div>
-                    </div>
+    <div class="admin-wrapper">
+        
+        <!-- Cabeçalho da Página Administrativa -->
+        <div class="admin-header-titulo">
+            <h2>Painel de Controle e Notícias Cadastradas</h2>
+            <p>Gerencie os registros do banco e execute sincronizações com as fontes oficiais.</p>
+        </div>
 
-                    <!-- Card 2: Automação e Fontes RSS -->
-                    <div class="card-kpi">
-                        <div class="kpi-header">
-                            <span class="kpi-titulo">Sincronização RSS</span>
-                            <i class="bi bi-rss-fill kpi-icone"></i>
-                        </div>
-                        <div class="kpi-body">
-                            <h2>31 Fontes</h2>
-                            <p class="kpi-subtexto">TSE, Agência Brasil e Câmara</p>
-                        </div>
-                        <div class="kpi-footer">
-                            <button id="btn-importar-rss" class="btn-manutencao btn-primario">
-                                <i class="bi bi-cloud-arrow-down-fill"></i> Importar Notícias
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Card 3: Métricas da Última Execução -->
-                    <div class="card-kpi">
-                        <div class="kpi-header">
-                            <span class="kpi-titulo">Última Operação</span>
-                            <i class="bi bi-activity kpi-icone"></i>
-                        </div>
-                        <div class="kpi-body">
-                            <h2 id="kpi-status-operacao">Pronto</h2>
-                            <p id="kpi-detalhe-operacao" class="kpi-subtexto">Nenhuma ação recente executada</p>
-                        </div>
-                        <div class="kpi-footer">
-                            <span id="badge-tempo-operacao" class="kpi-badge">Aguardando</span>
-                        </div>
-                    </div>
-
-                </div>
-
-                <section id="container-tabela-noticias">
-                    <h3>Notícias Cadastradas</h3>
-                    <br/>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Editoria</th>
-                                <th>Chapéu</th>
-                                <th>Título</th>
-                                <th>Linha Fina</th>
-                                <th>Autor</th>
-                                <th>Conteúdo</th>
-                                <th>Ações</th> <!-- Coluna para botões de ação (editar, excluir e etc) -->
-                            </tr>
-                        </thead>
-                        <tbody id="corpo-tabela-noticias">
-                            <tr>
-                                <td colspan="7" style="text-align: center;">Carregando notícias...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <!-- Paginação -->
-                    <div id="container-paginacao-noticias" class="paginacao-flex">
-                        <button id="btn-pagina-anterior" disabled>&laquo; Anterior</button>
-                        <span id="info-paginacao">Página 1 de 1</span>
-                        <button id="btn-pagina-proxima" disabled>Próxima &raquo;</button>
-                    </div>
-                </section>
+        <!-- 1. Grid de Cards KPI (Acima) -->
+        <div id="grid-kpis-admin">
             
-            </section>
-        </main>
+            <!-- Card 1: Status da Base de Dados -->
+            <div class="card-kpi">
+                <div class="kpi-header">
+                    <span class="kpi-titulo">Base de Dados (MongoDB)</span>
+                    <i class="bi bi-database-fill kpi-icone"></i>
+                </div>
+                <div class="kpi-body">
+                    <h2 id="kpi-total-noticias">--</h2>
+                    <p class="kpi-subtexto">Cota Limite: <strong>100 Notícias</strong></p>
+                </div>
+                <div class="kpi-footer">
+                    <button id="btn-limpar-banco" class="btn-manutencao btn-perigo">
+                        <i class="bi bi-trash3-fill"></i> Limpar Banco (Limite 100)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Card 2: Automação e Fontes RSS -->
+            <div class="card-kpi">
+                <div class="kpi-header">
+                    <span class="kpi-titulo">Sincronização RSS</span>
+                    <i class="bi bi-rss-fill kpi-icone"></i>
+                </div>
+                <div class="kpi-body">
+                    <h2>31 Fontes</h2>
+                    <p class="kpi-subtexto">TSE, Agência Brasil e Câmara</p>
+                </div>
+                <div class="kpi-footer">
+                    <button id="btn-importar-rss" class="btn-manutencao btn-primario">
+                        <i class="bi bi-cloud-arrow-down-fill"></i> Importar Notícias
+                    </button>
+                </div>
+            </div>
+
+            <!-- Card 3: Métricas da Última Execução -->
+            <div class="card-kpi">
+                <div class="kpi-header">
+                    <span class="kpi-titulo">Última Operação</span>
+                    <i class="bi bi-activity kpi-icone"></i>
+                </div>
+                <div class="kpi-body">
+                    <h2 id="kpi-status-operacao">Pronto</h2>
+                    <p id="kpi-detalhe-operacao" class="kpi-subtexto">Nenhuma ação recente executada</p>
+                </div>
+                <div class="kpi-footer">
+                    <span id="badge-tempo-operacao" class="kpi-badge">Aguardando</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 2. Tabela de Notícias Cadastradas (Abaixo) -->
+        <section id="container-tabela-noticias">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Editoria</th>
+                        <th>Chapéu</th>
+                        <th>Título</th>
+                        <th>Linha Fina</th>
+                        <th>Autor</th>
+                        <th>Conteúdo</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="corpo-tabela-noticias">
+                    <tr>
+                        <td colspan="7" style="text-align: center;">Carregando notícias...</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Paginação -->
+            <div id="container-paginacao-noticias" class="paginacao-flex">
+                <button id="btn-pagina-anterior" disabled>&laquo; Anterior</button>
+                <span id="info-paginacao">Página 1 de 1</span>
+                <button id="btn-pagina-proxima" disabled>Próxima &raquo;</button>
+            </div>
+        </section>
+
+    </div>
+
+</main>
 
         <!-- Rodapé Reutilizado -->
         <div id="footer-container"></div>
