@@ -4,10 +4,14 @@ import { mapearEditoriaCompativel } from '../editoriaHelper.js';
  * Módulo Específico para o TSE (Trata a estrutura RDF/RSS 1.0)
  */
 const buscarEParsearTse = async (urlFeed, editoriaPadrao = "política") => {
+
     const resposta = await fetch(urlFeed, {
         headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Accept': 'application/rdf+xml, application/xml, text/xml'
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+            'Accept': 'application/rdf+xml, application/xml, text/xml, */*',
+            'Accept-Language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache'
         }
     });
 
@@ -104,5 +108,7 @@ function decodificarEntidadesHTML(str = "") {
         .replace(/&#234;/g, "ê");
 }
 
-export { buscarEParsearTse };
+export { 
+    buscarEParsearTse 
+};
 

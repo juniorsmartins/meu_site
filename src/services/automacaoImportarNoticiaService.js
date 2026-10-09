@@ -12,11 +12,15 @@ const parser = new Parser({
     }
 });
 
+// Helper para criar uma pequena pausa no loop entre cada fonte RSS
+const aguardarMs = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 // ============================================================================
 // SERVIÇO PRINCIPAL (Orquestrador)
 // ============================================================================
 
 const automacaoImportarNoticiaService = async () => {
+
     const relatorioFontes = [];
     let totalGeralImportadas = 0;
     let totalGeralIgnoradas = 0;
@@ -29,6 +33,7 @@ const automacaoImportarNoticiaService = async () => {
             // Se a fonte possui um leitor próprio (ex: TSE), usa ele. Se não, usa o fluxo genérico do RSS Parser.
             if (fonte.buscarCustomizado) {
                 resultado = await processarFonteCustomizada(fonte);
+
             } else {
                 resultado = await processarFeedRssPadrão(fonte.url, (item) => fonte.normalizador(item, mapearEditoriaCompativel));
             }
@@ -43,6 +48,9 @@ const automacaoImportarNoticiaService = async () => {
                 sucesso: true,
                 ...resultado
             });
+
+            // Pausa de 200ms para não sobrecarregar o servidor do governo
+            await aguardarMs(150);
 
         } catch (error) {
             console.error(`Erro ao processar a fonte '${fonte.nome}':`, error);
@@ -74,9 +82,16 @@ const automacaoImportarNoticiaService = async () => {
 
 // Fluxo Padrão Genérico para RSS 2.0 (Câmara, Agência Brasil, etc.)
 const processarFeedRssPadrão = async (urlFeed, funcaoNormalizacao) => {
+
     const resposta = await fetch(urlFeed, {
-        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0 Safari/537.36' }
+        signal: controller.signal,
+        headers: { 
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'Accept-Language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7'
+        }
     });
+
     const xmlTexto = await resposta.text();
     const feed = await parser.parseString(xmlTexto);
 
