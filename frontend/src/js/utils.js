@@ -11,12 +11,15 @@ export function getDatePorExtenso() {
 
     const now = new Date();
 
-    return new Intl.DateTimeFormat("pt-BR", {
-			weekday: "long", 
-			day: "numeric", 
-			month: "long", 
-			year: "numeric"
-		}).format(now);
+    const dataFormatada = new Intl.DateTimeFormat("pt-BR", {
+        weekday: "long", 
+        day: "numeric", 
+        month: "long", 
+        year: "numeric"
+    }).format(now);
+
+    // Deixa apenas a primeira letra da frase em maiúsculo (ex: "sexta-feira..." -> "Sexta-feira...")
+    return dataFormatada.charAt(0).toUpperCase() + dataFormatada.slice(1);
 }
 
 export function getTimeHM() {
