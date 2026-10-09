@@ -401,9 +401,9 @@ async function deletarNoticia(idNoticia) {
  */
 async function carregarPainelMetricas() {
 
-    const elKpiTotal = document.getElementById("kpi-total-noticias");
-    const elTotalFeeds = document.getElementById("kpi-total-feeds");
-    const elDetalhePortais = document.getElementById("kpi-detalhe-portais");
+    const metricaTotalNoticias = document.getElementById("kpi-total-noticias");
+    const metricaTotalFeeds = document.getElementById("kpi-total-feeds");
+    const metricaDetalhePortais = document.getElementById("kpi-detalhe-portais");
 
     try {
         const resposta = await fetch("/admin/metricas");
@@ -413,26 +413,22 @@ async function carregarPainelMetricas() {
 
         if (dados.sucesso) {
             // 1. Atualiza Card da Base de Dados (MongoDB)
-            if (elKpiTotal) {
-                elKpiTotal.textContent = `${dados.bancoDados.totalNoticias}`;
+            if (metricaTotalNoticias) {
+                metricaTotalNoticias.textContent = `${dados.bancoDados.totalNoticias}`;
             }
 
             // 2. Atualiza Card da Sincronização RSS
-            if (elTotalFeeds) {
-                elTotalFeeds.textContent = `${dados.rss.totalFeeds} Feeds RSS`;
+            if (metricaTotalFeeds) {
+                metricaTotalFeeds.textContent = `${dados.rss.totalFeeds} Feeds RSS`;
             }
 
-            if (elDetalhePortais) {
-                elDetalhePortais.textContent = dados.rss.subtextoFormatado;
+            if (metricaDetalhePortais) {
+                metricaDetalhePortais.textContent = dados.rss.subtextoFormatado;
             }
         }
         
     } catch (error) {
         console.error("Erro ao carregar /admin/metricas:", error);
-        
-        // Fallbacks seguros caso a API falhe temporariamente
-        if (elTotalFeeds) elTotalFeeds.textContent = "31 Feeds RSS";
-        if (elDetalhePortais) elDetalhePortais.textContent = "Oriundos de 3 Portais: TSE, Agência Câmara, Agência Brasil.";
     }
 }
 
