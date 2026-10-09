@@ -8,7 +8,7 @@ import { LIMITE_MAXIMO_NOTICIAS_DATABASE } from '../constants/geralConstants.js'
 const adminMetricasService = async () => {
     // 1. Métricas do Banco de Dados (MongoDB)
     const totalNoticias = await Noticia.countDocuments();
-    const limiteCota = LIMITE_MAXIMO_NOTICIAS_DATABASE || 100;
+    const limiteCota = LIMITE_MAXIMO_NOTICIAS_DATABASE;
     const excedente = Math.max(0, totalNoticias - limiteCota);
 
     // 2. Métricas do FONTES_RSS (Extração dinâmica de portais únicos)
