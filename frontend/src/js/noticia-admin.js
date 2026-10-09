@@ -402,8 +402,11 @@ async function deletarNoticia(idNoticia) {
 async function carregarPainelMetricas() {
 
     const metricaTotalNoticias = document.getElementById("kpi-total-noticias");
+    const metricaLimiteNoticias = document.getElementById("kpi-limite-cota");
+    const elBtnTextoLimite = document.getElementById("btn-texto-limite");
+    
     const metricaTotalFeeds = document.getElementById("kpi-total-feeds");
-    const metricaDetalhePortais = document.getElementById("kpi-detalhe-portais");
+    const elDetalhePortais = document.getElementById("kpi-detalhe-portais");
 
     try {
         const resposta = await fetch("/api/admin/metricas");
@@ -417,18 +420,27 @@ async function carregarPainelMetricas() {
                 metricaTotalNoticias.textContent = `${dados.bancoDados.totalNoticias}`;
             }
 
+            // Injeta o limite vindo do backend (LIMITE_MAXIMO_NOTICIAS_DATABASE)
+            if (metricaLimiteNoticias) {
+                metricaLimiteNoticias.textContent = `${dados.bancoDados.limiteCota}`;
+            }
+
+            if (elBtnTextoLimite) {
+                elBtnTextoLimite.textContent = `Limpar Banco (Limite ${dados.bancoDados.limiteCota})`;
+            }
+
             // 2. Atualiza Card da Sincronização RSS
             if (metricaTotalFeeds) {
                 metricaTotalFeeds.textContent = `${dados.rss.totalFeeds} Feeds RSS`;
             }
 
-            if (metricaDetalhePortais) {
-                metricaDetalhePortais.textContent = dados.rss.subtextoFormatado;
+            if (elDetalhePortais) {
+                elDetalhePortais.textContent = dados.rss.subtextoFormatado;
             }
         }
         
     } catch (error) {
-        console.error("Erro ao carregar /admin/metricas:", error);
+        console.error("Erro ao carregar /api/admin/metricas:", error);
     }
 }
 

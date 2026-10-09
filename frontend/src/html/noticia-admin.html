@@ -48,7 +48,7 @@
 
         <!-- 1. Grid de Cards KPI (Acima) -->
         <div id="grid-kpis-admin">
-            
+
             <!-- Card 1: Status da Base de Dados -->
             <div class="card-kpi">
                 <div class="kpi-header">
@@ -57,11 +57,11 @@
                 </div>
                 <div class="kpi-body">
                     <h2 id="kpi-total-noticias">--</h2>
-                    <p class="kpi-subtexto">Cota Limite: <strong>100 Notícias</strong></p>
+                    <p class="kpi-subtexto">Cota Limite: <strong><span id="kpi-limite-cota">--</span> Notícias</strong></p>
                 </div>
                 <div class="kpi-footer">
                     <button id="btn-limpar-banco" class="btn-manutencao btn-perigo">
-                        <i class="bi bi-trash3-fill"></i> Limpar Banco
+                        <i class="bi bi-trash3-fill"></i> <span id="btn-texto-limite">Limpar Banco</span>
                     </button>
                 </div>
             </div>
