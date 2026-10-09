@@ -184,3 +184,155 @@ table td select {
     white-space: nowrap !important;
 }
 
+
+/* ==========================================
+   DIAGRAMAÇÃO PRINCIPAL DO PAINEL ADMIN
+   ========================================== */
+
+#container-noticia-admin {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 2rem 0;
+}
+
+.admin-wrapper {
+    width: 95%;
+    max-width: 1280px;
+    display: flex;
+    flex-direction: column; /* Força os elementos a ficarem um abaixo do outro */
+    gap: 1.5rem;
+}
+
+/* Novo Título Elegante do Painel */
+.admin-header-titulo {
+    margin-bottom: 0.5rem;
+}
+
+.admin-header-titulo h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--blue-900);
+    margin-bottom: 0.25rem;
+}
+
+.admin-header-titulo p {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.88rem;
+    color: var(--secondary-text-color);
+}
+
+/* ==========================================
+   GRID DE CARDS KPI
+   ========================================== */
+
+#grid-kpis-admin {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.card-kpi {
+    background: #FFFFFF;
+    border: 1px solid var(--blue-100);
+    border-radius: 8px;
+    padding: 1.25rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.kpi-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.kpi-titulo {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--secondary-text-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.kpi-icone {
+    font-size: 1.2rem;
+    color: var(--blue-600);
+}
+
+.kpi-body {
+    margin: 0.85rem 0;
+}
+
+.kpi-body h2 {
+    font-size: 1.8rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    color: var(--blue-900);
+    margin: 0;
+}
+
+.kpi-subtexto {
+    font-size: 0.8rem;
+    color: var(--tertiary-text-color);
+    margin-top: 0.25rem;
+}
+
+.btn-manutencao {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.btn-manutencao:hover:not(:disabled) {
+    opacity: 0.9;
+}
+
+.btn-manutencao:disabled {
+    background-color: #CBD5E1 !important;
+    color: #94A3B8 !important;
+    cursor: not-allowed;
+}
+
+.btn-primario {
+    background-color: var(--blue-700);
+    color: #FFFFFF;
+}
+
+.btn-perigo {
+    background-color: #E74C3C;
+    color: #FFFFFF;
+}
+
+.kpi-badge {
+    display: inline-block;
+    padding: 0.3rem 0.6rem;
+    background-color: var(--blue-50);
+    color: var(--blue-800);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* ==========================================
+   CONTAINER DA TABELA
+   ========================================== */
+
+#container-tabela-noticias {
+    width: 100%;
+    overflow-x: auto;
+}
+

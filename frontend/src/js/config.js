@@ -1,8 +1,8 @@
 // URL base centralizada da API
-export const API_URL = '/api/noticias';
+const API_URL = '/api/noticias';
 
 // Lista única das editorias usadas no frontend
-export const OPCOES_EDITORIA = [
+const OPCOES_EDITORIA = [
     "geral",
     "política", 
     "esportes", 
@@ -20,7 +20,7 @@ export const OPCOES_EDITORIA = [
 ];
 
 // Dados Centrais do Portal (Fonte Única de Verdade)
-export const SITE_CONFIG = {
+const SITE_CONFIG = {
     nome: "Gajeiro",
     slogan: "Olhos no horizonte, pés nos fatos",
     fundador: "Junior Martins",
@@ -29,4 +29,11 @@ export const SITE_CONFIG = {
     localizacaoPadrao: "Cuiabá - Mato Grosso, Brasil",
     horarioAtendimento: "Segunda a Sexta, das 08h às 17h"
 };
+
+export { 
+    API_URL, 
+    OPCOES_EDITORIA, 
+    SITE_CONFIG 
+};
+
 

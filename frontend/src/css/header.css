@@ -15,9 +15,27 @@
     background-color: var(--blue-900);
 }
 
+/* --- Estrutura da Barra do Topo --- */
+.header-topo-info {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
 .header-topo-info p {
-    margin-right: 1.5rem;
+    margin: 0;
     color: var(--blue-100);
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+}
+
+/* Divisor elegante em ponto (•) entre as informações */
+.header-topo-info p:not(:last-child)::after {
+    content: "•";
+    margin-left: 0.8rem;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.75rem;
 }
 
 /* ====================================================
@@ -69,6 +87,20 @@
     font-size: 0.85rem;
     color: var(--blue-100);
     margin-top: 0.3rem;
+}
+
+/* Estilização da Temperatura e Ícone do Tempo no Topo */
+#clima-extenso {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--blue-100);
+    font-weight: 600;
+}
+
+#clima-extenso i {
+    color: #F1C40F; /* Cor amarela dourada para o sol/clima */
+    font-size: 0.95rem;
 }
 
 .btn-entrar {
@@ -144,5 +176,4 @@
     background-color: var(--blue-300);
     border-radius: 2px 2px 0 0;
 }
-
 
