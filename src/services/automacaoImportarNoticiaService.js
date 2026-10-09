@@ -3,6 +3,8 @@ import { Noticia } from '../database/schema/noticiaSchema.js';
 import { EDITORIAS } from '../constants/editorias.js';
 import { FONTES_RSS } from '../constants/fontesRssConfig.js';
 
+process.removeAllListeners('warning');
+
 const parser = new Parser({
     customFields: {
         item: [
@@ -12,7 +14,6 @@ const parser = new Parser({
     }
 });
 
-// Helper para criar uma pequena pausa no loop entre cada fonte RSS
 const aguardarMs = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 // ============================================================================
@@ -52,7 +53,7 @@ const automacaoImportarNoticiaService = async () => {
             await aguardarMs(150); // Pequena pausa entre cada fonte RSS para evitar sobrecarga de requisições
 
         } catch (error) {
-            console.error(`Erro ao processar a fonte '${fonte.nome}':`, error.message);
+            console.warn(`[Automação RSS] Aviso na fonte '${fonte.nome}': ${error.message}`);
             relatorioFontes.push({
                 fonte: fonte.nome,
                 chave: fonte.chave,
