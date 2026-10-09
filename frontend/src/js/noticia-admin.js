@@ -1,6 +1,5 @@
 import { API_URL, OPCOES_EDITORIA } from './config.js';
-
-const LIMITE_POR_PAGINA = 10;
+import { LIMITE_NOTICIAS_POR_PAGINA } from '../../src/constants/geralConstants.js';
 
 // Armazena o HTML original das linhas em edição para permitir a ação de cancelar
 const linhasEmEdicao = {};
@@ -159,7 +158,7 @@ async function carregarTabelaNoticias() {
 
     try {
 
-        const dadosPaginados = await buscarNoticiasPaginadas(paginaAtual, LIMITE_POR_PAGINA);
+        const dadosPaginados = await buscarNoticiasPaginadas(paginaAtual, LIMITE_NOTICIAS_POR_PAGINA);
 
         const listaNoticias = dadosPaginados.noticias || [];
         totalPaginas = dadosPaginados.totalPaginas || 1;
