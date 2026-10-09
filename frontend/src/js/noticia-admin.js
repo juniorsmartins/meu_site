@@ -1,12 +1,16 @@
 import { API_URL, OPCOES_EDITORIA } from './config.js';
 
-const LIMITE_POR_PAGINA = 10;
+const LIMITE_NOTICIAS_POR_PAGINA = 12;
 
 // Armazena o HTML original das linhas em edição para permitir a ação de cancelar
 const linhasEmEdicao = {};
 
 let paginaAtual = 1;
 let totalPaginas = 1;
+
+// Variáveis de controle para o estado de confirmação do botão
+let aguardandoConfirmacaoLimpeza = false;
+let timerConfirmacaoLimpeza = null;
 
 document.addEventListener(`DOMContentLoaded`, async () => {
     configurarEventosPaginacao(); // Inicializa os botões de paginação
@@ -68,7 +72,7 @@ async function executarImportacaoRss() {
 
     try {
 
-        const resposta = await fetch("/automacao/importar", { method: "POST" });
+        const resposta = await fetch("/api/automacao/importar", { method: "POST" });
         if (!resposta.ok) {
             throw new Error(`Erro na importação: ${resposta.status}`);
         }
@@ -99,45 +103,77 @@ async function executarImportacaoRss() {
     }
 }
 
-// 2. Ação de Limpar Banco Mantendo Limite definido (DELETE /manutencao/limpar-database)
+// 2. Ação de Limpar Banco com Clique Duplo (DELETE /api/manutencao/limpar-database)
 async function executarLimpezaBanco() {
-
-    if (!confirm("Deseja executar a limpeza da base de dados para manter o limite de 100 notícias?")) return;
-
     const btn = document.getElementById("btn-limpar-banco");
     if (!btn) return;
 
-    const htmlOriginal = btn.innerHTML;
+    // --- PRIMEIRO CLIQUE: Entra em modo de confirmação ---
+    if (!aguardandoConfirmacaoLimpeza) {
+        aguardandoConfirmacaoLimpeza = true;
+        btn.innerHTML = `<i class="bi bi-exclamation-triangle-fill"></i> Clique p/ Confirmar`;
+        btn.classList.add("btn-confirmando");
+
+        // Se o usuário não clicar novamente em 4 segundos, reseta o botão
+        timerConfirmacaoLimpeza = setTimeout(() => {
+            resetarBotaoLimpeza(btn);
+        }, 4000);
+
+        return;
+    }
+
+    // --- SEGUNDO CLIQUE (dentro da janela de 4s): Executa a limpeza ---
+    clearTimeout(timerConfirmacaoLimpeza);
+    aguardandoConfirmacaoLimpeza = false;
+
+    // Estado de Carregamento
     btn.disabled = true;
+    btn.classList.remove("btn-confirmando");
     btn.innerHTML = `<i class="bi bi-arrow-repeat spin"></i> Limpando...`;
 
-    try {
+    atualizarCardStatus("Limpando...", "Removendo registros excedentes", "Processando");
 
-        const resposta = await fetch("/manutencao/limpar-database", { method: "DELETE" });
+    try {
+        const resposta = await fetch("/api/manutencao/limpar-database", { method: "DELETE" });
+        
         if (!resposta.ok) {
             throw new Error(`Erro na limpeza: ${resposta.status}`);
         }
 
         const dados = await resposta.json();
 
-        // Atualiza as métricas no topo
+        // Atualiza o Card 3 ("Última Operação") com o resultado da remoção
         atualizarCardStatus(
             `${dados.removidas} Removidas`,
             dados.mensagem || `Base mantida em ${dados.totalAtual} notícias`,
             "Otimizado"
         );
 
+        // Atualiza a tabela e recarrega os contadores dos KPIs
         paginaAtual = 1;
+        await carregarPainelMetricas();
         await carregarTabelaNoticias();
 
     } catch (error) {
         console.error("Erro ao limpar banco:", error);
+        atualizarCardStatus("Erro!", "Falha ao executar limpeza no banco", "Falhou");
         alert("Não foi possível executar a limpeza do banco.");
 
     } finally {
-        btn.disabled = false;
-        btn.innerHTML = htmlOriginal;
+        resetarBotaoLimpeza(btn);
     }
+}
+
+/**
+ * Auxiliar para restaurar o estado visual original do botão de limpeza
+ */
+function resetarBotaoLimpeza(btn) {
+    aguardandoConfirmacaoLimpeza = false;
+    if (timerConfirmacaoLimpeza) clearTimeout(timerConfirmacaoLimpeza);
+    
+    btn.disabled = false;
+    btn.classList.remove("btn-confirmando");
+    btn.innerHTML = `<i class="bi bi-trash3-fill"></i> Limpar Banco`;
 }
 
 // Auxiliar para atualizar o 3º Card ("Última Operação")
@@ -159,10 +195,15 @@ async function carregarTabelaNoticias() {
 
     try {
 
-        const dadosPaginados = await buscarNoticiasPaginadas(paginaAtual, LIMITE_POR_PAGINA);
+        const dadosPaginados = await buscarNoticiasPaginadas(paginaAtual, LIMITE_NOTICIAS_POR_PAGINA);
 
         const listaNoticias = dadosPaginados.noticias || [];
         totalPaginas = dadosPaginados.totalPaginas || 1;
+
+        // --- ATUALIZAÇÃO DINÂMICA DO TOTAL NO 1º CARD ---
+        if (kpiTotal && dadosPaginados.totalNoticias !== undefined) {
+            kpiTotal.textContent = `${dadosPaginados.totalNoticias}`;
+        }
 
         if (listaNoticias.length === 0) {
             corpoTabela.innerHTML = `
@@ -402,10 +443,12 @@ async function deletarNoticia(idNoticia) {
 async function carregarPainelMetricas() {
 
     const metricaTotalNoticias = document.getElementById("kpi-total-noticias");
+    const metricaLimiteNoticias = document.getElementById("kpi-limite-cota");
     const metricaTotalFeeds = document.getElementById("kpi-total-feeds");
-    const metricaDetalhePortais = document.getElementById("kpi-detalhe-portais");
+    const elDetalhePortais = document.getElementById("kpi-detalhe-portais");
 
     try {
+
         const resposta = await fetch("/api/admin/metricas");
         if (!resposta.ok) throw new Error(`Status ${resposta.status}`);
 
@@ -417,18 +460,23 @@ async function carregarPainelMetricas() {
                 metricaTotalNoticias.textContent = `${dados.bancoDados.totalNoticias}`;
             }
 
+            // Injeta o limite vindo do backend (LIMITE_MAXIMO_NOTICIAS_DATABASE)
+            if (metricaLimiteNoticias) {
+                metricaLimiteNoticias.textContent = `${dados.bancoDados.limiteCota}`;
+            }
+
             // 2. Atualiza Card da Sincronização RSS
             if (metricaTotalFeeds) {
                 metricaTotalFeeds.textContent = `${dados.rss.totalFeeds} Feeds RSS`;
             }
 
-            if (metricaDetalhePortais) {
-                metricaDetalhePortais.textContent = dados.rss.subtextoFormatado;
+            if (elDetalhePortais) {
+                elDetalhePortais.textContent = dados.rss.subtextoFormatado;
             }
         }
         
     } catch (error) {
-        console.error("Erro ao carregar /admin/metricas:", error);
+        console.error("Erro ao carregar /api/admin/metricas:", error);
     }
 }
 
