@@ -49,7 +49,7 @@ const automacaoImportarNoticiaService = async () => {
                 ...resultado
             });
 
-            // Pausa de 200ms para não sobrecarregar o servidor do governo
+            // Pausa para não sobrecarregar o servidor do governo
             await aguardarMs(150);
 
         } catch (error) {
