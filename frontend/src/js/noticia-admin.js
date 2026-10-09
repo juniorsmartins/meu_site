@@ -403,8 +403,6 @@ async function carregarPainelMetricas() {
 
     const metricaTotalNoticias = document.getElementById("kpi-total-noticias");
     const metricaLimiteNoticias = document.getElementById("kpi-limite-cota");
-    const elBtnTextoLimite = document.getElementById("btn-texto-limite");
-    
     const metricaTotalFeeds = document.getElementById("kpi-total-feeds");
     const elDetalhePortais = document.getElementById("kpi-detalhe-portais");
 
@@ -424,10 +422,6 @@ async function carregarPainelMetricas() {
             // Injeta o limite vindo do backend (LIMITE_MAXIMO_NOTICIAS_DATABASE)
             if (metricaLimiteNoticias) {
                 metricaLimiteNoticias.textContent = `${dados.bancoDados.limiteCota}`;
-            }
-
-            if (elBtnTextoLimite) {
-                elBtnTextoLimite.textContent = `Limpar Banco (Limite ${dados.bancoDados.limiteCota})`;
             }
 
             // 2. Atualiza Card da Sincronização RSS
