@@ -151,7 +151,7 @@ async function executarLimpezaBanco() {
 
         // Atualiza a tabela e recarrega os contadores dos KPIs
         paginaAtual = 1;
-        await carregarPainelKPIs();
+        await carregarPainelMetricas();
         await carregarTabelaNoticias();
 
     } catch (error) {
