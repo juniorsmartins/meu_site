@@ -200,6 +200,11 @@ async function carregarTabelaNoticias() {
         const listaNoticias = dadosPaginados.noticias || [];
         totalPaginas = dadosPaginados.totalPaginas || 1;
 
+        // --- ATUALIZAÇÃO DINÂMICA DO TOTAL NO 1º CARD ---
+        if (kpiTotal && dadosPaginados.totalNoticias !== undefined) {
+            kpiTotal.textContent = `${dadosPaginados.totalNoticias}`;
+        }
+
         if (listaNoticias.length === 0) {
             corpoTabela.innerHTML = `
                 <tr>
