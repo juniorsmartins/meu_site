@@ -28,7 +28,7 @@ const adminMetricasService = async () => {
             totalFeeds,
             totalPortais: portaisUnicos.length,
             portais: portaisUnicos,
-            subtextoFormatado: `Oriundos de ${portaisUnicos.length} Portais: ${portaisUnicos.join(', ')}.`
+            subtextoFormatado: `${portaisUnicos.length} Portais: ${portaisUnicos.join(', ')}.`
         },
         sistema: {
             status: "online",
