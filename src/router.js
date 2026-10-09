@@ -6,12 +6,14 @@ import { noticiaAtualizarController } from './controllers/noticiaAtualizarContro
 import { noticiaDeletarPorIdController } from './controllers/noticiaDeleteController.js';
 import { newsletterCriarController } from './controllers/newsletterCriarController.js';
 import { contatoLeitorCriarController } from './controllers/contatoLeitorCriarController.js';
+import { adminMetricasController } from './controllers/adminMetricasController.js';
 import { manutencaoLimparDatabaseController } from './controllers/manutencaoLimparDatabaseController.js';
 import { automacaoImportarNoticiaController } from './controllers/automacaoImportarNoticiaController.js';
 
 const noticiaRouter = express.Router();
 const newsletterRouter = express.Router();
 const contatoLeitorRouter = express.Router();
+const adminRouter = express.Router();
 const manutencaoRouter = express.Router();
 const automacaoRouter = express.Router();
 
@@ -28,6 +30,9 @@ newsletterRouter.post("/", newsletterCriarController);
 // Rotas de Contato do Leitor
 contatoLeitorRouter.post("/", contatoLeitorCriarController);
 
+// ADMIN - Rotas de administração do sistema
+adminRouter.get("/metricas", adminMetricasController);
+
 // MANUTENÇÃO - Rota para limpar banco de dados 
 manutencaoRouter.delete("/limpar-database", manutencaoLimparDatabaseController);
 
@@ -38,7 +43,9 @@ export {
     noticiaRouter, 
     newsletterRouter, 
     contatoLeitorRouter, 
+    adminRouter,
     manutencaoRouter,
     automacaoRouter
 };
+
 
