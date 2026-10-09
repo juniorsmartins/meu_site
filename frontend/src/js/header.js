@@ -29,9 +29,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Atualiza a tag <title> do navegador automaticamente
         document.title = `${SITE_CONFIG.nome} - Jornalismo Independente`;
 
-        // Data e Hora do Fuso Horário Local do Navegador do Leitor
-        document.getElementById("data-extenso").textContent = getDatePorExtenso();
-        document.getElementById("hora-extenso").textContent = getTimeHM();
+        document.getElementById("data-extenso").textContent = getDatePorExtenso(); // Atualiza a data por extenso no header
+
+
+        // Preenche Hora Inicial e Ativa o Relógio Dinâmico
+        atualizarHoraDinamica();
+        setInterval(atualizarHoraDinamica, 60000); // Atualiza a cada 60 segundos
 
         // Detecta Cidade/Estado/Clima do Leitor por IP
         await carregarLocalizacaoEClimaDoCliente();
@@ -42,6 +45,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.error("Erro ao inicializar o cabeçalho:", error);
     }
 });
+
+/**
+ * Atualiza o elemento de hora com o fuso horário atual do usuário
+ */
+function atualizarHoraDinamica() {
+    const horaEl = document.getElementById("hora-extenso");
+    if (horaEl) {
+        horaEl.textContent = getTimeHM();
+    }
+}
 
 /**
  * Detecta a localização exata do usuário via IP e busca o clima local
@@ -103,7 +116,7 @@ async function buscarPrevisaoTempo(lat, lon, elementoHtml) {
                 <span>${temp}°C</span>
             `;
         }
-        
+
     } catch (err) {
         console.error("Erro ao buscar previsão do tempo:", err);
     }
