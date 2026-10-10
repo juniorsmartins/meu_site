@@ -1,10 +1,10 @@
 // URL base centralizada da API
-const API_URL_NOTICIAS = '/api/v1/noticias';
-const API_URL_CONTATO_LEITOR = '/api/v1/contato-leitor';
-const API_URL_NEWSLETTER = '/api/v1/newsletter';
 const API_URL_ADMIN_METRICAS = '/api/v1/admin/metricas';
 const API_URL_ADMIN_IMPORTAR_NOTICIA = '/api/v1/admin/automacao/importar-noticias';
 const API_URL_ADMIN_LIMPAR_DATABASE = '/api/v1/admin/manutencao/limpar-database';
+const API_URL_COMUNICACAO_NEWSLETTER = '/api/v1/comunicacao/newsletter';
+const API_URL_COMUNICACAO_CONTATO_LEITOR = '/api/v1/comunicacao/contato-leitor';
+const API_URL_NOTICIAS = '/api/v1/noticias';
 
 // Lista única das editorias usadas no frontend
 const OPCOES_EDITORIA = [
@@ -36,12 +36,12 @@ const SITE_CONFIG = {
 };
 
 export { 
-    API_URL_NOTICIAS, 
-    API_URL_CONTATO_LEITOR,
-    API_URL_NEWSLETTER,
     API_URL_ADMIN_METRICAS,
     API_URL_ADMIN_IMPORTAR_NOTICIA,
     API_URL_ADMIN_LIMPAR_DATABASE,
+    API_URL_COMUNICACAO_CONTATO_LEITOR,
+    API_URL_COMUNICACAO_NEWSLETTER,
+    API_URL_NOTICIAS, 
     OPCOES_EDITORIA, 
     SITE_CONFIG 
 };

@@ -1,4 +1,4 @@
-import { SITE_CONFIG, API_URL_NEWSLETTER } from "./constantsConfig.js";
+import { SITE_CONFIG, API_URL_COMUNICACAO_NEWSLETTER } from "./constantsConfig.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     carregarFooter();
@@ -69,7 +69,7 @@ function configurarFormularioNewsletter() {
             btnSubmit.disabled = true;
             btnSubmit.textContent = "Enviando...";
 
-            const response = await fetch(API_URL_NEWSLETTER, {
+            const response = await fetch(API_URL_COMUNICACAO_NEWSLETTER, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email })

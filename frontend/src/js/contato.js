@@ -1,4 +1,4 @@
-import { SITE_CONFIG, API_URL_CONTATO_LEITOR } from "./constantsConfig.js";
+import { SITE_CONFIG, API_URL_COMUNICACAO_CONTATO_LEITOR } from "./constantsConfig.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     preencherInformacoesDinamicas();
@@ -40,7 +40,7 @@ function configurarEnvioContato() {
             btnSubmit.disabled = true;
             btnSubmit.innerHTML = `<i class="bi bi-hourglass-split"></i> Enviando...`;
 
-            const response = await fetch(API_URL_CONTATO_LEITOR, {
+            const response = await fetch(API_URL_COMUNICACAO_CONTATO_LEITOR, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)
