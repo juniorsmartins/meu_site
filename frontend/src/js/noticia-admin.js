@@ -1,8 +1,8 @@
 import { 
-    API_URL_NOTICIAS, 
     API_URL_ADMIN_METRICAS,
     API_URL_ADMIN_IMPORTAR_NOTICIA, 
     API_URL_ADMIN_LIMPAR_DATABASE, 
+    API_URL_NOTICIAS, 
     OPCOES_EDITORIA 
 } from './constantsConfig.js';
 
@@ -50,54 +50,86 @@ function configurarEventosPaginacao() {
     }
 }
 
-// Configura os botões de Importar RSS e Limpar Banco
+// Configura os botões do Painel de Manutenção e o Dropdown do RSS
 function configurarEventosManutencao() {
-
-    const btnImportar = document.getElementById("btn-importar-rss");
+    
+    const btnImportarPrincipal = document.getElementById("btn-importar-rss");
+    const btnToggleDropdown = document.getElementById("btn-toggle-dropdown-rss");
+    const menuDropdown = document.getElementById("menu-dropdown-rss");
     const btnLimpar = document.getElementById("btn-limpar-banco");
 
-    if (btnImportar) {
-        btnImportar.addEventListener("click", executarImportacaoRss);
+    // Clicar no botão principal importa todos os portais
+    if (btnImportarPrincipal) {
+        btnImportarPrincipal.addEventListener("click", () => executarImportacaoRss("TODOS"));
     }
+
+    // Alterna a exibição do menu dropdown ao clicar na setinha
+    if (btnToggleDropdown && menuDropdown) {
+        btnToggleDropdown.addEventListener("click", (e) => {
+            e.stopPropagation();
+            menuDropdown.classList.toggle("escondido");
+        });
+
+        // Fecha o dropdown se o usuário clicar fora dele
+        document.addEventListener("click", () => {
+            menuDropdown.classList.add("escondido");
+        });
+    }
+
+    // Escuta os cliques em cada item individual do dropdown (TSE, Câmara, Agência Brasil)
+    const itensDropdown = document.querySelectorAll(".item-dropdown-rss");
+    itensDropdown.forEach(btnItem => {
+        btnItem.addEventListener("click", (e) => {
+            const portalSelecionado = e.currentTarget.dataset.portal;
+            if (menuDropdown) menuDropdown.classList.add("escondido");
+            executarImportacaoRss(portalSelecionado);
+        });
+    });
 
     if (btnLimpar) {
         btnLimpar.addEventListener("click", executarLimpezaBanco);
     }
 }
 
-// 1. Ação de Importar Notícias das Fontes Oficiais (POST /automacao/importar)
-async function executarImportacaoRss() {
+// 1. Ação de Importar Notícias das Fontes Oficiais 
+// Função de importação com suporte ao parâmetro 'portal'
+async function executarImportacaoRss(portal = "TODOS") {
 
     const btn = document.getElementById("btn-importar-rss");
+    const btnArrow = document.getElementById("btn-toggle-dropdown-rss");
     if (!btn) return;
 
-    // Estado de Processamento (Disabled + Spinner)
     const htmlOriginal = btn.innerHTML;
     btn.disabled = true;
-    btn.innerHTML = `<i class="bi bi-arrow-repeat spin"></i> Importando Notícias...`;
+    if (btnArrow) btnArrow.disabled = true;
 
-    atualizarCardStatus("Importando...", "Buscando dados no TSE, Agência Câmara e Agência Brasil", "Processando");
+    // Ajusta o texto de progresso de acordo com a escolha
+    const textoRotulo = (portal && portal !== "TODOS") ? `Importando ${portal}...` : `Importando Notícias...`;
+    btn.innerHTML = `<i class="bi bi-arrow-repeat spin"></i> ${textoRotulo}`;
+
+    atualizarCardStatus("Importando...", `Buscando dados ${portal !== "TODOS" ? `em ${portal}` : "em todos os portais"}`, "Processando");
 
     try {
+        // Anexa o parâmetro ?portal=... à URL da requisição
+        const urlComQuery = portal !== "TODOS" 
+            ? `${API_URL_ADMIN_IMPORTAR_NOTICIA}?portal=${encodeURIComponent(portal)}` 
+            : API_URL_ADMIN_IMPORTAR_NOTICIA;
 
-        const resposta = await fetch(API_URL_ADMIN_IMPORTAR_NOTICIA, { method: "POST" });
-        if (!resposta.ok) {
-            throw new Error(`Erro na importação: ${resposta.status}`);
-        }
+        const resposta = await fetch(urlComQuery, { method: "POST" });
+        if (!resposta.ok) throw new Error(`Erro na importação: ${resposta.status}`);
 
         const dados = await resposta.json();
 
-        // Atualiza a interface com o resumo vindo do backend
         if (dados.resumo) {
             atualizarCardStatus(
                 `+${dados.resumo.totalImportadas} Novas`,
-                `${dados.resumo.totalAnalissadas || dados.resumo.totalAnalisadas} analisadas | ${dados.resumo.totalIgnoradas} duplicadas`,
+                `${dados.resumo.totalAnalisadas} analisadas | ${dados.resumo.totalIgnoradas} duplicadas`,
                 "Concluído"
             );
         }
 
-        // Recarrega a tabela de notícias e os contadores do topo
         paginaAtual = 1;
+        await carregarPainelMetrics();
         await carregarTabelaNoticias();
 
     } catch (error) {
@@ -107,6 +139,7 @@ async function executarImportacaoRss() {
 
     } finally {
         btn.disabled = false;
+        if (btnArrow) btnArrow.disabled = false;
         btn.innerHTML = htmlOriginal;
     }
 }

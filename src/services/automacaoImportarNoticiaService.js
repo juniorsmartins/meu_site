@@ -20,14 +20,21 @@ const aguardarMs = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 // SERVIÇO PRINCIPAL (Orquestrador)
 // ============================================================================
 
-const automacaoImportarNoticiaService = async () => {
+// Aceitação do parâmetro 'portalFiltro' com valor padrão null
+const automacaoImportarNoticiaService = async (portalFiltro = null) => {
 
     const relatorioFontes = [];
     let totalGeralImportadas = 0;
     let totalGeralIgnoradas = 0;
     let totalGeralAnalisadas = 0;
 
-    for (const fonte of FONTES_RSS) {
+    // Se portalFiltro for informado e diferente de 'TODOS', filtra apenas as fontes pertencentes àquele portal.
+    const fontesParaProcessar = (portalFiltro && portalFiltro.toUpperCase() !== 'TODOS')
+        ? FONTES_RSS.filter(f => f.portal && f.portal.toLowerCase() === portalFiltro.toLowerCase())
+        : FONTES_RSS;
+
+    for (const fonte of fontesParaProcessar) {
+
         try {
             let resultado;
 
@@ -69,7 +76,7 @@ const automacaoImportarNoticiaService = async () => {
             totalImportadas: totalGeralImportadas,
             totalIgnoradas: totalGeralIgnoradas,
             totalAnalisadas: totalGeralAnalisadas,
-            fontesProcessadas: FONTES_RSS.length
+            fontesProcessadas: fontesParaProcessar.length
         },
         detalhesPorFonte: relatorioFontes,
         mensagem: `Processamento concluído. ${totalGeralImportadas} notícias inéditas importadas no total.`
@@ -126,6 +133,7 @@ const processarFonteCustomizada = async (fonte) => {
 };
 
 const salvarNoticiaInedita = async (dadosNoticia) => {
+
     const noticiaExistente = await Noticia.findOne({
         $or: [
             { titulo: dadosNoticia.titulo },
@@ -142,6 +150,7 @@ const salvarNoticiaInedita = async (dadosNoticia) => {
 };
 
 const mapearEditoriaCompativel = (categoriaRss = "") => {
+
     if (!categoriaRss) return "geral";
     const categoriaNormalizada = removerAcentosECaixa(categoriaRss);
     const editoriaEncontrada = EDITORIAS.find(
@@ -151,6 +160,7 @@ const mapearEditoriaCompativel = (categoriaRss = "") => {
 };
 
 const removerAcentosECaixa = (texto = "") => {
+    
     if (!texto) return "";
     return String(texto)
         .toLowerCase()
@@ -162,5 +172,4 @@ const removerAcentosECaixa = (texto = "") => {
 export {
     automacaoImportarNoticiaService
 };
-
 
