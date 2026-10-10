@@ -30,12 +30,12 @@ app.use(async (request, response, next) => {
 });
 
 // Definição das rotas da API (Sem o prefixo /api, pois [...all].js já removeu)
-app.use("/noticias", noticiaRouter);
-app.use("/newsletter", newsletterRouter); 
-app.use("/contato-leitor", contatoLeitorRouter);
-app.use("/admin", adminRouter);
-app.use("/manutencao", manutencaoRouter);
-app.use("/automacao", automacaoRouter);
+app.use("/v1/noticias", noticiaRouter);
+app.use("/v1/newsletter", newsletterRouter); 
+app.use("/v1/contato-leitor", contatoLeitorRouter);
+app.use("/v1/admin", adminRouter);
+// app.use("/v1/admin", manutencaoRouter);
+// app.use("/v1/admin", automacaoRouter);
 
 // Exportação padrão necessária para Serverless na Vercel
 export default app;
