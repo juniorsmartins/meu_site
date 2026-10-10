@@ -9,3 +9,4 @@ const contatoLeitorCriarService = async (contatoLeitor) => {
 export {
     contatoLeitorCriarService
 };
+

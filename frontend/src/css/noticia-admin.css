@@ -336,3 +336,75 @@ table td select {
     overflow-x: auto;
 }
 
+
+/* ==========================================
+   GRUPO DE BOTÃO SPLIT COM DROPDOWN (CARD RSS)
+   ========================================== */
+
+.btn-split-container {
+    position: relative;
+    display: flex;
+    width: 100%;
+}
+
+.btn-split-principal {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    flex: 1;
+}
+
+.btn-split-arrow {
+    width: 42px !important;
+    padding: 0 !important;
+    border-left: 1px solid rgba(255, 255, 255, 0.25) !important;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+/* Menu Dropdown Suspenso */
+.dropdown-menu-rss {
+    position: absolute;
+    bottom: 110%; /* Abre para cima do botão */
+    right: 0;
+    left: 0;
+    background: #FFFFFF;
+    border: 1px solid var(--blue-100);
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    list-style: none;
+    padding: 0.5rem 0;
+    margin: 0;
+    z-index: 100;
+}
+
+.dropdown-menu-rss.escondido {
+    display: none;
+}
+
+.item-dropdown-rss {
+    width: 100%;
+    padding: 0.6rem 1rem;
+    background: transparent;
+    border: none;
+    text-align: left;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--blue-900);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    transition: background 0.15s ease;
+}
+
+.item-dropdown-rss:hover {
+    background-color: var(--blue-50);
+    color: var(--blue-700);
+}
+
+.dropdown-divisor {
+    height: 1px;
+    background-color: #E2E8F0;
+    margin: 0.3rem 0;
+}
+
