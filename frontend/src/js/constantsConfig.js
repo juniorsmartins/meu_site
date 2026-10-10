@@ -3,8 +3,8 @@ const API_URL_NOTICIAS = '/api/v1/noticias';
 const API_URL_CONTATO_LEITOR = '/api/v1/contato-leitor';
 const API_URL_NEWSLETTER = '/api/v1/newsletter';
 const API_URL_ADMIN_METRICAS = '/api/v1/admin/metricas';
-const API_URL_ADMIN_IMPORTAR_NOTICIA = '/api/v1/automacao/importar-noticias';
-const API_URL_ADMIN_LIMPAR_DATABASE = '/api/v1/manutencao/limpar-database';
+const API_URL_ADMIN_IMPORTAR_NOTICIA = '/api/v1/admin/automacao/importar-noticias';
+const API_URL_ADMIN_LIMPAR_DATABASE = '/api/v1/admin/manutencao/limpar-database';
 
 // Lista única das editorias usadas no frontend
 const OPCOES_EDITORIA = [
