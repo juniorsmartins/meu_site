@@ -78,9 +78,25 @@
                             <p id="kpi-detalhe-portais" class="kpi-subtexto">Carregando estatísticas...</p>
                         </div>
                         <div class="kpi-footer">
-                            <button id="btn-importar-rss" class="btn-manutencao btn-primario">
-                                <i class="bi bi-cloud-arrow-down-fill"></i> Importar Notícias
-                            </button>
+                            <!-- Grupo de botão dividido (Split Button Group) com Dropdown -->
+                            <!-- Permite acionar a importação geral pelo botão principal ou escolher um portal específico no menu. -->
+                            <div class="btn-split-container">
+                                <button id="btn-importar-rss" class="btn-manutencao btn-primario btn-split-principal">
+                                    <i class="bi bi-cloud-arrow-down-fill"></i> Importar Notícias
+                                </button>
+                                <button id="btn-toggle-dropdown-rss" class="btn-manutencao btn-primario btn-split-arrow" title="Escolher Portal Específico">
+                                    <i class="bi bi-chevron-down"></i>
+                                </button>
+                                
+                                <!-- Menu suspenso de portais -->
+                                <ul id="menu-dropdown-rss" class="dropdown-menu-rss escondido">
+                                    <li><button class="item-dropdown-rss" data-portal="TODOS"><i class="bi bi-arrow-repeat"></i> Todos os Portais</button></li>
+                                    <li class="dropdown-divisor"></li>
+                                    <li><button class="item-dropdown-rss" data-portal="TSE"><i class="bi bi-bank"></i> Apenas TSE</button></li>
+                                    <li><button class="item-dropdown-rss" data-portal="Agência Câmara"><i class="bi bi-building"></i> Apenas Agência Câmara</button></li>
+                                    <li><button class="item-dropdown-rss" data-portal="Agência Brasil"><i class="bi bi-newspaper"></i> Apenas Agência Brasil</button></li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
 
