@@ -1,4 +1,9 @@
-import { API_URL, OPCOES_EDITORIA } from './config.js';
+import { 
+    API_URL_NOTICIAS, 
+    API_URL_ADMIN_IMPORTAR_NOTICIA, 
+    API_URL_ADMIN_LIMPAR_DATABASE, 
+    OPCOES_EDITORIA 
+} from './constantsConfig.js';
 
 const LIMITE_NOTICIAS_POR_PAGINA = 12;
 
@@ -13,13 +18,15 @@ let aguardandoConfirmacaoLimpeza = false;
 let timerConfirmacaoLimpeza = null;
 
 document.addEventListener(`DOMContentLoaded`, async () => {
+
     configurarEventosPaginacao(); // Inicializa os botões de paginação
     configurarEventosManutencao(); // Inicializa os botões do Painel KPI
-    await carregarPainelMetricas(); 
-    await carregarTabelaNoticias();
+    await carregarPainelMetricas(); // Carrega os dados do painel de métricas
+    await carregarTabelaNoticias(); // Carrega a tabela de notícias com base na página atual
 });
 
 function configurarEventosPaginacao() {
+
     const btnAnterior = document.getElementById("btn-pagina-anterior");
     const btnProxima = document.getElementById("btn-pagina-proxima");
 
@@ -72,7 +79,7 @@ async function executarImportacaoRss() {
 
     try {
 
-        const resposta = await fetch("/api/automacao/importar", { method: "POST" });
+        const resposta = await fetch(API_URL_ADMIN_IMPORTAR_NOTICIA, { method: "POST" });
         if (!resposta.ok) {
             throw new Error(`Erro na importação: ${resposta.status}`);
         }
@@ -103,8 +110,9 @@ async function executarImportacaoRss() {
     }
 }
 
-// 2. Ação de Limpar Banco com Clique Duplo (DELETE /api/manutencao/limpar-database)
+// 2. Ação de Limpar Banco com Clique Duplo (DELETE /api/v1/manutencao/limpar-database)
 async function executarLimpezaBanco() {
+    
     const btn = document.getElementById("btn-limpar-banco");
     if (!btn) return;
 
@@ -134,7 +142,7 @@ async function executarLimpezaBanco() {
     atualizarCardStatus("Limpando...", "Removendo registros excedentes", "Processando");
 
     try {
-        const resposta = await fetch("/api/manutencao/limpar-database", { method: "DELETE" });
+        const resposta = await fetch(API_URL_ADMIN_LIMPAR_DATABASE, { method: "DELETE" });
         
         if (!resposta.ok) {
             throw new Error(`Erro na limpeza: ${resposta.status}`);
@@ -168,6 +176,7 @@ async function executarLimpezaBanco() {
  * Auxiliar para restaurar o estado visual original do botão de limpeza
  */
 function resetarBotaoLimpeza(btn) {
+
     aguardandoConfirmacaoLimpeza = false;
     if (timerConfirmacaoLimpeza) clearTimeout(timerConfirmacaoLimpeza);
     
@@ -178,6 +187,7 @@ function resetarBotaoLimpeza(btn) {
 
 // Auxiliar para atualizar o 3º Card ("Última Operação")
 function atualizarCardStatus(titulo, subtexto, badge) {
+
     const elTitulo = document.getElementById("kpi-status-operacao");
     const elSubtexto = document.getElementById("kpi-detalhe-operacao");
     const elBadge = document.getElementById("badge-tempo-operacao");
@@ -230,7 +240,7 @@ async function carregarTabelaNoticias() {
 
 async function buscarNoticiasPaginadas(pagina, limite) {
 
-    const response = await fetch(`${API_URL}?pagina=${pagina}&limite=${limite}`);
+    const response = await fetch(`${API_URL_NOTICIAS}?pagina=${pagina}&limite=${limite}`);
     if (!response.ok) {
         throw new Error(`Falha na requisição: ${response.status}`);
     }
@@ -401,7 +411,7 @@ async function salvarEdicao(idNoticia) {
     };
 
     try {
-        const resposta = await fetch(`${API_URL}/${idNoticia}`, {
+        const resposta = await fetch(`${API_URL_NOTICIAS}/${idNoticia}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(dadosAtualizados)
@@ -424,7 +434,7 @@ async function deletarNoticia(idNoticia) {
     if (!confirm("Tem certeza que deseja excluir esta notícia?")) return;
 
     try {
-        const resposta = await fetch(`${API_URL}/${idNoticia}`, { method: "DELETE" });
+        const resposta = await fetch(`${API_URL_NOTICIAS}/${idNoticia}`, { method: "DELETE" });
         if (!resposta.ok) {
             throw new Error("Erro ao excluir notícia"); 
         }
@@ -449,7 +459,7 @@ async function carregarPainelMetricas() {
 
     try {
 
-        const resposta = await fetch("/api/admin/metricas");
+        const resposta = await fetch(API_URL_ADMIN_METRICAS);
         if (!resposta.ok) throw new Error(`Status ${resposta.status}`);
 
         const dados = await resposta.json();
