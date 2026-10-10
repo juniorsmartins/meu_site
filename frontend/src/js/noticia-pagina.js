@@ -1,4 +1,4 @@
-import { SITE_CONFIG } from "./config.js";
+import { SITE_CONFIG, API_URL_NOTICIAS } from "./constantsConfig.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
     
@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // Busca a notícia na API
-    const API_URL = `/api/noticias/${noticiaId}`;
+    const API_URL = `${API_URL_NOTICIAS}/${noticiaId}`;
 
     try {
         const response = await fetch(API_URL, { cache: "no-store" });
@@ -54,9 +54,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (textoLegenda) {
                 legendaEl.textContent = textoLegenda;
                 legendaEl.style.display = "block";
+
             } else {
                 legendaEl.style.display = "none";
             }
+            
         } else if (containerImg) {
             containerImg.style.display = "none"; 
         }

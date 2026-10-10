@@ -1,3 +1,5 @@
+import { API_URL_NOTICIAS } from './constantsConfig.js';
+
 document.addEventListener("DOMContentLoaded", async () => {
     const carrosselContainer = document.getElementById("carrossel-container");
 
@@ -23,7 +25,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function carregarCarrosselCompleto() {
 
-    const API_URL = "/api/noticias?limite=8";
+    const API_URL = `${API_URL_NOTICIAS}?limite=8`;
 
     try {
 
@@ -159,7 +161,4 @@ function renderizarCarrossel3(noticias) {
     /* Adiciona o fragmento ao carrossel */
     carrossel3.appendChild(fragment);        
 }
-
-
-
 

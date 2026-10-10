@@ -1,4 +1,4 @@
-export function getFormattedDate() {
+function getFormattedDate() {
     const now = new Date();
     const day = String(now.getDate()).padStart(2, '0');
     const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -6,8 +6,7 @@ export function getFormattedDate() {
     return `${day}/${month}/${year}`;
 }
 
-
-export function getDatePorExtenso() {
+function getDatePorExtenso() {
 
     const now = new Date();
 
@@ -22,7 +21,7 @@ export function getDatePorExtenso() {
     return dataFormatada.charAt(0).toUpperCase() + dataFormatada.slice(1);
 }
 
-export function getTimeHM() {
+function getTimeHM() {
 
     const now = new Date();
 
@@ -32,4 +31,5 @@ export function getTimeHM() {
 		}).format(now);
 }
 
+export { getFormattedDate, getDatePorExtenso, getTimeHM };
 

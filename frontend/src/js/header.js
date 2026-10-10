@@ -1,5 +1,5 @@
 import { getDatePorExtenso, getTimeHM } from "./utils.js";
-import { SITE_CONFIG } from "./config.js"; // Importa variável global
+import { SITE_CONFIG } from "./constantsConfig.js"; // Importa variável global
 
 document.addEventListener("DOMContentLoaded", async () => {
     const headerContainer = document.getElementById("header-container"); // Container principal do header no index.html
@@ -50,6 +50,7 @@ document.addEventListener("DOMContentLoaded", async () => {
  * Atualiza o elemento de hora com o fuso horário atual do usuário
  */
 function atualizarHoraDinamica() {
+    
     const horaEl = document.getElementById("hora-extenso");
     if (horaEl) {
         horaEl.textContent = getTimeHM();

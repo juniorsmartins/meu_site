@@ -1,4 +1,4 @@
-import { SITE_CONFIG } from "./config.js";
+import { SITE_CONFIG, API_URL_CONTATO_LEITOR } from "./constantsConfig.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     preencherInformacoesDinamicas();
@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function preencherInformacoesDinamicas() {
+
     // Leitura direta e estrita de SITE_CONFIG
     document.getElementById("contato-info-email").textContent = SITE_CONFIG.emailRedacao;
     document.getElementById("contato-info-localizacao").textContent = SITE_CONFIG.localizacaoPadrao;
@@ -16,6 +17,7 @@ function preencherInformacoesDinamicas() {
 }
 
 function configurarEnvioContato() {
+
     const form = document.getElementById("form-contato");
     const msgFeedback = document.getElementById("contato-mensagem-feedback");
 
@@ -38,7 +40,7 @@ function configurarEnvioContato() {
             btnSubmit.disabled = true;
             btnSubmit.innerHTML = `<i class="bi bi-hourglass-split"></i> Enviando...`;
 
-            const response = await fetch("/api/contato-leitor", {
+            const response = await fetch(API_URL_CONTATO_LEITOR, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)
@@ -50,10 +52,12 @@ function configurarEnvioContato() {
                 msgFeedback.className = "contato-msg-feedback sucesso";
                 msgFeedback.textContent = resultado.message || "Sua mensagem foi enviada com sucesso!";
                 form.reset();
+
             } else {
                 msgFeedback.className = "contato-msg-feedback erro";
                 msgFeedback.textContent = resultado.error || "Não foi possível enviar sua mensagem.";
             }
+            
             msgFeedback.style.display = "block";
 
         } catch (error) {
@@ -61,6 +65,7 @@ function configurarEnvioContato() {
             msgFeedback.className = "contato-msg-feedback erro";
             msgFeedback.textContent = "Erro de conexão ao enviar a mensagem. Tente novamente mais tarde.";
             msgFeedback.style.display = "block";
+
         } finally {
             btnSubmit.disabled = false;
             btnSubmit.innerHTML = `<i class="bi bi-send-fill"></i> Enviar Mensagem`;

@@ -1,10 +1,11 @@
-import { SITE_CONFIG } from "./config.js";
+import { SITE_CONFIG, API_URL_NEWSLETTER } from "./constantsConfig.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     carregarFooter();
 });
 
 async function carregarFooter() {
+
     const footerContainer = document.getElementById("footer-container");
     if (!footerContainer) return;
 
@@ -28,6 +29,7 @@ async function carregarFooter() {
 }
 
 function atualizarTextosBranding() {
+
     // 1. Atualiza o copyright na barra inferior
     const copyrightEl = document.querySelector(".copyright-info p");
     if (copyrightEl) {
@@ -42,6 +44,7 @@ function atualizarTextosBranding() {
 }
 
 function configurarFormularioNewsletter() {
+
     const form = document.querySelector(".newsletter-form");
     const msgContainer = document.getElementById("newsletter-mensagem");
     if (!form) return;
@@ -66,7 +69,7 @@ function configurarFormularioNewsletter() {
             btnSubmit.disabled = true;
             btnSubmit.textContent = "Enviando...";
 
-            const response = await fetch("/api/newsletter", {
+            const response = await fetch(API_URL_NEWSLETTER, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email })
@@ -79,6 +82,7 @@ function configurarFormularioNewsletter() {
                     msgContainer.textContent = resultado.message || "Inscrição realizada com sucesso!";
                     msgContainer.classList.add("sucesso");
                     inputEmail.value = "";
+
                 } else {
                     msgContainer.textContent = resultado.message || resultado.error || "Não foi possível realizar a inscrição.";
                     msgContainer.classList.add("erro");
@@ -93,6 +97,7 @@ function configurarFormularioNewsletter() {
                 msgContainer.classList.add("erro");
                 msgContainer.style.display = "block";
             }
+            
         } finally {
             btnSubmit.disabled = false;
             btnSubmit.textContent = "Assinar";

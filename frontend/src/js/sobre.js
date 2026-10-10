@@ -1,10 +1,11 @@
-import { SITE_CONFIG } from "./config.js";
+import { SITE_CONFIG } from "./constantsConfig.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     preencherInformacoesDinamicas();
 });
 
 function preencherInformacoesDinamicas() {
+    
     // 1. Título e Slogan Principal
     const tituloEl = document.getElementById("sobre-titulo-principal");
     const sloganEl = document.getElementById("sobre-slogan-destaque");

@@ -1,4 +1,5 @@
-// ============================================================================
+import { API_URL_NOTICIAS } from "./constantsConfig.js";
+
 // CONFIGURAÇÕES GLOBAIS E ESTRUTURA DAS EDITORIAS (JS-FIRST)
 // ============================================================================
 
@@ -8,12 +9,6 @@ const IMAGEM_PLACEHOLDER = "https://us.123rf.com/450wm/koblizeek/koblizeek2204/k
 /**
  * Array de Configuração Central de Editorias (Estratégia JS-First)
  * Permite adicionar, remover ou reordenar colunas do portal modificando apenas este array.
- * 
- * Atributos de cada seção:
- * - titulo: Nome exibido no cabeçalho da coluna.
- * - editoria: Chave de filtro enviada para a API backend.
- * - comFoto: Define se o card usará template com imagem (true) ou sem imagem (false).
- * - limite: Quantidade máxima de notícias a carregar para a coluna.
  */
 const SECOES_EDITORIAS = [
     // --- Primeira Linha de Colunas (Com Foto) ---
@@ -37,6 +32,7 @@ const SECOES_EDITORIAS = [
 
 // Executa a inicialização assim que todo o DOM da página principal for carregado
 document.addEventListener("DOMContentLoaded", async () => {
+
     // Localiza o elemento container na página inicial onde o módulo será inserido
     const containerNoticiasPorEditoria = document.getElementById("container-noticias-por-editoria"); 
     
@@ -64,6 +60,7 @@ document.addEventListener("DOMContentLoaded", async () => {
  * e o injeta dinamicamente dentro do container da página inicial.
  */
 async function garantirEstruturaEditorias(containerNoticiasPorEditoria) {
+
     // Verifica se o wrapper do grid já foi injetado para evitar requisições duplicadas
     const jaEstaCarregado = document.getElementById("noticias-wraper-2");
     if (jaEstaCarregado) return; 
@@ -83,6 +80,7 @@ async function garantirEstruturaEditorias(containerNoticiasPorEditoria) {
  * cada coluna, realiza a busca das notícias no banco e desenha os cards na tela.
  */
 async function renderizarTodasAsEditorias() {
+
     const wrapperGrid = document.getElementById("noticias-wraper-2");
     const templateComFoto = document.getElementById("template-noticia-com-foto");
     const templateSemFoto = document.getElementById("template-noticia-sem-foto");
@@ -118,6 +116,7 @@ async function renderizarTodasAsEditorias() {
  * Cria o elemento container <div> da coluna com seu cabeçalho de título.
  */
 function criarElementoColuna(secao) {
+
     const divColuna = document.createElement("div");
     
     // Adiciona a classe base e uma classe adicional caso a coluna não utilize imagem
@@ -141,8 +140,9 @@ function criarElementoColuna(secao) {
  * Monta a URL de busca adequada e consome a rota da API do MongoDB.
  */
 async function buscarNoticiasDoBackend(secao) {
+
     // URL base definindo a quantidade limite de notícias a retornar
-    let url = `/api/noticias?limite=${secao.limite}`;
+    let url = `${API_URL_NOTICIAS}?limite=${secao.limite}`;
     
     // Se a coluna for diferente de 'ultimas', inclui o filtro de editoria específica na query
     if (secao.editoria !== "ultimas") {
@@ -157,6 +157,7 @@ async function buscarNoticiasDoBackend(secao) {
         
         // Trata o retorno aceitando tanto arrays diretos quanto objetos paginados
         return Array.isArray(dados) ? dados : (dados.noticias || []);
+
     } catch (error) {
         console.error(`Erro ao buscar notícias no backend para '${secao.titulo}':`, error);
         return [];
@@ -192,6 +193,7 @@ function renderizarListaEmColuna(containerLista, noticias, template, comFoto) {
  * e retorna o elemento pronto para renderização.
  */
 function criarCardNoticia(noticia, template, comFoto) {
+
     // Clona a árvore de nós do template indicado
     const clone = template.content.cloneNode(true);
     
@@ -226,3 +228,4 @@ function criarCardNoticia(noticia, template, comFoto) {
 function navegarParaNoticia(noticiaId) {
     window.location.href = `../html/noticia-pagina.html?id=${noticiaId}`;
 }
+
