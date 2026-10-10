@@ -129,7 +129,7 @@ async function executarImportacaoRss(portal = "TODOS") {
         }
 
         paginaAtual = 1;
-        await carregarPainelMetrics();
+        await carregarPainelMetricas();
         await carregarTabelaNoticias();
 
     } catch (error) {
