@@ -23,7 +23,7 @@ adminRouter.post("/automacao/importar-noticias", automacaoImportarNoticiaControl
 comunicacaoRouter.post("/newsletter", newsletterCriarController);
 comunicacaoRouter.post("/contato-leitor", contatoLeitorCriarController);
 
-// Rotas de Notícias
+// NOTICIAS - Rotas de Notícias
 noticiaRouter.post("/", noticiaCriarController);
 noticiaRouter.get("/", noticiaPesquisarController);
 noticiaRouter.get("/:id", noticiaConsultarPorIdController);
