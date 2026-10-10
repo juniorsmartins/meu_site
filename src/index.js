@@ -5,9 +5,7 @@ import {
     noticiaRouter, 
     newsletterRouter, 
     contatoLeitorRouter, 
-    adminRouter,
-    manutencaoRouter, 
-    automacaoRouter
+    adminRouter
 } from './router.js';
 
 const app = express(); /* Cria uma instância do aplicativo Express */
@@ -34,8 +32,6 @@ app.use("/v1/noticias", noticiaRouter);
 app.use("/v1/newsletter", newsletterRouter); 
 app.use("/v1/contato-leitor", contatoLeitorRouter);
 app.use("/v1/admin", adminRouter);
-// app.use("/v1/admin", manutencaoRouter);
-// app.use("/v1/admin", automacaoRouter);
 
 // Exportação padrão necessária para Serverless na Vercel
 export default app;
