@@ -15,7 +15,6 @@
     background-color: var(--blue-900);
 }
 
-/* --- Estrutura da Barra do Topo --- */
 .header-topo-info {
     display: flex;
     align-items: center;
@@ -30,12 +29,19 @@
     position: relative;
 }
 
-/* Divisor elegante em ponto (•) entre as informações */
+/* Divisor em ponto (•) entre as informações */
 .header-topo-info p:not(:last-child)::after {
     content: "•";
     margin-left: 0.8rem;
     color: rgba(255, 255, 255, 0.4);
     font-size: 0.75rem;
+}
+
+/* Estilização do Ícone de Bússola no Topo */
+.icone-bussola {
+    color: var(--blue-300);
+    margin-right: 0.35rem;
+    font-size: 0.85rem;
 }
 
 /* ====================================================
@@ -70,15 +76,41 @@
 .header-apresentacao-branding {
     text-align: center;
     flex: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Wrapper e Ícone do Cesto da Gávea na Logo */
+.header-logo-wrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+}
+
+.logo-icone-gavea {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background-color: var(--blue-700);
+    border: 1px solid var(--blue-300);
+    color: #F1C40F; /* Cor dourada representando o olhar atento */
+    border-radius: 50%;
+    font-size: 1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 #header-apresentacao-nome-titulo {
     font-family: 'Playfair Display', serif;
-    font-size: 2.5rem; /* Proporção ideal para o título central */
+    font-size: 2.5rem;
     color: #FFFFFF;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
     line-height: 1.1;
+    margin: 0;
 }
 
 #header-apresentacao-nome-subtitulo {
@@ -87,6 +119,7 @@
     font-size: 0.85rem;
     color: var(--blue-100);
     margin-top: 0.3rem;
+    letter-spacing: 0.5px;
 }
 
 /* Estilização da Temperatura e Ícone do Tempo no Topo */
@@ -99,7 +132,7 @@
 }
 
 #clima-extenso i {
-    color: #F1C40F; /* Cor amarela dourada para o sol/clima */
+    color: #F1C40F;
     font-size: 0.95rem;
 }
 
@@ -152,13 +185,11 @@
     border-radius: 4px;
 }
 
-/* Efeito Hover nos Links */
 #header-navbar a.nav-link:hover {
     color: #FFFFFF;
     background-color: rgba(255, 255, 255, 0.08);
 }
 
-/* Indicador de Link Ativo (Página Atual) */
 #header-navbar a.nav-link.active {
     color: #FFFFFF;
     font-weight: 700;
