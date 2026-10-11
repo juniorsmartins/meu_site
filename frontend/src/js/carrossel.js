@@ -161,4 +161,3 @@ function renderizarCarrossel3(noticias) {
     carrossel3.appendChild(fragment);        
 }
 
-

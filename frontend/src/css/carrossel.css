@@ -8,7 +8,6 @@
     gap: 1.5rem;
 }
 
-/* Container Superior (Carrossel 1 + Carrossel 2) */
 #noticias-1 > .flex {
     display: flex;
     gap: 1.5rem;
@@ -16,7 +15,7 @@
 }
 
 /* ----------------------------------------------------
-   1. Carrossel 1 (Destaque Principal)
+1. Carrossel 1 (Destaque Principal)
 ---------------------------------------------------- */
 #carrossel-1 {
     width: 60%;
@@ -47,18 +46,42 @@
     transform: scale(1.02);
 }
 
+/* Wrapper do gradiente e textos do Destaque Principal */
+.noticia-overlay-conteudo {
+    width: 100%;
+    padding: 2rem 1.25rem 1.25rem 1.25rem;
+    background: linear-gradient(180deg, transparent 0%, rgba(13, 71, 161, 0.95) 100%);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+/* Badge "NA GÁVEA" */
+.badge-cavea {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background-color: #F1C40F;
+    color: #0D47A1;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
 #carrossel-1-item h2 {
     width: 100%;
     margin: 0;
-    padding: 2rem 1.25rem 1.25rem 1.25rem;
     color: #FFFFFF;
     font-family: 'Playfair Display', serif;
     font-size: 1.6rem;
     font-weight: 800;
     line-height: 1.3;
-    /* Gradiente suave de leitura que substitui a caixa preta sólida */
-    background: linear-gradient(180deg, transparent 0%, rgba(13, 71, 161, 0.92) 100%);
-    box-sizing: border-box;
 }
 
 /* ----------------------------------------------------
@@ -105,7 +128,6 @@
     line-height: 1.3;
     background: linear-gradient(180deg, transparent 0%, rgba(13, 71, 161, 0.9) 100%);
     box-sizing: border-box;
-    /* Limita o texto a no máximo 3 linhas */
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
