@@ -19,7 +19,7 @@ const SECOES_EDITORIAS = [
     { titulo: "Esportes", editoria: "esportes", comFoto: true },
     { titulo: "Polícia", editoria: "polícia", comFoto: true },
     { titulo: "Saúde", editoria: "saúde", comFoto: true },
-    { titulo: "Turismo", editoria: "turismo", comFoto: true },
+    { titulo: "Geral", editoria: "geral", comFoto: true },
     { titulo: "Últimas Notícias", editoria: "ultimas", comFoto: false }
 ];
 
