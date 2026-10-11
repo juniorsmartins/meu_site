@@ -1,15 +1,17 @@
-import { API_URL_NOTICIAS } from './constantsConfig.js';
+import { obterDadosCapa } from './index.js';
+
+console.log("Arquivo carrossel.js carregado.");
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const carrosselContainer = document.getElementById("carrossel-container");
 
+    const carrosselContainer = document.getElementById("carrossel-container");
     if (!carrosselContainer) {
         return;
     }
 
     try {
-        const response = await fetch("../html/carrossel.html");
 
+        const response = await fetch("../html/carrossel.html");
         if (!response.ok) {
             throw new Error(`Erro ao carregar carrossel.html: ${response.status}`);
         }
@@ -25,28 +27,25 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function carregarCarrosselCompleto() {
 
-    const API_URL = `${API_URL_NOTICIAS}?limite=8`;
-
     try {
 
-        // Faz a requisição para a API de notícias
-        // Desativa o cache da requisição para sempre buscar os dados atualizados do MongoDB
-        const response = await fetch(API_URL, { cache: "no-store" });
-
-        if (!response.ok) {
-            throw new Error(`Erro ao carregar notícias: ${response.status}`);
+        // Consumo do estado unificado da Capa obtido da rota /api/v1/noticias/capa
+        // Receber as notícias já filtradas e ordenadas por curadoria editorial e fallback.
+        const dadosCapa = await obterDadosCapa();
+        if (!dadosCapa) {
+            throw new Error("Nenhum dado retornado da Capa");
         }
 
-        const dados = await response.json();
-        const noticias = Array.isArray(dados) ? dados : (dados.noticias || []);
+        // 1. Destaque Principal (1 notícia)
+        renderizarCarrossel1(dadosCapa.destaquePrincipal);
 
-        if (!noticias || noticias.length === 0) {
-            throw new Error("Nenhuma notícia encontrada");
-        }
+        // 2. Destaques Secundários (Primeiro grupo do topo: posições 0 a 3)
+        const secundariosBloco1 = (dadosCapa.destaquesSecundarios || []).slice(0, 4);
+        renderizarCarrossel2(secundariosBloco1);
 
-        renderizarCarrossel1(noticias[0]);
-        renderizarCarrossel2(noticias.slice(1, 5));
-        renderizarCarrossel3(noticias.slice(5, 8));
+        // 3. Destaques Secundários (Segundo grupo: posições 4 a 6)
+        const secundariosBloco2 = (dadosCapa.destaquesSecundarios || []).slice(4, 7);
+        renderizarCarrossel3(secundariosBloco2);
 
     } catch (error) {
         console.error("Erro ao carregar carrossel completo", error);
@@ -161,4 +160,5 @@ function renderizarCarrossel3(noticias) {
     /* Adiciona o fragmento ao carrossel */
     carrossel3.appendChild(fragment);        
 }
+
 

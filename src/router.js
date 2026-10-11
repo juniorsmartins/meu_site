@@ -9,6 +9,7 @@ import { noticiaPesquisarController } from './controllers/noticiaPesquisarContro
 import { noticiaConsultarPorIdController } from './controllers/noticiaConsultarController.js';
 import { noticiaAtualizarController } from './controllers/noticiaAtualizarController.js';
 import { noticiaDeletarPorIdController } from './controllers/noticiaDeleteController.js';
+import { noticiaCapaController } from './controllers/noticiaCapaController.js';
 
 const adminRouter = express.Router();
 const comunicacaoRouter = express.Router();
@@ -24,6 +25,7 @@ comunicacaoRouter.post("/newsletter", newsletterCriarController);
 comunicacaoRouter.post("/contato-leitor", contatoLeitorCriarController);
 
 // NOTICIAS - Rotas de Notícias
+noticiaRouter.get("/capa", noticiaCapaController);
 noticiaRouter.post("/", noticiaCriarController);
 noticiaRouter.get("/", noticiaPesquisarController);
 noticiaRouter.get("/:id", noticiaConsultarPorIdController);

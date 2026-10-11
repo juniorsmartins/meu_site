@@ -1,4 +1,6 @@
-import { API_URL_NOTICIAS } from "./constantsConfig.js";
+import { obterDadosCapa } from "./index.js";
+
+console.log("Arquivo noticia-editoria.js carregado.");
 
 // CONFIGURAÇÕES GLOBAIS E ESTRUTURA DAS EDITORIAS (JS-FIRST)
 // ============================================================================
@@ -11,19 +13,14 @@ const IMAGEM_PLACEHOLDER = "https://us.123rf.com/450wm/koblizeek/koblizeek2204/k
  * Permite adicionar, remover ou reordenar colunas do portal modificando apenas este array.
  */
 const SECOES_EDITORIAS = [
-    // --- Primeira Linha de Colunas (Com Foto) ---
-    { titulo: "Política", editoria: "política", comFoto: true, limite: 3 },
-    { titulo: "Economia", editoria: "economia", comFoto: true, limite: 3 },
-    { titulo: "Tecnologia", editoria: "tecnologia", comFoto: true, limite: 3 },
-    { titulo: "Esportes", editoria: "esportes", comFoto: true, limite: 3 },
-
-    // --- Segunda Linha de Colunas ---
-    { titulo: "Turismo", editoria: "turismo", comFoto: true, limite: 3 },
-    { titulo: "Meio Ambiente", editoria: "meio ambiente", comFoto: true, limite: 3 },
-    { titulo: "Saúde", editoria: "saúde", comFoto: true, limite: 3 },
-    
-    // Coluna especial compacta (sem imagem e com lista expandida)
-    { titulo: "Últimas Notícias", editoria: "ultimas", comFoto: false, limite: 10 }
+    { titulo: "Política", editoria: "política", comFoto: true },
+    { titulo: "Economia", editoria: "economia", comFoto: true },
+    { titulo: "Tecnologia", editoria: "tecnologia", comFoto: true },
+    { titulo: "Esportes", editoria: "esportes", comFoto: true },
+    { titulo: "Turismo", editoria: "turismo", comFoto: true },
+    { titulo: "Meio Ambiente", editoria: "meio ambiente", comFoto: true },
+    { titulo: "Saúde", editoria: "saúde", comFoto: true },
+    { titulo: "Últimas Notícias", editoria: "ultimas", comFoto: false }
 ];
 
 // ============================================================================
@@ -91,24 +88,27 @@ async function renderizarTodasAsEditorias() {
     // Limpa o conteúdo do wrapper antes de iniciar a montagem
     wrapperGrid.innerHTML = ""; 
 
-    // Itera sequencialmente sobre cada seção configurada no array JS-First
+    const dadosCapa = await obterDadosCapa();
+    if (!dadosCapa) return;
+
+    // Itera sobre cada seção configurada no array SECOES_EDITORIAS e monta as colunas correspondentes no grid.
     for (const secao of SECOES_EDITORIAS) {
-        
-        // 1. Cria a estrutura HTML da coluna (cabeçalho h2 + container da lista)
+
         const colunaElement = criarElementoColuna(secao);
         wrapperGrid.appendChild(colunaElement);
 
-        // 2. Obtém a referência interna da lista de notícias recém-criada
         const containerLista = colunaElement.querySelector(".noticias-lista");
-        
-        // 3. Define qual template HTML será utilizado com base na propriedade comFoto
         const templateAdequado = secao.comFoto ? templateComFoto : templateSemFoto;
 
-        // 4. Faz a requisição à API backend para buscar as notícias da coluna
-        const noticias = await buscarNoticiasDoBackend(secao);
+        // Seleção direta do array de notícias a partir da chave do JSON
+        let noticiasDaColuna = [];
+        if (secao.editoria === "ultimas") {
+            noticiasDaColuna = dadosCapa.ultimasNoticias || [];
+        } else {
+            noticiasDaColuna = (dadosCapa.editorias && dadosCapa.editorias[secao.editoria]) || [];
+        }
 
-        // 5. Preenche a coluna na tela com os dados obtidos da API
-        renderizarListaEmColuna(containerLista, noticias, templateAdequado, secao.comFoto);
+        renderizarListaEmColuna(containerLista, noticiasDaColuna, templateAdequado, secao.comFoto);
     }
 }
 
@@ -228,4 +228,5 @@ function criarCardNoticia(noticia, template, comFoto) {
 function navegarParaNoticia(noticiaId) {
     window.location.href = `../html/noticia-pagina.html?id=${noticiaId}`;
 }
+
 

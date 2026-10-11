@@ -4,6 +4,7 @@ const API_URL_ADMIN_IMPORTAR_NOTICIA = '/api/v1/admin/automacao/importar-noticia
 const API_URL_ADMIN_LIMPAR_DATABASE = '/api/v1/admin/manutencao/limpar-database';
 const API_URL_COMUNICACAO_NEWSLETTER = '/api/v1/comunicacao/newsletter';
 const API_URL_COMUNICACAO_CONTATO_LEITOR = '/api/v1/comunicacao/contato-leitor';
+const API_URL_NOTICIAS_CAPA = '/api/v1/noticias/capa';
 const API_URL_NOTICIAS = '/api/v1/noticias';
 
 // Lista única das editorias usadas no frontend
@@ -41,6 +42,7 @@ export {
     API_URL_ADMIN_LIMPAR_DATABASE,
     API_URL_COMUNICACAO_CONTATO_LEITOR,
     API_URL_COMUNICACAO_NEWSLETTER,
+    API_URL_NOTICIAS_CAPA,
     API_URL_NOTICIAS, 
     OPCOES_EDITORIA, 
     SITE_CONFIG 
