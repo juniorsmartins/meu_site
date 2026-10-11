@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         // Atualiza a tag <title> do navegador automaticamente
-        document.title = `${SITE_CONFIG.nome} - Jornalismo Independente`;
+        document.title = `${SITE_CONFIG.nome} | Jornalismo Independente`;
 
         document.getElementById("data-extenso").textContent = getDatePorExtenso(); // Atualiza a data por extenso no header
 
@@ -88,8 +88,9 @@ async function carregarLocalizacaoEClimaDoCliente() {
         console.warn("Uso do fallback de localização padrão:", e);
     }
 
+    // Manutenção do ícone de bússola náutica junto da localização 
     if (localizacao) {
-        localizacao.textContent = localTexto;
+        localizacao.innerHTML = `<i class="bi bi-compass-fill icone-bussola"></i> ${localTexto}`;
     }
 
     // Busca a temperatura para as coordenadas detectadas
@@ -150,5 +151,4 @@ function destacarPaginaAtiva() {
         }
     });
 }
-
 
