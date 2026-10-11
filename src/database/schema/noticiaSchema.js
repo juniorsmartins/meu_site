@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import { EDITORIAS } from '../../constants/editorias.js';
 
+console.log("Arquivo noticiaSchema.js carregado.");
+
 const noticiaSchema = new mongoose.Schema(
     {
         chapeu: { type: String, required: true },

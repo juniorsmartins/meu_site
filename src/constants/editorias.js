@@ -1,4 +1,6 @@
-export const EDITORIAS = [
+console.log("Arquivo editorias.js carregado.");
+
+const EDITORIAS = [
     "geral",
     "política", 
     "esportes", 
@@ -14,4 +16,6 @@ export const EDITORIAS = [
     "meio ambiente", 
     "internacional"
 ];
+
+export { EDITORIAS };
 

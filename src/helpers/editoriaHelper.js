@@ -1,5 +1,7 @@
 import { EDITORIAS } from '../constants/editorias.js';
 
+console.log("Arquivo editoriaHelper.js carregado.");
+
 /**
  * Remove acentos e converte para minúsculas
  */

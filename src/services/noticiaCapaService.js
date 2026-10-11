@@ -1,6 +1,8 @@
 import { Noticia } from '../database/schema/noticiaSchema.js';
 import { EDITORIAS } from '../constants/editorias.js';
 
+console.log("Arquivo noticiaCapaService.js carregado.");
+
 /**
  * SERVIÇO DE MONTAGEM DA CAPA DO PORTAL
  * Monta todos os blocos do layout da Home garantindo zero repetição de notícias.

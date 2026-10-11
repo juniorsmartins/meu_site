@@ -11,6 +11,8 @@ import { noticiaAtualizarController } from './controllers/noticiaAtualizarContro
 import { noticiaDeletarPorIdController } from './controllers/noticiaDeleteController.js';
 import { noticiaCapaController } from './controllers/noticiaCapaController.js';
 
+console.log("Arquivo router.js carregado.");
+
 const adminRouter = express.Router();
 const comunicacaoRouter = express.Router();
 const noticiaRouter = express.Router();

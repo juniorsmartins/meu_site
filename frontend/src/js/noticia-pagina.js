@@ -1,5 +1,7 @@
 import { SITE_CONFIG, API_URL_NOTICIAS } from "./constantsConfig.js";
 
+console.log("Arquivo noticia-pagina.js carregado.");
+
 document.addEventListener("DOMContentLoaded", async () => {
     
     // Obtém o ID da notícia na URL

@@ -1,5 +1,7 @@
 import { noticiaCriarService } from '../services/noticiaCriarService.js';
 
+console.log("Arquivo noticiaCriarController.js carregado.");
+
 const noticiaCriarController = async (request, response) => {
 
     const noticia = request.body;

@@ -1,6 +1,8 @@
 import { Noticia } from "../database/schema/noticiaSchema.js"; // Importe seu schema de Notícia
 import { LIMITE_MAXIMO_NOTICIAS_DATABASE } from "../constants/geralConstants.js";
 
+console.log("Arquivo manutencaoLimparDatabaseService.js carregado.");
+
 const manutencaoLimparDatabaseService = async () => {
 
     // Conta o total de notícias no banco de dados

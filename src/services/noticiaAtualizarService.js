@@ -1,5 +1,7 @@
 import { Noticia } from '../database/schema/noticiaSchema.js';
 
+console.log("Arquivo noticiaAtualizarService.js carregado.");
+
 const noticiaAtualizarPorIdService = async (id, request) => {
 
     // Atualiza a notícia e retorna a versão mais recente
