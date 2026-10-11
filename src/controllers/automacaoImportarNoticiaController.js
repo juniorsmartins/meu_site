@@ -1,5 +1,7 @@
 import { automacaoImportarNoticiaService } from "../services/automacaoImportarNoticiaService.js";
 
+console.log("Arquivo automacaoImportarNoticiaController.js carregado.");
+
 const automacaoImportarNoticiaController = async (request, response) => {
 
     try {

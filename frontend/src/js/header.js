@@ -1,5 +1,7 @@
 import { getDatePorExtenso, getTimeHM } from "./utils.js";
-import { SITE_CONFIG } from "./constantsConfig.js"; // Importa variável global
+import { SITE_CONFIG } from "./constantsConfig.js"; // Importa variável 
+
+console.log("Arquivo header.js carregado.");
 
 document.addEventListener("DOMContentLoaded", async () => {
     const headerContainer = document.getElementById("header-container"); // Container principal do header no index.html

@@ -6,6 +6,8 @@ import {
     OPCOES_EDITORIA 
 } from './constantsConfig.js';
 
+console.log("Arquivo noticia-admin.js carregado.");
+
 const LIMITE_NOTICIAS_POR_PAGINA = 12;
 
 // Armazena o HTML original das linhas em edição para permitir a ação de cancelar
@@ -19,15 +21,13 @@ let aguardandoConfirmacaoLimpeza = false;
 let timerConfirmacaoLimpeza = null;
 
 document.addEventListener(`DOMContentLoaded`, async () => {
-
-    configurarEventosPaginacao(); // Inicializa os botões de paginação
-    configurarEventosManutencao(); // Inicializa os botões do Painel KPI
-    await carregarPainelMetricas(); // Carrega os dados do painel de métricas
-    await carregarTabelaNoticias(); // Carrega a tabela de notícias com base na página atual
+    configurarEventosPaginacao();
+    configurarEventosManutencao();
+    await carregarPainelMetricas();
+    await carregarTabelaNoticias();
 });
 
 function configurarEventosPaginacao() {
-
     const btnAnterior = document.getElementById("btn-pagina-anterior");
     const btnProxima = document.getElementById("btn-pagina-proxima");
 
@@ -50,33 +50,27 @@ function configurarEventosPaginacao() {
     }
 }
 
-// Configura os botões do Painel de Manutenção e o Dropdown do RSS
 function configurarEventosManutencao() {
-    
     const btnImportarPrincipal = document.getElementById("btn-importar-rss");
     const btnToggleDropdown = document.getElementById("btn-toggle-dropdown-rss");
     const menuDropdown = document.getElementById("menu-dropdown-rss");
     const btnLimpar = document.getElementById("btn-limpar-banco");
 
-    // Clicar no botão principal importa todos os portais
     if (btnImportarPrincipal) {
         btnImportarPrincipal.addEventListener("click", () => executarImportacaoRss("TODOS"));
     }
 
-    // Alterna a exibição do menu dropdown ao clicar na setinha
     if (btnToggleDropdown && menuDropdown) {
         btnToggleDropdown.addEventListener("click", (e) => {
             e.stopPropagation();
             menuDropdown.classList.toggle("escondido");
         });
 
-        // Fecha o dropdown se o usuário clicar fora dele
         document.addEventListener("click", () => {
             menuDropdown.classList.add("escondido");
         });
     }
 
-    // Escuta os cliques em cada item individual do dropdown (TSE, Câmara, Agência Brasil)
     const itensDropdown = document.querySelectorAll(".item-dropdown-rss");
     itensDropdown.forEach(btnItem => {
         btnItem.addEventListener("click", (e) => {
@@ -91,10 +85,7 @@ function configurarEventosManutencao() {
     }
 }
 
-// 1. Ação de Importar Notícias das Fontes Oficiais 
-// Função de importação com suporte ao parâmetro 'portal'
 async function executarImportacaoRss(portal = "TODOS") {
-
     const btn = document.getElementById("btn-importar-rss");
     const btnArrow = document.getElementById("btn-toggle-dropdown-rss");
     if (!btn) return;
@@ -103,14 +94,12 @@ async function executarImportacaoRss(portal = "TODOS") {
     btn.disabled = true;
     if (btnArrow) btnArrow.disabled = true;
 
-    // Ajusta o texto de progresso de acordo com a escolha
     const textoRotulo = (portal && portal !== "TODOS") ? `Importando ${portal}...` : `Importando Notícias...`;
     btn.innerHTML = `<i class="bi bi-arrow-repeat spin"></i> ${textoRotulo}`;
 
     atualizarCardStatus("Importando...", `Buscando dados ${portal !== "TODOS" ? `em ${portal}` : "em todos os portais"}`, "Processando");
 
     try {
-        // Anexa o parâmetro ?portal=... à URL da requisição
         const urlComQuery = portal !== "TODOS" 
             ? `${API_URL_ADMIN_IMPORTAR_NOTICIA}?portal=${encodeURIComponent(portal)}` 
             : API_URL_ADMIN_IMPORTAR_NOTICIA;
@@ -144,19 +133,15 @@ async function executarImportacaoRss(portal = "TODOS") {
     }
 }
 
-// 2. Ação de Limpar Banco com Clique Duplo (DELETE /api/v1/manutencao/limpar-database)
 async function executarLimpezaBanco() {
-    
     const btn = document.getElementById("btn-limpar-banco");
     if (!btn) return;
 
-    // --- PRIMEIRO CLIQUE: Entra em modo de confirmação ---
     if (!aguardandoConfirmacaoLimpeza) {
         aguardandoConfirmacaoLimpeza = true;
         btn.innerHTML = `<i class="bi bi-exclamation-triangle-fill"></i> Clique p/ Confirmar`;
         btn.classList.add("btn-confirmando");
 
-        // Se o usuário não clicar novamente em 4 segundos, reseta o botão
         timerConfirmacaoLimpeza = setTimeout(() => {
             resetarBotaoLimpeza(btn);
         }, 4000);
@@ -164,11 +149,9 @@ async function executarLimpezaBanco() {
         return;
     }
 
-    // --- SEGUNDO CLIQUE (dentro da janela de 4s): Executa a limpeza ---
     clearTimeout(timerConfirmacaoLimpeza);
     aguardandoConfirmacaoLimpeza = false;
 
-    // Estado de Carregamento
     btn.disabled = true;
     btn.classList.remove("btn-confirmando");
     btn.innerHTML = `<i class="bi bi-arrow-repeat spin"></i> Limpando...`;
@@ -184,14 +167,12 @@ async function executarLimpezaBanco() {
 
         const dados = await resposta.json();
 
-        // Atualiza o Card 3 ("Última Operação") com o resultado da remoção
         atualizarCardStatus(
             `${dados.removidas} Removidas`,
             dados.mensagem || `Base mantida em ${dados.totalAtual} notícias`,
             "Otimizado"
         );
 
-        // Atualiza a tabela e recarrega os contadores dos KPIs
         paginaAtual = 1;
         await carregarPainelMetricas();
         await carregarTabelaNoticias();
@@ -206,11 +187,7 @@ async function executarLimpezaBanco() {
     }
 }
 
-/**
- * Auxiliar para restaurar o estado visual original do botão de limpeza
- */
 function resetarBotaoLimpeza(btn) {
-
     aguardandoConfirmacaoLimpeza = false;
     if (timerConfirmacaoLimpeza) clearTimeout(timerConfirmacaoLimpeza);
     
@@ -219,9 +196,7 @@ function resetarBotaoLimpeza(btn) {
     btn.innerHTML = `<i class="bi bi-trash3-fill"></i> Limpar Banco`;
 }
 
-// Auxiliar para atualizar o 3º Card ("Última Operação")
 function atualizarCardStatus(titulo, subtexto, badge) {
-
     const elTitulo = document.getElementById("kpi-status-operacao");
     const elSubtexto = document.getElementById("kpi-detalhe-operacao");
     const elBadge = document.getElementById("badge-tempo-operacao");
@@ -232,19 +207,16 @@ function atualizarCardStatus(titulo, subtexto, badge) {
 }
 
 async function carregarTabelaNoticias() {
-
     const corpoTabela = document.getElementById(`corpo-tabela-noticias`);
     const kpiTotal = document.getElementById("kpi-total-noticias");
     if (!corpoTabela) return;
 
     try {
-
         const dadosPaginados = await buscarNoticiasPaginadas(paginaAtual, LIMITE_NOTICIAS_POR_PAGINA);
 
         const listaNoticias = dadosPaginados.noticias || [];
         totalPaginas = dadosPaginados.totalPaginas || 1;
 
-        // --- ATUALIZAÇÃO DINÂMICA DO TOTAL NO 1º CARD ---
         if (kpiTotal && dadosPaginados.totalNoticias !== undefined) {
             kpiTotal.textContent = `${dadosPaginados.totalNoticias}`;
         }
@@ -252,7 +224,7 @@ async function carregarTabelaNoticias() {
         if (listaNoticias.length === 0) {
             corpoTabela.innerHTML = `
                 <tr>
-                    <td colspan="7" style="text-align: center;">Nenhuma notícia cadastrada.</td>
+                    <td colspan="8" style="text-align: center;">Nenhuma notícia cadastrada.</td>
                 </tr>
             `;
             atualizarControlesPaginacao(0, 1, 1);
@@ -266,14 +238,13 @@ async function carregarTabelaNoticias() {
         console.error(`Erro ao carregar tabela de notícias:`, error);
         corpoTabela.innerHTML = `
             <tr>
-                <td colspan="7" style="text-align: center; color: red;">Erro ao carregar notícias. Tente recarregar a página.</td>
+                <td colspan="8" style="text-align: center; color: red;">Erro ao carregar notícias. Tente recarregar a página.</td>
             </tr>
         `;
     }
 }
 
 async function buscarNoticiasPaginadas(pagina, limite) {
-
     const response = await fetch(`${API_URL_NOTICIAS}?pagina=${pagina}&limite=${limite}`);
     if (!response.ok) {
         throw new Error(`Falha na requisição: ${response.status}`);
@@ -283,7 +254,6 @@ async function buscarNoticiasPaginadas(pagina, limite) {
 }
 
 function atualizarControlesPaginacao(totalNoticias, pagina, totalDePaginas) {
-
     const btnAnterior = document.getElementById("btn-pagina-anterior");
     const btnProxima = document.getElementById("btn-pagina-proxima");
     const infoPaginacao = document.getElementById("info-paginacao");
@@ -305,19 +275,22 @@ function renderizarLinhasTabela(corpoTabela, listaNoticias) {
     });
 }
 
-// Constrói a linha com os botões de ação e anexa os eventos
+// MODIFICAÇÃO: Criação da linha com os botões de Manchete (Estrela) e Destaque (Bookmark)
 function criarLinhaNoticia(noticia) {
-
     const tr = document.createElement("tr");
     tr.id = `linha-noticia-${noticia._id}`;
-
-    const conteudoResumido = noticia.conteudo && noticia.conteudo.length > 40 
-        ? noticia.conteudo.substring(0, 40) + "..." 
-        : (noticia.conteudo || "");
 
     const linhaFinaResumida = noticia.linhaFina && noticia.linhaFina.length > 20
         ? noticia.linhaFina.substring(0, 20) + "..."
         : (noticia.linhaFina || ""); 
+
+    const btnManchete = noticia.destaquePrincipal 
+        ? `<button class="btn-toggle-status btn-manchete-ativo" title="Remover Manchete"><i class="bi bi-star-fill"></i> Sim</button>`
+        : `<button class="btn-toggle-status btn-status-inativo" title="Definir como Manchete"><i class="bi bi-star"></i> Não</button>`;
+
+    const btnDestaque = noticia.destaqueSecundario
+        ? `<button class="btn-toggle-status btn-destaque-ativo" title="Remover Destaque"><i class="bi bi-bookmark-check-fill"></i> Sim</button>`
+        : `<button class="btn-toggle-status btn-status-inativo" title="Definir como Destaque"><i class="bi bi-bookmark"></i> Não</button>`;
 
     tr.innerHTML = `
         <td class="col-editoria">${noticia.editoria || 'Geral'}</td>
@@ -325,8 +298,9 @@ function criarLinhaNoticia(noticia) {
         <td class="col-titulo">${noticia.titulo || '-'}</td>
         <td class="col-linhaFina">${linhaFinaResumida || '-'}</td>
         <td class="col-autor">${noticia.autor || '-'}</td>
-        <td class="col-conteudo">${conteudoResumido || '-'}</td>
-        <td class="col-acoes">
+        <td class="col-manchete text-center">${btnManchete}</td>
+        <td class="col-destaque text-center">${btnDestaque}</td>
+        <td class="col-acoes text-center">
             <div class="acoes-wrapper">
                 <button class="btn-acao btn-editar" title="Editar Notícia">
                     <i class="bi bi-pencil"></i>
@@ -338,22 +312,76 @@ function criarLinhaNoticia(noticia) {
         </td>
     `;
 
-    // Armazena a notícia tratando valores nulos
     tr.dataset.noticia = JSON.stringify(noticia);
 
-    // Eventos dos botões
     const btnEditar = tr.querySelector(".btn-editar");
     const btnDeletar = tr.querySelector(".btn-deletar");
 
     btnEditar.addEventListener("click", () => ativarModoEdicao(noticia._id));
     btnDeletar.addEventListener("click", () => deletarNoticia(noticia._id));
 
+    // Eventos de clique direto nos botões de destaque da tabela
+    const elBtnManchete = tr.querySelector(".col-manchete button");
+    const elBtnDestaque = tr.querySelector(".col-destaque button");
+
+    if (elBtnManchete) {
+        elBtnManchete.addEventListener("click", () => alternarStatusDestaque(noticia._id, "MANCHETE"));
+    }
+
+    if (elBtnDestaque) {
+        elBtnDestaque.addEventListener("click", () => alternarStatusDestaque(noticia._id, "DESTAQUE"));
+    }
+
     return tr;
 }
 
-// 1. Ativa o modo de edição
-function ativarModoEdicao(id) {
+// MODIFICAÇÃO: Lógica para alternar destaque com exclusividade mútua (Manchete OU Destaque)
+async function alternarStatusDestaque(idNoticia, tipoAcao) {
+    try {
+        const tr = document.getElementById(`linha-noticia-${idNoticia}`);
+        if (!tr) return;
 
+        const noticiaOriginal = JSON.parse(tr.dataset.noticia);
+
+        let novoDestaquePrincipal = noticiaOriginal.destaquePrincipal || false;
+        let novoDestaqueSecundario = noticiaOriginal.destaqueSecundario || false;
+
+        if (tipoAcao === "MANCHETE") {
+            novoDestaquePrincipal = !noticiaOriginal.destaquePrincipal;
+            if (novoDestaquePrincipal) {
+                novoDestaqueSecundario = false;
+            }
+        } else if (tipoAcao === "DESTAQUE") {
+            novoDestaqueSecundario = !noticiaOriginal.destaqueSecundario;
+            if (novoDestaqueSecundario) {
+                novoDestaquePrincipal = false;
+            }
+        }
+
+        const dadosAtualizados = {
+            ...noticiaOriginal,
+            destaquePrincipal: novoDestaquePrincipal,
+            destaqueSecundario: novoDestaqueSecundario
+        };
+
+        const resposta = await fetch(`${API_URL_NOTICIAS}/${idNoticia}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(dadosAtualizados)
+        });
+
+        if (!resposta.ok) throw new Error("Erro ao atualizar destaque");
+
+        await carregarTabelaNoticias();
+
+    } catch (error) {
+        console.error("Erro ao alterar destaque da notícia:", error);
+        alert("Não foi possível atualizar o destaque da notícia.");
+    }
+}
+
+// MODIFICAÇÃO: Modo de edição em linha com controle de seleções exclusivas
+function ativarModoEdicao(id) {
     const tr = document.getElementById(`linha-noticia-${id}`);
     if (!tr) return;
 
@@ -365,21 +393,17 @@ function ativarModoEdicao(id) {
         return;
     }
 
-    // Salva o HTML original caso cancele
     linhasEmEdicao[id] = tr.innerHTML;
 
-    // Constrói o <select>
     const editoriaAtual = (noticia.editoria || "").toLowerCase();
     const opcoesSelect = OPCOES_EDITORIA.map(ed => 
         `<option value="${ed}" ${editoriaAtual === ed.toLowerCase() ? 'selected' : ''}>${ed}</option>`
     ).join("");
 
-    // Trata aspas duplas nos textos para não quebrar os inputs
     const chapeu = (noticia.chapeu || "").replace(/"/g, '&quot;');
     const titulo = (noticia.titulo || "").replace(/"/g, '&quot;');
     const linhaFina = (noticia.linhaFina || "").replace(/"/g, '&quot;');
     const autor = (noticia.autor || "").replace(/"/g, '&quot;');
-    const conteudo = (noticia.conteudo || "").replace(/"/g, '&quot;');
 
     tr.innerHTML = `
         <td>
@@ -391,8 +415,13 @@ function ativarModoEdicao(id) {
         <td><input type="text" id="edit-titulo-${id}" value="${titulo}"></td>
         <td><input type="text" id="edit-linhaFina-${id}" value="${linhaFina}"></td>
         <td><input type="text" id="edit-autor-${id}" value="${autor}"></td>
-        <td><input type="text" id="edit-conteudo-${id}" value="${conteudo}"></td>
-        <td class="col-acoes">
+        <td class="text-center">
+            <input type="checkbox" id="edit-manchete-${id}" ${noticia.destaquePrincipal ? 'checked' : ''}>
+        </td>
+        <td class="text-center">
+            <input type="checkbox" id="edit-destaque-${id}" ${noticia.destaqueSecundario ? 'checked' : ''}>
+        </td>
+        <td class="col-acoes text-center">
             <div class="acoes-wrapper">
                 <button class="btn-acao btn-salvar" title="Salvar Alterações">
                     <i class="bi bi-check-lg"></i>
@@ -404,7 +433,18 @@ function ativarModoEdicao(id) {
         </td>
     `;
 
-    // Eventos de Salvar e Cancelar
+    // Garante a exclusividade mútua nas checkboxes durante a edição
+    const chkManchete = document.getElementById(`edit-manchete-${id}`);
+    const chkDestaque = document.getElementById(`edit-destaque-${id}`);
+
+    chkManchete.addEventListener("change", () => {
+        if (chkManchete.checked) chkDestaque.checked = false;
+    });
+
+    chkDestaque.addEventListener("change", () => {
+        if (chkDestaque.checked) chkManchete.checked = false;
+    });
+
     const btnSalvar = tr.querySelector(".btn-salvar");
     const btnCancelar = tr.querySelector(".btn-cancelar");
 
@@ -412,13 +452,10 @@ function ativarModoEdicao(id) {
     btnCancelar.addEventListener("click", () => cancelarEdicao(id));
 }
 
-// 2. Cancela a edição e restaura o conteúdo original da linha
 function cancelarEdicao(idNoticia) {
-
     const tr = document.getElementById(`linha-noticia-${idNoticia}`);
-    if (!tr || !linhasEmEdicao[idNoticia]) return; // Se não houver edição em andamento, sai da função
+    if (!tr || !linhasEmEdicao[idNoticia]) return;
 
-    // Recria a linha a partir do objeto mantido no dataset
     const noticia = JSON.parse(tr.dataset.noticia);
     const linhaRestaurada = criarLinhaNoticia(noticia);
     
@@ -426,22 +463,21 @@ function cancelarEdicao(idNoticia) {
     delete linhasEmEdicao[idNoticia];
 }
 
-// 3. Coleta os novos dados e faz a requisição PUT para a API
 async function salvarEdicao(idNoticia) {
-
     const tr = document.getElementById(`linha-noticia-${idNoticia}`);
     if (!tr) return;
 
     const noticiaOriginal = JSON.parse(tr.dataset.noticia);
 
     const dadosAtualizados = {
+        ...noticiaOriginal,
         editoria: document.getElementById(`edit-editoria-${idNoticia}`).value,
         chapeu: document.getElementById(`edit-chapeu-${idNoticia}`).value,
         titulo: document.getElementById(`edit-titulo-${idNoticia}`).value,
         linhaFina: document.getElementById(`edit-linhaFina-${idNoticia}`).value,
         autor: document.getElementById(`edit-autor-${idNoticia}`).value,
-        conteudo: document.getElementById(`edit-conteudo-${idNoticia}`).value,
-        imagemUrl: noticiaOriginal.imagemUrl
+        destaquePrincipal: document.getElementById(`edit-manchete-${idNoticia}`).checked,
+        destaqueSecundario: document.getElementById(`edit-destaque-${idNoticia}`).checked
     };
 
     try {
@@ -462,9 +498,7 @@ async function salvarEdicao(idNoticia) {
     }
 }
 
-// 4. Executa a deleção da notícia via DELETE
 async function deletarNoticia(idNoticia) {
-
     if (!confirm("Tem certeza que deseja excluir esta notícia?")) return;
 
     try {
@@ -481,35 +515,27 @@ async function deletarNoticia(idNoticia) {
     }
 }
 
-/**
- * Consome o endpoint /admin/metricas e distribui os dados pelos Cards do topo
- */
 async function carregarPainelMetricas() {
-
     const metricaTotalNoticias = document.getElementById("kpi-total-noticias");
     const metricaLimiteNoticias = document.getElementById("kpi-limite-cota");
     const metricaTotalFeeds = document.getElementById("kpi-total-feeds");
     const elDetalhePortais = document.getElementById("kpi-detalhe-portais");
 
     try {
-
         const resposta = await fetch(API_URL_ADMIN_METRICAS);
         if (!resposta.ok) throw new Error(`Status ${resposta.status}`);
 
         const dados = await resposta.json();
 
         if (dados.sucesso) {
-            // 1. Atualiza Card da Base de Dados (MongoDB)
             if (metricaTotalNoticias) {
                 metricaTotalNoticias.textContent = `${dados.bancoDados.totalNoticias}`;
             }
 
-            // Injeta o limite vindo do backend (LIMITE_MAXIMO_NOTICIAS_DATABASE)
             if (metricaLimiteNoticias) {
                 metricaLimiteNoticias.textContent = `${dados.bancoDados.limiteCota}`;
             }
 
-            // 2. Atualiza Card da Sincronização RSS
             if (metricaTotalFeeds) {
                 metricaTotalFeeds.textContent = `${dados.rss.totalFeeds} Feeds RSS`;
             }
@@ -520,8 +546,7 @@ async function carregarPainelMetricas() {
         }
         
     } catch (error) {
-        console.error("Erro ao carregar /api/admin/metricas:", error);
+        console.error("Erro ao carregar /api/v1/admin/metricas:", error);
     }
 }
-
 

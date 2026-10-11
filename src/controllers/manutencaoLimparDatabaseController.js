@@ -1,5 +1,7 @@
 import { manutencaoLimparDatabaseService } from "../services/manutencaoLimparDatabaseService.js";
 
+console.log("Arquivo manutencaoLimparDatabaseController.js carregado.");
+
 const manutencaoLimparDatabaseController = async (request, response) => {
  
     try {

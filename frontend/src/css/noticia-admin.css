@@ -30,7 +30,7 @@ table td {
     vertical-align: middle;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap !important; /* Trava qualquer quebra de linha vertical em textos */
+    white-space: nowrap !important;
 }
 
 table th {
@@ -40,23 +40,59 @@ table th {
     font-family: 'Inter', sans-serif;
 }
 
-/* Distribuição exata das 7 colunas (Soma = 100%) */
-table th:nth-child(1), table td:nth-child(1) { width: 11%; } /* Editoria */
-table th:nth-child(2), table td:nth-child(2) { width: 11%; } /* Chapéu */
-table th:nth-child(3), table td:nth-child(3) { width: 30%; } /* Título (Espaço ampliado) */
-table th:nth-child(4), table td:nth-child(4) { width: 18%; } /* Linha Fina */
-table th:nth-child(5), table td:nth-child(5) { width: 12%; } /* Autor */
-table th:nth-child(6), table td:nth-child(6) { width: 12%; } /* Conteúdo */
+.text-center {
+    text-align: center !important;
+}
 
-table th:nth-child(7), 
-table td:nth-child(7) { 
-    width: 9%; 
-    min-width: 80px; 
-    text-align: center; 
+/* Distribuição ajustada para as 8 colunas da tabela */
+table th:nth-child(1), table td:nth-child(1) { width: 10%; } /* Editoria */
+table th:nth-child(2), table td:nth-child(2) { width: 10%; } /* Chapéu */
+table th:nth-child(3), table td:nth-child(3) { width: 30%; } /* Título */
+table th:nth-child(4), table td:nth-child(4) { width: 18%; } /* Linha Fina */
+table th:nth-child(5), table td:nth-child(5) { width: 10%; } /* Autor */
+table th:nth-child(6), table td:nth-child(6) { width: 7.5%; text-align: center; } /* Manchete */
+table th:nth-child(7), table td:nth-child(7) { width: 7.5%; text-align: center; } /* Destaque */
+table th:nth-child(8), table td:nth-child(8) { width: 7%; text-align: center; } /* Ações */
+
+/* Estilos dos Botões/Badges de Manchete e Destaque */
+.btn-toggle-status {
+    border: none;
+    border-radius: 20px;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.btn-manchete-ativo {
+    background-color: #FEF3C7;
+    color: #D97706;
+    border: 1px solid #FCD34D;
+}
+
+.btn-destaque-ativo {
+    background-color: #D1FAE5;
+    color: #059669;
+    border: 1px solid #6EE7B7;
+}
+
+.btn-status-inativo {
+    background-color: #F1F5F9;
+    color: #94A3B8;
+    border: 1px solid #E2E8F0;
+}
+
+.btn-toggle-status:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
 }
 
 /* ==========================================
-   COLUNA DE AÇÕES COM ÍCONES EMPILHADOS
+   COLUNA DE AÇÕES COM ÍCONES
    ========================================== */
 
 td.col-acoes {
@@ -66,7 +102,7 @@ td.col-acoes {
 
 .acoes-wrapper {
     display: flex !important;
-    flex-direction: row !important; /* Alinha lado a lado */
+    flex-direction: row !important;
     align-items: center;
     justify-content: center;
     gap: 0.35rem;
@@ -133,8 +169,15 @@ table td select {
     background-color: #FFFFFF;
 }
 
+/* Checkboxes no modo de edição */
+table td input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
 /* ==========================================
-   PAGINAÇÃO (RESTAURADA E ISOLADA)
+   PAGINAÇÃO
    ========================================== */
 
 .paginacao-flex {
@@ -184,7 +227,6 @@ table td select {
     white-space: nowrap !important;
 }
 
-
 /* ==========================================
    DIAGRAMAÇÃO PRINCIPAL DO PAINEL ADMIN
    ========================================== */
@@ -200,7 +242,7 @@ table td select {
     width: 95%;
     max-width: 1280px;
     display: flex;
-    flex-direction: column; /* Força os elementos a ficarem um abaixo do outro */
+    flex-direction: column;
     gap: 1.5rem;
 }
 
@@ -336,7 +378,6 @@ table td select {
     overflow-x: auto;
 }
 
-
 /* ==========================================
    GRUPO DE BOTÃO SPLIT COM DROPDOWN (CARD RSS)
    ========================================== */
@@ -361,10 +402,9 @@ table td select {
     border-bottom-left-radius: 0 !important;
 }
 
-/* Menu Dropdown Suspenso */
 .dropdown-menu-rss {
     position: absolute;
-    bottom: 110%; /* Abre para cima do botão */
+    bottom: 110%;
     right: 0;
     left: 0;
     background: #FFFFFF;

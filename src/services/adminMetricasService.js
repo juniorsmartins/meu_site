@@ -2,6 +2,8 @@ import { Noticia } from '../database/schema/noticiaSchema.js';
 import { FONTES_RSS } from '../constants/fontesRssConfig.js';
 import { LIMITE_MAXIMO_NOTICIAS_DATABASE } from '../constants/geralConstants.js';
 
+console.log("Arquivo adminMetricasService.js carregado.");
+
 /**
  * Service responsável por calcular e consolidar as métricas do painel administrativo
  */

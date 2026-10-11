@@ -1,5 +1,7 @@
 import { SITE_CONFIG, API_URL_COMUNICACAO_NEWSLETTER } from "./constantsConfig.js";
 
+console.log("Arquivo footer.js carregado.");
+
 document.addEventListener("DOMContentLoaded", () => {
     carregarFooter();
 });
