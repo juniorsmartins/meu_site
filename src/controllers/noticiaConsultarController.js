@@ -3,6 +3,8 @@ import {
 } from '../services/noticiaConsultarService.js';
 import { isValidObjectId } from 'mongoose';
 
+console.log("Arquivo noticiaConsultarController.js carregado.");
+
 const noticiaConsultarPorIdController = async (request, response) => {
 
     // Extrai o ID da notícia dos parâmetros da requisição

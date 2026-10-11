@@ -16,7 +16,7 @@
         <!-- Favicon -->
         <link rel="shortcut icon" type="image/png" href="../img/favicon.png">
 
-        <!-- Google Fonts: Inter (Sans-serif moderna) + Playfair Display (Serifada elegante para manchetes) -->
+        <!-- Google Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
@@ -56,7 +56,6 @@
                             <i class="bi bi-database-fill kpi-icone"></i>
                         </div>
                         <div class="kpi-body">
-                            <!-- Inicializa com '--' para evitar valor estático antes da API responder -->
                             <h2 id="kpi-total-noticias">--</h2>
                             <p class="kpi-subtexto">Cota Limite: <strong><span id="kpi-limite-cota">--</span> Notícias</strong></p>
                         </div>
@@ -78,8 +77,6 @@
                             <p id="kpi-detalhe-portais" class="kpi-subtexto">Carregando estatísticas...</p>
                         </div>
                         <div class="kpi-footer">
-                            <!-- Grupo de botão dividido (Split Button Group) com Dropdown -->
-                            <!-- Permite acionar a importação geral pelo botão principal ou escolher um portal específico no menu. -->
                             <div class="btn-split-container">
                                 <button id="btn-importar-rss" class="btn-manutencao btn-primario btn-split-principal">
                                     <i class="bi bi-cloud-arrow-down-fill"></i> Importar Notícias
@@ -88,7 +85,6 @@
                                     <i class="bi bi-chevron-down"></i>
                                 </button>
                                 
-                                <!-- Menu suspenso de portais -->
                                 <ul id="menu-dropdown-rss" class="dropdown-menu-rss escondido">
                                     <li><button class="item-dropdown-rss" data-portal="TODOS"><i class="bi bi-arrow-repeat"></i> Todos os Portais</button></li>
                                     <li class="dropdown-divisor"></li>
@@ -127,13 +123,15 @@
                                 <th>Título</th>
                                 <th>Linha Fina</th>
                                 <th>Autor</th>
-                                <th>Conteúdo</th>
-                                <th>Ações</th>
+                                <!-- Colunas visuais para Manchete e Destaque -->
+                                <th class="text-center">Manchete</th>
+                                <th class="text-center">Destaque</th>
+                                <th class="text-center">Ações</th>
                             </tr>
                         </thead>
                         <tbody id="corpo-tabela-noticias">
                             <tr>
-                                <td colspan="7" style="text-align: center;">Carregando notícias...</td>
+                                <td colspan="8" style="text-align: center;">Carregando notícias...</td>
                             </tr>
                         </tbody>
                     </table>

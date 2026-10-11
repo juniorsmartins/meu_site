@@ -1,4 +1,6 @@
-export const SITE_CONFIG = {
+console.log("Arquivo siteConfig.js carregado.");
+
+const SITE_CONFIG = {
     nome: "Gajeiro",
     slogan: "Olhos no horizonte, pés nos fatos",
     fundador: "Junior Martins",
@@ -7,4 +9,6 @@ export const SITE_CONFIG = {
     localizacaoPadrao: "Cuiabá - Mato Grosso, Brasil",
     horarioAtendimento: "Segunda a Sexta, das 08h às 17h"
 };
+
+export { SITE_CONFIG };
 

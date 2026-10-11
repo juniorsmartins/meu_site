@@ -1,5 +1,7 @@
 import { mapearEditoriaCompativel } from '../editoriaHelper.js';
 
+console.log("Arquivo tseParser.js carregado.");
+
 /**
  * Módulo Específico para o TSE (Trata a estrutura RDF/RSS 1.0)
  */
