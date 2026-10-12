@@ -4,44 +4,53 @@ import { SITE_CONFIG } from "./constantsConfig.js"; // Importa variável
 console.log("Arquivo header.js carregado.");
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const headerContainer = document.getElementById("header-container"); // Container principal do header no index.html
 
+    // 1 - Obtém o container principal do header no index.html
+    const headerContainer = document.getElementById("header-container"); 
     if (!headerContainer) return;
 
     try {
 
-        const response = await fetch("../html/header.html"); // Carrega o conteúdo do header.html de forma assíncrona
+        // 2 - Carrega o conteúdo do header.html de forma assíncrona
+        const response = await fetch("../html/header.html"); 
         if (!response.ok) {
             throw new Error(`Erro ao carregar header.html: ${response.status}`);
         }
 
-        headerContainer.innerHTML = await response.text(); // Insere o conteúdo do header.html no container principal
+        // 3 - Insere o conteúdo do header.html no container principal
+        headerContainer.innerHTML = await response.text(); 
 
-        // Injeção dinâmica a partir da variável SITE_CONFIG
-        const titulo = document.getElementById("header-apresentacao-nome-titulo"); // Elemento do título do header
+        // 4 - Atualiza o título e subtítulo do header com base na configuração do site
+        const titulo = document.getElementById("header-apresentacao-nome-titulo"); 
         if (titulo) {
             titulo.textContent = SITE_CONFIG.nome; // Atualiza o título do header
         }
-
-        const subtitulo = document.getElementById("header-apresentacao-nome-subtitulo"); // Elemento do subtítulo do header
+        const subtitulo = document.getElementById("header-apresentacao-nome-subtitulo");
         if (subtitulo) {
             subtitulo.textContent = SITE_CONFIG.slogan; // Atualiza o subtítulo do header
         }
 
-        // Atualiza a tag <title> do navegador automaticamente
+        // 5 - Atualiza a tag <title> do navegador automaticamente
         document.title = `${SITE_CONFIG.nome} | Jornalismo Independente`;
 
+        // 6 - Atualiza a data por extenso no header
         document.getElementById("data-extenso").textContent = getDatePorExtenso(); // Atualiza a data por extenso no header
 
-
-        // Preenche Hora Inicial e Ativa o Relógio Dinâmico
+        // 7 - Preenche Hora Inicial e Ativa o Relógio Dinâmico
         atualizarHoraDinamica();
         setInterval(atualizarHoraDinamica, 60000); // Atualiza a cada 60 segundos
 
-        // Detecta Cidade/Estado/Clima do Leitor por IP
+        // 8 - Detecta Cidade/Estado/Clima do Leitor por IP
         await carregarLocalizacaoEClimaDoCliente();
 
-        destacarPaginaAtiva(); // Destaca a página ativa no menu de navegação
+        // 9 - Destaca a página ativa no menu de navegação
+        destacarPaginaAtiva(); 
+
+        // 10 - Configura eventos de autenticação do usuário
+        configurarEventosAutenticacao();
+
+        // 11 - Verifica o estado da sessão do usuário
+        verificarEstadoSessao();
 
     } catch (error) {
         console.error("Erro ao inicializar o cabeçalho:", error);
@@ -150,5 +159,140 @@ function destacarPaginaAtiva() {
             }
         }
     });
+}
+
+// Função para gerenciar os cliques do Modal e Logout
+function configurarEventosAutenticacao() {
+
+    // Botão que abre o modal de login
+    const btnAbrir = document.getElementById("btn-abrir-login");
+
+    // Botão que fecha o modal de login
+    const btnFechar = document.getElementById("btn-fechar-modal-login");
+
+    // Elemento de sobreposição do modal de login. Fica atrás do card do modal e captura cliques fora do card.
+    const overlay = document.getElementById("modal-login-overlay"); 
+
+    // Formulário de login dentro do modal
+    const formLogin = document.getElementById("form-login-modal");
+
+    // Botão que abre o menu do usuário logado
+    const btnMenuUsuario = document.getElementById("btn-menu-usuario");
+
+    // Dropdown do menu do usuário logado
+    const dropdownUsuario = document.getElementById("dropdown-menu-usuario");
+
+    // Botão de logout dentro do menu do usuário logado
+    const btnLogout = document.getElementById("btn-executar-logout");
+
+    // 1. Abrir e Fechar Modal
+    if (btnAbrir) {
+        btnAbrir.addEventListener("click", () => {
+            // Remove a classe "escondido" para exibir o modal
+            if (overlay) overlay.classList.remove("escondido"); 
+        });
+    }
+
+    if (btnFechar) {
+        btnFechar.addEventListener("click", () => {
+            // Adiciona a classe "escondido" para ocultar o modal
+            if (overlay) overlay.classList.add("escondido"); 
+        });
+    }
+
+    // Fechar ao clicar fora do card do modal
+    if (overlay) {
+        overlay.addEventListener("click", (e) => {
+            // Fecha o modal se o clique ocorrer fora do card do modal
+            if (e.target === overlay) overlay.classList.add("escondido");
+        });
+    }
+
+    // 2. Submeter Formulário de Login
+    if (formLogin) {
+        formLogin.addEventListener("submit", (e) => {
+
+            // Previne o comportamento padrão do formulário (recarregar a página)
+            e.preventDefault();
+
+            // Obtém os valores dos campos de email e senha do formulário
+            const email = document.getElementById("input-login-email").value;
+            const senha = document.getElementById("input-login-senha").value;
+
+            // Simulação de autenticação (pode ser substituído pela chamada de API POST no futuro)
+            if (email && senha) {
+                const usuarioSimulado = {
+                    nome: email.split("@")[0],
+                    email: email,
+                    logado: true
+                };
+
+                // Salva o estado no localStorage para persistir entre recarregamentos
+                localStorage.setItem("gajeiro_usuario", JSON.stringify(usuarioSimulado));
+
+                // Fecha o modal de login após o login bem-sucedido
+                if (overlay) overlay.classList.add("escondido");
+
+                // Atualiza a interface do usuário com o estado de sessão atual
+                verificarEstadoSessao();
+            }
+        });
+    }
+
+    // 3. Abrir/Fechar Dropdown do Usuário Logado
+    if (btnMenuUsuario && dropdownUsuario) {
+        // Alterna a visibilidade do dropdown do usuário logado ao clicar no botão do menu do usuário
+        btnMenuUsuario.addEventListener("click", (e) => {
+            // Impede que o clique no botão feche o dropdown imediatamente
+            e.stopPropagation();
+            // Alterna a classe "escondido" para mostrar ou ocultar o dropdown do usuário logado
+            dropdownUsuario.classList.toggle("escondido");
+        });
+
+        document.addEventListener("click", () => {
+            // Fecha o dropdown do usuário logado ao clicar em qualquer lugar fora dele
+            dropdownUsuario.classList.add("escondido");
+        });
+    }
+
+    // 4. Executar Logout
+    if (btnLogout) {
+        btnLogout.addEventListener("click", () => {
+            // Remove o estado de sessão do localStorage para efetuar o logout
+            localStorage.removeItem("gajeiro_usuario");
+            // Atualiza a interface do usuário após o logout
+            verificarEstadoSessao();
+        });
+    }
+}
+
+// Verifica se o usuário já possui sessão no localStorage e alterna os botões do header
+function verificarEstadoSessao() {
+
+    // Obtém referência ao botão de abrir o modal de login
+    const btnAbrir = document.getElementById("btn-abrir-login");
+
+    // Obtém referência ao container do usuário logado
+    const containerLogado = document.getElementById("container-usuario-logado");
+
+    // Obtém referência ao elemento que exibe o nome do usuário no header
+    const elNomeUsuario = document.getElementById("nome-usuario-header");
+
+    // Obtém os dados da sessão do localStorage
+    const dadosSessao = localStorage.getItem("gajeiro_usuario");
+
+    if (dadosSessao) {
+        try {
+            const usuario = JSON.parse(dadosSessao);
+            if (btnAbrir) btnAbrir.classList.add("escondido");
+            if (containerLogado) containerLogado.classList.remove("escondido");
+            if (elNomeUsuario) elNomeUsuario.textContent = usuario.nome;
+        } catch (e) {
+            console.error("Erro ao ler sessão local:", e);
+        }
+    } else {
+        if (btnAbrir) btnAbrir.classList.remove("escondido");
+        if (containerLogado) containerLogado.classList.add("escondido");
+    }
 }
 
