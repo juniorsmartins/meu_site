@@ -20,14 +20,21 @@ document.addEventListener("DOMContentLoaded", async () => {
         // 3 - Insere o conteúdo do header.html no container principal
         headerContainer.innerHTML = await response.text(); 
 
-        // 4 - Atualiza o título e subtítulo do header com base na configuração do site
+        // 4 - Atualiza o título e o subtítulo do header com base na configuração do site
         const titulo = document.getElementById("header-apresentacao-nome-titulo"); 
         if (titulo) {
             titulo.textContent = SITE_CONFIG.nome; // Atualiza o título do header
         }
+
         const subtitulo = document.getElementById("header-apresentacao-nome-subtitulo");
         if (subtitulo) {
             subtitulo.textContent = SITE_CONFIG.slogan; // Atualiza o subtítulo do header
+        }
+
+        // Injeção dinâmica do nome do site no título do Modal
+        const tituloModal = document.getElementById("modal-titulo-nome-site");
+        if (tituloModal) {
+            tituloModal.textContent = `Acesse o ${SITE_CONFIG.nome}`;
         }
 
         // 5 - Atualiza a tag <title> do navegador automaticamente
@@ -216,24 +223,25 @@ function configurarEventosAutenticacao() {
             e.preventDefault();
 
             // Obtém os valores dos campos de email e senha do formulário
-            const email = document.getElementById("input-login-email").value;
-            const senha = document.getElementById("input-login-senha").value;
+            const emailDigitado = document.getElementById("input-login-email").value.trim();
+            const senhaDigitada = document.getElementById("input-login-senha").value;
 
             // Simulação de autenticação (pode ser substituído pela chamada de API POST no futuro)
-            if (email && senha) {
+            // Verifica se todos os campos foram preenchidos antes de simular o login
+           if (emailDigitado && senhaDigitada) {
+
+                // Extrai o nome de usuário a partir da primeira parte do e-mail (ex: "junior" de "junior@email.com")
+                const nomeExtraido = emailDigitado.split(/[@._]/)[0];
+
                 const usuarioSimulado = {
-                    nome: email.split("@")[0],
-                    email: email,
+                    nome: nomeExtraido,
+                    email: emailDigitado,
                     logado: true
                 };
 
-                // Salva o estado no localStorage para persistir entre recarregamentos
                 localStorage.setItem("gajeiro_usuario", JSON.stringify(usuarioSimulado));
 
-                // Fecha o modal de login após o login bem-sucedido
                 if (overlay) overlay.classList.add("escondido");
-
-                // Atualiza a interface do usuário com o estado de sessão atual
                 verificarEstadoSessao();
             }
         });
