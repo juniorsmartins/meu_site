@@ -1,6 +1,8 @@
 <!-- Cabeçalho -->
 <header id="header" class="width-100">
 
+
+    <!-- Parte 1 Superior - Informações de Data, Hora, Localização e Clima -->
     <div id="header-topo" class="flex flex-between">
         <div class="header-topo-info flex">
             <p id="data-extenso"></p>
@@ -10,14 +12,18 @@
         </div>
     </div>
 
-    <!-- Apresentação Centralizada com Identidade Visual da Gávea -->
+
+
+    <!-- Parte 2 Central - Apresentação Centralizada com Identidade Visual da Gávea -->
     <div class="flex flex-between header-conteudo-central">
+
+        <!-- Lado Esquerdo do Cabeçalho -->
         <div class="header-lado-esquerdo">
             <p class="header-btn-menu"><i class="bi bi-list"></i> Menu</p>
         </div>
 
+        <!-- Parte Central do Cabeçalho - Apresentação da Marca -->
         <div class="header-apresentacao-branding">
-            <!-- Ícone de Vigia/Gávea integrado ao Título da Marca -->
             <div class="header-logo-wrapper">
                 <span class="logo-icone-gavea" title="Gajeiro: O vigia no mastro"><i class="bi bi-eye-fill"></i></span>
                 <h1 id="header-apresentacao-nome-titulo"></h1>
@@ -25,23 +31,80 @@
             <h3 id="header-apresentacao-nome-subtitulo"></h3>
         </div>
 
+        <!-- Lado Direito do Cabeçalho -->
         <div class="header-lado-direito">
-            <button type="button" class="btn-padrao btn-entrar">
+
+            <!-- Estado 1: Deslogado (Botão de abrir modal) -->
+            <button id="btn-abrir-login" type="button" class="btn-padrao btn-entrar">
                 <i class="bi bi-person-circle"></i> Entrar
             </button>
+
+            <!-- Estado 2: Logado (Menu do Usuário) -->
+            <div id="container-usuario-logado" class="usuario-logado-wrapper escondido">
+                <button id="btn-menu-usuario" type="button" class="btn-usuario-perfil">
+                    <i class="bi bi-person-check-fill"></i>
+                    <span id="nome-usuario-header">Leitor</span>
+                    <i class="bi bi-chevron-down seta-dropdown"></i>
+                </button>
+
+                <!-- Dropdown com Opções do Usuário -->
+                <div id="dropdown-menu-usuario" class="dropdown-usuario escondido">
+                    <a href="../html/noticia-admin.html" class="item-dropdown-usuario"><i class="bi bi-speedometer2"></i> Painel Admin</a>
+                    <div class="dropdown-divisor"></div>
+                    <button id="btn-executar-logout" class="item-dropdown-usuario btn-logout-item"><i class="bi bi-box-arrow-right"></i> Sair</button>
+                </div>
+            </div>
+
         </div>
     </div>
 
+
+
+    <!-- Parte 3 Inferior - Menu de Navegação -->
     <nav id="header-navbar"> 
         <ul class="flex flex-center">
             <li><a href="../html/index.html" class="nav-link">Home</a></li>
             <li><a href="../html/sobre.html" class="nav-link">Sobre</a></li>
-            <li><a href="../html/noticia-admin.html" class="nav-link">Teste</a></li>
             <li><a href="../html/servicos.html" class="nav-link">Serviços</a></li>
             <li><a href="#portfolio" class="nav-link">Portfólio</a></li>
             <li><a href="../html/contato.html" class="nav-link">Contato</a></li>
         </ul>
     </nav>
 
+
 </header>
+
+
+
+<!-- Modal Flutuante de Login -->
+<div id="modal-login-overlay" class="modal-overlay escondido">
+    <div class="modal-card">
+        <button id="btn-fechar-modal-login" class="btn-fechar-modal" title="Fechar Modal">&times;</button>
+        
+        <div class="modal-header-branding">
+            <span class="logo-icone-gavea-modal"><i class="bi bi-eye-fill"></i></span>
+            <h3 id="modal-titulo-nome-site">Acesse o Portal</h3>
+            <p>Entre com sua conta para acessar o painel de controle</p>
+        </div>
+
+        <form id="form-login-modal" class="modal-form">
+            <!-- Apenas E-mail e Senha -->
+            <div class="campo-form">
+                <label for="input-login-email">E-mail</label>
+                <input type="email" id="input-login-email" placeholder="seuemail@exemplo.com" required>
+            </div>
+
+            <div class="campo-form">
+                <label for="input-login-senha">Senha</label>
+                <input type="password" id="input-login-senha" placeholder="••••••••" required>
+            </div>
+
+            <div id="mensagem-erro-login" class="msg-erro-modal escondido"></div>
+
+            <button type="submit" id="btn-submeter-login" class="btn-submeter-modal">
+                Entrar no Portal
+            </button>
+        </form>
+    </div>
+</div>
 
