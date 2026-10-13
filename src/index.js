@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { connectToMongo } from './configs/connectToMongo.js';
 import { 
+    authRouter,
     adminRouter,
     comunicacaoRouter,
     noticiaRouter
@@ -31,6 +32,7 @@ app.use(async (request, response, next) => {
 app.use("/v1/admin", adminRouter);
 app.use("/v1/comunicacao", comunicacaoRouter);
 app.use("/v1/noticias", noticiaRouter);
+app.use("/v1/auth", authRouter);
 
 // Exportação padrão necessária para Serverless na Vercel
 export default app;

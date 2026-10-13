@@ -66,4 +66,14 @@ ARQUIVOS
 
 
 
+SECURITY (login)
+- Passo 1: instalação de bibliotecas no backend (jsonwebtoken e bcryptjs);
+- Passo 2: criar variáveis de ambiente no arquivo .env (JWT_SECRET e JWT_EXPIRES_IN);
+- Passo 3: criar model de usuário com métodos de criptografia;
+- Passo 4: criar middleware de proteção (authMiddleware.js);
+- Passo 5: criar rota de autenticação;
+- Passo 6: criar controller e service para login;
+- Passo 7: consumir rota no front-end.
+
+
 

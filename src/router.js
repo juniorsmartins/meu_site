@@ -1,4 +1,5 @@
 import express from 'express';
+import { loginController } from './controllers/authController.js';
 import { adminMetricasController } from './controllers/adminMetricasController.js';
 import { manutencaoLimparDatabaseController } from './controllers/manutencaoLimparDatabaseController.js';
 import { automacaoImportarNoticiaController } from './controllers/automacaoImportarNoticiaController.js';
@@ -13,10 +14,14 @@ import { noticiaCapaController } from './controllers/noticiaCapaController.js';
 
 console.log("Arquivo router.js carregado.");
 
+const authRouter = express.Router();
 const adminRouter = express.Router();
 const comunicacaoRouter = express.Router();
 const noticiaRouter = express.Router();
 
+// AUTH - Rotas de autenticação do sistema
+authRouter.post("/login", loginController);
+    
 // ADMIN - Rotas de administração do sistema
 adminRouter.get("/metricas", adminMetricasController);
 adminRouter.delete("/manutencao/limpar-database", manutencaoLimparDatabaseController);
@@ -35,6 +40,7 @@ noticiaRouter.put("/:id", noticiaAtualizarController);
 noticiaRouter.delete("/:id", noticiaDeletarPorIdController);
 
 export { 
+    authRouter,
     adminRouter,
     comunicacaoRouter,
     noticiaRouter
