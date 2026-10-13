@@ -48,7 +48,21 @@ npm run dev
 
 
 
+ESQUEMA DE DIRETÓRIOS DO BACK-END
+* config (Conexão com o banco de dados e configuração do ambiente);
+* controllers (Lógica principal para cada ponto final);
 
+middlewares/Funções que são executadas antes dos controladores (por exemplo, verificações de autenticação).
+
+models/Esquemas do Mongoose.
+
+routes/Definições de endpoints da API.
+
+services/Lógica reutilizável (hashing, JWT).
+
+.envSegredos e variáveis ​​de configuração.
+
+server.jsPonto de entrada do aplicativo.
 
 
 
