@@ -1,4 +1,4 @@
-import { EDITORIAS } from '../constants/editorias.js';
+import { EDITORIAS } from '../configs/constantsConfig.js';
 
 console.log("Arquivo editoriaHelper.js carregado.");
 

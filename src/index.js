@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { connectToMongo } from './database/index.js';
+import { connectToMongo } from './database/db.js';
 import { 
     adminRouter,
     comunicacaoRouter,

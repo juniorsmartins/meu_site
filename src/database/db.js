@@ -23,4 +23,3 @@ const connectToMongo = async () => {
 
 export { connectToMongo };
 
-

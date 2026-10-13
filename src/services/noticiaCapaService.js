@@ -1,5 +1,5 @@
-import { Noticia } from '../database/schema/noticiaSchema.js';
-import { EDITORIAS } from '../constants/editorias.js';
+import { Noticia } from '../models/noticiaSchema.js';
+import { EDITORIAS } from '../configs/constantsConfig.js';
 
 console.log("Arquivo noticiaCapaService.js carregado.");
 

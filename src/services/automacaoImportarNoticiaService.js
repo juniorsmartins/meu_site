@@ -1,7 +1,7 @@
 import Parser from 'rss-parser';
-import { Noticia } from '../database/schema/noticiaSchema.js';
-import { EDITORIAS } from '../constants/editorias.js';
-import { FONTES_RSS } from '../constants/fontesRssConfig.js';
+import { Noticia } from '../models/noticiaSchema.js';
+import { EDITORIAS } from '../configs/constantsConfig.js';
+import { FONTES_RSS } from '../configs/fontesRssConfig.js';
 
 console.log("Arquivo automacaoImportarNoticiaService.js carregado.");
 

@@ -1,6 +1,6 @@
-import { Noticia } from '../database/schema/noticiaSchema.js';
-import { FONTES_RSS } from '../constants/fontesRssConfig.js';
-import { LIMITE_MAXIMO_NOTICIAS_DATABASE } from '../constants/geralConstants.js';
+import { Noticia } from '../models/noticiaSchema.js';
+import { FONTES_RSS } from '../configs/fontesRssConfig.js';
+import { LIMITE_MAXIMO_NOTICIAS_DATABASE } from '../configs/constantsConfig.js';
 
 console.log("Arquivo adminMetricasService.js carregado.");
 
