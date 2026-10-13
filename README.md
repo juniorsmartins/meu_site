@@ -49,22 +49,20 @@ npm run dev
 
 
 ESQUEMA DE DIRETÓRIOS DO BACK-END
-* config (Conexão com o banco de dados e configuração do ambiente);
-* controllers (Lógica principal para cada ponto final);
+* config (configurações da aplicação e do banco de dados);
+* controllers (recebem requisições HTTP e delegam a lógica para o service);
+* services (lógica e regras de negócio).
+* middlewares (Funções rodadas antes dos controladores - exemplo: verificações de autenticação);
+* models (Esquemas do Mongoose);
+* helpers (utilitários e parsers);
+* mocks (dados mockados para testes em ambiente local);
+* test (requests locais para testes);
 
-middlewares/Funções que são executadas antes dos controladores (por exemplo, verificações de autenticação).
-
-models/Esquemas do Mongoose.
-
-routes/Definições de endpoints da API.
-
-services/Lógica reutilizável (hashing, JWT).
-
-.envSegredos e variáveis ​​de configuração.
-
-server.jsPonto de entrada do aplicativo.
-
-
+ARQUIVOS
+* [...all].js (adaptador para rodar a API em ambiente serverless da Vercel);
+* server.js (inicia o servidor);
+* index.js (Cria o app, aplica Json parser e Cors, conecta no database e monta rotas por módulo);
+* router.js (organiza os endpoints em grupos);
 
 
 
