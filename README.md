@@ -13,11 +13,16 @@ Endereço: https://meu-site-ashy-omega.vercel.app/
 
 
 -> Bibliotecas
-* nodemon (executar script para desenvolvimento);
+* nodemon (Facilita o desenvolvimento, pois reinicia o servidor automaticamente quando houver alterações);
 * faker-js/faker (serve para gerar grandes volumes de dados fictícios);
+* eslint 
+* mongoose (Biblioteca ODM (Object Data Modeling) para interagir facilmente com o MongoDB);
+* cors 
 * express (biblioteca mais popular do Node para criar aplicações web e APIs. Cria servidor web);
 * nodemailer (biblioteca de envio de emails - https://nodemailer.com/);
 * rss-parser (biblioteca de RSS - lê e converte arquivos XML de Feeds em objetos JavaScript manipuláveis);
+* SECURITY - jsonwebtoken (Biblioteca para gerar e verificar tokens JWT);
+* SECURITY - bcryptjs (Biblioteca para gerar hashes e comparar senhas com segurança);
 
 
 
@@ -30,10 +35,13 @@ npm install cors
 npm install --save-dev eslint
 npm install nodemailer
 npm install rss-parser
+npm install jsonwebtoken 
+npm install bcryptjs
 
 
 
 -> Comandos para acionar
+npm start
 npm run start
 npm run dev
 
