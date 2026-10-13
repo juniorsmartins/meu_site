@@ -3,6 +3,7 @@ import cors from 'cors';
 import { connectToMongo } from './configs/connectToMongo.js';
 import { 
     authRouter,
+    usuarioRouter,
     adminRouter,
     comunicacaoRouter,
     noticiaRouter
@@ -30,6 +31,7 @@ app.use(async (request, response, next) => {
 });
 
 app.use("/v1/admin", adminRouter);
+app.use("/v1/usuarios", usuarioRouter);
 app.use("/v1/comunicacao", comunicacaoRouter);
 app.use("/v1/noticias", noticiaRouter);
 app.use("/v1/auth", authRouter);

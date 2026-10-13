@@ -1,6 +1,7 @@
 import express from 'express';
 import { loginController } from './controllers/authController.js';
 import { adminMetricasController } from './controllers/adminMetricasController.js';
+import { usuarioCriarController } from './controllers/usuarioCriarController.js';
 import { manutencaoLimparDatabaseController } from './controllers/manutencaoLimparDatabaseController.js';
 import { automacaoImportarNoticiaController } from './controllers/automacaoImportarNoticiaController.js';
 import { newsletterCriarController } from './controllers/newsletterCriarController.js';
@@ -15,12 +16,16 @@ import { noticiaCapaController } from './controllers/noticiaCapaController.js';
 console.log("Arquivo router.js carregado.");
 
 const authRouter = express.Router();
+const usuarioRouter = express.Router();
 const adminRouter = express.Router();
 const comunicacaoRouter = express.Router();
 const noticiaRouter = express.Router();
 
 // AUTH - Rotas de autenticação do sistema
 authRouter.post("/login", loginController);
+
+// USUÁRIOS - Rotas de gerenciamento de usuários do sistema
+usuarioRouter.post("/", usuarioCriarController);
     
 // ADMIN - Rotas de administração do sistema
 adminRouter.get("/metricas", adminMetricasController);
@@ -43,6 +48,7 @@ export {
     authRouter,
     adminRouter,
     comunicacaoRouter,
+    usuarioRouter,
     noticiaRouter
 };
 
