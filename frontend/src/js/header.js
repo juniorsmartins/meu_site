@@ -12,7 +12,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
 
         // 2 - Carrega o conteúdo do header.html de forma assíncrona
-        const response = await fetch("../html/header.html"); 
+        // const response = await fetch("../html/header.html"); 
+        const caminhoAbsolutoHeader = new URL('../html/header.html', import.meta.url).href;
+        const response = await fetch(caminhoAbsolutoHeader);
         if (!response.ok) {
             throw new Error(`Erro ao carregar header.html: ${response.status}`);
         }

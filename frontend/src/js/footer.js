@@ -12,7 +12,11 @@ async function carregarFooter() {
     if (!footerContainer) return;
 
     try {
-        const response = await fetch("../html/footer.html");
+
+        // const response = await fetch("../html/footer.html");
+        const caminhoAbsolutoFooter = new URL('../html/footer.html', import.meta.url).href;
+        const response = await fetch(caminhoAbsolutoFooter);
+
         if (!response.ok) throw new Error("Erro ao carregar footer.html");
 
         // 1. Injeta o HTML no contêiner
