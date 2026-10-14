@@ -1,7 +1,7 @@
 import express from 'express';
 import { loginController } from './controllers/authController.js';
-import { adminMetricasController } from './controllers/adminMetricasController.js';
 import { usuarioCriarController } from './controllers/usuarioCriarController.js';
+import { adminMetricasController } from './controllers/adminMetricasController.js';
 import { manutencaoLimparDatabaseController } from './controllers/manutencaoLimparDatabaseController.js';
 import { automacaoImportarNoticiaController } from './controllers/automacaoImportarNoticiaController.js';
 import { newsletterCriarController } from './controllers/newsletterCriarController.js';
@@ -46,9 +46,9 @@ noticiaRouter.delete("/:id", noticiaDeletarPorIdController);
 
 export { 
     authRouter,
+    usuarioRouter,
     adminRouter,
     comunicacaoRouter,
-    usuarioRouter,
     noticiaRouter
 };
 
