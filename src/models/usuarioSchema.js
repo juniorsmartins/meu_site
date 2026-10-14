@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
+console.log("Arquivo usuarioSchema.js carregado.");
+
 const usuarioSchema = new mongoose.Schema(
     {
         nome: {
@@ -29,16 +31,16 @@ const usuarioSchema = new mongoose.Schema(
 );
 
 // HOOK PRE-SAVE: Executa automaticamente antes de salvar no banco
-usuarioSchema.pre('save', async function (next) {
+usuarioSchema.pre('save', async function () {
 
     // Se a senha não foi modificada/alterada, pula para o próximo passo
-    if (!this.isModified('senha')) return next();
+    if (!this.isModified('senha')) return;
 
     // Gera um salt (custo do algoritmo 10) para reforçar o hash
     const salt = await bcrypt.genSalt(10);
+
     // Substitui a senha em texto limpo pelo hash seguro
     this.senha = await bcrypt.hash(this.senha, salt);
-    next();
 });
 
 // MÉTODO AUXILIAR: Para validar se a senha digitada no login bate com o hash salvo
@@ -46,7 +48,10 @@ usuarioSchema.methods.compararSenha = async function (senhaDigitada) {
     return await bcrypt.compare(senhaDigitada, this.senha);
 };
 
+usuarioSchema.index({ email: 1, createdAt: -1 });
+
 const Usuario = mongoose.model("Usuario", usuarioSchema);
 
 export { Usuario };
+
 
