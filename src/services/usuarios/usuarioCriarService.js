@@ -1,4 +1,4 @@
-import { Usuario } from "../models/usuarioSchema.js";
+import { Usuario } from "../../models/usuarioSchema.js";
 
 console.log("Arquivo usuarioCriarService.js carregado.");
 

@@ -1,4 +1,4 @@
-import { usuarioCriarService } from '../services/usuarioCriarService.js';
+import { usuarioCriarService } from '../../services/usuarios/usuarioCriarService.js';
 
 console.log("Arquivo usuarioCriarController.js carregado.");
 
