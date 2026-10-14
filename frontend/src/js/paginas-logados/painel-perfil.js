@@ -1,4 +1,4 @@
-import { API_URL_USUARIOS } from './constantsConfig.js';
+import { API_URL_USUARIOS } from '../constantsConfig.js';
 
 console.log("Arquivo painel-perfil.js carregado.");
 
@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!dadosSessao) {
         alert("Acesso restrito. Por favor, faça login para acessar seu perfil.");
-        window.location.href = "../html/index.html";
+        window.location.href = "../../html/index.html";
         return;
     }
 
