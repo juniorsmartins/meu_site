@@ -4,9 +4,9 @@ import {
     API_URL_ADMIN_LIMPAR_DATABASE, 
     API_URL_NOTICIAS, 
     OPCOES_EDITORIA 
-} from './constantsConfig.js';
+} from '../constantsConfig.js';
 
-console.log("Arquivo noticia-admin.js carregado.");
+console.log("Arquivo painel-noticias.js carregado.");
 
 const LIMITE_NOTICIAS_POR_PAGINA = 12;
 

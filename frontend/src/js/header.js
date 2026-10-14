@@ -332,10 +332,10 @@ function verificarEstadoSessao() {
 
 // Retorna os links HTML permitidos para cada perfil de usuário
 function gerarItensMenuPorFuncao(funcao = 'leitor') {
-    
+
     // Opção padrão para todos os usuários logados
     let htmlMenu = `
-        <a href="../html/painel-perfil.html" class="item-dropdown-usuario">
+        <a href="../html/paginas-logados/painel-perfil.html" class="item-dropdown-usuario">
             <i class="bi bi-person-gear"></i> Meu Perfil
         </a>
     `;
@@ -343,16 +343,16 @@ function gerarItensMenuPorFuncao(funcao = 'leitor') {
     // 1. ADMIN
     if (funcao === 'admin') {
         htmlMenu += `
-            <a href="../html/painel-usuarios.html" class="item-dropdown-usuario">
+            <a href="../html/paginas-logados/painel-usuarios.html" class="item-dropdown-usuario">
                 <i class="bi bi-people-fill"></i> Painel de Usuários
             </a>
-            <a href="../html/noticia-admin.html" class="item-dropdown-usuario">
+            <a href="../html/paginas-logados/painel-noticias.html" class="item-dropdown-usuario">
                 <i class="bi bi-sliders"></i> Painel de Notícias
             </a>
-            <a href="../html/painel-contatos.html" class="item-dropdown-usuario">
+            <a href="../html/paginas-logados/painel-contatos.html" class="item-dropdown-usuario">
                 <i class="bi bi-envelope-paper-fill"></i> Painel de Contatos
             </a>
-            <a href="../html/mesa-redacao.html" class="item-dropdown-usuario">
+            <a href="../html/paginas-logados/mesa-redacao.html" class="item-dropdown-usuario">
                 <i class="bi bi-journal-text"></i> Mesa de Redação
             </a>
         `;
