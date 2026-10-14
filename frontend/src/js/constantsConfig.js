@@ -1,4 +1,5 @@
 // URL base centralizada da API
+const API_URL_USUARIOS = '/api/v1/usuarios';
 const API_URL_ADMIN_METRICAS = '/api/v1/admin/metricas';
 const API_URL_ADMIN_IMPORTAR_NOTICIA = '/api/v1/admin/automacao/importar-noticias';
 const API_URL_ADMIN_LIMPAR_DATABASE = '/api/v1/admin/manutencao/limpar-database';
@@ -39,6 +40,7 @@ const SITE_CONFIG = {
 };
 
 export { 
+    API_URL_USUARIOS,
     API_URL_ADMIN_METRICAS,
     API_URL_ADMIN_IMPORTAR_NOTICIA,
     API_URL_ADMIN_LIMPAR_DATABASE,
