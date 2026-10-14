@@ -345,16 +345,16 @@ function gerarItensMenuPorFuncao(funcao = 'leitor') {
     // 1. ADMIN
     if (funcao === 'admin') {
         htmlMenu += `
-            <a href="../html/paginas-logados/painel-usuarios.html" class="item-dropdown-usuario">
+            <a href="/html/paginas-logados/painel-usuarios.html" class="item-dropdown-usuario">
                 <i class="bi bi-people-fill"></i> Painel de Usuários
             </a>
-            <a href="../html/paginas-logados/painel-noticias.html" class="item-dropdown-usuario">
+            <a href="/html/paginas-logados/painel-noticias.html" class="item-dropdown-usuario">
                 <i class="bi bi-sliders"></i> Painel de Notícias
             </a>
-            <a href="../html/paginas-logados/painel-contatos.html" class="item-dropdown-usuario">
+            <a href="/html/paginas-logados/painel-contatos.html" class="item-dropdown-usuario">
                 <i class="bi bi-envelope-paper-fill"></i> Painel de Contatos
             </a>
-            <a href="../html/paginas-logados/mesa-redacao.html" class="item-dropdown-usuario">
+            <a href="/html/paginas-logados/mesa-redacao.html" class="item-dropdown-usuario">
                 <i class="bi bi-journal-text"></i> Mesa de Redação
             </a>
         `;
@@ -362,7 +362,7 @@ function gerarItensMenuPorFuncao(funcao = 'leitor') {
     // 2. EDITOR
     else if (funcao === 'editor') {
         htmlMenu += `
-            <a href="../html/paginas-logados/painel-noticias.html" class="item-dropdown-usuario">
+            <a href="/html/paginas-logados/painel-noticias.html" class="item-dropdown-usuario">
                 <i class="bi bi-sliders"></i> Painel de Notícias
             </a>
             <a href="../html/paginas-logados/mesa-redacao.html" class="item-dropdown-usuario">
@@ -373,7 +373,7 @@ function gerarItensMenuPorFuncao(funcao = 'leitor') {
     // 3. JORNALISTA
     else if (funcao === 'jornalista') {
         htmlMenu += `
-            <a href="../html/paginas-logados/mesa-redacao.html" class="item-dropdown-usuario">
+            <a href="/html/paginas-logados/mesa-redacao.html" class="item-dropdown-usuario">
                 <i class="bi bi-journal-text"></i> Mesa de Redação
             </a>
         `;
