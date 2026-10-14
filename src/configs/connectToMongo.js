@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-console.log("Arquivo index.js do database carregado.");
+console.log("Arquivo connectToMongo.js do database carregado.");
 
 const dbKey = process.env.DB_KEY;
 
@@ -22,5 +22,4 @@ const connectToMongo = async () => {
 }
 
 export { connectToMongo };
-
 

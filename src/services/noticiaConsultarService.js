@@ -1,4 +1,4 @@
-import { Noticia } from '../database/schema/noticiaSchema.js';
+import { Noticia } from '../models/noticiaSchema.js';
 
 console.log("Arquivo noticiaConsultarService.js carregado.");
 
