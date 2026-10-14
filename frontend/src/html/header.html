@@ -49,9 +49,14 @@
 
                 <!-- Dropdown com Opções do Usuário -->
                 <div id="dropdown-menu-usuario" class="dropdown-usuario escondido">
-                    <a href="../html/noticia-admin.html" class="item-dropdown-usuario"><i class="bi bi-speedometer2"></i> Painel Admin</a>
+                    
+                    <!-- Itens de menu injetado dinamicamente via header.js conforme a funcao do usuario -->
+                    <div id="itens-menu-funcao"></div>
+                    
                     <div class="dropdown-divisor"></div>
-                    <button id="btn-executar-logout" class="item-dropdown-usuario btn-logout-item"><i class="bi bi-box-arrow-right"></i> Sair</button>
+                    <button id="btn-executar-logout" class="item-dropdown-usuario btn-logout-item">
+                        <i class="bi bi-box-arrow-right"></i> Sair
+                    </button>
                 </div>
             </div>
 

@@ -302,16 +302,11 @@ function configurarEventosAutenticacao() {
 // Verifica se o usuário já possui sessão no localStorage e alterna os botões do header
 function verificarEstadoSessao() {
 
-    // Obtém referência ao botão de abrir o modal de login
     const btnAbrir = document.getElementById("btn-abrir-login");
-
-    // Obtém referência ao container do usuário logado
     const containerLogado = document.getElementById("container-usuario-logado");
-
-    // Obtém referência ao elemento que exibe o nome do usuário no header
     const elNomeUsuario = document.getElementById("nome-usuario-header");
+    const containerItensMenu = document.getElementById("itens-menu-funcao");
 
-    // Obtém os dados da sessão do localStorage
     const dadosSessao = localStorage.getItem("gajeiro_usuario");
 
     if (dadosSessao) {
@@ -319,7 +314,13 @@ function verificarEstadoSessao() {
             const usuario = JSON.parse(dadosSessao);
             if (btnAbrir) btnAbrir.classList.add("escondido");
             if (containerLogado) containerLogado.classList.remove("escondido");
-            if (elNomeUsuario) elNomeUsuario.textContent = usuario.nome;
+            if (elNomeUsuario) elNomeUsuario.textContent = usuario.nome || "Usuário";
+
+            // Monta o menu dinâmico de acordo com a função do usuário logado
+            if (containerItensMenu) {
+                containerItensMenu.innerHTML = gerarItensMenuPorFuncao(usuario.funcao);
+            }
+
         } catch (e) {
             console.error("Erro ao ler sessão local:", e);
         }
@@ -327,5 +328,55 @@ function verificarEstadoSessao() {
         if (btnAbrir) btnAbrir.classList.remove("escondido");
         if (containerLogado) containerLogado.classList.add("escondido");
     }
+}
+
+// Retorna os links HTML permitidos para cada perfil de usuário
+function gerarItensMenuPorFuncao(funcao = 'leitor') {
+    
+    // Opção padrão para todos os usuários logados
+    let htmlMenu = `
+        <a href="../html/painel-perfil.html" class="item-dropdown-usuario">
+            <i class="bi bi-person-gear"></i> Meu Perfil
+        </a>
+    `;
+
+    // 1. ADMIN
+    if (funcao === 'admin') {
+        htmlMenu += `
+            <a href="../html/painel-usuarios.html" class="item-dropdown-usuario">
+                <i class="bi bi-people-fill"></i> Painel de Usuários
+            </a>
+            <a href="../html/noticia-admin.html" class="item-dropdown-usuario">
+                <i class="bi bi-sliders"></i> Painel de Notícias
+            </a>
+            <a href="../html/painel-contatos.html" class="item-dropdown-usuario">
+                <i class="bi bi-envelope-paper-fill"></i> Painel de Contatos
+            </a>
+            <a href="../html/mesa-redacao.html" class="item-dropdown-usuario">
+                <i class="bi bi-journal-text"></i> Mesa de Redação
+            </a>
+        `;
+    } 
+    // 2. EDITOR
+    else if (funcao === 'editor') {
+        htmlMenu += `
+            <a href="../html/noticia-admin.html" class="item-dropdown-usuario">
+                <i class="bi bi-sliders"></i> Painel de Notícias
+            </a>
+            <a href="../html/mesa-redacao.html" class="item-dropdown-usuario">
+                <i class="bi bi-journal-text"></i> Mesa de Redação
+            </a>
+        `;
+    } 
+    // 3. JORNALISTA
+    else if (funcao === 'jornalista') {
+        htmlMenu += `
+            <a href="../html/mesa-redacao.html" class="item-dropdown-usuario">
+                <i class="bi bi-journal-text"></i> Mesa de Redação
+            </a>
+        `;
+    }
+
+    return htmlMenu;
 }
 
