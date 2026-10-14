@@ -1,5 +1,5 @@
-import { Noticia } from "../database/schema/noticiaSchema.js"; // Importe seu schema de Notícia
-import { LIMITE_MAXIMO_NOTICIAS_DATABASE } from "../constants/geralConstants.js";
+import { Noticia } from "../models/noticiaSchema.js";
+import { LIMITE_MAXIMO_NOTICIAS_DATABASE } from "../configs/constantsConfig.js";
 
 console.log("Arquivo manutencaoLimparDatabaseService.js carregado.");
 

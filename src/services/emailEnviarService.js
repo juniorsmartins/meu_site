@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import { SITE_CONFIG } from "../constants/siteConfig.js";
+import { SITE_CONFIG } from "../configs/constantsConfig.js";
 
 console.log("Arquivo emailEnviarService.js carregado.");
 

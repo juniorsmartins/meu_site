@@ -1,0 +1,20 @@
+### Criar usuário
+POST http://localhost:3000/v1/usuarios
+Content-Type: application/json
+
+{
+    "nome": "João da Silva",
+    "email": "joao.silva@example.com",
+    "senha": "senha123"
+}
+
+### Atualizar usuário
+PUT http://localhost:3000/v1/usuarios/6acf7c11b3d3823e83b4802e
+Content-Type: application/json
+
+{
+    "nome": "Junior Martins Atual",
+    "email": "juniora@gmail.com",
+    "senha": "1234"
+}
+

@@ -1,4 +1,4 @@
-import { Newsletter } from '../database/schema/newsletterSchema.js';
+import { Newsletter } from '../models/newsletterSchema.js';
 
 console.log("Arquivo newsletterCriarService.js carregado.");
 

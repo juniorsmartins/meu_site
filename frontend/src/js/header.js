@@ -171,38 +171,24 @@ function destacarPaginaAtiva() {
 // Função para gerenciar os cliques do Modal e Logout
 function configurarEventosAutenticacao() {
 
-    // Botão que abre o modal de login
     const btnAbrir = document.getElementById("btn-abrir-login");
-
-    // Botão que fecha o modal de login
     const btnFechar = document.getElementById("btn-fechar-modal-login");
-
-    // Elemento de sobreposição do modal de login. Fica atrás do card do modal e captura cliques fora do card.
+    // Overlay do modal de login - utilizado para fechar o modal ao clicar fora do card.
     const overlay = document.getElementById("modal-login-overlay"); 
-
-    // Formulário de login dentro do modal
     const formLogin = document.getElementById("form-login-modal");
-
-    // Botão que abre o menu do usuário logado
     const btnMenuUsuario = document.getElementById("btn-menu-usuario");
-
-    // Dropdown do menu do usuário logado
     const dropdownUsuario = document.getElementById("dropdown-menu-usuario");
-
-    // Botão de logout dentro do menu do usuário logado
     const btnLogout = document.getElementById("btn-executar-logout");
 
     // 1. Abrir e Fechar Modal
     if (btnAbrir) {
         btnAbrir.addEventListener("click", () => {
-            // Remove a classe "escondido" para exibir o modal
             if (overlay) overlay.classList.remove("escondido"); 
         });
     }
 
     if (btnFechar) {
         btnFechar.addEventListener("click", () => {
-            // Adiciona a classe "escondido" para ocultar o modal
             if (overlay) overlay.classList.add("escondido"); 
         });
     }
@@ -210,55 +196,96 @@ function configurarEventosAutenticacao() {
     // Fechar ao clicar fora do card do modal
     if (overlay) {
         overlay.addEventListener("click", (e) => {
-            // Fecha o modal se o clique ocorrer fora do card do modal
             if (e.target === overlay) overlay.classList.add("escondido");
         });
     }
 
-    // 2. Submeter Formulário de Login
     if (formLogin) {
-        formLogin.addEventListener("submit", (e) => {
-
-            // Previne o comportamento padrão do formulário (recarregar a página)
+        formLogin.addEventListener("submit", async (e) => {
             e.preventDefault();
 
-            // Obtém os valores dos campos de email e senha do formulário
-            const emailDigitado = document.getElementById("input-login-email").value.trim();
-            const senhaDigitada = document.getElementById("input-login-senha").value;
+            // Referências aos elementos do formulário e feedback de erro
+            const emailInput = document.getElementById("input-login-email");
+            const senhaInput = document.getElementById("input-login-senha");
+            const msgErro = document.getElementById("mensagem-erro-login");
+            const btnSubmeter = document.getElementById("btn-submeter-login");
 
-            // Simulação de autenticação (pode ser substituído pela chamada de API POST no futuro)
-            // Verifica se todos os campos foram preenchidos antes de simular o login
-           if (emailDigitado && senhaDigitada) {
+            const email = emailInput ? emailInput.value.trim() : "";
+            const senha = senhaInput ? senhaInput.value : "";
 
-                // Extrai o nome de usuário a partir da primeira parte do e-mail (ex: "junior" de "junior@email.com")
-                const nomeExtraido = emailDigitado.split(/[@._]/)[0];
+            // Oculta mensagem de erro prévia se houver
+            if (msgErro) {
+                msgErro.classList.add("escondido");
+                msgErro.textContent = "";
+            }
 
-                const usuarioSimulado = {
-                    nome: nomeExtraido,
-                    email: emailDigitado,
-                    logado: true
+            if (!email || !senha) return;
+
+            try {
+                // Feedback visual de carregamento
+                if (btnSubmeter) {
+                    btnSubmeter.disabled = true;
+                    btnSubmeter.textContent = "Autenticando...";
+                }
+
+                // 1. Chamada HTTP POST à API de Autenticação do Backend
+                const resposta = await fetch('/api/v1/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, senha })
+                });
+
+                const dados = await resposta.json();
+
+                // 2. Se a API responder com status de erro (400, 401, 500)
+                if (!resposta.ok || !dados.sucesso) {
+                    throw new Error(dados.mensagem || "Credenciais inválidas.");
+                }
+
+                // 3. Salva a sessão no localStorage contendo o Token JWT e o Objeto do Usuário
+                const usuarioSessao = {
+                    id: dados.usuario.id,
+                    nome: dados.usuario.nome,
+                    email: dados.usuario.email,
+                    funcao: dados.usuario.funcao,
+                    token: dados.token
                 };
 
-                localStorage.setItem("gajeiro_usuario", JSON.stringify(usuarioSimulado));
+                localStorage.setItem("gajeiro_usuario", JSON.stringify(usuarioSessao));
 
+                // 4. Limpa o formulário e fecha o modal
+                formLogin.reset();
                 if (overlay) overlay.classList.add("escondido");
+
+                // 5. Atualiza o cabeçalho imediatamente com os dados do usuário
                 verificarEstadoSessao();
+
+            } catch (error) {
+                console.error("Erro na autenticação:", error);
+                
+                // Exibe a mensagem do backend no container de erro do modal
+                if (msgErro) {
+                    msgErro.textContent = error.message;
+                    msgErro.classList.remove("escondido");
+                }
+            } finally {
+                // Restaura o botão ao estado normal
+                if (btnSubmeter) {
+                    btnSubmeter.disabled = false;
+                    btnSubmeter.textContent = "Entrar no Portal";
+                }
             }
         });
     }
 
     // 3. Abrir/Fechar Dropdown do Usuário Logado
     if (btnMenuUsuario && dropdownUsuario) {
-        // Alterna a visibilidade do dropdown do usuário logado ao clicar no botão do menu do usuário
         btnMenuUsuario.addEventListener("click", (e) => {
-            // Impede que o clique no botão feche o dropdown imediatamente
             e.stopPropagation();
-            // Alterna a classe "escondido" para mostrar ou ocultar o dropdown do usuário logado
             dropdownUsuario.classList.toggle("escondido");
         });
 
         document.addEventListener("click", () => {
-            // Fecha o dropdown do usuário logado ao clicar em qualquer lugar fora dele
             dropdownUsuario.classList.add("escondido");
         });
     }
@@ -266,9 +293,7 @@ function configurarEventosAutenticacao() {
     // 4. Executar Logout
     if (btnLogout) {
         btnLogout.addEventListener("click", () => {
-            // Remove o estado de sessão do localStorage para efetuar o logout
             localStorage.removeItem("gajeiro_usuario");
-            // Atualiza a interface do usuário após o logout
             verificarEstadoSessao();
         });
     }

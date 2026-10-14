@@ -1,4 +1,4 @@
-import { ContatoLeitor } from "../database/schema/contatoLeitorSchema.js";
+import { ContatoLeitor } from "../models/contatoLeitorSchema.js";
 
 console.log("Arquivo contatoLeitorCriarService.js carregado.");
 
