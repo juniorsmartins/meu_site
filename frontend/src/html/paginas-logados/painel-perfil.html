@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Gazeta Central - Meu Perfil</title>
+
+        <!-- Estilos -->
+        <link rel="stylesheet" href="../../css/index.css">
+        <link rel="stylesheet" href="../../css/header.css">
+        <link rel="stylesheet" href="../../css/paginas-logados/painel-perfil.css">
+        <link rel="stylesheet" href="../../css/footer.css">
+
+        <!-- Favicon -->
+        <link rel="shortcut icon" type="image/png" href="../../img/favicon.png">
+
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+        <!-- Bootstrap Icons -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    </head>
+
+    <body>
+
+        <!-- Scripts globais -->
+        <script type="module" src="../../js/header.js"></script>
+        <script type="module" src="../../js/paginas-logados/painel-perfil.js"></script>
+        <script type="module" src="../../js/footer.js"></script>
+
+        <!-- Cabeçalho Reutilizado -->
+        <div id="header-container"></div>
+
+        <!-- Conteúdo do Perfil do Usuário -->
+        <main id="container-painel-perfil">
+
+            <div class="perfil-wrapper">
+                
+                <!-- Cabeçalho da Página de Perfil -->
+                <div class="perfil-header-titulo">
+                    <h2>Meu Perfil</h2>
+                    <p>Gerencie seus dados pessoais e de acesso ao portal.</p>
+                </div>
+
+                <!-- Card com Formulário de Atualização do Usuário -->
+                <div class="card-perfil-form">
+                    
+                    <div class="avatar-header-section">
+                        <div class="avatar-circulo">
+                            <i class="bi bi-person-fill"></i>
+                        </div>
+                        <div class="avatar-info-texto">
+                            <h3 id="label-nome-usuario">Carregando...</h3>
+                            <span id="badge-funcao-usuario" class="badge-funcao">Leitor</span>
+                        </div>
+                    </div>
+
+                    <form id="form-meu-perfil">
+                        
+                        <div class="linha-form-dupla">
+                            <div class="campo-perfil">
+                                <label for="perfil-nome">Nome Completo</label>
+                                <input type="text" id="perfil-nome" placeholder="Seu nome" required />
+                            </div>
+
+                            <div class="campo-perfil">
+                                <label for="perfil-email">E-mail de Acesso</label>
+                                <input type="email" id="perfil-email" placeholder="seuemail@exemplo.com" required />
+                            </div>
+                        </div>
+
+                        <div class="linha-form-dupla">
+                            <div class="campo-perfil">
+                                <label for="perfil-senha">Nova Senha (deixe em branco para manter a atual)</label>
+                                <input type="password" id="perfil-senha" placeholder="••••••••" />
+                            </div>
+
+                            <!-- Campo Função Bloqueado para edição própria (Permissão exclusiva do Admin) -->
+                            <div class="campo-perfil">
+                                <label for="perfil-funcao">
+                                    Função no Portal
+                                    <i class="bi bi-lock-fill icone-bloqueio" title="Apenas Administradores podem alterar esta função"></i>
+                                </label>
+                                <select id="perfil-funcao" disabled class="campo-desabilitado">
+                                    <option value="leitor">Leitor</option>
+                                    <option value="jornalista">Jornalista</option>
+                                    <option value="editor">Editor</option>
+                                    <option value="admin">Administrador</option>
+                                </select>
+                                <span class="subtexto-bloqueio">A alteração de privilégios é realizada exclusivamente pelo Administrador.</span>
+                            </div>
+                        </div>
+
+                        <!-- Feedback de Erro ou Sucesso -->
+                        <div id="mensagem-perfil-feedback" class="feedback-perfil escondido"></div>
+
+                        <div class="acoes-perfil-footer">
+                            <button type="submit" id="btn-salvar-perfil" class="btn-salvar-perfil">
+                                <i class="bi bi-check-circle-fill"></i> Salvar Alterações
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </main>
+
+        <!-- Rodapé Reutilizado -->
+        <div id="footer-container"></div>
+
+    </body>
+
+</html>
+
