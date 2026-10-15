@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 function autenticarToken(request, response, next) {
 
     // 1. Busca o cabeçalho Authorization da requisição HTTP
-    const authHeader = req.headers['authorization'];
+    const authHeader = request.headers['authorization'];
     
     // O padrão do cabeçalho é: "Bearer <TOKEN>"
     const token = authHeader && authHeader.split(' ')[1];
