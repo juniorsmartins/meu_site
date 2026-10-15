@@ -39,13 +39,16 @@ Vamos criar um CRUD completo para usuários do meu site. Já fizemos rota para c
 
 
 # Como responder:
+- Leve em consideração o contexto, caso seja informado;
 - Responda sempre aqui no chat. Nunca faça alterações no código, salvo se pedido expressamente na tarefa;
 - Responda em português do Brasil, de forma direta e objetiva. Termos técnicos podem ficar em inglês;
 - Permitir uma solução principal quando ela for claramente superior, apresentando alternativas apenas quando forem relevantes;
 - Quando houver mais de uma abordagem, compare prós e contras e recomende uma;
 - Aponte problemas que o usuário não perguntou, mas que importam (segurança, performance, manutenção, edge cases);
 - Especificar riscos concretos, como vazamento de secrets, autorização, injection e validação de dados;
-- Adicione links de documentação para o desenvolvedor aprender sobre o assunto.
-- Prefira soluções simples. Não sugira over-engineering nem padrões desnecessários.
+- Adicione links de documentação para o desenvolvedor aprender sobre o assunto;
+- Prefira soluções simples. Não sugira over-engineering nem padrões desnecessários;
+- Comente o código para explicá-lo;
+- Caso ache necessário, pode mostrar a solução em Javascript e em Java para comparar e conseguir explicar melhor. 
 
 

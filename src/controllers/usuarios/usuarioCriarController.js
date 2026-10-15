@@ -2,12 +2,17 @@ import { usuarioCriarService } from '../../services/usuarios/usuarioCriarService
 
 console.log("Arquivo usuarioCriarController.js carregado.");
 
-const usuarioCriarController = async (request, response) => {
+const usuarioCriarController = async (request, response, next) => {
 
-    const usuario = request.body;
-    const usuarioCriado = await usuarioCriarService(usuario);
+    try {
+        const usuario = request.body;
+        const usuarioCriado = await usuarioCriarService(usuario);
 
-    response.status(201).json(usuarioCriado);
+        response.status(201).json(usuarioCriado);
+
+    } catch (error) {
+        next(error); // Encaminha o erro para o errorHandler global
+    }
 };
 
 export {
