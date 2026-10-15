@@ -23,20 +23,23 @@ Endereço: https://meu-site-ashy-omega.vercel.app/
 * rss-parser (biblioteca de RSS - lê e converte arquivos XML de Feeds em objetos JavaScript manipuláveis);
 * SECURITY - jsonwebtoken (Biblioteca para gerar e verificar tokens JWT);
 * SECURITY - bcryptjs (Biblioteca para gerar hashes e comparar senhas com segurança);
+* TEST - vitest (biblioteca para testes unitários - https://vitest.dev/guide/);
 
 
 
 -> Comandos para instalar biblibotecas
-npm i nodemon -D
-npm install --save-dev @faker-js/faker
 npm i express
 npm install mongoose 
 npm install cors 
-npm install --save-dev eslint
 npm install nodemailer
 npm install rss-parser
 npm install jsonwebtoken 
 npm install bcryptjs
+npm install --save-dev eslint
+npm install --save-dev @faker-js/faker
+npm i -D nodemon
+npm install -D vitest
+npm install -D supertest 
 
 
 
@@ -50,13 +53,14 @@ npm run dev
 
 ESQUEMA DE DIRETÓRIOS DO BACK-END
 * config (configurações da aplicação e do banco de dados);
-* controllers (recebem requisições HTTP e delegam a lógica para o service);
-* services (lógica e regras de negócio).
+* controllers (camada para receber requisições HTTP);
+* services (camada de lógica e regras de negócio);
+* repositories (camada de acesso ao banco de dados);
 * middlewares (Funções rodadas antes dos controladores - exemplo: verificações de autenticação);
 * models (Esquemas do Mongoose);
 * helpers (utilitários e parsers);
 * mocks (dados mockados para testes em ambiente local);
-* test (requests locais para testes);
+* tests (requests locais para testes);
 
 ARQUIVOS
 * [...all].js (adaptador para rodar a API em ambiente serverless da Vercel);
@@ -79,8 +83,14 @@ SECURITY (login)
 
 
 
+npm test              # roda tudo uma vez e termina (ideal para CI)
+npm run test:watch    # modo watch: reroda ao salvar (ideal para TDD)
+npm run test:coverage # gera relatório de cobertura
 
-
-
+npx vitest                      # modo watch
+npx vitest run                  # roda uma vez
+npx vitest run tests/soma.test.js   # roda um arquivo específico
+npx vitest run -t "soma dois"   # roda testes cujo nome contém o texto
+npx vitest --ui                 # interface web (precisa de @vitest/ui)
 
 

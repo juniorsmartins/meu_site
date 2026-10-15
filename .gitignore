@@ -18,4 +18,7 @@ yarn.lock
 .vscode
 *.iml
 
+# Vitest reports and artifacts
+.vitest/
+
 
