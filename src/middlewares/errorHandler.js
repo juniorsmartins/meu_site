@@ -23,7 +23,7 @@ function errorHandler(err, req, res, next) {
     }
 
     if (err.statusCode === 404) {
-        console.error("Erro de usuário não encontrado:", err);
+        console.error(err.mensagem + ": ", err);
         return res.status(404).json({
             sucesso: false,
             mensagem: err.mensagem
