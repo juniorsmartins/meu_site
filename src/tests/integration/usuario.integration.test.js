@@ -80,6 +80,104 @@ describe('Usuários - Testes de integração', () => {
         });
     });
 
+    describe('Atualizar Usuário', () => {
+
+        it('deve atualizar nome de usuário com sucesso e retornar status 200', async () => {
+            // Arrange: Prepara os dados e o ambiente para o teste
+            // Cria usuário direto no banco de teste
+            const usuarioCriado = await Usuario.create({
+                nome: 'Nome Antigo',
+                email: 'antigo@gajeiro.com',
+                senha: '123',
+                funcao: 'leitor'
+            });
+
+            const tokenAdmin = jwt.sign(
+                { id: usuarioCriado._id, funcao: 'admin' }, 
+                process.env.JWT_SECRET || 'secret_teste_jwt', 
+                { expiresIn: '1h' }
+            );
+
+            // Act: Realiza a requisição HTTP para atualizar o usuário
+            const response = await request(app)
+                .put(`/v1/usuarios/${usuarioCriado._id}`)
+                .set('Authorization', `Bearer ${tokenAdmin}`)
+                .send({ nome: 'Nome Atualizado' });
+
+            // Assert: Verifica se a resposta está de acordo com o esperado
+            expect(response.status).toBe(200);
+            expect(response.body.nome).toBe('Nome Atualizado');
+        });
+
+        it('deve retornar status 400 ao fornecer um ID de formato inválido', async () => {
+            // Arrange: Prepara os dados e o ambiente para o teste
+            const tokenAdmin = jwt.sign(
+                { id: '123', funcao: 'admin' }, 
+                process.env.JWT_SECRET || 'secret_teste_jwt', 
+                { expiresIn: '1h' }
+            );
+
+            // Act: Realiza a requisição HTTP para atualizar o usuário com ID inválido
+            const response = await request(app)
+                .put('/v1/usuarios/id-invalido-123')
+                .set('Authorization', `Bearer ${tokenAdmin}`)
+                .send({ nome: 'Teste' });
+
+            // Assert: Verifica se a resposta está de acordo com o esperado
+            expect(response.status).toBe(400);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.USUARIO.ID_INVALIDO);
+        });
+
+        it('deve retornar status 404 se o usuário a ser atualizado não existir', async () => {
+            // Arrange: Prepara os dados e o ambiente para o teste
+            const idFalso = new mongoose.Types.ObjectId();
+            const tokenAdmin = jwt.sign(
+                { id: '123', funcao: 'admin' }, 
+                process.env.JWT_SECRET || 'secret_teste_jwt', 
+                { expiresIn: '1h' }
+            );
+
+            // Act: Realiza a requisição HTTP para atualizar o usuário que não existe
+            const response = await request(app)
+                .put(`/v1/usuarios/${idFalso}`)
+                .set('Authorization', `Bearer ${tokenAdmin}`)
+                .send({ nome: 'Teste' });
+
+            // Assert: Verifica se a resposta está de acordo com o esperado
+            expect(response.status).toBe(404);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.USUARIO.NAO_ENCONTRADO);
+        });
+
+        it('deve retornar status 403 se um usuário comum tentar alterar o campo funcao', async () => {
+            // Arrange: Prepara os dados e o ambiente para o teste
+            const usuarioComum = await Usuario.create({
+                nome: 'Comum',
+                email: 'comum@gajeiro.com',
+                senha: '123',
+                funcao: 'leitor'
+            });
+
+            const tokenLeitor = jwt.sign(
+                { id: usuarioComum._id, funcao: 'leitor' }, 
+                process.env.JWT_SECRET || 'secret_teste_jwt', 
+                { expiresIn: '1h' }
+            );
+
+            // Act: Realiza a requisição HTTP para tentar alterar o campo funcao
+            const response = await request(app)
+                .put(`/v1/usuarios/${usuarioComum._id}`)
+                .set('Authorization', `Bearer ${tokenLeitor}`)
+                .send({ funcao: 'admin' }); // Tentando escalar privilégios
+
+            // Assert: Verifica se a resposta está de acordo com o esperado
+            expect(response.status).toBe(403);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_ADMIN_OBRIGATÓRIO);
+        });
+    });
+
     describe('Pesquisar Usuários - Rota Restrita)', () => {
 
         it('deve retornar status 401 se nenhum token de autenticação for fornecido', async () => {
