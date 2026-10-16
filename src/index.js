@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import { errorHandler } from './middlewares/errorHandler.js';
 import { connectToMongo } from './configs/connectToMongo.js';
 import { 
     authRouter,
@@ -15,7 +16,6 @@ const app = express(); /* Cria uma instância do aplicativo Express */
 
 /* Middleware para parsear JSON. Necessário para que o corpo das requisições POST seja interpretado corretamente. */
 app.use(express.json()); 
-
 app.use(cors({ origin: '*' })); 
 
 // Middleware para garantir que a conexão com o MongoDB seja estabelecida antes de processar as requisições
@@ -35,6 +35,10 @@ app.use("/v1/usuarios", usuarioRouter);
 app.use("/v1/admin", adminRouter);
 app.use("/v1/comunicacao", comunicacaoRouter);
 app.use("/v1/noticias", noticiaRouter);
+
+// REGISTRO OBRIGATÓRIO: Tratamento Global de Exceções
+// Middleware global de tratamento de erros. Deve ser registrado após todas as rotas e outros middlewares.
+app.use(errorHandler); 
 
 // Exportação padrão necessária para Serverless na Vercel
 export default app;
