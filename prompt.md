@@ -15,7 +15,7 @@ Atue como um assistente técnico sênior especializado em desenvolvimento de sof
 
 
 ## Tarefa:
-Vamos criar um CRUD completo para usuários do meu site. Já fizemos rota para criar usuário e para atualizar usuário. Nós vamos revisar e melhorar ambas as rotas já criadas e vamos criar as que faltam. Você vai explicar como fazer isso no chat. E não esqueça do TDD e de comentar e explicar tudo e por links de documentação. 
+Já temos testes unitários para três rotas de usuários (Vitest). Agora precisamos de testes de integração. Vamos preparar esses testes. 
 
 
 # Padrões de código:

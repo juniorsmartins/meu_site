@@ -1,6 +1,7 @@
 import { usuarioRepository } from '../../repositories/usuarios/usuarioRepository.js';
 import { LIMITE_USUARIOS_POR_PAGINA } from '../../configs/constantsConfig.js';
 import { AppError } from '../../errors/AppError.js';
+import { MENSAGENS_ERRO } from '../../configs/mensagensErro.js';
 
 /**
  * Serviço responsável por pesquisar, filtrar e paginar os usuários do sistema.
@@ -12,7 +13,7 @@ const usuarioPesquisarService = async (queryParams = {}, usuarioAutenticado = {}
     
     // REGRA DE SEGURANÇA: Somente administradores podem usar a rota de pesquisa de usuários
     if (usuarioAutenticado?.funcao !== 'admin') {
-        throw new AppError("Acesso negado. Apenas administradores podem pesquisar usuários.", 403);
+        throw new AppError(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_ADMIN_OBRIGATÓRIO, 403);
     }
 
     const { nome, email, funcao, pagina = 1, limite = LIMITE_USUARIOS_POR_PAGINA } = queryParams;

@@ -8,7 +8,7 @@ import { AppError } from '../../../errors/AppError.js';
 // Mock do repositório de usuários para testes unitários
 vi.mock('../../../repositories/usuarios/usuarioRepository.js');
 
-describe('usuarioService - TDD Unit Tests', () => {
+describe('Usuários - Testes unitários de service', () => {
 
     beforeEach(() => {
         vi.clearAllMocks();
