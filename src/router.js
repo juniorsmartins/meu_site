@@ -1,7 +1,9 @@
 import express from 'express';
 import { loginController } from './controllers/authController.js';
+import { autenticarToken } from './middlewares/autenticarToken.js';
 import { usuarioCriarController } from './controllers/usuarios/usuarioCriarController.js';
 import { usuarioAtualizarController } from './controllers/usuarios/usuarioAtualizarController.js';
+import { usuarioPesquisarController } from './controllers/usuarios/usuarioPesquisarController.js';
 import { adminMetricasController } from './controllers/adminMetricasController.js';
 import { manutencaoLimparDatabaseController } from './controllers/manutencaoLimparDatabaseController.js';
 import { automacaoImportarNoticiaController } from './controllers/automacaoImportarNoticiaController.js';
@@ -28,6 +30,7 @@ authRouter.post("/login", loginController);
 // USUÁRIOS - Rotas de gerenciamento de usuários do sistema
 usuarioRouter.post("/", usuarioCriarController);
 usuarioRouter.put("/:id", usuarioAtualizarController);
+usuarioRouter.get("/", autenticarToken, usuarioPesquisarController);
     
 // ADMIN - Rotas de administração do sistema
 adminRouter.get("/metricas", adminMetricasController);

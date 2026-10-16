@@ -1,8 +1,6 @@
 import { usuarioRepository } from "../../repositories/usuarios/usuarioRepository.js";
 import { AppError } from "../../errors/AppError.js";
 
-console.log("Arquivo usuarioCriarService.js carregado.");
-
 const usuarioCriarService = async (usuario) => {
 
     const { nome, email, senha } = usuario;

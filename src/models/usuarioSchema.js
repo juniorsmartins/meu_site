@@ -1,8 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
-console.log("Arquivo usuarioSchema.js carregado.");
-
 const usuarioSchema = new mongoose.Schema(
     {
         nome: {

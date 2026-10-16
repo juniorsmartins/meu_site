@@ -1,7 +1,5 @@
 import { Usuario } from "../../models/usuarioSchema.js";
 
-console.log("Arquivo usuarioRepository.js carregado.");
-
 const usuarioRepository = {
 
     async criar(dadosUsuario) {
@@ -19,6 +17,18 @@ const usuarioRepository = {
 
     async listarTodos() {
         return await Usuario.find().select("-senha").sort({ createdAt: -1 });
+    },
+
+    async pesquisarComFiltroPaginado({ filtro, pular, limitePorPagina }) {
+        return await Promise.all([
+            Usuario.find(filtro)
+                .select("-senha")
+                .sort({ createdAt: -1 })
+                .skip(pular) // Pula os registros já exibidos nas páginas anteriores
+                .limit(limitePorPagina)
+                .lean(), // Converte os documentos para objetos JavaScript simples
+            Usuario.countDocuments(filtro) // Conta o número total de documentos que correspondem ao filtro
+        ]);
     },
 
     async atualizar(id, dadosAtualizacao) {

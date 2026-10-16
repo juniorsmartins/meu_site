@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'; // Importando funções do Vitest para testes unitários
 import { usuarioCriarService } from '../../../services/usuarios/usuarioCriarService.js'; 
 import { usuarioAtualizarService } from '../../../services/usuarios/usuarioAtualizarService.js'; 
+import { usuarioPesquisarService } from '../../../services/usuarios/usuarioPesquisarService.js';
 import { usuarioRepository } from '../../../repositories/usuarios/usuarioRepository.js';
 import { AppError } from '../../../errors/AppError.js';
 
@@ -121,8 +122,76 @@ describe('usuarioService - TDD Unit Tests', () => {
             )).rejects.toHaveProperty('statusCode', 404);
         });
 
+    });
 
+    describe('Pesquisar Service', () => {
 
+        it('deve permitir usuário administrador pesquisar e retornar dados paginados', async () => {
+            // Arrange
+            const usuarioAdmin = { id: '6acf72ce74ffd75a24c55b43', funcao: 'admin' };
+            const queryParams = { pagina: 1, limite: 10, nome: 'Junior' };
+            
+            const mockFiltroRetorno = [
+                [{ _id: '1', nome: 'Junior', email: 'junior@gajeiro.com', funcao: 'leitor' }],
+                1
+            ];
+            
+            usuarioRepository.pesquisarComFiltroPaginado.mockResolvedValue(mockFiltroRetorno);
+
+            // Act
+            const resultado = await usuarioPesquisarService(queryParams, usuarioAdmin);
+
+            // Assert
+            expect(usuarioRepository.pesquisarComFiltroPaginado).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    filtro: { nome: { $regex: 'Junior', $options: 'i' } },
+                    pular: 0,
+                    limitePorPagina: 10
+                })
+            );
+            expect(resultado).toEqual({
+                usuarios: expect.any(Array),
+                totalRegistros: 1,
+                paginaAtual: 1,
+                totalPaginas: 1,
+                limitePorPagina: 10
+            });
+        });
+
+        it('deve lançar AppError(403) se usuário não-admin tentar acessar a pesquisa', async () => {
+            // Arrange
+            const usuarioComum = { id: 'user-2', funcao: 'leitor' };
+
+            // Act & Assert
+            await expect(usuarioPesquisarService({}, usuarioComum))
+                .rejects
+                .toThrow(AppError);
+
+            await expect(usuarioPesquisarService({}, usuarioComum))
+                .rejects
+                .toHaveProperty('statusCode', 403);
+            
+            // Garante que o repositório nem chegou a ser consultado por falha na barreira de segurança
+            expect(usuarioRepository.pesquisarComFiltroPaginado).not.toHaveBeenCalled();
+        });
+
+        it('deve aplicar filtro por função com sucesso quando solicitado por administrador', async () => {
+            // Arrange
+            const usuarioAdmin = { id: 'admin-1', funcao: 'admin' };
+            const queryParams = { funcao: 'editor' };
+            
+            usuarioRepository.pesquisarComFiltroPaginado.mockResolvedValue([[], 0]);
+
+            // Act
+            await usuarioPesquisarService(queryParams, usuarioAdmin);
+
+            // Assert
+            expect(usuarioRepository.pesquisarComFiltroPaginado).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    filtro: { funcao: 'editor' }
+                })
+            );
+        });
     });
 });
 
