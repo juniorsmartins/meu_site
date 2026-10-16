@@ -1,16 +1,17 @@
 import { usuarioRepository } from "../../repositories/usuarios/usuarioRepository.js";
 import { AppError } from "../../errors/AppError.js";
+import { MENSAGENS_ERRO } from '../../configs/mensagensErro.js';
 
 const usuarioCriarService = async (usuario) => {
 
     const { nome, email, senha } = usuario;
     if (!nome || !email || !senha) {
-        throw new AppError("Nome, e-mail e senha são obrigatórios.", 400);
+        throw new AppError(MENSAGENS_ERRO.USUARIO.CAMPOS_OBRIGATÓRIOS, 400);
     }
 
     const emailExiste = await usuarioRepository.buscarPorEmail(email);
     if (emailExiste) {
-        throw new AppError("E-mail já cadastrado no sistema.", 409);
+        throw new AppError(MENSAGENS_ERRO.USUARIO.EMAIL_DUPLICADO, 409);
     }
 
     const usuarioCriado = await usuarioRepository.criar({ nome, email, senha });

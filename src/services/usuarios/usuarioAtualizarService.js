@@ -1,17 +1,18 @@
 import { usuarioRepository } from "../../repositories/usuarios/usuarioRepository.js";
 import { AppError } from "../../errors/AppError.js";
 import { isValidObjectId } from "mongoose";
+import { MENSAGENS_ERRO } from '../../configs/mensagensErro.js';
 
 const usuarioAtualizarService = async (id, usuario, usuarioAutenticado) => {
 
     if (!isValidObjectId(id)) {
-        throw new AppError("ID de usuário inválido.", 400)
+        throw new AppError(MENSAGENS_ERRO.USUARIO.ID_INVALIDO, 400)
     }  
     
     const solicitouAlteracaoDeFuncao = Object.prototype.hasOwnProperty.call(usuario, 'funcao');
     const solicitanteEhAdmin = usuarioAutenticado?.funcao === 'admin';
     if (solicitouAlteracaoDeFuncao && !solicitanteEhAdmin) {
-        throw new AppError("Apenas usuários com função admin podem alterar a função de outro usuário.", 403);
+        throw new AppError(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_ADMIN_OBRIGATÓRIO, 403);
     }
 
     const usuarioExistente = await usuarioRepository.buscarPorId(id);

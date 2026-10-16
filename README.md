@@ -24,6 +24,8 @@ Endereço: https://meu-site-ashy-omega.vercel.app/
 * SECURITY - jsonwebtoken (Biblioteca para gerar e verificar tokens JWT);
 * SECURITY - bcryptjs (Biblioteca para gerar hashes e comparar senhas com segurança);
 * TEST - vitest (biblioteca para testes unitários - https://vitest.dev/guide/);
+* TEST - supertest (biblio pra simular requisições HTTP e validar códigos status, cabeçalhos e respostas JSON);
+* TEST - mongodb-memory-server (Utilitário para testes de integração com MongoDB/Mongoose. Baixa e executa um servidor MongoDB na memória RAM da máquina de testes.);
 
 
 
@@ -40,6 +42,7 @@ npm install --save-dev @faker-js/faker
 npm i -D nodemon
 npm install -D vitest
 npm install -D supertest 
+npm install -D mongodb-memory-server
 
 
 
