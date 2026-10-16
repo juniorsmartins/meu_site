@@ -1,5 +1,3 @@
-console.log("Arquivo AppError.js carregado.");
-
 class AppError extends Error {
 
     constructor(mensagem, statusCode = 400) {

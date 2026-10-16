@@ -1,21 +1,13 @@
-import { isValidObjectId } from "mongoose";
 import { usuarioAtualizarService } from "../../services/usuarios/usuarioAtualizarService.js";
 
-console.log("Arquivo usuarioAtualizarController.js carregado.");
-
-const usuarioAtualizarController = async (request, response) => {
+const usuarioAtualizarController = async (request, response, next) => {
 
     try {
         const { id } = request.params;
         const usuario = request.body;
         const usuarioAutenticado = request.usuario;
 
-        if (!isValidObjectId(id)) {
-            return response.status(400).json({ error: "ID de usuário inválido." });
-        }
-
         const usuarioAtualizado = await usuarioAtualizarService(id, usuario, usuarioAutenticado);
-
         if (!usuarioAtualizado) {
             return response.status(404).json({ error: "Usuário não encontrado para atualização." });
         }
@@ -40,3 +32,4 @@ const usuarioAtualizarController = async (request, response) => {
 export {
     usuarioAtualizarController
 };
+

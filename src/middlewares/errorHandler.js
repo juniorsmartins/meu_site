@@ -22,6 +22,14 @@ function errorHandler(err, req, res, next) {
         });
     }
 
+    if (err.statusCode === 404) {
+        console.error(err.mensagem + ": ", err);
+        return res.status(404).json({
+            sucesso: false,
+            mensagem: err.mensagem
+        });
+    }
+
     // 3. Erro de validação de ID do Mongoose (CastError)
     if (err.name === "CastError") {
         console.error("Erro de validação de ID:", err);

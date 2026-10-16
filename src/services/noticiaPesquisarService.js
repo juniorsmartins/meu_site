@@ -1,7 +1,5 @@
 import { Noticia } from '../models/noticiaSchema.js';
 
-console.log("Arquivo noticiaPesquisarService.js carregado.");
-
 const noticiaPesquisarService = async ({ editoria, buscaTitulo, pagina = 1, limite = 8 } = {}) => {
 
     const filtro = {};

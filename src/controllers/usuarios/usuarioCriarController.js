@@ -1,7 +1,5 @@
 import { usuarioCriarService } from '../../services/usuarios/usuarioCriarService.js';
 
-console.log("Arquivo usuarioCriarController.js carregado.");
-
 const usuarioCriarController = async (request, response, next) => {
 
     try {
