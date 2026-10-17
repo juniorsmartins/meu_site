@@ -10,8 +10,6 @@ import {
     noticiaRouter
 } from './router.js';
 
-console.log("Arquivo index.js carregado.");
-
 const app = express(); /* Cria uma instância do aplicativo Express */
 
 /* Middleware para parsear JSON. Necessário para que o corpo das requisições POST seja interpretado corretamente. */

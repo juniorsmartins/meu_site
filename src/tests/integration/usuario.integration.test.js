@@ -7,8 +7,9 @@ import { Usuario } from '../../models/usuarioSchema.js';
 import jwt from 'jsonwebtoken';
 import { MENSAGENS_ERRO } from '../../configs/mensagensErro.js';
 
-// Define o ambiente como test
+// 1. GARANTE O AMBIENTE E A CHAVE SECRETA ANTES DE QUALQUER IMPORTAÇÃO
 process.env.NODE_ENV = 'test';
+process.env.JWT_SECRET = process.env.JWT_SECRET || 'chave_secreta_para_testes_unitarios_e_integracao';
 
 let mongoServer; // Instância do servidor MongoDB em memória para testes
 
@@ -35,11 +36,11 @@ afterAll(async () => {
     await mongoServer.stop();
 });
 
-describe('Usuários - Testes de integração', () => {
+describe('Testes de Integração - Usuários', () => {
 
     describe('Criar Usuário', () => {
         
-        it('deve criar um novo usuário com sucesso e retornar status 201', async () => {
+        it('deve criar novo usuário com sucesso', async () => {
             const novoUsuario = {
                 nome: 'Usuário Teste',
                 email: 'teste.integracao@gajeiro.com',
@@ -59,7 +60,7 @@ describe('Usuários - Testes de integração', () => {
             expect(response.body).not.toHaveProperty('senha');
         });
 
-        it('deve retornar status 409 ao tentar cadastrar um e-mail duplicado', async () => {
+        it('deve retornar status 409 ao tentar cadastrar e-mail duplicado', async () => {
             const dadosDuplicados = {
                 nome: 'Duplicado',
                 email: 'duplicado@gajeiro.com',
@@ -77,6 +78,136 @@ describe('Usuários - Testes de integração', () => {
             expect(response.status).toBe(409);
             expect(response.body.sucesso).toBe(false);
             expect(response.body.mensagem).toBe(MENSAGENS_ERRO.USUARIO.EMAIL_DUPLICADO);
+        });
+    });
+
+    describe('Atualizar Usuário', () => {
+
+        it('deve atualizar nome e email de usuário leitor com sucesso', async () => {
+            // Arrange: Prepara os dados e o ambiente para o teste
+            // Cria usuário direto no banco de teste
+            const usuarioCriado = await Usuario.create({
+                nome: 'Nome Antigo',
+                email: 'antigo@gajeiro.com',
+                senha: '123',
+                funcao: 'leitor'
+            });
+
+            const tokenLeitor = jwt.sign(
+                { id: usuarioCriado._id, funcao: 'leitor' }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            const nomeAtualizado = 'Nome Atualizado';
+            const emailAtualizado = 'atualizado@gajeiro.com';
+
+            // Act: Realiza a requisição HTTP para atualizar o usuário
+            const response = await request(app)
+                .put(`/v1/usuarios/${usuarioCriado._id}`)
+                .set('Authorization', `Bearer ${tokenLeitor}`)
+                .send({ nome: nomeAtualizado, email: emailAtualizado });
+
+            // Assert: Verifica se a resposta está de acordo com o esperado
+            expect(response.status).toBe(200);
+            expect(response.body.nome).toBe(nomeAtualizado);
+            expect(response.body.email).toBe(emailAtualizado);
+        });
+
+        it('deve retornar status 400 ao fornecer ID de formato inválido', async () => {
+            // Arrange: Prepara os dados e o ambiente para o teste
+            const tokenAdmin = jwt.sign(
+                { id: '123', funcao: 'admin' }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            // Act: Realiza a requisição HTTP para atualizar o usuário com ID inválido
+            const response = await request(app)
+                .put('/v1/usuarios/id-invalido-123')
+                .set('Authorization', `Bearer ${tokenAdmin}`)
+                .send({ nome: 'Teste' });
+
+            // Assert: Verifica se a resposta está de acordo com o esperado
+            expect(response.status).toBe(400);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.USUARIO.ID_INVALIDO);
+        });
+
+        it('deve retornar status 404 se o usuário a ser atualizado não existir', async () => {
+            // Arrange: Prepara os dados e o ambiente para o teste
+            const tokenAdmin = jwt.sign(
+                { id: '123', funcao: 'admin' }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            const idFalso = new mongoose.Types.ObjectId();
+
+            // Act: Realiza a requisição HTTP para atualizar o usuário que não existe
+            const response = await request(app)
+                .put(`/v1/usuarios/${idFalso}`)
+                .set('Authorization', `Bearer ${tokenAdmin}`)
+                .send({ nome: 'Nome Teste' });
+
+            // Assert: Verifica se a resposta está de acordo com o esperado
+            expect(response.status).toBe(404);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.USUARIO.NAO_ENCONTRADO);
+        });
+
+        it('deve retornar status 403 se usuário leitor tentar alterar o campo nome de outro usuário', async () => {
+            // Arrange: Prepara os dados e o ambiente para o teste
+            const tokenLeitor = jwt.sign(
+                { id: '456', funcao: 'leitor' }, 
+                process.env.JWT_SECRET || 'secret_teste_jwt', 
+                { expiresIn: '1h' }
+            );
+
+            const usuarioOutro = await Usuario.create({
+                nome: 'Comum2',
+                email: 'comum2@gajeiro.com',
+                senha: '123',
+                funcao: 'leitor'
+            });
+
+            // Act: Realiza a requisição HTTP para tentar alterar o campo funcao
+            const response = await request(app)
+                .put(`/v1/usuarios/${usuarioOutro._id}`)
+                .set('Authorization', `Bearer ${tokenLeitor}`)
+                .send({ nome: 'Comum2 Alterado' }); 
+
+            // Assert: Verifica se a resposta está de acordo com o esperado
+            expect(response.status).toBe(403);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_PROPRIO_PERFIL_OBRIGATORIO);
+        });
+
+        it('deve retornar status 403 se um usuário comum tentar alterar o próprio campo funcao', async () => {
+            // Arrange: Prepara os dados e o ambiente para o teste
+            const usuarioComum = await Usuario.create({
+                nome: 'Comum',
+                email: 'comum@gajeiro.com',
+                senha: '123',
+                funcao: 'leitor'
+            });
+
+            const tokenLeitor = jwt.sign(
+                { id: usuarioComum._id, funcao: 'leitor' }, 
+                process.env.JWT_SECRET || 'secret_teste_jwt', 
+                { expiresIn: '1h' }
+            );
+
+            // Act: Realiza a requisição HTTP para tentar alterar o campo funcao
+            const response = await request(app)
+                .put(`/v1/usuarios/${usuarioComum._id}`)
+                .set('Authorization', `Bearer ${tokenLeitor}`)
+                .send({ funcao: 'admin' }); // Tentando escalar privilégios
+
+            // Assert: Verifica se a resposta está de acordo com o esperado
+            expect(response.status).toBe(403);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_ADMIN_OBRIGATÓRIO);
         });
     });
 
