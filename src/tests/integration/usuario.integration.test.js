@@ -5,7 +5,7 @@ import request from 'supertest';
 import { app } from '../../index.js'; // Importa a aplicação Express
 import { Usuario } from '../../models/usuarioSchema.js';
 import jwt from 'jsonwebtoken';
-import { MENSAGENS_ERRO } from '../../configs/mensagensErro.js';
+import { MENSAGENS_ERRO, MENSAGENS_SUCESSO } from '../../configs/mensagensConfig.js';
 
 // 1. GARANTE O AMBIENTE E A CHAVE SECRETA ANTES DE QUALQUER IMPORTAÇÃO
 process.env.NODE_ENV = 'test';
@@ -228,7 +228,7 @@ describe('Testes de Integração - Usuários', () => {
             // Assert: Verifica se a resposta está de acordo com o esperado
             expect(response.status).toBe(403);
             expect(response.body.sucesso).toBe(false);
-            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_PROPRIO_PERFIL_OBRIGATORIO);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_ATUALIZAR_OUTRO_PERFIL);
         });
 
         it('leitor não pode alterar o próprio campo função 403', async () => {
@@ -255,7 +255,7 @@ describe('Testes de Integração - Usuários', () => {
             // Assert: Verifica se a resposta está de acordo com o esperado
             expect(response.status).toBe(403);
             expect(response.body.sucesso).toBe(false);
-            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_ADMIN_OBRIGATÓRIO);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_ATUALIZAR_CAMPO_FUNCAO);
         });
     });
 
@@ -310,7 +310,6 @@ describe('Testes de Integração - Usuários', () => {
 
         it('endpoint exclusivo para admins e proibido para demais usuários 403', async () => {
             // Gera um token JWT simulando um usuário leitor/comum
-            process.env.JWT_SECRET = process.env.JWT_SECRET || 'secret_teste_jwt';
             const tokenLeitor = jwt.sign(
                 { id: '123', funcao: 'leitor' }, 
                 process.env.JWT_SECRET, 
@@ -323,7 +322,73 @@ describe('Testes de Integração - Usuários', () => {
 
             expect(response.status).toBe(403);
             expect(response.body.sucesso).toBe(false);
-            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_ADMIN_OBRIGATÓRIO);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_ADMIN_OBRIGATÓRIO);
+        });
+    });
+
+    describe('Deletar Usuário', () => {
+
+        it('admin deve deletar usuário comum com sucesso.', async () => {
+            // Arrange (preparação)
+            const usuarioEditor = await Usuario.create({
+                nome: 'Usuário Editor',
+                email: 'editor@gajeiro.com',
+                senha: '123',
+                funcao: 'editor'
+            });
+
+            const tokenAdmin = jwt.sign(
+                { id: '123', funcao: 'admin' }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            // Act (ação)
+            const response = await request(app)
+                .delete(`/v1/usuarios/${usuarioEditor._id}`)
+                .set('Authorization', `Bearer ${tokenAdmin}`);
+
+            // Assert (verificação)
+            expect(response.status).toBe(200);
+            expect(response.body.sucesso).toBe(true);
+            expect(response.body.idDeletado).toEqual(String(usuarioEditor._id));
+            expect(response.body.mensagem).toContain(MENSAGENS_SUCESSO.USUARIO.DELETADO);
+        });
+
+        it('admin deve deletar a si próprio com sucesso.', async () => {
+
+            const usuarioAdmin = { id: 'admin-1', funcao: 'admin' };
+
+        });
+
+        it('leitor deve deletar a si próprio com sucesso.', async () => {
+
+            const usuarioLeitor = { id: 'leitor-1', funcao: 'leitor' };
+
+        });
+    
+        it('deve lançar AppError(400) de ID inválido.', async () => {
+
+            const usuarioAdmin = { id: 'admin-1', funcao: 'admin' };
+
+        });
+        
+        it('deve lançar AppError(404) de usuário não encontrado.', async () => {
+
+            const usuarioAdmin = { id: 'admin-1', funcao: 'admin' };
+
+        });
+
+        it('deve lançar AppError(403) por não-admin tentar deletar outro usuário.', async () => {
+
+            const usuarioAdmin = { id: 'admin-1', funcao: 'admin' };
+
+        });
+
+        it('deve lançar AppError(403) por admin tentar se deletar sem outro admin presente.', async () => {
+
+            const usuarioAdmin = { id: 'admin-1', funcao: 'admin' };
+
         });
     });
 });

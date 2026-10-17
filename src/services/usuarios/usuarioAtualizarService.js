@@ -1,7 +1,7 @@
 import { usuarioRepository } from "../../repositories/usuarios/usuarioRepository.js";
 import { AppError } from "../../errors/AppError.js";
 import { isValidObjectId } from "mongoose";
-import { MENSAGENS_ERRO } from '../../configs/mensagensErro.js';
+import { MENSAGENS_ERRO } from '../../configs/mensagensConfig.js';
 
 const usuarioAtualizarService = async (id, usuario, usuarioAutenticado) => {
 
@@ -14,7 +14,7 @@ const usuarioAtualizarService = async (id, usuario, usuarioAutenticado) => {
     const solicitanteEhAdmin = usuarioAutenticado?.funcao === 'admin';
     const solicitouAlteracaoDeFuncao = Object.prototype.hasOwnProperty.call(usuario, 'funcao'); // Verifica se o usuário está tentando alterar a função
     if (solicitouAlteracaoDeFuncao && !solicitanteEhAdmin) {
-        throw new AppError(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_ADMIN_OBRIGATÓRIO, 403);
+        throw new AppError(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_ATUALIZAR_CAMPO_FUNCAO, 403);
     }
 
     // 3. REGRA DE SEGURANÇA: Não-admins só podem atualizar o seu próprio perfil
@@ -23,7 +23,7 @@ const usuarioAtualizarService = async (id, usuario, usuarioAutenticado) => {
     const idAlvo = String(id);
     const ehOProprioUsuario = idUsuarioAutenticado === idAlvo;
     if (!solicitanteEhAdmin && !ehOProprioUsuario) {
-        throw new AppError(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_PROPRIO_PERFIL_OBRIGATORIO, 403);
+        throw new AppError(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_ATUALIZAR_OUTRO_PERFIL, 403);
     }
 
     // 4. Busca o usuário no banco de dados
