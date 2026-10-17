@@ -1,7 +1,5 @@
 import { AppError } from '../errors/AppError.js';
 
-console.log("Arquivo errorHandler.js carregado.");
-
 function errorHandler(err, req, res, next) {
 
     // 1. Erros intencionais lançados pela aplicação (regras de negócio)
