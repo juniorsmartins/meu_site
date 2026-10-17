@@ -195,32 +195,5 @@ describe('Usuários - Testes unitários de service', () => {
             );
         });
     });
-
-    describe('Deletar Usuário', () => {
-
-        it('deve lançar AppError(400) de ID inválido.', async () => {
-
-            const usuarioAdmin = { id: 'admin-1', funcao: 'admin' };
-
-        });
-        
-        it('deve lançar AppError(404) de usuário não encontrado.', async () => {
-
-            const usuarioAdmin = { id: 'admin-1', funcao: 'admin' };
-
-        });
-
-        it('deve lançar AppError(403) por não-admin tentar deletar outro usuário.', async () => {
-
-            const usuarioAdmin = { id: 'admin-1', funcao: 'admin' };
-
-        });
-
-        it('deve lançar AppError(403) por admin tentar se deletar sem outro admin presente.', async () => {
-
-            const usuarioAdmin = { id: 'admin-1', funcao: 'admin' };
-
-        });
-    });
 });
 

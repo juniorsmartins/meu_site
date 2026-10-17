@@ -418,27 +418,105 @@ describe('Testes de Integração - Usuários', () => {
         });
     
         it('deve lançar AppError(400) de ID inválido.', async () => {
+            // Arrange (preparação)
+            const idInvalido = 'id-invalido';
 
-            const usuarioAdmin = { id: 'admin-1', funcao: 'admin' };
+            const tokenLeitor = jwt.sign(
+                { id: '123', funcao: 'leitor' }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            // Act (ação)
+            const response = await request(app)
+                .delete(`/v1/usuarios/${idInvalido}`)
+                .set('Authorization', `Bearer ${tokenLeitor}`);
+
+            // Assert (verificação)
+            expect(response.status).toBe(400);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.USUARIO.ID_INVALIDO);
 
         });
         
         it('deve lançar AppError(404) de usuário não encontrado.', async () => {
+            // Arrange (preparação)
+            const idValidoInexistente = new mongoose.Types.ObjectId();
 
-            const usuarioAdmin = { id: 'admin-1', funcao: 'admin' };
+            const tokenLeitor = jwt.sign(
+                { id: '123', funcao: 'leitor' }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
 
+            // Act (ação)
+            const response = await request(app)
+                .delete(`/v1/usuarios/${idValidoInexistente}`)
+                .set('Authorization', `Bearer ${tokenLeitor}`);
+
+            // Assert (verificação)
+            expect(response.status).toBe(404);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.USUARIO.NAO_ENCONTRADO);
         });
 
         it('deve lançar AppError(403) por não-admin tentar deletar outro usuário.', async () => {
+            // Arrange (preparação)
+            const usuarioLeitor = await Usuario.create({
+                nome: 'Usuário Leitor1',
+                email: 'leitor1@gajeiro.com',
+                senha: '123',
+                funcao: 'leitor'
+            });
 
-            const usuarioAdmin = { id: 'admin-1', funcao: 'admin' };
+            const usuarioLeitorPraDeletar = await Usuario.create({
+                nome: 'Usuário Leitor2',
+                email: 'leitor2@gajeiro.com',
+                senha: '456',
+                funcao: 'leitor'
+            });
 
+            const tokenLeitor = jwt.sign(
+                { id: usuarioLeitor._id, funcao: usuarioLeitor.funcao }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            // Act (ação)
+            const response = await request(app)
+                .delete(`/v1/usuarios/${usuarioLeitorPraDeletar._id}`)
+                .set('Authorization', `Bearer ${tokenLeitor}`);
+
+            // Assert (verificação)
+            expect(response.status).toBe(403);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_DELETAR_OUTRO_PERFIL);
         });
 
         it('deve lançar AppError(403) por admin tentar se deletar sem outro admin presente.', async () => {
+            // Arrange (preparação)
+            const usuarioAdmin = await Usuario.create({
+                nome: 'Usuário Admin1',
+                email: 'admin1@gajeiro.com',
+                senha: '123',
+                funcao: 'admin'
+            });
 
-            const usuarioAdmin = { id: 'admin-1', funcao: 'admin' };
+            const tokenAdmin = jwt.sign(
+                { id: usuarioAdmin._id, funcao: usuarioAdmin.funcao }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
 
+            // Act (ação)
+            const response = await request(app)
+                .delete(`/v1/usuarios/${usuarioAdmin._id}`)
+                .set('Authorization', `Bearer ${tokenAdmin}`);
+
+            // Assert (verificação)
+            expect(response.status).toBe(403);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_DELETAR_ADMIN_UNICO);
         });
     });
 });
