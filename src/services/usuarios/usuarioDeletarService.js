@@ -17,9 +17,11 @@ const usuarioDeletarService = async (id, usuarioAutenticado) => {
     }
 
     const ehAdmin = usuarioAutenticado.funcao === 'admin';
-    const ehOProprioUsuario = String(usuarioAutenticado._id) === String(id);
 
-    // 2. Validação de autorização baseada nas regras de negócio
+    // 2. Regras de segurança para não-admins tentando deletar outros usuários
+    const idUsuarioAutenticado = String(usuarioAutenticado?.id || usuarioAutenticado?._id || '');
+    const idAlvo = String(id);
+    const ehOProprioUsuario = idUsuarioAutenticado === idAlvo;    
     if (!ehAdmin && !ehOProprioUsuario) {
         throw new AppError(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_DELETAR_OUTRO_PERFIL, 403);
     }

@@ -356,14 +356,64 @@ describe('Testes de Integração - Usuários', () => {
         });
 
         it('admin deve deletar a si próprio com sucesso.', async () => {
+            // Arrange (preparação)
+            await Usuario.create({
+                nome: 'Usuário Admin1',
+                email: 'admin1@gajeiro.com',
+                senha: '123',
+                funcao: 'admin'
+            });
 
-            const usuarioAdmin = { id: 'admin-1', funcao: 'admin' };
+            const usuarioAdminPraDeletar = await Usuario.create({
+                nome: 'Usuário Admin2',
+                email: 'admin2@gajeiro.com',
+                senha: '456',
+                funcao: 'admin'
+            });
 
+            const tokenAdmin = jwt.sign(
+                { id: usuarioAdminPraDeletar._id, funcao: 'admin' }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            // Act (ação)
+            const response = await request(app)
+                .delete(`/v1/usuarios/${usuarioAdminPraDeletar._id}`)
+                .set('Authorization', `Bearer ${tokenAdmin}`);
+
+            // Assert (verificação)
+            expect(response.status).toBe(200);
+            expect(response.body.sucesso).toBe(true);
+            expect(response.body.idDeletado).toEqual(String(usuarioAdminPraDeletar._id));
+            expect(response.body.mensagem).toContain(MENSAGENS_SUCESSO.USUARIO.DELETADO);
         });
 
         it('leitor deve deletar a si próprio com sucesso.', async () => {
+            // Arrange (preparação)
+            const usuarioLeitor = await Usuario.create({
+                nome: 'Usuário Leitor',
+                email: 'leitor@gajeiro.com',
+                senha: '123',
+                funcao: 'leitor'
+            });
 
-            const usuarioLeitor = { id: 'leitor-1', funcao: 'leitor' };
+            const tokenLeitor = jwt.sign(
+                { id: usuarioLeitor._id, funcao: usuarioLeitor.funcao }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            // Act (ação)
+            const response = await request(app)
+                .delete(`/v1/usuarios/${usuarioLeitor._id}`)
+                .set('Authorization', `Bearer ${tokenLeitor}`);
+
+            // Assert (verificação)
+            expect(response.status).toBe(200);
+            expect(response.body.sucesso).toBe(true);
+            expect(response.body.idDeletado).toEqual(String(usuarioLeitor._id));
+            expect(response.body.mensagem).toContain(MENSAGENS_SUCESSO.USUARIO.DELETADO);
 
         });
     
