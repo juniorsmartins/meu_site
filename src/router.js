@@ -4,6 +4,7 @@ import { autenticarToken } from './middlewares/autenticarToken.js';
 import { usuarioCriarController } from './controllers/usuarios/usuarioCriarController.js';
 import { usuarioAtualizarController } from './controllers/usuarios/usuarioAtualizarController.js';
 import { usuarioPesquisarController } from './controllers/usuarios/usuarioPesquisarController.js';
+import { usuarioDeletarController } from './controllers/usuarios/usuarioDeletarController.js';
 import { adminMetricasController } from './controllers/adminMetricasController.js';
 import { manutencaoLimparDatabaseController } from './controllers/manutencaoLimparDatabaseController.js';
 import { automacaoImportarNoticiaController } from './controllers/automacaoImportarNoticiaController.js';
@@ -29,7 +30,8 @@ authRouter.post("/login", loginController);
 usuarioRouter.post("/", usuarioCriarController);
 usuarioRouter.put("/:id", autenticarToken, usuarioAtualizarController);
 usuarioRouter.get("/", autenticarToken, usuarioPesquisarController);
-    
+usuarioRouter.delete("/:id", autenticarToken, usuarioDeletarController);
+
 // ADMIN - Rotas de administração do sistema
 adminRouter.get("/metricas", adminMetricasController);
 adminRouter.delete("/manutencao/limpar-database", manutencaoLimparDatabaseController);

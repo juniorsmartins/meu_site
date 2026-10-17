@@ -9,6 +9,7 @@ const usuarioCriarController = async (request, response, next) => {
         response.status(201).json(usuarioCriado);
 
     } catch (error) {
+        console.error("Erro no usuarioCriarController:", error.message);
         next(error); // Encaminha o erro para o errorHandler global
     }
 };

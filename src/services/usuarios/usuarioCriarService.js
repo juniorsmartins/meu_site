@@ -1,6 +1,6 @@
 import { usuarioRepository } from "../../repositories/usuarios/usuarioRepository.js";
 import { AppError } from "../../errors/AppError.js";
-import { MENSAGENS_ERRO } from '../../configs/mensagensErro.js';
+import { MENSAGENS_ERRO } from '../../configs/mensagensConfig.js';
 
 const usuarioCriarService = async (usuario) => {
 
