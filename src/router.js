@@ -16,8 +16,6 @@ import { noticiaAtualizarController } from './controllers/noticiaAtualizarContro
 import { noticiaDeletarPorIdController } from './controllers/noticiaDeleteController.js';
 import { noticiaCapaController } from './controllers/noticiaCapaController.js';
 
-console.log("Arquivo router.js carregado.");
-
 const authRouter = express.Router();
 const usuarioRouter = express.Router();
 const adminRouter = express.Router();
@@ -29,7 +27,7 @@ authRouter.post("/login", loginController);
 
 // USUÁRIOS - Rotas de gerenciamento de usuários do sistema
 usuarioRouter.post("/", usuarioCriarController);
-usuarioRouter.put("/:id", usuarioAtualizarController);
+usuarioRouter.put("/:id", autenticarToken, usuarioAtualizarController);
 usuarioRouter.get("/", autenticarToken, usuarioPesquisarController);
     
 // ADMIN - Rotas de administração do sistema

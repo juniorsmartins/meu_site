@@ -3,7 +3,8 @@ const MENSAGENS_ERRO = Object.freeze({ // Mensagens de erro padronizadas do sist
     AUTENTICAÇÃO: {
         TOKEN_NAO_FORNECIDO: "Acesso negado. Token de autenticação não fornecido.",
         TOKEN_INVALIDO: "Token inválido ou expirado. Faça login novamente.",
-        ACESSO_ADMIN_OBRIGATÓRIO: "Acesso negado. Apenas administradores podem acessar o recurso."
+        ACESSO_ADMIN_OBRIGATÓRIO: "Acesso negado. Apenas administradores podem acessar o recurso.",
+        ACESSO_PROPRIO_PERFIL_OBRIGATORIO: "Acesso negado. Leitor só pode acessar seu próprio perfil."
     },
 
     USUARIO: {

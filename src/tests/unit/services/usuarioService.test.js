@@ -47,15 +47,12 @@ describe('Usuários - Testes unitários de service', () => {
 
     describe('Atualizar Usuário', () => {
 
-        it ('deve atualizar um usuário com sucesso', async () => {
+        it ('deve atualizar usuário comum com sucesso', async () => {
+
             // Arrange (preparação dos dados e mocks para o teste)
             const idUsuario = '6acf72ce74ffd75a24c55b43';
-            const dadosAtualizacao = { 
-                nome: 'Junior Atual', 
-                email: 'junior.atual@gajeiro.com' 
-            };
 
-            // Usuário já existente no banco (retornado pelo repositório)
+            // Usuário já existente no banco 
             const usuarioExistenteMock = {
                 _id: idUsuario,
                 nome: 'Junior Antigo',
@@ -63,8 +60,13 @@ describe('Usuários - Testes unitários de service', () => {
                 funcao: 'leitor'
             };
 
+            const dadosAtualizacao = { 
+                nome: 'Junior Atual', 
+                email: 'junior.atual@gajeiro.com' 
+            };
+
             // Usuário autenticado sem privilégio de admin (ok, porque não está alterando "funcao")
-            const usuarioAutenticado = { id: 'u-logado', funcao: 'leitor' };
+            const usuarioAutenticado = { id: idUsuario, funcao: 'leitor' };
 
             // Mock das dependências usadas pelo service
             usuarioRepository.buscarPorId.mockResolvedValue(usuarioExistenteMock);
@@ -108,15 +110,15 @@ describe('Usuários - Testes unitários de service', () => {
 
         it ('deve lançar erro se usuário não existir', async () => {
             // Arrange
-            const idUsuario = '6acf72ce74ffd75a24c55b43';
+            const idUsuarioInexistente = '6acf72ce74ffd75a24c55b43';
             const dadosAtualizacao = { nome: 'Nome Qualquer' };
-            const usuarioAutenticado = { id: 'u-logado', funcao: 'leitor' };
+            const usuarioAutenticado = { id: '6acf7c11b3d3823e83b4802e', funcao: 'admin' };
 
             usuarioRepository.buscarPorId.mockResolvedValue(null);
 
             // Act & Assert (execução e verificações)
             await expect(usuarioAtualizarService(
-                idUsuario,
+                idUsuarioInexistente,
                 dadosAtualizacao,
                 usuarioAutenticado
             )).rejects.toHaveProperty('statusCode', 404);
