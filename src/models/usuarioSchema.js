@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+import { FUNCOES_USUARIO } from "../configs/constantsConfig.js";
 
 const usuarioSchema = new mongoose.Schema(
     {
@@ -21,7 +22,7 @@ const usuarioSchema = new mongoose.Schema(
         },
         funcao: {
             type: String,
-            enum: ["admin", "editor", "jornalista", "leitor"], // Define os valores permitidos à função
+            enum: FUNCOES_USUARIO, // Define os valores permitidos à função
             default: "leitor" // Define o valor padrão
         }
     }, 
@@ -38,7 +39,7 @@ usuarioSchema.pre('save', async function () {
     const salt = await bcrypt.genSalt(10);
 
     // Substitui a senha em texto limpo pelo hash seguro
-    this.senha = await bcrypt.hash(this.senha, salt);
+    this.senha = bcrypt.hash(this.senha, salt);
 });
 
 // MÉTODO AUXILIAR: Para validar se a senha digitada no login bate com o hash salvo
