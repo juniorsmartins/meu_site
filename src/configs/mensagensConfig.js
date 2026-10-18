@@ -6,6 +6,7 @@ const MENSAGENS_ERRO = Object.freeze({ // Mensagens de erro padronizadas do sist
         ACESSO_BLOQUEADO_ADMIN_OBRIGATÓRIO: "Acesso negado. Apenas administradores podem acessar o recurso.",
         ACESSO_BLOQUEADO_ATUALIZAR_OUTRO_PERFIL: "Acesso negado. Você só pode atualizar o próprio perfil.",
         ACESSO_BLOQUEADO_ATUALIZAR_CAMPO_FUNCAO: "Acesso negado. Apenas administradores podem alterar a função do usuário.",
+        ACESSO_BLOQUEADO_BUSCAR_OUTRO_PERFIL: "Acesso negado. Você só pode buscar o próprio perfil.",
         ACESSO_BLOQUEADO_DELETAR_OUTRO_PERFIL: "Acesso negado. Você só pode deletar o próprio perfil.",
         ACESSO_BLOQUEADO_DELETAR_ADMIN_UNICO: "Acesso negado. Não é possível deletar o único administrador existente no sistema."
     },
@@ -22,7 +23,8 @@ const MENSAGENS_ERRO = Object.freeze({ // Mensagens de erro padronizadas do sist
 const MENSAGENS_SUCESSO = Object.freeze({
 
     USUARIO: {
-        DELETADO: "Usuário deletado com sucesso do sistema."
+        BUSCADO: "Usuário buscado com sucesso.",
+        DELETADO: "Usuário deletado com sucesso."
     }
 });
 

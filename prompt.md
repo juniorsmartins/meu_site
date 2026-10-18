@@ -13,7 +13,7 @@ Atue como um assistente técnico sênior especializado em desenvolvimento de sof
 
 
 ## Tarefa:
-Agora vamos criar o endpoint de deletar usuário seguindo todos os padrões de código. Coloquei alguns arquivos em anexo para dar um pouco de contexto. 
+Agora vamos criar o endpoint de buscar usuário por id. Não faremos testes unitários, mas faremos testes de integração. Também vamos colocar os arquivos index.js e router.js nos padrões de código. 
 
 
 # Padrões de código:

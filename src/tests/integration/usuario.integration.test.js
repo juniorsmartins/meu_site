@@ -436,15 +436,14 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.status).toBe(400);
             expect(response.body.sucesso).toBe(false);
             expect(response.body.mensagem).toContain(MENSAGENS_ERRO.USUARIO.ID_INVALIDO);
-
         });
         
         it('deve lançar AppError(404) de usuário não encontrado.', async () => {
             // Arrange (preparação)
             const idValidoInexistente = new mongoose.Types.ObjectId();
 
-            const tokenLeitor = jwt.sign(
-                { id: '123', funcao: 'leitor' }, 
+            const tokenAdmin = jwt.sign(
+                { id: '123', funcao: 'admin' }, 
                 process.env.JWT_SECRET, 
                 { expiresIn: '1h' }
             );
@@ -452,7 +451,7 @@ describe('Testes de Integração - Usuários', () => {
             // Act (ação)
             const response = await request(app)
                 .delete(`/v1/usuarios/${idValidoInexistente}`)
-                .set('Authorization', `Bearer ${tokenLeitor}`);
+                .set('Authorization', `Bearer ${tokenAdmin}`);
 
             // Assert (verificação)
             expect(response.status).toBe(404);
@@ -517,6 +516,118 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.status).toBe(403);
             expect(response.body.sucesso).toBe(false);
             expect(response.body.mensagem).toContain(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_DELETAR_ADMIN_UNICO);
+        });
+    });
+
+    describe('Buscar usuário', () => {
+
+        it ('admin deve buscar usuário comum com sucesso.', async () => {
+            const usuarioEditor = await Usuario.create({
+                nome: 'Usuário Editor',
+                email: 'editor@gajeiro.com',
+                senha: '123',
+                funcao: 'editor'
+            });
+
+            const tokenAdmin = jwt.sign(
+                { id: '123', funcao: 'admin' }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            const response = await request(app)
+                .get(`/v1/usuarios/${usuarioEditor._id}`)
+                .set('Authorization', `Bearer ${tokenAdmin}`);
+
+            expect(response.status).toBe(200);
+            expect(response.body._id).toBe(usuarioEditor._id.toString());
+            expect(response.body.nome).toBe(usuarioEditor.nome);
+            expect(response.body.email).toBe(usuarioEditor.email);
+            expect(response.body.funcao).toBe(usuarioEditor.funcao);
+        });
+
+        it ('leitor deve buscar a si próprio com sucesso.', async () => {
+            const usuarioLeitor = await Usuario.create({
+                nome: 'Usuário Leitor',
+                email: 'leitor@gajeiro.com',
+                senha: '123',
+                funcao: 'leitor'
+            });
+
+            const tokenLeitor = jwt.sign(
+                { id: usuarioLeitor._id, funcao: usuarioLeitor.funcao }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            const response = await request(app)
+                .get(`/v1/usuarios/${usuarioLeitor._id}`)
+                .set('Authorization', `Bearer ${tokenLeitor}`);
+
+            expect(response.status).toBe(200);
+            expect(response.body._id).toBe(usuarioLeitor._id.toString());
+            expect(response.body.nome).toBe(usuarioLeitor.nome);
+            expect(response.body.email).toBe(usuarioLeitor.email);
+            expect(response.body.funcao).toBe(usuarioLeitor.funcao);
+        });
+
+        it ('deve lançar AppError(400) de ID inválido.', async () => {
+            const idInvalido = 'id-invalido';
+
+            const tokenAdmin = jwt.sign(
+                { id: '123', funcao: 'admin' }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            const response = await request(app)
+                .get(`/v1/usuarios/${idInvalido}`)
+                .set('Authorization', `Bearer ${tokenAdmin}`);
+
+            expect(response.status).toBe(400);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.USUARIO.ID_INVALIDO);
+        });
+
+        it ('deve lançar AppError(403) por não-admin tentar buscar outro usuário.', async () => {
+            const usuarioEditor = await Usuario.create({
+                nome: 'Usuário Editor',
+                email: 'editor@gajeiro.com',
+                senha: '123',
+                funcao: 'editor'
+            });
+
+            const tokenLeitor = jwt.sign(
+                { id: '123', funcao: 'leitor' }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            const response = await request(app)
+                .get(`/v1/usuarios/${usuarioEditor._id}`)
+                .set('Authorization', `Bearer ${tokenLeitor}`);
+
+            expect(response.status).toBe(403);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_BUSCAR_OUTRO_PERFIL);
+        });
+
+        it ('deve lançar AppError(404) de usuário não encontrado.', async () => {
+            const idValidoInexistente = new mongoose.Types.ObjectId();
+
+            const tokenAdmin = jwt.sign(
+                { id: '123', funcao: 'admin' }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            const response = await request(app)
+                .get(`/v1/usuarios/${idValidoInexistente}`)
+                .set('Authorization', `Bearer ${tokenAdmin}`);
+
+            expect(response.status).toBe(404);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.USUARIO.NAO_ENCONTRADO);
         });
     });
 });
