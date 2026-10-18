@@ -1,31 +1,23 @@
 import { usuarioAtualizarService } from "../../services/usuarios/usuarioAtualizarService.js";
+import { MENSAGENS_SUCESSO } from '../../configs/mensagensConfig.js';
 
 const usuarioAtualizarController = async (request, response, next) => {
 
     try {
         const { id } = request.params;
-        const usuario = request.body;
+        const dadosAtualizacao = request.body;
         const usuarioAutenticado = request.usuario;
 
-        const usuarioAtualizado = await usuarioAtualizarService(id, usuario, usuarioAutenticado);
-        if (!usuarioAtualizado) {
-            return response.status(404).json({ error: "Usuário não encontrado para atualização." });
-        }
+        const usuarioAtualizado = await usuarioAtualizarService(id, dadosAtualizacao, usuarioAutenticado);
 
-        return response.status(200).json(usuarioAtualizado);
+        return response.status(200).json({
+            sucesso: true,
+            mensagem: MENSAGENS_SUCESSO.USUARIO.ATUALIZADO,
+            usuarioAtualizado
+        });
         
     } catch (error) {
-        console.error("Erro no usuarioAtualizarController:", error.message);
-
-        const status = error.statusCode || 500;
-        const mensagem = status === 500
-            ? "Ocorreu um erro interno ao atualizar o usuário."
-            : error.message;
-
-        return response.status(status).json({
-            sucesso: false,
-            mensagem
-        });
+        next(error);
     }
 };
 

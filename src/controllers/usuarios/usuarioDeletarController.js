@@ -1,4 +1,5 @@
 import { usuarioDeletarService } from '../../services/usuarios/usuarioDeletarService.js';
+import { MENSAGENS_SUCESSO } from '../../configs/mensagensConfig.js';
 
 const usuarioDeletarController = async (request, response, next) => {
 
@@ -6,16 +7,16 @@ const usuarioDeletarController = async (request, response, next) => {
         const { id } = request.params;
         const usuarioAutenticado = request.usuario; // Usuário autenticado injetado pelo middleware de autenticação
 
-        const resultado = await usuarioDeletarService(id, usuarioAutenticado);
+        const idDeletado = await usuarioDeletarService(id, usuarioAutenticado);
 
         return response.status(200).json({
             sucesso: true,
-            ...resultado
+            mensagem: MENSAGENS_SUCESSO.USUARIO.DELETADO,
+            idDeletado
         });
 
     } catch (error) {
-        console.error("Erro no usuarioDeletarController:", error.message);
-        next(error); // Encaminha para o Global Error Handler
+        next(error); 
     }
 };
 

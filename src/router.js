@@ -2,8 +2,9 @@ import express from 'express';
 import { loginController } from './controllers/authController.js';
 import { autenticarToken } from './middlewares/autenticarToken.js';
 import { usuarioCriarController } from './controllers/usuarios/usuarioCriarController.js';
-import { usuarioAtualizarController } from './controllers/usuarios/usuarioAtualizarController.js';
 import { usuarioPesquisarController } from './controllers/usuarios/usuarioPesquisarController.js';
+import { usuarioBuscarController } from './controllers/usuarios/usuarioBuscarController.js';
+import { usuarioAtualizarController } from './controllers/usuarios/usuarioAtualizarController.js';
 import { usuarioDeletarController } from './controllers/usuarios/usuarioDeletarController.js';
 import { adminMetricasController } from './controllers/adminMetricasController.js';
 import { manutencaoLimparDatabaseController } from './controllers/manutencaoLimparDatabaseController.js';
@@ -16,6 +17,8 @@ import { noticiaConsultarPorIdController } from './controllers/noticiaConsultarC
 import { noticiaAtualizarController } from './controllers/noticiaAtualizarController.js';
 import { noticiaDeletarPorIdController } from './controllers/noticiaDeleteController.js';
 import { noticiaCapaController } from './controllers/noticiaCapaController.js';
+import { validarSchema } from './middlewares/validarSchemaMiddleware.js';
+import { usuarioCriarSchema, usuarioAtualizarSchema } from './validators/usuarioValidator.js';
 
 const authRouter = express.Router();
 const usuarioRouter = express.Router();
@@ -27,9 +30,10 @@ const noticiaRouter = express.Router();
 authRouter.post("/login", loginController);
 
 // USUÁRIOS - Rotas de gerenciamento de usuários do sistema
-usuarioRouter.post("/", usuarioCriarController);
-usuarioRouter.put("/:id", autenticarToken, usuarioAtualizarController);
+usuarioRouter.post("/", validarSchema(usuarioCriarSchema), usuarioCriarController);
 usuarioRouter.get("/", autenticarToken, usuarioPesquisarController);
+usuarioRouter.get("/:id", autenticarToken, usuarioBuscarController);
+usuarioRouter.put("/:id", autenticarToken, validarSchema(usuarioAtualizarSchema), usuarioAtualizarController);
 usuarioRouter.delete("/:id", autenticarToken, usuarioDeletarController);
 
 // ADMIN - Rotas de administração do sistema

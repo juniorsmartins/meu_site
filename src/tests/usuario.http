@@ -4,12 +4,12 @@ Content-Type: application/json
 
 {
     "nome": "João da Silva",
-    "email": "joao.silva@example.com",
+    "email": "joao.silva2@example.com",
     "senha": "senha123"
 }
 
 ### Atualizar usuário
-PUT http://localhost:3000/v1/usuarios/6acf7c11b3d3823e83b4802e
+PUT http://localhost:3000/v1/usuarios/6ad4c55aaeae35fdfc809d9e
 Content-Type: application/json
 
 {

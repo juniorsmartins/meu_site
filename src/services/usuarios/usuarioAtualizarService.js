@@ -3,21 +3,21 @@ import { AppError } from "../../errors/AppError.js";
 import { isValidObjectId } from "mongoose";
 import { MENSAGENS_ERRO } from '../../configs/mensagensConfig.js';
 
-const usuarioAtualizarService = async (id, usuario, usuarioAutenticado) => {
+const usuarioAtualizarService = async (id, dadosAtualizacao, usuarioAutenticado) => {
 
     // 1. Valida se o ID fornecido possui um formato ObjectId válido do MongoDB
     if (!isValidObjectId(id)) {
         throw new AppError(MENSAGENS_ERRO.USUARIO.ID_INVALIDO, 400);
     }
     
-    // 2. REGRA DE SEGURANÇA: Apenas administradores podem alterar funções de usuários
+    // 2. REGRA DE NEGÓCIO: Apenas administradores podem alterar funções de usuários
     const solicitanteEhAdmin = usuarioAutenticado?.funcao === 'admin';
-    const solicitouAlteracaoDeFuncao = Object.prototype.hasOwnProperty.call(usuario, 'funcao'); // Verifica se o usuário está tentando alterar a função
+    const solicitouAlteracaoDeFuncao = Object.prototype.hasOwnProperty.call(dadosAtualizacao, 'funcao'); // Verifica se o usuário está tentando alterar a função
     if (solicitouAlteracaoDeFuncao && !solicitanteEhAdmin) {
         throw new AppError(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_ATUALIZAR_CAMPO_FUNCAO, 403);
     }
 
-    // 3. REGRA DE SEGURANÇA: Não-admins só podem atualizar o seu próprio perfil
+    // 3. REGRA DE NEGÓCIO: Não-admins só podem atualizar o seu próprio perfil
     // Normalizamos ambos para String para evitar conflito entre ObjectId e String pura
     const idUsuarioAutenticado = String(usuarioAutenticado?.id || usuarioAutenticado?._id || '');
     const idAlvo = String(id);
@@ -26,21 +26,28 @@ const usuarioAtualizarService = async (id, usuario, usuarioAutenticado) => {
         throw new AppError(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_ATUALIZAR_OUTRO_PERFIL, 403);
     }
 
-    // 4. Busca o usuário no banco de dados
-    const usuarioExistente = await usuarioRepository.buscarPorId(id);
-    if (!usuarioExistente) {
+    const usuarioExiste = await usuarioRepository.existePorId(id);
+    if (!usuarioExiste) {
         throw new AppError(MENSAGENS_ERRO.USUARIO.NAO_ENCONTRADO, 404);
     }
 
-    // 5. Atualiza os dados do usuário existente com os novos dados fornecidos
-    Object.assign(usuarioExistente, usuario);
+    // START SEGURANÇA (Whitelisting)
+    // SEGURANÇA (Whitelisting): Extraímos apenas os campos permitidos para alteração,
+    // blindando contra Mass Assignment de propriedades internas do Mongoose ou do Schema.
+    const { nome, email, senha, funcao } = dadosAtualizacao;
+    const dadosFiltrados = {};
 
-    await usuarioRepository.atualizar(id, usuarioExistente);
-    return usuarioExistente;
+    if (nome !== undefined) dadosFiltrados.nome = nome;
+    if (email !== undefined) dadosFiltrados.email = email;
+    if (senha !== undefined) dadosFiltrados.senha = senha; // O hook pre-save do Mongoose cuidará do hash automaticamente!
+    if (solicitanteEhAdmin && funcao !== undefined) dadosFiltrados.funcao = funcao;
+    // END SEGURANÇA (Whitelisting)
+
+    const usuarioAtualizado = await usuarioRepository.atualizar(id, dadosFiltrados);
+    return usuarioAtualizado;
 };
 
 export {
     usuarioAtualizarService
 };
-
 
