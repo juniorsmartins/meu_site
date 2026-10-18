@@ -52,12 +52,14 @@ describe('Testes de Integração - Usuários', () => {
                 .send(novoUsuario);
 
             expect(response.status).toBe(201);
-            expect(response.body).toHaveProperty('_id');
-            expect(response.body.nome).toBe(novoUsuario.nome);
-            expect(response.body.email).toBe(novoUsuario.email);
-            expect(response.body.funcao).toBe('leitor'); // Valor padrão para novos usuários
+            expect(response.body.sucesso).toBe(true);
+            expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.CRIADO);
+            expect(response.body).toHaveProperty('usuarioCriado._id');
+            expect(response.body.usuarioCriado.nome).toBe(novoUsuario.nome);
+            expect(response.body.usuarioCriado.email).toBe(novoUsuario.email);
+            expect(response.body.usuarioCriado.funcao).toBe('leitor'); // Valor padrão para novos usuários
             // Garante que a senha nunca é exposta no JSON de resposta (Clean Code & Segurança)
-            expect(response.body).not.toHaveProperty('senha');
+            expect(response.body.usuarioCriado).not.toHaveProperty('senha');
         });
 
         it('não pode criar usuário sem informar email 400', async () => {
@@ -72,7 +74,7 @@ describe('Testes de Integração - Usuários', () => {
 
             expect(response.status).toBe(400);
             expect(response.body.sucesso).toBe(false);
-            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.USUARIO.CAMPOS_OBRIGATÓRIOS);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.USUARIO.CAMPO_EMAIL_OBRIGATORIO);
         });
 
         it('deve retornar status 409 ao tentar cadastrar e-mail duplicado', async () => {
@@ -98,7 +100,7 @@ describe('Testes de Integração - Usuários', () => {
 
     describe('Atualizar Usuário', () => {
 
-        it('leitor deve atualizar nome e email próprios com sucesso', async () => {
+        it('leitor deve atualizar nome e email próprios com sucesso.', async () => {
             // Arrange: Prepara os dados e o ambiente para o teste
             // Cria usuário direto no banco de teste
             const usuarioCriado = await Usuario.create({
@@ -109,7 +111,7 @@ describe('Testes de Integração - Usuários', () => {
             });
 
             const tokenLeitor = jwt.sign(
-                { id: usuarioCriado._id, funcao: 'leitor' }, 
+                { id: usuarioCriado._id, funcao: usuarioCriado.funcao }, 
                 process.env.JWT_SECRET, 
                 { expiresIn: '1h' }
             );
@@ -125,8 +127,10 @@ describe('Testes de Integração - Usuários', () => {
 
             // Assert: Verifica se a resposta está de acordo com o esperado
             expect(response.status).toBe(200);
-            expect(response.body.nome).toBe(nomeAtualizado);
-            expect(response.body.email).toBe(emailAtualizado);
+            expect(response.body.sucesso).toBe(true);
+            expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.ATUALIZADO);
+            expect(response.body.usuarioAtualizado.nome).toBe(nomeAtualizado);
+            expect(response.body.usuarioAtualizado.email).toBe(emailAtualizado);
         });
 
         it('admin deve atualizar nome, email e função de leitor com sucesso', async () => {
@@ -157,9 +161,11 @@ describe('Testes de Integração - Usuários', () => {
 
             // Assert: Verifica se a resposta está de acordo com o esperado
             expect(response.status).toBe(200);
-            expect(response.body.nome).toBe(nomeAtualizado);
-            expect(response.body.email).toBe(emailAtualizado);
-            expect(response.body.funcao).toBe(funcaoAtualizada);
+            expect(response.body.sucesso).toBe(true);
+            expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.ATUALIZADO);
+            expect(response.body.usuarioAtualizado.nome).toBe(nomeAtualizado);
+            expect(response.body.usuarioAtualizado.email).toBe(emailAtualizado);
+            expect(response.body.usuarioAtualizado.funcao).toBe(funcaoAtualizada);
         });
 
         it('deve retornar status 400 ao fornecer ID de formato inválido', async () => {
@@ -291,6 +297,7 @@ describe('Testes de Integração - Usuários', () => {
             // Assert: Verifica se a resposta está de acordo com o esperado
             expect(response.status).toBe(200);
             expect(response.body.sucesso).toBe(true);
+            expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.PESQUISADO);
             expect(Array.isArray(response.body.usuarios)).toBe(true);
             expect(response.body.usuarios).toEqual(
                 expect.arrayContaining([
@@ -436,15 +443,14 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.status).toBe(400);
             expect(response.body.sucesso).toBe(false);
             expect(response.body.mensagem).toContain(MENSAGENS_ERRO.USUARIO.ID_INVALIDO);
-
         });
         
         it('deve lançar AppError(404) de usuário não encontrado.', async () => {
             // Arrange (preparação)
             const idValidoInexistente = new mongoose.Types.ObjectId();
 
-            const tokenLeitor = jwt.sign(
-                { id: '123', funcao: 'leitor' }, 
+            const tokenAdmin = jwt.sign(
+                { id: '123', funcao: 'admin' }, 
                 process.env.JWT_SECRET, 
                 { expiresIn: '1h' }
             );
@@ -452,7 +458,7 @@ describe('Testes de Integração - Usuários', () => {
             // Act (ação)
             const response = await request(app)
                 .delete(`/v1/usuarios/${idValidoInexistente}`)
-                .set('Authorization', `Bearer ${tokenLeitor}`);
+                .set('Authorization', `Bearer ${tokenAdmin}`);
 
             // Assert (verificação)
             expect(response.status).toBe(404);
@@ -517,6 +523,122 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.status).toBe(403);
             expect(response.body.sucesso).toBe(false);
             expect(response.body.mensagem).toContain(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_DELETAR_ADMIN_UNICO);
+        });
+    });
+
+    describe('Buscar usuário', () => {
+
+        it ('admin deve buscar usuário comum com sucesso.', async () => {
+            const usuarioEditor = await Usuario.create({
+                nome: 'Usuário Editor',
+                email: 'editor@gajeiro.com',
+                senha: '123',
+                funcao: 'editor'
+            });
+
+            const tokenAdmin = jwt.sign(
+                { id: '123', funcao: 'admin' }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            const response = await request(app)
+                .get(`/v1/usuarios/${usuarioEditor._id}`)
+                .set('Authorization', `Bearer ${tokenAdmin}`);
+
+            expect(response.status).toBe(200);
+            expect(response.body.sucesso).toBe(true);
+            expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.BUSCADO);
+            expect(response.body.usuarioBuscado._id).toBe(usuarioEditor._id.toString());
+            expect(response.body.usuarioBuscado.nome).toBe(usuarioEditor.nome);
+            expect(response.body.usuarioBuscado.email).toBe(usuarioEditor.email);
+            expect(response.body.usuarioBuscado.funcao).toBe(usuarioEditor.funcao);
+        });
+
+        it ('leitor deve buscar a si próprio com sucesso.', async () => {
+            const usuarioLeitor = await Usuario.create({
+                nome: 'Usuário Leitor',
+                email: 'leitor@gajeiro.com',
+                senha: '123',
+                funcao: 'leitor'
+            });
+
+            const tokenLeitor = jwt.sign(
+                { id: usuarioLeitor._id, funcao: usuarioLeitor.funcao }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            const response = await request(app)
+                .get(`/v1/usuarios/${usuarioLeitor._id}`)
+                .set('Authorization', `Bearer ${tokenLeitor}`);
+
+            expect(response.status).toBe(200);
+            expect(response.body.sucesso).toBe(true);
+            expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.BUSCADO);
+            expect(response.body.usuarioBuscado._id).toBe(usuarioLeitor._id.toString());
+            expect(response.body.usuarioBuscado.nome).toBe(usuarioLeitor.nome);
+            expect(response.body.usuarioBuscado.email).toBe(usuarioLeitor.email);
+            expect(response.body.usuarioBuscado.funcao).toBe(usuarioLeitor.funcao);
+        });
+
+        it ('deve lançar AppError(400) de ID inválido.', async () => {
+            const idInvalido = 'id-invalido';
+
+            const tokenAdmin = jwt.sign(
+                { id: '123', funcao: 'admin' }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            const response = await request(app)
+                .get(`/v1/usuarios/${idInvalido}`)
+                .set('Authorization', `Bearer ${tokenAdmin}`);
+
+            expect(response.status).toBe(400);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.USUARIO.ID_INVALIDO);
+        });
+
+        it ('deve lançar AppError(403) por não-admin tentar buscar outro usuário.', async () => {
+            const usuarioEditor = await Usuario.create({
+                nome: 'Usuário Editor',
+                email: 'editor@gajeiro.com',
+                senha: '123',
+                funcao: 'editor'
+            });
+
+            const tokenLeitor = jwt.sign(
+                { id: '123', funcao: 'leitor' }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            const response = await request(app)
+                .get(`/v1/usuarios/${usuarioEditor._id}`)
+                .set('Authorization', `Bearer ${tokenLeitor}`);
+
+            expect(response.status).toBe(403);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_BUSCAR_OUTRO_PERFIL);
+        });
+
+        it ('deve lançar AppError(404) de usuário não encontrado.', async () => {
+            const idValidoInexistente = new mongoose.Types.ObjectId();
+
+            const tokenAdmin = jwt.sign(
+                { id: '123', funcao: 'admin' }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            const response = await request(app)
+                .get(`/v1/usuarios/${idValidoInexistente}`)
+                .set('Authorization', `Bearer ${tokenAdmin}`);
+
+            expect(response.status).toBe(404);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.USUARIO.NAO_ENCONTRADO);
         });
     });
 });

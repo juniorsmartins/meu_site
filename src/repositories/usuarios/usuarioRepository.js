@@ -8,7 +8,7 @@ const usuarioRepository = {
     },
 
     async buscarPorEmail(email) {
-        return await Usuario.findOne({ email: email.toLowerCase() });
+        return await Usuario.findOne({ email: email.toLowerCase() }).select("-senha");
     },
 
     async buscarPorId(id) {
@@ -41,6 +41,14 @@ const usuarioRepository = {
 
     async deletar(id) {
         return await Usuario.findByIdAndDelete(id);
+    },
+
+    async contarPorFuncao(funcao) {
+        return await Usuario.countDocuments({ funcao });
+    },
+
+    async existePorId(id) {
+        return await Usuario.exists({ _id: id });
     }
 };
 

@@ -1,4 +1,5 @@
 import { usuarioPesquisarService } from "../../services/usuarios/usuarioPesquisarService.js";
+import { MENSAGENS_SUCESSO } from '../../configs/mensagensConfig.js';
 
 const usuarioPesquisarController = async (request, response, next) => {
     
@@ -10,12 +11,12 @@ const usuarioPesquisarController = async (request, response, next) => {
 
         return response.status(200).json({
             sucesso: true,
+            mensagem: MENSAGENS_SUCESSO.USUARIO.PESQUISADO,
             ...resultadoPaginado
         });
 
     } catch (error) {
-        console.error("Erro no usuarioPesquisarController:", error.message);
-        next(error); // Encaminha para o middleware errorHandler global
+        next(error); 
     }
 };
 

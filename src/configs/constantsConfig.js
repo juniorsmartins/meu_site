@@ -11,6 +11,13 @@ const SITE_CONFIG = {
     horarioAtendimento: "Segunda a Sexta, das 08h às 17h"
 };
 
+const FUNCOES_USUARIO = Object.freeze([
+    "admin",
+    "editor",
+    "jornalista",
+    "leitor"
+]);
+
 // Editorias disponíveis no sistema
 const EDITORIAS = [
     "geral",
@@ -37,8 +44,9 @@ const LIMITE_NOTICIAS_POR_PAGINA_ADMIN = 15;
 const LIMITE_USUARIOS_POR_PAGINA = 15;
 
 export { 
-    EDITORIAS,
     SITE_CONFIG,
+    FUNCOES_USUARIO,
+    EDITORIAS,
     LIMITE_MAXIMO_NOTICIAS_DATABASE, 
     LIMITE_NOTICIAS_POR_PAGINA_ADMIN,
     LIMITE_USUARIOS_POR_PAGINA
