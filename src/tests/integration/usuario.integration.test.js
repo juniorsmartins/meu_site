@@ -74,7 +74,7 @@ describe('Testes de Integração - Usuários', () => {
 
             expect(response.status).toBe(400);
             expect(response.body.sucesso).toBe(false);
-            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.USUARIO.CAMPOS_OBRIGATÓRIOS);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.USUARIO.CAMPO_EMAIL_OBRIGATORIO);
         });
 
         it('deve retornar status 409 ao tentar cadastrar e-mail duplicado', async () => {

@@ -15,7 +15,13 @@ const MENSAGENS_ERRO = Object.freeze({ // Mensagens de erro padronizadas do sist
         CAMPOS_OBRIGATÓRIOS: "Nome, e-mail e senha são obrigatórios.",
         NAO_ENCONTRADO: "Usuário não encontrado.",
         EMAIL_DUPLICADO: "E-mail já cadastrado no sistema.",
-        ID_INVALIDO: "ID de usuário inválido."
+        ID_INVALIDO: "ID de usuário inválido.",
+        CAMPO_EMAIL_OBRIGATORIO: "O campo e-mail é obrigatório.",
+        CAMPO_NOME_OBRIGATORIO: "O campo nome é obrigatório.",
+        CAMPO_SENHA_OBRIGATORIO: "O campo senha é obrigatório.",
+        CAMPO_NOME_MINIMO_CARACTERES: "O campo nome deve ter pelo menos 2 caracteres.",
+        CAMPO_SENHA_MINIMO_CARACTERES: "O campo senha deve ter no mínimo 3 caracteres.",
+        CAMPO_EMAIL_FORMATO_INVALIDO: "O campo e-mail deve ter um formato válido."
     }
     // Outros domínios do sistema (noticias, comunicacao, etc.) podem entrar aqui futuramente
 });

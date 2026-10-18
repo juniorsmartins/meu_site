@@ -52,4 +52,3 @@ const Usuario = mongoose.model("Usuario", usuarioSchema);
 
 export { Usuario };
 
-

@@ -17,6 +17,8 @@ import { noticiaConsultarPorIdController } from './controllers/noticiaConsultarC
 import { noticiaAtualizarController } from './controllers/noticiaAtualizarController.js';
 import { noticiaDeletarPorIdController } from './controllers/noticiaDeleteController.js';
 import { noticiaCapaController } from './controllers/noticiaCapaController.js';
+import { validarSchema } from './middlewares/validarSchemaMiddleware.js';
+import { usuarioCriarSchema, usuarioAtualizarSchema } from './validators/usuarioValidator.js';
 
 const authRouter = express.Router();
 const usuarioRouter = express.Router();
@@ -28,10 +30,10 @@ const noticiaRouter = express.Router();
 authRouter.post("/login", loginController);
 
 // USUÁRIOS - Rotas de gerenciamento de usuários do sistema
-usuarioRouter.post("/", usuarioCriarController);
+usuarioRouter.post("/", validarSchema(usuarioCriarSchema), usuarioCriarController);
 usuarioRouter.get("/", autenticarToken, usuarioPesquisarController);
 usuarioRouter.get("/:id", autenticarToken, usuarioBuscarController);
-usuarioRouter.put("/:id", autenticarToken, usuarioAtualizarController);
+usuarioRouter.put("/:id", autenticarToken, validarSchema(usuarioAtualizarSchema), usuarioAtualizarController);
 usuarioRouter.delete("/:id", autenticarToken, usuarioDeletarController);
 
 // ADMIN - Rotas de administração do sistema

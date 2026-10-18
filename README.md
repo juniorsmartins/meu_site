@@ -26,6 +26,7 @@ Endereço: https://meu-site-ashy-omega.vercel.app/
 * TEST - vitest (biblioteca para testes unitários - https://vitest.dev/guide/);
 * TEST - supertest (biblio pra simular requisições HTTP e validar códigos status, cabeçalhos e respostas JSON);
 * TEST - mongodb-memory-server (Utilitário para testes de integração com MongoDB/Mongoose. Baixa e executa um servidor MongoDB na memória RAM da máquina de testes.);
+* zod (biblioteca de validação. Pode definir esquemas para validar dados. Funciona em Node.js.);
 
 
 
@@ -37,8 +38,9 @@ npm install nodemailer
 npm install rss-parser
 npm install jsonwebtoken 
 npm install bcryptjs
+npm install zod
 npm install --save-dev eslint
-npm install --save-dev @faker-js/faker
+npm install --save-dev @faker-js/faker 
 npm i -D nodemon
 npm install -D vitest
 npm install -D supertest 
