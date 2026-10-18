@@ -1,4 +1,5 @@
 import { usuarioCriarService } from '../../services/usuarios/usuarioCriarService.js';
+import { MENSAGENS_SUCESSO } from '../../configs/mensagensConfig.js';
 
 const usuarioCriarController = async (request, response, next) => {
 
@@ -6,11 +7,14 @@ const usuarioCriarController = async (request, response, next) => {
         const usuario = request.body;
         const usuarioCriado = await usuarioCriarService(usuario);
 
-        response.status(201).json(usuarioCriado);
+        response.status(201).json({ 
+            sucesso: true,
+            mensagem: MENSAGENS_SUCESSO.USUARIO.CRIADO,
+            usuarioCriado 
+        });
 
     } catch (error) {
-        console.error("Erro no usuarioCriarController:", error.message);
-        next(error); // Encaminha o erro para o errorHandler global
+        next(error); 
     }
 };
 

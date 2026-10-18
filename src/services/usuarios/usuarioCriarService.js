@@ -16,9 +16,10 @@ const usuarioCriarService = async (usuario) => {
 
     const usuarioCriado = await usuarioRepository.criar({ nome, email, senha });
 
-    // Remove a senha do objeto de retorno por segurança
-    delete usuarioCriado.senha;
-    return usuarioCriado;
+    const usuarioRetorno = { ...usuarioCriado };
+    delete usuarioRetorno.senha; // Remove a senha do objeto de retorno por segurança
+
+    return usuarioRetorno;
 };
 
 export {

@@ -1,4 +1,5 @@
 import { usuarioBuscarService } from '../../services/usuarios/usuarioBuscarService.js';
+import { MENSAGENS_SUCESSO } from '../../configs/mensagensConfig.js';
 
 const usuarioBuscarController = async (req, res, next) => {
     
@@ -8,10 +9,13 @@ const usuarioBuscarController = async (req, res, next) => {
 
         const usuarioBuscado = await usuarioBuscarService(id, usuarioAutenticado);
 
-        return res.status(200).json(usuarioBuscado);
+        return res.status(200).json({ 
+            sucesso: true,
+            mensagem: MENSAGENS_SUCESSO.USUARIO.BUSCADO,
+            usuarioBuscado 
+        });
 
     } catch (error) {
-        console.error("Erro no usuarioBuscarController:", error.message);
         next(error);
     }
 };

@@ -23,6 +23,9 @@ const MENSAGENS_ERRO = Object.freeze({ // Mensagens de erro padronizadas do sist
 const MENSAGENS_SUCESSO = Object.freeze({
 
     USUARIO: {
+        CRIADO: "Usuário criado com sucesso.",
+        ATUALIZADO: "Usuário atualizado com sucesso.",
+        PESQUISADO: "Usuário pesquisado com sucesso.",
         BUSCADO: "Usuário buscado com sucesso.",
         DELETADO: "Usuário deletado com sucesso."
     }

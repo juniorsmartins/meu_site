@@ -52,12 +52,14 @@ describe('Testes de Integração - Usuários', () => {
                 .send(novoUsuario);
 
             expect(response.status).toBe(201);
-            expect(response.body).toHaveProperty('_id');
-            expect(response.body.nome).toBe(novoUsuario.nome);
-            expect(response.body.email).toBe(novoUsuario.email);
-            expect(response.body.funcao).toBe('leitor'); // Valor padrão para novos usuários
+            expect(response.body.sucesso).toBe(true);
+            expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.CRIADO);
+            expect(response.body).toHaveProperty('usuarioCriado._id');
+            expect(response.body.usuarioCriado.nome).toBe(novoUsuario.nome);
+            expect(response.body.usuarioCriado.email).toBe(novoUsuario.email);
+            expect(response.body.usuarioCriado.funcao).toBe('leitor'); // Valor padrão para novos usuários
             // Garante que a senha nunca é exposta no JSON de resposta (Clean Code & Segurança)
-            expect(response.body).not.toHaveProperty('senha');
+            expect(response.body.usuarioCriado).not.toHaveProperty('senha');
         });
 
         it('não pode criar usuário sem informar email 400', async () => {
@@ -98,7 +100,7 @@ describe('Testes de Integração - Usuários', () => {
 
     describe('Atualizar Usuário', () => {
 
-        it('leitor deve atualizar nome e email próprios com sucesso', async () => {
+        it('leitor deve atualizar nome e email próprios com sucesso.', async () => {
             // Arrange: Prepara os dados e o ambiente para o teste
             // Cria usuário direto no banco de teste
             const usuarioCriado = await Usuario.create({
@@ -109,7 +111,7 @@ describe('Testes de Integração - Usuários', () => {
             });
 
             const tokenLeitor = jwt.sign(
-                { id: usuarioCriado._id, funcao: 'leitor' }, 
+                { id: usuarioCriado._id, funcao: usuarioCriado.funcao }, 
                 process.env.JWT_SECRET, 
                 { expiresIn: '1h' }
             );
@@ -125,8 +127,10 @@ describe('Testes de Integração - Usuários', () => {
 
             // Assert: Verifica se a resposta está de acordo com o esperado
             expect(response.status).toBe(200);
-            expect(response.body.nome).toBe(nomeAtualizado);
-            expect(response.body.email).toBe(emailAtualizado);
+            expect(response.body.sucesso).toBe(true);
+            expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.ATUALIZADO);
+            expect(response.body.usuarioAtualizado.nome).toBe(nomeAtualizado);
+            expect(response.body.usuarioAtualizado.email).toBe(emailAtualizado);
         });
 
         it('admin deve atualizar nome, email e função de leitor com sucesso', async () => {
@@ -157,9 +161,11 @@ describe('Testes de Integração - Usuários', () => {
 
             // Assert: Verifica se a resposta está de acordo com o esperado
             expect(response.status).toBe(200);
-            expect(response.body.nome).toBe(nomeAtualizado);
-            expect(response.body.email).toBe(emailAtualizado);
-            expect(response.body.funcao).toBe(funcaoAtualizada);
+            expect(response.body.sucesso).toBe(true);
+            expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.ATUALIZADO);
+            expect(response.body.usuarioAtualizado.nome).toBe(nomeAtualizado);
+            expect(response.body.usuarioAtualizado.email).toBe(emailAtualizado);
+            expect(response.body.usuarioAtualizado.funcao).toBe(funcaoAtualizada);
         });
 
         it('deve retornar status 400 ao fornecer ID de formato inválido', async () => {
@@ -291,6 +297,7 @@ describe('Testes de Integração - Usuários', () => {
             // Assert: Verifica se a resposta está de acordo com o esperado
             expect(response.status).toBe(200);
             expect(response.body.sucesso).toBe(true);
+            expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.PESQUISADO);
             expect(Array.isArray(response.body.usuarios)).toBe(true);
             expect(response.body.usuarios).toEqual(
                 expect.arrayContaining([
@@ -540,10 +547,12 @@ describe('Testes de Integração - Usuários', () => {
                 .set('Authorization', `Bearer ${tokenAdmin}`);
 
             expect(response.status).toBe(200);
-            expect(response.body._id).toBe(usuarioEditor._id.toString());
-            expect(response.body.nome).toBe(usuarioEditor.nome);
-            expect(response.body.email).toBe(usuarioEditor.email);
-            expect(response.body.funcao).toBe(usuarioEditor.funcao);
+            expect(response.body.sucesso).toBe(true);
+            expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.BUSCADO);
+            expect(response.body.usuarioBuscado._id).toBe(usuarioEditor._id.toString());
+            expect(response.body.usuarioBuscado.nome).toBe(usuarioEditor.nome);
+            expect(response.body.usuarioBuscado.email).toBe(usuarioEditor.email);
+            expect(response.body.usuarioBuscado.funcao).toBe(usuarioEditor.funcao);
         });
 
         it ('leitor deve buscar a si próprio com sucesso.', async () => {
@@ -565,10 +574,12 @@ describe('Testes de Integração - Usuários', () => {
                 .set('Authorization', `Bearer ${tokenLeitor}`);
 
             expect(response.status).toBe(200);
-            expect(response.body._id).toBe(usuarioLeitor._id.toString());
-            expect(response.body.nome).toBe(usuarioLeitor.nome);
-            expect(response.body.email).toBe(usuarioLeitor.email);
-            expect(response.body.funcao).toBe(usuarioLeitor.funcao);
+            expect(response.body.sucesso).toBe(true);
+            expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.BUSCADO);
+            expect(response.body.usuarioBuscado._id).toBe(usuarioLeitor._id.toString());
+            expect(response.body.usuarioBuscado.nome).toBe(usuarioLeitor.nome);
+            expect(response.body.usuarioBuscado.email).toBe(usuarioLeitor.email);
+            expect(response.body.usuarioBuscado.funcao).toBe(usuarioLeitor.funcao);
         });
 
         it ('deve lançar AppError(400) de ID inválido.', async () => {

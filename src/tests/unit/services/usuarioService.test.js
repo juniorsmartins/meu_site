@@ -16,9 +16,9 @@ describe('Usuários - Testes unitários de service', () => {
 
     describe('Criar Usuário', () => {
         
-        it('deve criar um usuário com sucesso', async () => {
+        it('deve criar um usuário com sucesso.', async () => {
             const dadosUsuario = { nome: 'Junior', email: 'junior@gajeiro.com', senha: '123' };
-            const usuarioCriadoMock = { id: '123', ...dadosUsuario, funcao: 'leitor' };
+            const usuarioCriadoMock = { id: '123', nome: 'Junior', email: 'junior@gajeiro.com', funcao: 'leitor' };
 
             usuarioRepository.buscarPorEmail.mockResolvedValue(null);
             usuarioRepository.criar.mockResolvedValue(usuarioCriadoMock);
@@ -47,9 +47,7 @@ describe('Usuários - Testes unitários de service', () => {
 
     describe('Atualizar Usuário', () => {
 
-        it ('deve atualizar usuário comum com sucesso', async () => {
-
-            // Arrange (preparação dos dados e mocks para o teste)
+        it ('leitor deve atualizar a si próprio com sucesso.', async () => {
             const idUsuario = '6acf72ce74ffd75a24c55b43';
 
             // Usuário já existente no banco 
@@ -69,7 +67,7 @@ describe('Usuários - Testes unitários de service', () => {
             const usuarioAutenticado = { id: idUsuario, funcao: 'leitor' };
 
             // Mock das dependências usadas pelo service
-            usuarioRepository.buscarPorId.mockResolvedValue(usuarioExistenteMock);
+            usuarioRepository.existePorId.mockResolvedValue(true);
             usuarioRepository.atualizar.mockResolvedValue({
                 ...usuarioExistenteMock,
                 ...dadosAtualizacao
@@ -83,18 +81,16 @@ describe('Usuários - Testes unitários de service', () => {
             );
 
             // Assert (verificações)
-            // 1) Garantimos que buscou o usuário antes de atualizar
-            expect(usuarioRepository.buscarPorId).toHaveBeenCalledWith(idUsuario);
+            // 1) Garantimos que verificou a existência do usuário antes de atualizar
+            expect(usuarioRepository.existePorId).toHaveBeenCalledWith(idUsuario);
 
             // 2) Garantimos que chamou atualização com o id e objeto mesclado
             //    (o service faz Object.assign no usuário existente)
             expect(usuarioRepository.atualizar).toHaveBeenCalledWith(
                 idUsuario,
                 expect.objectContaining({
-                    _id: idUsuario,
                     nome: 'Junior Atual',
-                    email: 'junior.atual@gajeiro.com',
-                    funcao: 'leitor'
+                    email: 'junior.atual@gajeiro.com'
                 })
             );
 
@@ -108,13 +104,13 @@ describe('Usuários - Testes unitários de service', () => {
             );
         });
 
-        it ('deve lançar erro se usuário não existir', async () => {
+        it ('deve lançar erro se usuário não existir.', async () => {
             // Arrange
             const idUsuarioInexistente = '6acf72ce74ffd75a24c55b43';
-            const dadosAtualizacao = { nome: 'Nome Qualquer' };
+            const dadosAtualizacao = { nome: 'Nome Qualquer', email: 'nome.qualquer@gajeiro.com' };
             const usuarioAutenticado = { id: '6acf7c11b3d3823e83b4802e', funcao: 'admin' };
 
-            usuarioRepository.buscarPorId.mockResolvedValue(null);
+            usuarioRepository.existePorId.mockResolvedValue(false);
 
             // Act & Assert (execução e verificações)
             await expect(usuarioAtualizarService(

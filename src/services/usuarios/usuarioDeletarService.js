@@ -1,7 +1,7 @@
 import { usuarioRepository } from "../../repositories/usuarios/usuarioRepository.js";
 import { AppError } from '../../errors/AppError.js';
 import { isValidObjectId } from "mongoose";
-import { MENSAGENS_ERRO, MENSAGENS_SUCESSO } from '../../configs/mensagensConfig.js';
+import { MENSAGENS_ERRO } from '../../configs/mensagensConfig.js';
 
 const usuarioDeletarService = async (id, usuarioAutenticado) => {
 
@@ -35,10 +35,7 @@ const usuarioDeletarService = async (id, usuarioAutenticado) => {
 
     await usuarioRepository.deletar(id);
 
-    return {
-        mensagem: MENSAGENS_SUCESSO.USUARIO.DELETADO,
-        idDeletado: id
-    };
+    return id;
 };
 
 export {
