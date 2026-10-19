@@ -12,14 +12,14 @@ function errorHandler(err, req, res, next) {
         });
     }
 
-    // 2. Erro de chave duplicada do MongoDB (E-mail já cadastrado)
-    // if (err.code === 11000) {
-    //     console.error("Erro de email duplicado:", err);
-    //     return res.status(409).json({
-    //         sucesso: false,
-    //         mensagem: MENSAGENS_ERRO.USUARIO.EMAIL_DUPLICADO
-    //     });
-    // }
+    // 2. Erro de chave duplicada do MongoDB 
+    if (err.code === 11000) {
+        console.error(MENSAGENS_ERRO.GERAL.VALOR_UNICO_DUPLICADO, err);
+        return res.status(409).json({
+            sucesso: false,
+            mensagem: MENSAGENS_ERRO.GERAL.VALOR_UNICO_DUPLICADO
+        });
+    }
 
     if (err.statusCode === 404) {
         console.error(err.mensagem + ": ", err);
@@ -31,10 +31,10 @@ function errorHandler(err, req, res, next) {
 
     // 3. Erro de validação de ID do Mongoose (CastError)
     if (err.name === "CastError") {
-        console.error("Erro de validação de ID:", err);
+        console.error(MENSAGENS_ERRO.GERAL.ID_INVALIDO, err);
         return res.status(400).json({
             sucesso: false,
-            mensagem: MENSAGENS_ERRO.USUARIO.ID_INVALIDO
+            mensagem: MENSAGENS_ERRO.GERAL.ID_INVALIDO
         });
     }
 

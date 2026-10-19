@@ -1,7 +1,7 @@
 import { usuarioRepository } from "../../repositories/usuarios/usuarioRepository.js";
 import { AppError } from "../../errors/AppError.js";
 import { MENSAGENS_ERRO } from '../../configs/mensagensConfig.js';
-import { validarFormatoId } from "../../helpers/utils.js";
+import { validarFormatoId, criptografar } from "../../helpers/utils.js";
 import { usuarioAutenticadoEhAdmin, verificarUsuarioExistePorId, verificarDuplicidadeDeEmail, regraAutorizarAdminOuDonoDoPerfil } from "../../helpers/usuarioUtils.js";
 
 const usuarioAtualizarService = async (id, dadosAtualizacao, usuarioAutenticado) => {
@@ -19,11 +19,16 @@ const usuarioAtualizarService = async (id, dadosAtualizacao, usuarioAutenticado)
         await verificarDuplicidadeDeEmail(email, id);
     }
 
+    let senhaCriptografada = senha;
+    if (senha !== undefined) {
+        senhaCriptografada = await criptografar(senha);
+    }
+
     // 3. Sanitização do Payload (Whitelisting / Mass Assignment Protection)
     const dadosFiltrados = {
         ...(nome !== undefined && { nome }),
         ...(email !== undefined && { email }),
-        ...(senha !== undefined && { senha }),
+        ...(senha !== undefined && { senha: senhaCriptografada }),
         ...(usuarioAutenticadoEhAdmin(usuarioAutenticado) && funcao !== undefined && { funcao })
     };
 

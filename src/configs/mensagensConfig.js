@@ -2,6 +2,7 @@ const MENSAGENS_ERRO = Object.freeze({ // Mensagens de erro padronizadas do sist
 
     GERAL: {
         ID_INVALIDO: "ID em formato inválido.",
+        VALOR_UNICO_DUPLICADO: "Valor único já cadastrado no sistema.",
     },
 
     SERVIDOR: {
@@ -21,7 +22,6 @@ const MENSAGENS_ERRO = Object.freeze({ // Mensagens de erro padronizadas do sist
         CAMPOS_OBRIGATÓRIOS: "Nome, e-mail e senha são obrigatórios.",
         NAO_ENCONTRADO: "Usuário não encontrado.",
         EMAIL_DUPLICADO: "E-mail já cadastrado no sistema.",
-        ID_INVALIDO: "ID de usuário inválido.",
         CAMPO_EMAIL_OBRIGATORIO: "O campo e-mail é obrigatório.",
         CAMPO_NOME_OBRIGATORIO: "O campo nome é obrigatório.",
         CAMPO_SENHA_OBRIGATORIO: "O campo senha é obrigatório.",

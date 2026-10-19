@@ -39,7 +39,7 @@ usuarioSchema.pre('save', async function () {
     const salt = await bcrypt.genSalt(10);
 
     // Substitui a senha em texto limpo pelo hash seguro
-    this.senha = bcrypt.hash(this.senha, salt);
+    this.senha = await bcrypt.hash(this.senha, salt);
 });
 
 // MÉTODO AUXILIAR: Para validar se a senha digitada no login bate com o hash salvo
