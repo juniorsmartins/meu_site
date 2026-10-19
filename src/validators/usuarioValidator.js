@@ -2,6 +2,8 @@ import { z } from 'zod';
 import { MENSAGENS_ERRO } from '../configs/mensagensConfig.js';
 import { FUNCOES_USUARIO } from "../configs/constantsConfig.js";
 
+const FUNCOES_VALIDAS = Object.values(FUNCOES_USUARIO);
+
 const usuarioCriarSchema = z.object({
     nome: z.string({ 
         message: MENSAGENS_ERRO.USUARIO.CAMPO_NOME_OBRIGATORIO 
@@ -22,7 +24,7 @@ const usuarioCriarSchema = z.object({
     })
     .min(3, MENSAGENS_ERRO.USUARIO.CAMPO_SENHA_MINIMO_CARACTERES),
 
-    funcao: z.enum(FUNCOES_USUARIO)
+    funcao: z.enum(FUNCOES_VALIDAS)
     .optional()
 });
 
@@ -42,7 +44,7 @@ const usuarioAtualizarSchema = z.object({
     .min(3, MENSAGENS_ERRO.USUARIO.CAMPO_SENHA_MINIMO_CARACTERES)
     .optional(),
 
-    funcao: z.enum(FUNCOES_USUARIO)
+    funcao: z.enum(FUNCOES_VALIDAS)
     .optional()
 });
 
