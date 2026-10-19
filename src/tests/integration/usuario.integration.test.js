@@ -210,7 +210,7 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.body.mensagem).toBe(MENSAGENS_ERRO.USUARIO.NAO_ENCONTRADO);
         });
 
-        it('deve retornar status 403 se usuário leitor tentar alterar o campo nome de outro usuário', async () => {
+        it('deve retornar status 403 se leitor tentar alterar o campo nome de outro usuário', async () => {
             // Arrange: Prepara os dados e o ambiente para o teste
             const tokenLeitor = jwt.sign(
                 { id: '456', funcao: 'leitor' }, 
@@ -262,6 +262,40 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.status).toBe(403);
             expect(response.body.sucesso).toBe(false);
             expect(response.body.mensagem).toBe(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_ATUALIZAR_CAMPO_FUNCAO);
+        });
+
+        it('deve retornar status 409 por e-mail já registrado.', async () => {
+            await Usuario.create({
+                nome: 'Nome Antigo',
+                email: 'duplicado@gajeiro.com',
+                senha: '456',
+                funcao: 'leitor'
+            });
+
+            const usuarioPraAtualizar = await Usuario.create({
+                nome: 'Nome Antigo',
+                email: 'antigo@gajeiro.com',
+                senha: '123',
+                funcao: 'leitor'
+            });
+
+            const nomeAtualizado = 'Nome Atualizado';
+            const emailAtualizadoDuplicado = 'duplicado@gajeiro.com';
+
+            const tokenLeitor = jwt.sign(
+                { id: usuarioPraAtualizar._id, funcao: usuarioPraAtualizar.funcao }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            const response = await request(app)
+                .put(`/v1/usuarios/${usuarioPraAtualizar._id}`)
+                .set('Authorization', `Bearer ${tokenLeitor}`)
+                .send({ nome: nomeAtualizado, email: emailAtualizadoDuplicado });
+
+            expect(response.status).toBe(409);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.USUARIO.EMAIL_DUPLICADO);
         });
     });
 

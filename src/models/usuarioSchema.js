@@ -22,8 +22,8 @@ const usuarioSchema = new mongoose.Schema(
         },
         funcao: {
             type: String,
-            enum: FUNCOES_USUARIO, // Define os valores permitidos à função
-            default: "leitor" // Define o valor padrão
+            enum: Object.values(FUNCOES_USUARIO), // Define os valores permitidos à função
+            default: FUNCOES_USUARIO.LEITOR // Define o valor padrão
         }
     }, 
     { timestamps: true } /* Habilita timestamps automáticos para createdAt e updatedAt */

@@ -1,28 +1,25 @@
 import { usuarioRepository } from "../../repositories/usuarios/usuarioRepository.js";
 import { AppError } from "../../errors/AppError.js";
-import { isValidObjectId } from "mongoose";
 import { MENSAGENS_ERRO } from '../../configs/mensagensConfig.js';
+import { validarFormatoId, usuarioAutenticadoEhAdmin } from "../../helpers/utils.js";
 
 const usuarioAtualizarService = async (id, dadosAtualizacao, usuarioAutenticado) => {
 
-    // 1. Valida se o ID fornecido possui um formato ObjectId válido do MongoDB
-    if (!isValidObjectId(id)) {
-        throw new AppError(MENSAGENS_ERRO.USUARIO.ID_INVALIDO, 400);
-    }
-    
-    // 2. REGRA DE NEGÓCIO: Apenas administradores podem alterar funções de usuários
-    const solicitanteEhAdmin = usuarioAutenticado?.funcao === 'admin';
+    validarFormatoId(id);
+    const autenticadoEhAdmin = usuarioAutenticadoEhAdmin(usuarioAutenticado);
+
+    // 1. REGRA DE NEGÓCIO: Apenas administradores podem alterar funções de usuários
     const solicitouAlteracaoDeFuncao = Object.prototype.hasOwnProperty.call(dadosAtualizacao, 'funcao'); // Verifica se o usuário está tentando alterar a função
-    if (solicitouAlteracaoDeFuncao && !solicitanteEhAdmin) {
+    if (solicitouAlteracaoDeFuncao && !autenticadoEhAdmin) {
         throw new AppError(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_ATUALIZAR_CAMPO_FUNCAO, 403);
     }
 
-    // 3. REGRA DE NEGÓCIO: Não-admins só podem atualizar o seu próprio perfil
+    // 2. REGRA DE NEGÓCIO: Não-admins só podem atualizar o seu próprio perfil
     // Normalizamos ambos para String para evitar conflito entre ObjectId e String pura
     const idUsuarioAutenticado = String(usuarioAutenticado?.id || usuarioAutenticado?._id || '');
     const idAlvo = String(id);
     const ehOProprioUsuario = idUsuarioAutenticado === idAlvo;
-    if (!solicitanteEhAdmin && !ehOProprioUsuario) {
+    if (!autenticadoEhAdmin && !ehOProprioUsuario) {
         throw new AppError(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_ATUALIZAR_OUTRO_PERFIL, 403);
     }
 
@@ -38,9 +35,18 @@ const usuarioAtualizarService = async (id, dadosAtualizacao, usuarioAutenticado)
     const dadosFiltrados = {};
 
     if (nome !== undefined) dadosFiltrados.nome = nome;
-    if (email !== undefined) dadosFiltrados.email = email;
+    
+    if (email !== undefined) {
+        // 1. REGRA DE NEGÓCIO: O email do usuário deve ser único no sistema
+        const emailExiste = await usuarioRepository.buscarPorEmail(email);
+        if (emailExiste && (String(emailExiste._id) !== String(id))) {
+            throw new AppError(MENSAGENS_ERRO.USUARIO.EMAIL_DUPLICADO, 409);
+        }
+        dadosFiltrados.email = email;
+    }
+
     if (senha !== undefined) dadosFiltrados.senha = senha; // O hook pre-save do Mongoose cuidará do hash automaticamente!
-    if (solicitanteEhAdmin && funcao !== undefined) dadosFiltrados.funcao = funcao;
+    if (autenticadoEhAdmin && funcao !== undefined) dadosFiltrados.funcao = funcao;
     // END SEGURANÇA (Whitelisting)
 
     const usuarioAtualizado = await usuarioRepository.atualizar(id, dadosFiltrados);

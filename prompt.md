@@ -13,7 +13,8 @@ Atue como um assistente técnico sênior especializado em desenvolvimento de sof
 
 
 ## Tarefa:
-Concluímos o CRUD de usuário. Agora quero padronizar eles. Tenha como exemplo os endpoints de buscar e de deletar, pois são os que mais gostei. Daí vamos modificar o criar e o atualizar para ficarem no mesmo padrão. E tu também já dá uma boa checada em todos pra ver o que mais podemos melhorar em termos de segurança, performance e boas práticas. Vou te enviar os arquivos em anexo.  
+
+* atualizar tá salvando a senha sem criptografia.
 
 
 # Padrões de código:

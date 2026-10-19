@@ -1,4 +1,5 @@
 import { AppError } from '../errors/AppError.js';
+import { MENSAGENS_ERRO } from '../configs/mensagensConfig.js';
 
 function errorHandler(err, req, res, next) {
 
@@ -16,7 +17,7 @@ function errorHandler(err, req, res, next) {
         console.error("Erro de email duplicado:", err);
         return res.status(409).json({
             sucesso: false,
-            mensagem: "E-mail já cadastrado no sistema."
+            mensagem: MENSAGENS_ERRO.USUARIO.EMAIL_DUPLICADO
         });
     }
 
@@ -33,17 +34,19 @@ function errorHandler(err, req, res, next) {
         console.error("Erro de validação de ID:", err);
         return res.status(400).json({
             sucesso: false,
-            mensagem: "ID fornecido está em formato inválido."
+            mensagem: MENSAGENS_ERRO.USUARIO.ID_INVALIDO
         });
     }
 
     // 4. Erros inesperados de servidor (500)
-    console.error("🔥 Erro não tratado:", err);
+    console.error("Erro não tratado:", err);
     return res.status(500).json({
         sucesso: false,
-        mensagem: "Ocorreu um erro interno no servidor."
+        mensagem: MENSAGENS_ERRO.SERVIDOR.ERRO_INTERNO
     });
 }
 
-export { errorHandler };
+export { 
+    errorHandler 
+};
 

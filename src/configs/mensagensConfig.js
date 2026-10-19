@@ -1,5 +1,9 @@
 const MENSAGENS_ERRO = Object.freeze({ // Mensagens de erro padronizadas do sistema - utilizadas em toda a aplicação para consistência e manutenção facilitada
 
+    SERVIDOR: {
+        ERRO_INTERNO: "Ocorreu um erro interno no servidor."
+    },
+
     AUTENTICAÇÃO: {
         TOKEN_NAO_FORNECIDO: "Acesso negado. Token de autenticação não fornecido.",
         TOKEN_INVALIDO: "Token inválido ou expirado. Faça login novamente.",
