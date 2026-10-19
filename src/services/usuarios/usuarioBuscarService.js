@@ -1,13 +1,11 @@
 import { usuarioRepository } from "../../repositories/usuarios/usuarioRepository.js";
 import { AppError } from "../../errors/AppError.js";
-import { isValidObjectId } from "mongoose";
-import { MENSAGENS_ERRO, MENSAGENS_SUCESSO } from '../../configs/mensagensConfig.js';
+import { MENSAGENS_ERRO } from '../../configs/mensagensConfig.js';
+import { validarFormatoId } from "../../helpers/utils.js";
 
 const usuarioBuscarService = async (id, usuarioAutenticado) => {
     
-    if (!isValidObjectId(id)) {
-        throw new AppError(MENSAGENS_ERRO.USUARIO.ID_INVALIDO, 400);
-    }
+    validarFormatoId(id);
 
     // 1. Usuário comum pode buscar apenas o próprio perfil. Admins podem buscar qualquer usuário.
     const ehAdmin = usuarioAutenticado.funcao === 'admin';

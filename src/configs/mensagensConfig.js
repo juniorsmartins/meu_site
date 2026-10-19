@@ -1,5 +1,9 @@
 const MENSAGENS_ERRO = Object.freeze({ // Mensagens de erro padronizadas do sistema - utilizadas em toda a aplicação para consistência e manutenção facilitada
 
+    GERAL: {
+        ID_INVALIDO: "ID em formato inválido.",
+    },
+
     SERVIDOR: {
         ERRO_INTERNO: "Ocorreu um erro interno no servidor."
     },

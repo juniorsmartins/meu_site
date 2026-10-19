@@ -2,17 +2,15 @@ import { usuarioRepository } from "../../repositories/usuarios/usuarioRepository
 import { AppError } from "../../errors/AppError.js";
 import { MENSAGENS_ERRO } from '../../configs/mensagensConfig.js';
 import { validarFormatoId, usuarioAutenticadoEhAdmin } from "../../helpers/utils.js";
+import { verificarUsuarioExistePorId, verificarDuplicidadeDeEmail } from "../../helpers/usuarioUtils.js";
 
 const usuarioAtualizarService = async (id, dadosAtualizacao, usuarioAutenticado) => {
 
     validarFormatoId(id);
+
     const autenticadoEhAdmin = usuarioAutenticadoEhAdmin(usuarioAutenticado);
 
-    // 1. REGRA DE NEGÓCIO: Apenas administradores podem alterar funções de usuários
-    const solicitouAlteracaoDeFuncao = Object.prototype.hasOwnProperty.call(dadosAtualizacao, 'funcao'); // Verifica se o usuário está tentando alterar a função
-    if (solicitouAlteracaoDeFuncao && !autenticadoEhAdmin) {
-        throw new AppError(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_ATUALIZAR_CAMPO_FUNCAO, 403);
-    }
+    regraApenasAdminPodeAlterarFuncao(autenticadoEhAdmin, dadosAtualizacao);
 
     // 2. REGRA DE NEGÓCIO: Não-admins só podem atualizar o seu próprio perfil
     // Normalizamos ambos para String para evitar conflito entre ObjectId e String pura
@@ -23,10 +21,7 @@ const usuarioAtualizarService = async (id, dadosAtualizacao, usuarioAutenticado)
         throw new AppError(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_ATUALIZAR_OUTRO_PERFIL, 403);
     }
 
-    const usuarioExiste = await usuarioRepository.existePorId(id);
-    if (!usuarioExiste) {
-        throw new AppError(MENSAGENS_ERRO.USUARIO.NAO_ENCONTRADO, 404);
-    }
+    await verificarUsuarioExistePorId(id); 
 
     // START SEGURANÇA (Whitelisting)
     // SEGURANÇA (Whitelisting): Extraímos apenas os campos permitidos para alteração,
@@ -37,11 +32,7 @@ const usuarioAtualizarService = async (id, dadosAtualizacao, usuarioAutenticado)
     if (nome !== undefined) dadosFiltrados.nome = nome;
     
     if (email !== undefined) {
-        // 1. REGRA DE NEGÓCIO: O email do usuário deve ser único no sistema
-        const emailExiste = await usuarioRepository.buscarPorEmail(email);
-        if (emailExiste && (String(emailExiste._id) !== String(id))) {
-            throw new AppError(MENSAGENS_ERRO.USUARIO.EMAIL_DUPLICADO, 409);
-        }
+        await verificarDuplicidadeDeEmail(email, id);
         dadosFiltrados.email = email;
     }
 
@@ -51,6 +42,13 @@ const usuarioAtualizarService = async (id, dadosAtualizacao, usuarioAutenticado)
 
     const usuarioAtualizado = await usuarioRepository.atualizar(id, dadosFiltrados);
     return usuarioAtualizado;
+};
+
+const regraApenasAdminPodeAlterarFuncao = (autenticadoEhAdmin, dadosAtualizacao) => {
+    const solicitouAlteracaoDeFuncao = Object.prototype.hasOwnProperty.call(dadosAtualizacao, 'funcao'); // Verifica se o usuário está tentando alterar a função
+    if (solicitouAlteracaoDeFuncao && !autenticadoEhAdmin) {
+        throw new AppError(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_ATUALIZAR_CAMPO_FUNCAO, 403);
+    }
 };
 
 export {

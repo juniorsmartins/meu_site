@@ -13,13 +13,13 @@ function errorHandler(err, req, res, next) {
     }
 
     // 2. Erro de chave duplicada do MongoDB (E-mail já cadastrado)
-    if (err.code === 11000) {
-        console.error("Erro de email duplicado:", err);
-        return res.status(409).json({
-            sucesso: false,
-            mensagem: MENSAGENS_ERRO.USUARIO.EMAIL_DUPLICADO
-        });
-    }
+    // if (err.code === 11000) {
+    //     console.error("Erro de email duplicado:", err);
+    //     return res.status(409).json({
+    //         sucesso: false,
+    //         mensagem: MENSAGENS_ERRO.USUARIO.EMAIL_DUPLICADO
+    //     });
+    // }
 
     if (err.statusCode === 404) {
         console.error(err.mensagem + ": ", err);

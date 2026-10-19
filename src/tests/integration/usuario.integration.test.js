@@ -62,7 +62,7 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.body.usuarioCriado).not.toHaveProperty('senha');
         });
 
-        it('não pode criar usuário sem informar email 400', async () => {
+        it('deve lançar erro 400 ao tentar criar usuário sem informar email', async () => {
             const novoUsuario = {
                 nome: 'Usuário Teste',
                 senha: 'senhaSegura123'
@@ -77,7 +77,7 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.body.mensagem).toBe(MENSAGENS_ERRO.USUARIO.CAMPO_EMAIL_OBRIGATORIO);
         });
 
-        it('deve retornar status 409 ao tentar cadastrar e-mail duplicado', async () => {
+        it('deve lançar erro 409 ao tentar cadastrar e-mail duplicado', async () => {
             const dadosDuplicados = {
                 nome: 'Duplicado',
                 email: 'duplicado@gajeiro.com',
@@ -168,28 +168,24 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.body.usuarioAtualizado.funcao).toBe(funcaoAtualizada);
         });
 
-        it('deve retornar status 400 ao fornecer ID de formato inválido', async () => {
-            // Arrange: Prepara os dados e o ambiente para o teste
+        it('deve lançar erro 400 ao fornecer ID de formato inválido', async () => {
             const tokenAdmin = jwt.sign(
                 { id: '123', funcao: 'admin' }, 
                 process.env.JWT_SECRET, 
                 { expiresIn: '1h' }
             );
 
-            // Act: Realiza a requisição HTTP para atualizar o usuário com ID inválido
             const response = await request(app)
                 .put('/v1/usuarios/id-invalido-123')
                 .set('Authorization', `Bearer ${tokenAdmin}`)
                 .send({ nome: 'Teste' });
 
-            // Assert: Verifica se a resposta está de acordo com o esperado
             expect(response.status).toBe(400);
             expect(response.body.sucesso).toBe(false);
-            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.USUARIO.ID_INVALIDO);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.GERAL.ID_INVALIDO);
         });
 
-        it('usuário não encontrado 404 por id inexistente', async () => {
-            // Arrange: Prepara os dados e o ambiente para o teste
+        it('deve lançar erro 404 ao tentar atualizar usuário inexistente', async () => {
             const tokenAdmin = jwt.sign(
                 { id: '123', funcao: 'admin' }, 
                 process.env.JWT_SECRET, 
@@ -198,20 +194,17 @@ describe('Testes de Integração - Usuários', () => {
 
             const idInexistente = new mongoose.Types.ObjectId();
 
-            // Act: Realiza a requisição HTTP para atualizar o usuário que não existe
             const response = await request(app)
                 .put(`/v1/usuarios/${idInexistente}`)
                 .set('Authorization', `Bearer ${tokenAdmin}`)
                 .send({ nome: 'Nome Teste' });
 
-            // Assert: Verifica se a resposta está de acordo com o esperado
             expect(response.status).toBe(404);
             expect(response.body.sucesso).toBe(false);
             expect(response.body.mensagem).toBe(MENSAGENS_ERRO.USUARIO.NAO_ENCONTRADO);
         });
 
-        it('deve retornar status 403 se leitor tentar alterar o campo nome de outro usuário', async () => {
-            // Arrange: Prepara os dados e o ambiente para o teste
+        it('deve lançar erro 403 se leitor tentar alterar o campo nome de outro usuário', async () => {
             const tokenLeitor = jwt.sign(
                 { id: '456', funcao: 'leitor' }, 
                 process.env.JWT_SECRET || 'secret_teste_jwt', 
@@ -225,20 +218,17 @@ describe('Testes de Integração - Usuários', () => {
                 funcao: 'leitor'
             });
 
-            // Act: Realiza a requisição HTTP para tentar alterar o campo funcao
             const response = await request(app)
                 .put(`/v1/usuarios/${usuarioOutro._id}`)
                 .set('Authorization', `Bearer ${tokenLeitor}`)
                 .send({ nome: 'Comum2 Alterado' }); 
 
-            // Assert: Verifica se a resposta está de acordo com o esperado
             expect(response.status).toBe(403);
             expect(response.body.sucesso).toBe(false);
             expect(response.body.mensagem).toBe(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_ATUALIZAR_OUTRO_PERFIL);
         });
 
-        it('leitor não pode alterar o próprio campo função 403', async () => {
-            // Arrange: Prepara os dados e o ambiente para o teste
+        it('deve lançar erro 403 se leitor tentar alterar o próprio campo função', async () => {
             const usuarioComum = await Usuario.create({
                 nome: 'Comum',
                 email: 'comum@gajeiro.com',
@@ -252,19 +242,17 @@ describe('Testes de Integração - Usuários', () => {
                 { expiresIn: '1h' }
             );
 
-            // Act: Realiza a requisição HTTP para tentar alterar o campo funcao
             const response = await request(app)
                 .put(`/v1/usuarios/${usuarioComum._id}`)
                 .set('Authorization', `Bearer ${tokenLeitor}`)
                 .send({ funcao: 'admin' }); // Tentando escalar privilégios
 
-            // Assert: Verifica se a resposta está de acordo com o esperado
             expect(response.status).toBe(403);
             expect(response.body.sucesso).toBe(false);
             expect(response.body.mensagem).toBe(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_ATUALIZAR_CAMPO_FUNCAO);
         });
 
-        it('deve retornar status 409 por e-mail já registrado.', async () => {
+        it('deve lançar erro 409 se tentar atualizar para um e-mail já registrado por outro usuário', async () => {
             await Usuario.create({
                 nome: 'Nome Antigo',
                 email: 'duplicado@gajeiro.com',
@@ -302,7 +290,6 @@ describe('Testes de Integração - Usuários', () => {
     describe('Pesquisar Usuários)', () => {
 
         it('admin deve pesquisar usuários com sucesso', async () => {
-            // Arrange: Gera um token JWT simulando um usuário admin
             const usuarioLeitor = await Usuario.create({
                 nome: 'Leitor',
                 email: 'leitor@gajeiro.com',
@@ -323,12 +310,10 @@ describe('Testes de Integração - Usuários', () => {
                 { expiresIn: '1h' }
             );
 
-            // Act: Realiza a requisição HTTP para pesquisar usuários
             const response = await request(app)
                 .get('/v1/usuarios')
                 .set('Authorization', `Bearer ${tokenAdmin}`);
 
-            // Assert: Verifica se a resposta está de acordo com o esperado
             expect(response.status).toBe(200);
             expect(response.body.sucesso).toBe(true);
             expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.PESQUISADO);
@@ -341,7 +326,7 @@ describe('Testes de Integração - Usuários', () => {
             );
         });
 
-        it('deve retornar status 401 se nenhum token de autenticação for fornecido', async () => {
+        it('deve lançar erro 401 se nenhum token de autenticação for fornecido', async () => {
             const response = await request(app).get('/v1/usuarios');
 
             expect(response.status).toBe(401);
@@ -349,8 +334,7 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.body.mensagem).toContain(MENSAGENS_ERRO.AUTENTICAÇÃO.TOKEN_NAO_FORNECIDO);
         });
 
-        it('endpoint exclusivo para admins e proibido para demais usuários 403', async () => {
-            // Gera um token JWT simulando um usuário leitor/comum
+        it('deve lançar erro 403 se usuário não admin tentar acessar endpoint exclusivo para admins', async () => {
             const tokenLeitor = jwt.sign(
                 { id: '123', funcao: 'leitor' }, 
                 process.env.JWT_SECRET, 
@@ -458,7 +442,7 @@ describe('Testes de Integração - Usuários', () => {
 
         });
     
-        it('deve lançar AppError(400) de ID inválido.', async () => {
+        it('deve lançar erro 400 por ID inválido.', async () => {
             // Arrange (preparação)
             const idInvalido = 'id-invalido';
 
@@ -476,10 +460,10 @@ describe('Testes de Integração - Usuários', () => {
             // Assert (verificação)
             expect(response.status).toBe(400);
             expect(response.body.sucesso).toBe(false);
-            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.USUARIO.ID_INVALIDO);
+            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.GERAL.ID_INVALIDO);
         });
         
-        it('deve lançar AppError(404) de usuário não encontrado.', async () => {
+        it('deve lançar erro 404 por usuário não encontrado.', async () => {
             // Arrange (preparação)
             const idValidoInexistente = new mongoose.Types.ObjectId();
 
@@ -500,7 +484,7 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.body.mensagem).toContain(MENSAGENS_ERRO.USUARIO.NAO_ENCONTRADO);
         });
 
-        it('deve lançar AppError(403) por não-admin tentar deletar outro usuário.', async () => {
+        it('deve lançar erro 403 por não-admin tentar deletar outro usuário.', async () => {
             // Arrange (preparação)
             const usuarioLeitor = await Usuario.create({
                 nome: 'Usuário Leitor1',
@@ -533,7 +517,7 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.body.mensagem).toContain(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_DELETAR_OUTRO_PERFIL);
         });
 
-        it('deve lançar AppError(403) por admin tentar se deletar sem outro admin presente.', async () => {
+        it('deve lançar erro 403 por admin tentar se deletar sem outro admin presente.', async () => {
             // Arrange (preparação)
             const usuarioAdmin = await Usuario.create({
                 nome: 'Usuário Admin1',
@@ -616,7 +600,7 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.body.usuarioBuscado.funcao).toBe(usuarioLeitor.funcao);
         });
 
-        it ('deve lançar AppError(400) de ID inválido.', async () => {
+        it ('deve lançar erro 400 por ID inválido.', async () => {
             const idInvalido = 'id-invalido';
 
             const tokenAdmin = jwt.sign(
@@ -631,10 +615,10 @@ describe('Testes de Integração - Usuários', () => {
 
             expect(response.status).toBe(400);
             expect(response.body.sucesso).toBe(false);
-            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.USUARIO.ID_INVALIDO);
+            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.GERAL.ID_INVALIDO);
         });
 
-        it ('deve lançar AppError(403) por não-admin tentar buscar outro usuário.', async () => {
+        it ('deve lançar erro 403 por não-admin tentar buscar outro usuário.', async () => {
             const usuarioEditor = await Usuario.create({
                 nome: 'Usuário Editor',
                 email: 'editor@gajeiro.com',
@@ -657,7 +641,7 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.body.mensagem).toContain(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_BUSCAR_OUTRO_PERFIL);
         });
 
-        it ('deve lançar AppError(404) de usuário não encontrado.', async () => {
+        it ('deve lançar erro 404 por usuário não encontrado.', async () => {
             const idValidoInexistente = new mongoose.Types.ObjectId();
 
             const tokenAdmin = jwt.sign(

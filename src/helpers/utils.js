@@ -5,7 +5,7 @@ import { FUNCOES_USUARIO } from '../configs/constantsConfig.js'
 
 const validarFormatoId = (id) => {
     if (!isValidObjectId(id)) {
-        throw new AppError(MENSAGENS_ERRO.USUARIO.ID_INVALIDO, 400);
+        throw new AppError(MENSAGENS_ERRO.GERAL.ID_INVALIDO, 400);
     }
 
 };

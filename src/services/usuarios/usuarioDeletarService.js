@@ -1,26 +1,25 @@
 import { usuarioRepository } from "../../repositories/usuarios/usuarioRepository.js";
 import { AppError } from '../../errors/AppError.js';
-import { isValidObjectId } from "mongoose";
 import { MENSAGENS_ERRO } from '../../configs/mensagensConfig.js';
+import { validarFormatoId, usuarioAutenticadoEhAdmin } from "../../helpers/utils.js";
+import { verificarUsuarioExistePorId } from "../../helpers/usuarioUtils.js";
 
 const usuarioDeletarService = async (id, usuarioAutenticado) => {
 
-    if (!isValidObjectId(id)) {
-        throw new AppError(MENSAGENS_ERRO.USUARIO.ID_INVALIDO, 400);
-    }
+    validarFormatoId(id);
 
-    const ehAdmin = usuarioAutenticado.funcao === 'admin';
+    const autenticadoEhAdmin = usuarioAutenticadoEhAdmin(usuarioAutenticado);
 
     // 1. Regras de segurança para não-admins tentando deletar outros usuários
     const idUsuarioAutenticado = String(usuarioAutenticado?.id || usuarioAutenticado?._id || '');
     const idAlvo = String(id);
     const ehOProprioUsuario = idUsuarioAutenticado === idAlvo;    
-    if (!ehAdmin && !ehOProprioUsuario) {
+    if (!autenticadoEhAdmin && !ehOProprioUsuario) {
         throw new AppError(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_DELETAR_OUTRO_PERFIL, 403);
     }
 
     // 2. Regra de segurança para Admins deletando a si mesmos
-    if (ehAdmin && ehOProprioUsuario) {
+    if (autenticadoEhAdmin && ehOProprioUsuario) {
         const totalAdmins = await usuarioRepository.contarPorFuncao('admin');
         
         if (totalAdmins <= 1) {
@@ -28,10 +27,7 @@ const usuarioDeletarService = async (id, usuarioAutenticado) => {
         }
     }
 
-    const usuarioExiste = await usuarioRepository.existePorId(id);
-    if (!usuarioExiste) {
-        throw new AppError(MENSAGENS_ERRO.USUARIO.NAO_ENCONTRADO, 404);
-    }
+    await verificarUsuarioExistePorId(id);
 
     await usuarioRepository.deletar(id);
 
