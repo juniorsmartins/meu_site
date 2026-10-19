@@ -1,52 +1,41 @@
 import { usuarioRepository } from "../../repositories/usuarios/usuarioRepository.js";
 import { AppError } from "../../errors/AppError.js";
 import { MENSAGENS_ERRO } from '../../configs/mensagensConfig.js';
-import { validarFormatoId, usuarioAutenticadoEhAdmin } from "../../helpers/utils.js";
-import { verificarUsuarioExistePorId, verificarDuplicidadeDeEmail } from "../../helpers/usuarioUtils.js";
+import { validarFormatoId } from "../../helpers/utils.js";
+import { usuarioAutenticadoEhAdmin, verificarUsuarioExistePorId, verificarDuplicidadeDeEmail, regraAutorizarAdminOuDonoDoPerfil } from "../../helpers/usuarioUtils.js";
 
 const usuarioAtualizarService = async (id, dadosAtualizacao, usuarioAutenticado) => {
 
+    // 1. Cláusulas de Guarda (Validações de entrada, existência e autorização)
     validarFormatoId(id);
-
-    const autenticadoEhAdmin = usuarioAutenticadoEhAdmin(usuarioAutenticado);
-
-    regraApenasAdminPodeAlterarFuncao(autenticadoEhAdmin, dadosAtualizacao);
-
-    // 2. REGRA DE NEGÓCIO: Não-admins só podem atualizar o seu próprio perfil
-    // Normalizamos ambos para String para evitar conflito entre ObjectId e String pura
-    const idUsuarioAutenticado = String(usuarioAutenticado?.id || usuarioAutenticado?._id || '');
-    const idAlvo = String(id);
-    const ehOProprioUsuario = idUsuarioAutenticado === idAlvo;
-    if (!autenticadoEhAdmin && !ehOProprioUsuario) {
-        throw new AppError(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_ATUALIZAR_OUTRO_PERFIL, 403);
-    }
-
+    regraAutorizarAdminOuDonoDoPerfil(id, usuarioAutenticado);
+    regraApenasAdminPodeAlterarFuncao(usuarioAutenticado, dadosAtualizacao);
     await verificarUsuarioExistePorId(id); 
 
-    // START SEGURANÇA (Whitelisting)
-    // SEGURANÇA (Whitelisting): Extraímos apenas os campos permitidos para alteração,
-    // blindando contra Mass Assignment de propriedades internas do Mongoose ou do Schema.
     const { nome, email, senha, funcao } = dadosAtualizacao;
-    const dadosFiltrados = {};
 
-    if (nome !== undefined) dadosFiltrados.nome = nome;
-    
+    // 2. Validação de Regra de Negócio Específica (E-mail único)
     if (email !== undefined) {
         await verificarDuplicidadeDeEmail(email, id);
-        dadosFiltrados.email = email;
     }
 
-    if (senha !== undefined) dadosFiltrados.senha = senha; // O hook pre-save do Mongoose cuidará do hash automaticamente!
-    if (autenticadoEhAdmin && funcao !== undefined) dadosFiltrados.funcao = funcao;
-    // END SEGURANÇA (Whitelisting)
+    // 3. Sanitização do Payload (Whitelisting / Mass Assignment Protection)
+    const dadosFiltrados = {
+        ...(nome !== undefined && { nome }),
+        ...(email !== undefined && { email }),
+        ...(senha !== undefined && { senha }),
+        ...(usuarioAutenticadoEhAdmin(usuarioAutenticado) && funcao !== undefined && { funcao })
+    };
 
-    const usuarioAtualizado = await usuarioRepository.atualizar(id, dadosFiltrados);
-    return usuarioAtualizado;
+    // 4. Persistência
+    return await usuarioRepository.atualizar(id, dadosFiltrados);
 };
 
-const regraApenasAdminPodeAlterarFuncao = (autenticadoEhAdmin, dadosAtualizacao) => {
+const regraApenasAdminPodeAlterarFuncao = (usuarioAutenticado, dadosAtualizacao) => {
+
+    const ehAdmin = usuarioAutenticadoEhAdmin(usuarioAutenticado);
     const solicitouAlteracaoDeFuncao = Object.prototype.hasOwnProperty.call(dadosAtualizacao, 'funcao'); // Verifica se o usuário está tentando alterar a função
-    if (solicitouAlteracaoDeFuncao && !autenticadoEhAdmin) {
+    if (solicitouAlteracaoDeFuncao && !ehAdmin) {
         throw new AppError(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_ATUALIZAR_CAMPO_FUNCAO, 403);
     }
 };

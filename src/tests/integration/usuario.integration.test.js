@@ -225,7 +225,7 @@ describe('Testes de Integração - Usuários', () => {
 
             expect(response.status).toBe(403);
             expect(response.body.sucesso).toBe(false);
-            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_ATUALIZAR_OUTRO_PERFIL);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_OUTRO_PERFIL);
         });
 
         it('deve lançar erro 403 se leitor tentar alterar o próprio campo função', async () => {
@@ -514,7 +514,7 @@ describe('Testes de Integração - Usuários', () => {
             // Assert (verificação)
             expect(response.status).toBe(403);
             expect(response.body.sucesso).toBe(false);
-            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_DELETAR_OUTRO_PERFIL);
+            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_OUTRO_PERFIL);
         });
 
         it('deve lançar erro 403 por admin tentar se deletar sem outro admin presente.', async () => {
@@ -638,7 +638,7 @@ describe('Testes de Integração - Usuários', () => {
 
             expect(response.status).toBe(403);
             expect(response.body.sucesso).toBe(false);
-            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_BUSCAR_OUTRO_PERFIL);
+            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_OUTRO_PERFIL);
         });
 
         it ('deve lançar erro 404 por usuário não encontrado.', async () => {

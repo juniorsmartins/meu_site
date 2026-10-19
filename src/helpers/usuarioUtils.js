@@ -1,6 +1,11 @@
-import { AppError } from "../errors/AppError.js";
+import { FUNCOES_USUARIO } from '../configs/constantsConfig.js'
 import { MENSAGENS_ERRO } from '../configs/mensagensConfig.js';
+import { AppError } from "../errors/AppError.js";
 import { usuarioRepository } from "../repositories/usuarios/usuarioRepository.js";
+
+const usuarioAutenticadoEhAdmin = (usuarioAutenticado) => usuarioAutenticado?.funcao === FUNCOES_USUARIO.ADMIN;
+
+const usuarioEhODonoPerfil = (idUsuarioAlvo, usuarioAutenticado) =>  String(idUsuarioAlvo) === String(usuarioAutenticado?.id || usuarioAutenticado?._id || '');
 
 const verificarUsuarioExistePorId = async (id) => {
     const usuarioExiste = await usuarioRepository.existePorId(id);
@@ -20,8 +25,22 @@ const verificarDuplicidadeDeEmail = async (email, idUsuarioPraAtualizar = null) 
     }
 };
 
+const regraAutorizarAdminOuDonoDoPerfil = (idUsuarioAlvo, usuarioAutenticado) => {
+
+    const ehAdmin = usuarioAutenticadoEhAdmin(usuarioAutenticado);
+    const ehOProprioUsuario = usuarioEhODonoPerfil(idUsuarioAlvo, usuarioAutenticado);
+    
+    if (!ehAdmin && !ehOProprioUsuario) {
+        throw new AppError(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_OUTRO_PERFIL, 403);
+    }
+};
+
+
 export {
+    usuarioAutenticadoEhAdmin,
     verificarUsuarioExistePorId,
-    verificarDuplicidadeDeEmail
+    verificarDuplicidadeDeEmail,
+    regraAutorizarAdminOuDonoDoPerfil,
+    usuarioEhODonoPerfil
 };
 
