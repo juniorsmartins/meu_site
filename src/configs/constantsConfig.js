@@ -1,6 +1,3 @@
-console.log("Arquivo constantsConfig.js carregado.");
-
-// Configurações gerais do site
 const SITE_CONFIG = {
     nome: "Gajeiro",
     slogan: "Olhos no horizonte, pés nos fatos",
@@ -11,12 +8,12 @@ const SITE_CONFIG = {
     horarioAtendimento: "Segunda a Sexta, das 08h às 17h"
 };
 
-const FUNCOES_USUARIO = Object.freeze([
-    "admin",
-    "editor",
-    "jornalista",
-    "leitor"
-]);
+const FUNCOES_USUARIO = Object.freeze({
+    ADMIN: "admin",
+    EDITOR: "editor",
+    JORNALISTA: "jornalista",
+    LEITOR: "leitor"
+});
 
 // Editorias disponíveis no sistema
 const EDITORIAS = [

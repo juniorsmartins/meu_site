@@ -1,15 +1,11 @@
 import { usuarioRepository } from "../../repositories/usuarios/usuarioRepository.js";
-import { AppError } from "../../errors/AppError.js";
-import { MENSAGENS_ERRO } from '../../configs/mensagensConfig.js';
+import { verificarDuplicidadeDeEmail } from "../../helpers/usuarioUtils.js";
 
 const usuarioCriarService = async (usuario) => {
 
     const { nome, email, senha } = usuario;
 
-    const emailExiste = await usuarioRepository.buscarPorEmail(email);
-    if (emailExiste) {
-        throw new AppError(MENSAGENS_ERRO.USUARIO.EMAIL_DUPLICADO, 409);
-    }
+    await verificarDuplicidadeDeEmail(email);
 
     const usuarioCriado = await usuarioRepository.criar({ nome, email, senha });
 

@@ -47,8 +47,8 @@ const usuarioRepository = {
         return await Usuario.countDocuments({ funcao });
     },
 
-    async existePorId(id) {
-        return await Usuario.exists({ _id: id });
+    async existePorId(id) { 
+        return await Usuario.exists({ _id: id }); // O retorno será um objeto se existir ou null se não existir. Não é um booleano direto.
     }
 };
 

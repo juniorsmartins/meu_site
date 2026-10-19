@@ -22,8 +22,8 @@ const usuarioSchema = new mongoose.Schema(
         },
         funcao: {
             type: String,
-            enum: FUNCOES_USUARIO, // Define os valores permitidos à função
-            default: "leitor" // Define o valor padrão
+            enum: Object.values(FUNCOES_USUARIO), // Define os valores permitidos à função
+            default: FUNCOES_USUARIO.LEITOR // Define o valor padrão
         }
     }, 
     { timestamps: true } /* Habilita timestamps automáticos para createdAt e updatedAt */
@@ -39,7 +39,7 @@ usuarioSchema.pre('save', async function () {
     const salt = await bcrypt.genSalt(10);
 
     // Substitui a senha em texto limpo pelo hash seguro
-    this.senha = bcrypt.hash(this.senha, salt);
+    this.senha = await bcrypt.hash(this.senha, salt);
 });
 
 // MÉTODO AUXILIAR: Para validar se a senha digitada no login bate com o hash salvo

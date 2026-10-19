@@ -62,7 +62,7 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.body.usuarioCriado).not.toHaveProperty('senha');
         });
 
-        it('não pode criar usuário sem informar email 400', async () => {
+        it('deve lançar erro 400 ao tentar criar usuário sem informar email', async () => {
             const novoUsuario = {
                 nome: 'Usuário Teste',
                 senha: 'senhaSegura123'
@@ -77,17 +77,15 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.body.mensagem).toBe(MENSAGENS_ERRO.USUARIO.CAMPO_EMAIL_OBRIGATORIO);
         });
 
-        it('deve retornar status 409 ao tentar cadastrar e-mail duplicado', async () => {
+        it('deve lançar erro 409 ao tentar cadastrar e-mail duplicado', async () => {
             const dadosDuplicados = {
                 nome: 'Duplicado',
                 email: 'duplicado@gajeiro.com',
                 senha: '123'
             };
 
-            // Insere o primeiro usuário diretamente no banco de teste
             await Usuario.create(dadosDuplicados);
 
-            // Tenta cadastrar novamente via requisição HTTP
             const response = await request(app)
                 .post('/v1/usuarios')
                 .send(dadosDuplicados);
@@ -100,46 +98,12 @@ describe('Testes de Integração - Usuários', () => {
 
     describe('Atualizar Usuário', () => {
 
-        it('leitor deve atualizar nome e email próprios com sucesso.', async () => {
-            // Arrange: Prepara os dados e o ambiente para o teste
-            // Cria usuário direto no banco de teste
+        it('admin deve atualizar nome, email, senha e função de leitor com sucesso.', async () => {
+            const senhaAntiga = '123';
             const usuarioCriado = await Usuario.create({
                 nome: 'Nome Antigo',
                 email: 'antigo@gajeiro.com',
-                senha: '123',
-                funcao: 'leitor'
-            });
-
-            const tokenLeitor = jwt.sign(
-                { id: usuarioCriado._id, funcao: usuarioCriado.funcao }, 
-                process.env.JWT_SECRET, 
-                { expiresIn: '1h' }
-            );
-
-            const nomeAtualizado = 'Nome Atualizado';
-            const emailAtualizado = 'atualizado@gajeiro.com';
-
-            // Act: Realiza a requisição HTTP para atualizar o usuário
-            const response = await request(app)
-                .put(`/v1/usuarios/${usuarioCriado._id}`)
-                .set('Authorization', `Bearer ${tokenLeitor}`)
-                .send({ nome: nomeAtualizado, email: emailAtualizado });
-
-            // Assert: Verifica se a resposta está de acordo com o esperado
-            expect(response.status).toBe(200);
-            expect(response.body.sucesso).toBe(true);
-            expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.ATUALIZADO);
-            expect(response.body.usuarioAtualizado.nome).toBe(nomeAtualizado);
-            expect(response.body.usuarioAtualizado.email).toBe(emailAtualizado);
-        });
-
-        it('admin deve atualizar nome, email e função de leitor com sucesso', async () => {
-            // Arrange: Prepara os dados e o ambiente para o teste
-            // Cria usuário direto no banco de teste
-            const usuarioCriado = await Usuario.create({
-                nome: 'Nome Antigo',
-                email: 'antigo@gajeiro.com',
-                senha: '123',
+                senha: senhaAntiga,
                 funcao: 'leitor'
             });
 
@@ -151,67 +115,98 @@ describe('Testes de Integração - Usuários', () => {
 
             const nomeAtualizado = 'Nome Atualizado';
             const emailAtualizado = 'atualizado@gajeiro.com';
+            const senhaAtualizada = '898';
             const funcaoAtualizada = 'editor';
 
-            // Act: Realiza a requisição HTTP para atualizar o usuário
             const response = await request(app)
                 .put(`/v1/usuarios/${usuarioCriado._id}`)
                 .set('Authorization', `Bearer ${tokenAdmin}`)
-                .send({ nome: nomeAtualizado, email: emailAtualizado, funcao: funcaoAtualizada });
+                .send({ nome: nomeAtualizado, email: emailAtualizado, senha: senhaAtualizada, funcao: funcaoAtualizada });
 
-            // Assert: Verifica se a resposta está de acordo com o esperado
             expect(response.status).toBe(200);
             expect(response.body.sucesso).toBe(true);
             expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.ATUALIZADO);
             expect(response.body.usuarioAtualizado.nome).toBe(nomeAtualizado);
             expect(response.body.usuarioAtualizado.email).toBe(emailAtualizado);
             expect(response.body.usuarioAtualizado.funcao).toBe(funcaoAtualizada);
+            expect(response.body.usuarioAtualizado).not.toHaveProperty('senha');
+
+            // Assert no Banco de Dados: Busca o usuário incluindo o campo senha (select: false)
+            const usuarioDoBanco = await Usuario.findById(usuarioCriado._id).select('+senha');
+            expect(usuarioDoBanco).not.toBeNull();
+            
+            // Valida se a senha nova foi devidamente criptografada comparando com a senha em texto limpo
+            const senhaBateComHash = await usuarioDoBanco.compararSenha(senhaAtualizada);
+            expect(senhaBateComHash).toBe(true);
+
+            // Garante que a senha antiga NÃO funciona mais
+            const senhaAntigaBate = await usuarioDoBanco.compararSenha(senhaAntiga);
+            expect(senhaAntigaBate).toBe(false);
         });
 
-        it('deve retornar status 400 ao fornecer ID de formato inválido', async () => {
-            // Arrange: Prepara os dados e o ambiente para o teste
+        it('leitor deve atualizar nome, email e senha próprios com sucesso.', async () => {
+            const senhaAntiga = '123';
+            const usuarioCriado = await Usuario.create({
+                nome: 'Nome Antigo',
+                email: 'antigo@gajeiro.com',
+                senha: senhaAntiga,
+                funcao: 'leitor'
+            });
+
+            const tokenLeitor = jwt.sign(
+                { id: usuarioCriado._id, funcao: usuarioCriado.funcao }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            const nomeAtualizado = 'Nome Atualizado';
+            const emailAtualizado = 'atualizado@gajeiro.com';
+            const senhaAtualizada = '456';
+
+            const response = await request(app)
+                .put(`/v1/usuarios/${usuarioCriado._id}`)
+                .set('Authorization', `Bearer ${tokenLeitor}`)
+                .send({ nome: nomeAtualizado, email: emailAtualizado, senha: senhaAtualizada });
+
+            expect(response.status).toBe(200);
+            expect(response.body.sucesso).toBe(true);
+            expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.ATUALIZADO);
+            expect(response.body.usuarioAtualizado.nome).toBe(nomeAtualizado);
+            expect(response.body.usuarioAtualizado.email).toBe(emailAtualizado);
+            // Garante que a senha atualizada nunca vaza na resposta HTTP
+            expect(response.body.usuarioAtualizado).not.toHaveProperty('senha');
+
+            // Assert no Banco de Dados: Busca o usuário incluindo o campo senha (select: false)
+            const usuarioDoBanco = await Usuario.findById(usuarioCriado._id).select('+senha');
+            expect(usuarioDoBanco).not.toBeNull();
+            
+            // Valida se a senha nova foi devidamente criptografada comparando com a senha em texto limpo
+            const senhaBateComHash = await usuarioDoBanco.compararSenha(senhaAtualizada);
+            expect(senhaBateComHash).toBe(true);
+
+            // Garante que a senha antiga NÃO funciona mais
+            const senhaAntigaBate = await usuarioDoBanco.compararSenha(senhaAntiga);
+            expect(senhaAntigaBate).toBe(false);
+        });
+
+        it('deve lançar erro 400 por ID inválido.', async () => {
             const tokenAdmin = jwt.sign(
                 { id: '123', funcao: 'admin' }, 
                 process.env.JWT_SECRET, 
                 { expiresIn: '1h' }
             );
 
-            // Act: Realiza a requisição HTTP para atualizar o usuário com ID inválido
             const response = await request(app)
                 .put('/v1/usuarios/id-invalido-123')
                 .set('Authorization', `Bearer ${tokenAdmin}`)
                 .send({ nome: 'Teste' });
 
-            // Assert: Verifica se a resposta está de acordo com o esperado
             expect(response.status).toBe(400);
             expect(response.body.sucesso).toBe(false);
-            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.USUARIO.ID_INVALIDO);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.GERAL.ID_INVALIDO);
         });
 
-        it('usuário não encontrado 404 por id inexistente', async () => {
-            // Arrange: Prepara os dados e o ambiente para o teste
-            const tokenAdmin = jwt.sign(
-                { id: '123', funcao: 'admin' }, 
-                process.env.JWT_SECRET, 
-                { expiresIn: '1h' }
-            );
-
-            const idInexistente = new mongoose.Types.ObjectId();
-
-            // Act: Realiza a requisição HTTP para atualizar o usuário que não existe
-            const response = await request(app)
-                .put(`/v1/usuarios/${idInexistente}`)
-                .set('Authorization', `Bearer ${tokenAdmin}`)
-                .send({ nome: 'Nome Teste' });
-
-            // Assert: Verifica se a resposta está de acordo com o esperado
-            expect(response.status).toBe(404);
-            expect(response.body.sucesso).toBe(false);
-            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.USUARIO.NAO_ENCONTRADO);
-        });
-
-        it('deve retornar status 403 se usuário leitor tentar alterar o campo nome de outro usuário', async () => {
-            // Arrange: Prepara os dados e o ambiente para o teste
+        it('deve lançar erro 403 se leitor tentar alterar o nome de outro usuário.', async () => {
             const tokenLeitor = jwt.sign(
                 { id: '456', funcao: 'leitor' }, 
                 process.env.JWT_SECRET || 'secret_teste_jwt', 
@@ -225,20 +220,17 @@ describe('Testes de Integração - Usuários', () => {
                 funcao: 'leitor'
             });
 
-            // Act: Realiza a requisição HTTP para tentar alterar o campo funcao
             const response = await request(app)
                 .put(`/v1/usuarios/${usuarioOutro._id}`)
                 .set('Authorization', `Bearer ${tokenLeitor}`)
                 .send({ nome: 'Comum2 Alterado' }); 
 
-            // Assert: Verifica se a resposta está de acordo com o esperado
             expect(response.status).toBe(403);
             expect(response.body.sucesso).toBe(false);
-            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_ATUALIZAR_OUTRO_PERFIL);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_OUTRO_PERFIL);
         });
 
-        it('leitor não pode alterar o próprio campo função 403', async () => {
-            // Arrange: Prepara os dados e o ambiente para o teste
+        it('deve lançar erro 403 se leitor tentar alterar a própria função.', async () => {
             const usuarioComum = await Usuario.create({
                 nome: 'Comum',
                 email: 'comum@gajeiro.com',
@@ -252,23 +244,73 @@ describe('Testes de Integração - Usuários', () => {
                 { expiresIn: '1h' }
             );
 
-            // Act: Realiza a requisição HTTP para tentar alterar o campo funcao
             const response = await request(app)
                 .put(`/v1/usuarios/${usuarioComum._id}`)
                 .set('Authorization', `Bearer ${tokenLeitor}`)
                 .send({ funcao: 'admin' }); // Tentando escalar privilégios
 
-            // Assert: Verifica se a resposta está de acordo com o esperado
             expect(response.status).toBe(403);
             expect(response.body.sucesso).toBe(false);
             expect(response.body.mensagem).toBe(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_ATUALIZAR_CAMPO_FUNCAO);
+        });
+
+        it('deve lançar erro 404 por usuário não encontrado.', async () => {
+            const tokenAdmin = jwt.sign(
+                { id: '123', funcao: 'admin' }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            const idInexistente = new mongoose.Types.ObjectId();
+
+            const response = await request(app)
+                .put(`/v1/usuarios/${idInexistente}`)
+                .set('Authorization', `Bearer ${tokenAdmin}`)
+                .send({ nome: 'Nome Teste' });
+
+            expect(response.status).toBe(404);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.USUARIO.NAO_ENCONTRADO);
+        });
+
+        it('deve lançar erro 409 por duplicidade de e-mail.', async () => {
+            await Usuario.create({
+                nome: 'Nome Antigo',
+                email: 'duplicado@gajeiro.com',
+                senha: '456',
+                funcao: 'leitor'
+            });
+
+            const usuarioPraAtualizar = await Usuario.create({
+                nome: 'Nome Antigo',
+                email: 'antigo@gajeiro.com',
+                senha: '123',
+                funcao: 'leitor'
+            });
+
+            const nomeAtualizado = 'Nome Atualizado';
+            const emailAtualizadoDuplicado = 'duplicado@gajeiro.com';
+
+            const tokenLeitor = jwt.sign(
+                { id: usuarioPraAtualizar._id, funcao: usuarioPraAtualizar.funcao }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            const response = await request(app)
+                .put(`/v1/usuarios/${usuarioPraAtualizar._id}`)
+                .set('Authorization', `Bearer ${tokenLeitor}`)
+                .send({ nome: nomeAtualizado, email: emailAtualizadoDuplicado });
+
+            expect(response.status).toBe(409);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.USUARIO.EMAIL_DUPLICADO);
         });
     });
 
     describe('Pesquisar Usuários)', () => {
 
         it('admin deve pesquisar usuários com sucesso', async () => {
-            // Arrange: Gera um token JWT simulando um usuário admin
             const usuarioLeitor = await Usuario.create({
                 nome: 'Leitor',
                 email: 'leitor@gajeiro.com',
@@ -289,12 +331,10 @@ describe('Testes de Integração - Usuários', () => {
                 { expiresIn: '1h' }
             );
 
-            // Act: Realiza a requisição HTTP para pesquisar usuários
             const response = await request(app)
                 .get('/v1/usuarios')
                 .set('Authorization', `Bearer ${tokenAdmin}`);
 
-            // Assert: Verifica se a resposta está de acordo com o esperado
             expect(response.status).toBe(200);
             expect(response.body.sucesso).toBe(true);
             expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.PESQUISADO);
@@ -307,7 +347,7 @@ describe('Testes de Integração - Usuários', () => {
             );
         });
 
-        it('deve retornar status 401 se nenhum token de autenticação for fornecido', async () => {
+        it('deve lançar erro 401 se nenhum token de autenticação for fornecido', async () => {
             const response = await request(app).get('/v1/usuarios');
 
             expect(response.status).toBe(401);
@@ -315,8 +355,7 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.body.mensagem).toContain(MENSAGENS_ERRO.AUTENTICAÇÃO.TOKEN_NAO_FORNECIDO);
         });
 
-        it('endpoint exclusivo para admins e proibido para demais usuários 403', async () => {
-            // Gera um token JWT simulando um usuário leitor/comum
+        it('deve lançar erro 403 se usuário não admin tentar acessar endpoint exclusivo para admins', async () => {
             const tokenLeitor = jwt.sign(
                 { id: '123', funcao: 'leitor' }, 
                 process.env.JWT_SECRET, 
@@ -424,7 +463,7 @@ describe('Testes de Integração - Usuários', () => {
 
         });
     
-        it('deve lançar AppError(400) de ID inválido.', async () => {
+        it('deve lançar erro 400 por ID inválido.', async () => {
             // Arrange (preparação)
             const idInvalido = 'id-invalido';
 
@@ -442,10 +481,10 @@ describe('Testes de Integração - Usuários', () => {
             // Assert (verificação)
             expect(response.status).toBe(400);
             expect(response.body.sucesso).toBe(false);
-            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.USUARIO.ID_INVALIDO);
+            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.GERAL.ID_INVALIDO);
         });
         
-        it('deve lançar AppError(404) de usuário não encontrado.', async () => {
+        it('deve lançar erro 404 por usuário não encontrado.', async () => {
             // Arrange (preparação)
             const idValidoInexistente = new mongoose.Types.ObjectId();
 
@@ -466,7 +505,7 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.body.mensagem).toContain(MENSAGENS_ERRO.USUARIO.NAO_ENCONTRADO);
         });
 
-        it('deve lançar AppError(403) por não-admin tentar deletar outro usuário.', async () => {
+        it('deve lançar erro 403 por não-admin tentar deletar outro usuário.', async () => {
             // Arrange (preparação)
             const usuarioLeitor = await Usuario.create({
                 nome: 'Usuário Leitor1',
@@ -496,10 +535,10 @@ describe('Testes de Integração - Usuários', () => {
             // Assert (verificação)
             expect(response.status).toBe(403);
             expect(response.body.sucesso).toBe(false);
-            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_DELETAR_OUTRO_PERFIL);
+            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_OUTRO_PERFIL);
         });
 
-        it('deve lançar AppError(403) por admin tentar se deletar sem outro admin presente.', async () => {
+        it('deve lançar erro 403 por admin tentar se deletar sem outro admin presente.', async () => {
             // Arrange (preparação)
             const usuarioAdmin = await Usuario.create({
                 nome: 'Usuário Admin1',
@@ -582,7 +621,7 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.body.usuarioBuscado.funcao).toBe(usuarioLeitor.funcao);
         });
 
-        it ('deve lançar AppError(400) de ID inválido.', async () => {
+        it ('deve lançar erro 400 por ID inválido.', async () => {
             const idInvalido = 'id-invalido';
 
             const tokenAdmin = jwt.sign(
@@ -597,10 +636,10 @@ describe('Testes de Integração - Usuários', () => {
 
             expect(response.status).toBe(400);
             expect(response.body.sucesso).toBe(false);
-            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.USUARIO.ID_INVALIDO);
+            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.GERAL.ID_INVALIDO);
         });
 
-        it ('deve lançar AppError(403) por não-admin tentar buscar outro usuário.', async () => {
+        it ('deve lançar erro 403 por não-admin tentar buscar outro usuário.', async () => {
             const usuarioEditor = await Usuario.create({
                 nome: 'Usuário Editor',
                 email: 'editor@gajeiro.com',
@@ -620,10 +659,10 @@ describe('Testes de Integração - Usuários', () => {
 
             expect(response.status).toBe(403);
             expect(response.body.sucesso).toBe(false);
-            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_BUSCAR_OUTRO_PERFIL);
+            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_OUTRO_PERFIL);
         });
 
-        it ('deve lançar AppError(404) de usuário não encontrado.', async () => {
+        it ('deve lançar erro 404 por usuário não encontrado.', async () => {
             const idValidoInexistente = new mongoose.Types.ObjectId();
 
             const tokenAdmin = jwt.sign(
