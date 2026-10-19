@@ -5,7 +5,10 @@ import { usuarioRepository } from "../repositories/usuarios/usuarioRepository.js
 
 const usuarioAutenticadoEhAdmin = (usuarioAutenticado) => usuarioAutenticado?.funcao === FUNCOES_USUARIO.ADMIN;
 
-const usuarioEhODonoPerfil = (idUsuarioAlvo, usuarioAutenticado) =>  String(idUsuarioAlvo) === String(usuarioAutenticado?.id || usuarioAutenticado?._id || '');
+const usuarioEhODonoPerfil = (idUsuarioAlvo, usuarioAutenticado) => {
+    const idAutenticado = String(usuarioAutenticado?.id || usuarioAutenticado?._id || '');
+    return String(idUsuarioAlvo) === idAutenticado;
+};
 
 const verificarUsuarioExistePorId = async (id) => {
     const usuarioExiste = await usuarioRepository.existePorId(id);
@@ -15,12 +18,9 @@ const verificarUsuarioExistePorId = async (id) => {
 };
 
 const verificarDuplicidadeDeEmail = async (email, idUsuarioPraAtualizar = null) => {
-    const emailExiste = await usuarioRepository.buscarPorEmail(email);
+    const usuarioComEmail = await usuarioRepository.buscarPorEmail(email);
 
-    const idUsuarioDoEmail = String(emailExiste?._id); 
-    const idUsuarioPraAtualizarStr = String(idUsuarioPraAtualizar); 
-
-    if (emailExiste && (idUsuarioDoEmail !== idUsuarioPraAtualizarStr)) {
+    if (usuarioComEmail && String(usuarioComEmail._id) !== String(idUsuarioPraAtualizar)) {
         throw new AppError(MENSAGENS_ERRO.USUARIO.EMAIL_DUPLICADO, 409);
     }
 };
@@ -34,7 +34,6 @@ const regraAutorizarAdminOuDonoDoPerfil = (idUsuarioAlvo, usuarioAutenticado) =>
         throw new AppError(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_OUTRO_PERFIL, 403);
     }
 };
-
 
 export {
     usuarioAutenticadoEhAdmin,

@@ -32,9 +32,9 @@ const usuarioAtualizarService = async (id, dadosAtualizacao, usuarioAutenticado)
 };
 
 const regraApenasAdminPodeAlterarFuncao = (usuarioAutenticado, dadosAtualizacao) => {
-
     const ehAdmin = usuarioAutenticadoEhAdmin(usuarioAutenticado);
     const solicitouAlteracaoDeFuncao = Object.prototype.hasOwnProperty.call(dadosAtualizacao, 'funcao'); // Verifica se o usuário está tentando alterar a função
+
     if (solicitouAlteracaoDeFuncao && !ehAdmin) {
         throw new AppError(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_ATUALIZAR_CAMPO_FUNCAO, 403);
     }
