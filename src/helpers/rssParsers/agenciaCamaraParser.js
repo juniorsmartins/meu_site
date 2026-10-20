@@ -1,7 +1,5 @@
 import { mapearEditoriaCompativel } from '../editoriaHelper.js';
 
-console.log("Arquivo agenciaCamaraParser.js carregado.");
-
 /**
  * Normalizador exclusivo para os feeds RSS da Agência Câmara dos Deputados
  */

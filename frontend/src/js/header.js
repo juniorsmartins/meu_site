@@ -349,7 +349,7 @@ function gerarItensMenuPorFuncao(funcao = 'leitor') {
 
     // Opção padrão para todos os usuários logados
     let htmlMenu = `
-        <a href="../html/paginas-logados/painel-perfil.html" class="item-dropdown-usuario">
+        <a href="/html/paginas-logados/painel-perfil.html" class="item-dropdown-usuario">
             <i class="bi bi-person-gear"></i> Meu Perfil
         </a>
     `;

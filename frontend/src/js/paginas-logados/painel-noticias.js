@@ -6,8 +6,6 @@ import {
     OPCOES_EDITORIA 
 } from '../constantsConfig.js';
 
-console.log("Arquivo painel-noticias.js carregado.");
-
 const LIMITE_NOTICIAS_POR_PAGINA = 12;
 
 // Armazena o HTML original das linhas em edição para permitir a ação de cancelar
