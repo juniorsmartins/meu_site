@@ -29,13 +29,28 @@ function preencherDadosFormulario(usuario) {
     const inputNome = document.getElementById("perfil-nome");
     const inputEmail = document.getElementById("perfil-email");
     const selectFuncao = document.getElementById("perfil-funcao");
+    const iconeBloqueio = document.querySelector(".icone-bloqueio");
+    const subtextoBloqueio = document.querySelector(".subtexto-bloqueio");
 
-    if (elNomeHeader) elNomeHeader.textContent = usuario.nome || "Usuário";
-    if (elBadgeFuncao) elBadgeFuncao.textContent = formatarNomeFuncao(usuario.funcao);
+    if (elNomeHeader) elNomeHeader.textContent = usuarioSessao.nome || "Usuário";
+    if (elBadgeFuncao) elBadgeFuncao.textContent = formatarNomeFuncao(usuarioSessao.funcao);
 
-    if (inputNome) inputNome.value = usuario.nome || "";
-    if (inputEmail) inputEmail.value = usuario.email || "";
-    if (selectFuncao) selectFuncao.value = usuario.funcao || "leitor";
+    if (inputNome) inputNome.value = usuarioSessao.nome || "";
+    if (inputEmail) inputEmail.value = usuarioSessao.email || "";
+    if (selectFuncao) selectFuncao.value = usuarioSessao.funcao || "leitor";
+
+    // LIBERAÇÃO PARA ADMINISTRADOR:
+    // Se o usuário logado for 'admin', destravamos o campo de função para edição
+    if (usuarioSessao.funcao === 'admin' && selectFuncao) {
+        selectFuncao.disabled = false; // Habilita o select
+        selectFuncao.classList.remove("campo-desabilitado"); // Remove o estilo visual de desabilitado
+        
+        if (iconeBloqueio) iconeBloqueio.style.display = "none"; // Oculta o ícone de cadeado
+        if (subtextoBloqueio) {
+            subtextoBloqueio.textContent = "Modo Administrador: Você pode alterar a função deste usuário.";
+            subtextoBloqueio.style.color = "var(--blue-700)";
+        }
+    }
 }
 
 function formatarNomeFuncao(funcao) {
@@ -61,6 +76,7 @@ function configurarFormularioPerfil(usuarioSessao) {
         const nome = document.getElementById("perfil-nome").value.trim();
         const email = document.getElementById("perfil-email").value.trim();
         const senha = document.getElementById("perfil-senha").value;
+        const funcao = document.getElementById("perfil-funcao");
 
         // Oculta feedback anterior
         if (feedback) {
@@ -77,6 +93,12 @@ function configurarFormularioPerfil(usuarioSessao) {
         // Envia o campo senha somente se o usuário digitou uma nova senha
         if (senha && senha.trim() !== "") {
             payloadAtualizacao.senha = senha;
+        }
+
+        // Se o select de função estiver habilitado (significa que é admin), incluímos a nova função no payload
+        
+        if (funcao && !funcao.disabled) {
+            payloadAtualizacao.funcao = funcao.value;
         }
 
         try {
