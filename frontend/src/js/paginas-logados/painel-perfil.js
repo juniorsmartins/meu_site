@@ -144,10 +144,21 @@ function configurarFormularioPerfil(usuarioSessao) {
 
         } catch (error) {
             console.error("Erro ao atualizar perfil:", error);
+
+            // --- FLUXO DE ERRO / RECUPERAÇÃO ---
+            // 1. Exibe a mensagem de erro do backend (ex: "Não é possível alterar a função do último administrador...")
             if (feedback) {
                 feedback.textContent = error.message;
                 feedback.className = "feedback-perfil erro";
             }
+
+            // 2. RESTAURAÇÃO: Reseta o formulário de volta para os dados originais salvos na sessão (localStorage)
+            preencherDadosFormulario(usuarioSessao);
+
+            // 3. Limpa o campo de senha por segurança
+            const inputSenha = document.getElementById("perfil-senha");
+            if (inputSenha) inputSenha.value = "";
+
         } finally {
             if (btnSalvar) {
                 btnSalvar.disabled = false;
