@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function preencherDadosFormulario(usuario) {
-const elNomeHeader = document.getElementById("label-nome-usuario");
+    const elNomeHeader = document.getElementById("label-nome-usuario");
     const elBadgeFuncao = document.getElementById("badge-funcao-usuario");
     
     const inputNome = document.getElementById("perfil-nome");
@@ -32,7 +32,6 @@ const elNomeHeader = document.getElementById("label-nome-usuario");
     const iconeBloqueio = document.querySelector(".icone-bloqueio");
     const subtextoBloqueio = document.querySelector(".subtexto-bloqueio");
 
-    // CORREÇÃO: Utilizando o parâmetro 'usuario' enviado para a função, evitando o ReferenceError
     if (elNomeHeader) elNomeHeader.textContent = usuario.nome || "Usuário";
     if (elBadgeFuncao) elBadgeFuncao.textContent = formatarNomeFuncao(usuario.funcao);
 
@@ -40,16 +39,29 @@ const elNomeHeader = document.getElementById("label-nome-usuario");
     if (inputEmail) inputEmail.value = usuario.email || "";
     if (selectFuncao) selectFuncao.value = usuario.funcao || "leitor";
 
-    // LIBERAÇÃO PARA ADMINISTRADOR:
-    // Se o usuário logado na sessão possuir a função 'admin', destravamos o campo select
-    if (usuario.funcao === 'admin' && selectFuncao) {
-        selectFuncao.disabled = false; // Habilita o campo de seleção
-        selectFuncao.classList.remove("campo-desabilitado"); // Remove o estilo cinza de desativado
-        
-        if (iconeBloqueio) iconeBloqueio.style.display = "none"; // Oculta o ícone do cadeado
-        if (subtextoBloqueio) {
-            subtextoBloqueio.textContent = "Modo Administrador: Você pode alterar a função deste usuário.";
-            subtextoBloqueio.style.color = "var(--blue-700)";
+    // CONTROLE DINÂMICO DE LIBERAÇÃO / BLOQUEIO DA FUNÇÃO:
+    if (selectFuncao) {
+        if (usuario.funcao === 'admin') {
+            // Se o usuário atual for Administrador, destrava o campo para permitir alterações
+            selectFuncao.disabled = false;
+            selectFuncao.classList.remove("campo-desabilitado");
+            
+            if (iconeBloqueio) iconeBloqueio.style.display = "none";
+            if (subtextoBloqueio) {
+                subtextoBloqueio.textContent = "Modo Administrador: Você pode alterar a função deste usuário.";
+                subtextoBloqueio.style.color = "var(--blue-700)";
+            }
+        } else {
+            // Se o usuário NÃO for Administrador (ex: rebaixado para editor/jornalista/leitor),
+            // bloqueia imediatamente o campo, restabelece a classe e os avisos de segurança.
+            selectFuncao.disabled = true;
+            selectFuncao.classList.add("campo-desabilitado");
+            
+            if (iconeBloqueio) iconeBloqueio.style.display = "inline-block";
+            if (subtextoBloqueio) {
+                subtextoBloqueio.textContent = "A alteração de privilégios é realizada exclusivamente pelo Administrador.";
+                subtextoBloqueio.style.color = "#94A3B8";
+            }
         }
     }
 }
