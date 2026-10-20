@@ -2,7 +2,7 @@ import { usuarioRepository } from "../../repositories/usuarios/usuarioRepository
 import { AppError } from "../../errors/AppError.js";
 import { MENSAGENS_ERRO } from '../../configs/mensagensConfig.js';
 import { validarFormatoId, criptografar } from "../../helpers/utils.js";
-import { usuarioAutenticadoEhAdmin, verificarUsuarioExistePorId, verificarDuplicidadeDeEmail, regraAutorizarAdminOuDonoDoPerfil } from "../../helpers/usuarioUtils.js";
+import { usuarioAutenticadoEhAdmin, verificarUsuarioExistePorId, verificarDuplicidadeDeEmail, regraAutorizarAdminOuDonoDoPerfil, usuarioEhODonoPerfil } from "../../helpers/usuarioUtils.js";
 
 const usuarioAtualizarService = async (id, dadosAtualizacao, usuarioAutenticado) => {
 
@@ -10,6 +10,7 @@ const usuarioAtualizarService = async (id, dadosAtualizacao, usuarioAutenticado)
     validarFormatoId(id);
     regraAutorizarAdminOuDonoDoPerfil(id, usuarioAutenticado);
     regraApenasAdminPodeAlterarFuncao(usuarioAutenticado, dadosAtualizacao);
+    await regraAdminUnicoNaoPodeAlterarPropriaFuncao(id, usuarioAutenticado, dadosAtualizacao);
     await verificarUsuarioExistePorId(id); 
 
     const { nome, email, senha, funcao } = dadosAtualizacao;
@@ -45,7 +46,21 @@ const regraApenasAdminPodeAlterarFuncao = (usuarioAutenticado, dadosAtualizacao)
     }
 };
 
+const regraAdminUnicoNaoPodeAlterarPropriaFuncao = async (idAlvo, usuarioAutenticado, dadosAtualizacao) => {
+    const ehAdmin = usuarioAutenticadoEhAdmin(usuarioAutenticado);
+    const solicitouAlteracaoDeFuncao = Object.prototype.hasOwnProperty.call(dadosAtualizacao, 'funcao'); 
+    const ehPerfilPropriio = usuarioEhODonoPerfil(idAlvo, usuarioAutenticado);
+
+    if (solicitouAlteracaoDeFuncao && ehAdmin && ehPerfilPropriio) {
+        const numeroDeAdmins = await usuarioRepository.contarPorFuncao("admin");
+        if (numeroDeAdmins === 1) {
+            throw new AppError(MENSAGENS_ERRO.USUARIO.ULTIMO_ADMIN, 409);
+        }
+    }
+};
+
 export {
     usuarioAtualizarService
 };
+
 

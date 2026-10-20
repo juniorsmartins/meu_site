@@ -40,7 +40,7 @@ describe('Testes de Integração - Usuários', () => {
 
     describe('Criar Usuário', () => {
         
-        it('deve criar novo usuário com sucesso', async () => {
+        it('deve criar novo usuário com sucesso.', async () => {
             const novoUsuario = {
                 nome: 'Usuário Teste',
                 email: 'teste.integracao@gajeiro.com',
@@ -54,15 +54,15 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.status).toBe(201);
             expect(response.body.sucesso).toBe(true);
             expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.CRIADO);
-            expect(response.body).toHaveProperty('usuarioCriado._id');
-            expect(response.body.usuarioCriado.nome).toBe(novoUsuario.nome);
-            expect(response.body.usuarioCriado.email).toBe(novoUsuario.email);
-            expect(response.body.usuarioCriado.funcao).toBe('leitor'); // Valor padrão para novos usuários
+            expect(response.body).toHaveProperty('usuario._id');
+            expect(response.body.usuario.nome).toBe(novoUsuario.nome);
+            expect(response.body.usuario.email).toBe(novoUsuario.email);
+            expect(response.body.usuario.funcao).toBe('leitor'); // Valor padrão para novos usuários
             // Garante que a senha nunca é exposta no JSON de resposta (Clean Code & Segurança)
-            expect(response.body.usuarioCriado).not.toHaveProperty('senha');
+            expect(response.body.usuario).not.toHaveProperty('senha');
         });
 
-        it('deve lançar erro 400 ao tentar criar usuário sem informar email', async () => {
+        it('deve lançar erro 400 por não informar email.', async () => {
             const novoUsuario = {
                 nome: 'Usuário Teste',
                 senha: 'senhaSegura123'
@@ -77,7 +77,7 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.body.mensagem).toBe(MENSAGENS_ERRO.USUARIO.CAMPO_EMAIL_OBRIGATORIO);
         });
 
-        it('deve lançar erro 409 ao tentar cadastrar e-mail duplicado', async () => {
+        it('deve lançar erro 409 por e-mail duplicado.', async () => {
             const dadosDuplicados = {
                 nome: 'Duplicado',
                 email: 'duplicado@gajeiro.com',
@@ -126,10 +126,10 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.status).toBe(200);
             expect(response.body.sucesso).toBe(true);
             expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.ATUALIZADO);
-            expect(response.body.usuarioAtualizado.nome).toBe(nomeAtualizado);
-            expect(response.body.usuarioAtualizado.email).toBe(emailAtualizado);
-            expect(response.body.usuarioAtualizado.funcao).toBe(funcaoAtualizada);
-            expect(response.body.usuarioAtualizado).not.toHaveProperty('senha');
+            expect(response.body.usuario.nome).toBe(nomeAtualizado);
+            expect(response.body.usuario.email).toBe(emailAtualizado);
+            expect(response.body.usuario.funcao).toBe(funcaoAtualizada);
+            expect(response.body.usuario).not.toHaveProperty('senha');
 
             // Assert no Banco de Dados: Busca o usuário incluindo o campo senha (select: false)
             const usuarioDoBanco = await Usuario.findById(usuarioCriado._id).select('+senha');
@@ -171,10 +171,10 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.status).toBe(200);
             expect(response.body.sucesso).toBe(true);
             expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.ATUALIZADO);
-            expect(response.body.usuarioAtualizado.nome).toBe(nomeAtualizado);
-            expect(response.body.usuarioAtualizado.email).toBe(emailAtualizado);
+            expect(response.body.usuario.nome).toBe(nomeAtualizado);
+            expect(response.body.usuario.email).toBe(emailAtualizado);
             // Garante que a senha atualizada nunca vaza na resposta HTTP
-            expect(response.body.usuarioAtualizado).not.toHaveProperty('senha');
+            expect(response.body.usuario).not.toHaveProperty('senha');
 
             // Assert no Banco de Dados: Busca o usuário incluindo o campo senha (select: false)
             const usuarioDoBanco = await Usuario.findById(usuarioCriado._id).select('+senha');
@@ -206,7 +206,7 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.body.mensagem).toBe(MENSAGENS_ERRO.GERAL.ID_INVALIDO);
         });
 
-        it('deve lançar erro 403 se leitor tentar alterar o nome de outro usuário.', async () => {
+        it('deve lançar erro 403 se leitor tentar alterar outro usuário.', async () => {
             const tokenLeitor = jwt.sign(
                 { id: '456', funcao: 'leitor' }, 
                 process.env.JWT_SECRET || 'secret_teste_jwt', 
@@ -230,7 +230,7 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.body.mensagem).toBe(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_OUTRO_PERFIL);
         });
 
-        it('deve lançar erro 403 se leitor tentar alterar a própria função.', async () => {
+        it('deve lançar erro 403 se leitor tentar alterar função.', async () => {
             const usuarioComum = await Usuario.create({
                 nome: 'Comum',
                 email: 'comum@gajeiro.com',
@@ -305,6 +305,30 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.status).toBe(409);
             expect(response.body.sucesso).toBe(false);
             expect(response.body.mensagem).toBe(MENSAGENS_ERRO.USUARIO.EMAIL_DUPLICADO);
+        });
+
+        it ('deve lançar erro 409 por admin mudar própria função sem haver outro admin.', async () => {
+            const adminUnico = await Usuario.create({
+                nome: 'Nome Antigo',
+                email: 'admin@gajeiro.com',
+                senha: '456',
+                funcao: 'admin'
+            });
+
+            const tokenAdminUnico = jwt.sign(
+                { id: adminUnico._id, funcao: adminUnico.funcao }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            const response = await request(app)
+                .put(`/v1/usuarios/${adminUnico._id}`)
+                .set('Authorization', `Bearer ${tokenAdminUnico}`)
+                .send({ funcao: 'editor' });
+
+            expect(response.status).toBe(409);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.USUARIO.ULTIMO_ADMIN);
         });
     });
 

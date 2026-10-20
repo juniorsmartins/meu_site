@@ -15,6 +15,17 @@ const FUNCOES_USUARIO = Object.freeze({
     LEITOR: "leitor"
 });
 
+const REGRAS_USUARIO = Object.freeze({
+    NOME: {
+        MIN: 2,
+        MAX: 100
+    },
+    SENHA: {
+        MIN: 3,
+        MAX: 50
+    }
+});
+
 // Editorias disponíveis no sistema
 const EDITORIAS = [
     "geral",
@@ -46,6 +57,7 @@ export {
     EDITORIAS,
     LIMITE_MAXIMO_NOTICIAS_DATABASE, 
     LIMITE_NOTICIAS_POR_PAGINA_ADMIN,
-    LIMITE_USUARIOS_POR_PAGINA
+    LIMITE_USUARIOS_POR_PAGINA,
+    REGRAS_USUARIO
 };
 

@@ -1,23 +1,28 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
-import { FUNCOES_USUARIO } from "../configs/constantsConfig.js";
+import { MENSAGENS_ERRO } from '../configs/mensagensConfig.js';
+import { FUNCOES_USUARIO, REGRAS_USUARIO } from "../configs/constantsConfig.js";
 
 const usuarioSchema = new mongoose.Schema(
     {
         nome: {
             type: String,
-            required: [true, "O nome é obrigatório"],
+            required: [true, MENSAGENS_ERRO.USUARIO.CAMPO_NOME_OBRIGATORIO],
+            minlength: [REGRAS_USUARIO.NOME.MIN, MENSAGENS_ERRO.USUARIO.CAMPO_NOME_MINIMO_CARACTERES(REGRAS_USUARIO.NOME.MIN)],
+            maxlength: [REGRAS_USUARIO.NOME.MAX, MENSAGENS_ERRO.USUARIO.CAMPO_NOME_MAXIMO_CARACTERES(REGRAS_USUARIO.NOME.MAX)],
             trim: true
         },
         email: { 
             type: String, 
-            required: [true, "O email é obrigatório"], 
+            required: [true, MENSAGENS_ERRO.USUARIO.CAMPO_EMAIL_OBRIGATORIO], 
             lowercase: true,
-            unique: true 
+            unique: true
         },
         senha: { 
             type: String, 
-            required: [true, "A senha é obrigatória"],
+            required: [true, MENSAGENS_ERRO.USUARIO.CAMPO_SENHA_OBRIGATORIO],
+            minlength: [REGRAS_USUARIO.SENHA.MIN, MENSAGENS_ERRO.USUARIO.CAMPO_SENHA_MINIMO_CARACTERES(REGRAS_USUARIO.SENHA.MIN)],
+            // não colocar maxlength para a senha, pois o hash gerado pelo bcrypt tem tamanho fixo
             select: false // A senha não será retornada por padrão nas consultas
         },
         funcao: {

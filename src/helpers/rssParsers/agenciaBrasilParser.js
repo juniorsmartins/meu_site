@@ -1,7 +1,5 @@
 import { mapearEditoriaCompativel, extrairTextoCategoria } from '../editoriaHelper.js';
 
-console.log("Arquivo agenciaBrasilParser.js carregado.");
-
 /**
  * Transforma o item bruto do XML da Agência Brasil para o Schema do MongoDB.
  * Aceita uma editoriaPadrao como fallback caso a notícia não traga categoria válida.

@@ -1,8 +1,6 @@
 import { getDatePorExtenso, getTimeHM } from "./utils.js";
 import { SITE_CONFIG } from "./constantsConfig.js"; // Importa variável 
 
-console.log("Arquivo header.js carregado.");
-
 document.addEventListener("DOMContentLoaded", async () => {
 
     // 1 - Obtém o container principal do header no index.html
@@ -270,6 +268,9 @@ function configurarEventosAutenticacao() {
                     msgErro.textContent = error.message;
                     msgErro.classList.remove("escondido");
                 }
+
+                formLogin.reset();
+                
             } finally {
                 // Restaura o botão ao estado normal
                 if (btnSubmeter) {
@@ -295,8 +296,19 @@ function configurarEventosAutenticacao() {
     // 4. Executar Logout
     if (btnLogout) {
         btnLogout.addEventListener("click", () => {
+
+            // Remove os dados do usuário da sessão local (LocalStorage)
             localStorage.removeItem("gajeiro_usuario");
+
+            // Atualiza o estado visual do header para deslogado
             verificarEstadoSessao();
+
+            // REDIRECIONAMENTO: Envia o usuário para a página inicial (Home) do site
+            const caminhoHome = window.location.pathname.includes('/paginas-logados/') 
+                ? '../index.html' 
+                : './index.html';
+                
+            window.location.href = caminhoHome;
         });
     }
 }
@@ -337,7 +349,7 @@ function gerarItensMenuPorFuncao(funcao = 'leitor') {
 
     // Opção padrão para todos os usuários logados
     let htmlMenu = `
-        <a href="../html/paginas-logados/painel-perfil.html" class="item-dropdown-usuario">
+        <a href="/html/paginas-logados/painel-perfil.html" class="item-dropdown-usuario">
             <i class="bi bi-person-gear"></i> Meu Perfil
         </a>
     `;

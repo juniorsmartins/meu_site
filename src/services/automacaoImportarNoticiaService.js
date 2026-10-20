@@ -3,10 +3,6 @@ import { Noticia } from '../models/noticiaSchema.js';
 import { EDITORIAS } from '../configs/constantsConfig.js';
 import { FONTES_RSS } from '../configs/fontesRssConfig.js';
 
-console.log("Arquivo automacaoImportarNoticiaService.js carregado.");
-
-process.removeAllListeners('warning');
-
 const parser = new Parser({
     customFields: {
         item: [
@@ -59,7 +55,7 @@ const automacaoImportarNoticiaService = async (portalFiltro = null) => {
                 ...resultado
             });
 
-            await aguardarMs(150); // Pequena pausa entre cada fonte RSS para evitar sobrecarga de requisições
+            await aguardarMs(300); // Pequena pausa entre cada fonte RSS para evitar sobrecarga de requisições
 
         } catch (error) {
             console.warn(`[Automação RSS] Aviso na fonte '${fonte.nome}': ${error.message}`);
@@ -92,6 +88,7 @@ const automacaoImportarNoticiaService = async (portalFiltro = null) => {
 // Fluxo Padrão Genérico para RSS 2.0 (Câmara, Agência Brasil, etc.)
 const processarFeedRssPadrão = async (urlFeed, funcaoNormalizacao) => {
 
+    // Inclusão de cabeçalhos HTTP amigáveis simulando navegador nas requisições da Câmara e Agência Brasil
     const resposta = await fetch(urlFeed, {
         headers: { 
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',

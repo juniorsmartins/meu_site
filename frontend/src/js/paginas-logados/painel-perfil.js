@@ -29,6 +29,8 @@ function preencherDadosFormulario(usuario) {
     const inputNome = document.getElementById("perfil-nome");
     const inputEmail = document.getElementById("perfil-email");
     const selectFuncao = document.getElementById("perfil-funcao");
+    const iconeBloqueio = document.querySelector(".icone-bloqueio");
+    const subtextoBloqueio = document.querySelector(".subtexto-bloqueio");
 
     if (elNomeHeader) elNomeHeader.textContent = usuario.nome || "Usuário";
     if (elBadgeFuncao) elBadgeFuncao.textContent = formatarNomeFuncao(usuario.funcao);
@@ -36,6 +38,32 @@ function preencherDadosFormulario(usuario) {
     if (inputNome) inputNome.value = usuario.nome || "";
     if (inputEmail) inputEmail.value = usuario.email || "";
     if (selectFuncao) selectFuncao.value = usuario.funcao || "leitor";
+
+    // CONTROLE DINÂMICO DE LIBERAÇÃO / BLOQUEIO DA FUNÇÃO:
+    if (selectFuncao) {
+        if (usuario.funcao === 'admin') {
+            // Se o usuário atual for Administrador, destrava o campo para permitir alterações
+            selectFuncao.disabled = false;
+            selectFuncao.classList.remove("campo-desabilitado");
+            
+            if (iconeBloqueio) iconeBloqueio.style.display = "none";
+            if (subtextoBloqueio) {
+                subtextoBloqueio.textContent = "Modo Administrador: Você pode alterar a função deste usuário.";
+                subtextoBloqueio.style.color = "var(--blue-700)";
+            }
+        } else {
+            // Se o usuário NÃO for Administrador (ex: rebaixado para editor/jornalista/leitor),
+            // bloqueia imediatamente o campo, restabelece a classe e os avisos de segurança.
+            selectFuncao.disabled = true;
+            selectFuncao.classList.add("campo-desabilitado");
+            
+            if (iconeBloqueio) iconeBloqueio.style.display = "inline-block";
+            if (subtextoBloqueio) {
+                subtextoBloqueio.textContent = "A alteração de privilégios é realizada exclusivamente pelo Administrador.";
+                subtextoBloqueio.style.color = "#94A3B8";
+            }
+        }
+    }
 }
 
 function formatarNomeFuncao(funcao) {
@@ -61,6 +89,7 @@ function configurarFormularioPerfil(usuarioSessao) {
         const nome = document.getElementById("perfil-nome").value.trim();
         const email = document.getElementById("perfil-email").value.trim();
         const senha = document.getElementById("perfil-senha").value;
+        const funcao = document.getElementById("perfil-funcao");
 
         // Oculta feedback anterior
         if (feedback) {
@@ -77,6 +106,11 @@ function configurarFormularioPerfil(usuarioSessao) {
         // Envia o campo senha somente se o usuário digitou uma nova senha
         if (senha && senha.trim() !== "") {
             payloadAtualizacao.senha = senha;
+        }
+
+        // Se o select de função estiver habilitado (significa que é admin), incluímos a nova função no payload
+        if (funcao && !funcao.disabled) {
+            payloadAtualizacao.funcao = funcao.value;
         }
 
         try {
@@ -106,7 +140,8 @@ function configurarFormularioPerfil(usuarioSessao) {
             const novaSessao = {
                 ...usuarioSessao,
                 nome: resultado.usuario ? resultado.usuario.nome : nome,
-                email: resultado.usuario ? resultado.usuario.email : email
+                email: resultado.usuario ? resultado.usuario.email : email,
+                funcao: resultado.usuario ? resultado.usuario.funcao : usuarioSessao.funcao
             };
 
             localStorage.setItem("gajeiro_usuario", JSON.stringify(novaSessao));
@@ -121,10 +156,21 @@ function configurarFormularioPerfil(usuarioSessao) {
 
         } catch (error) {
             console.error("Erro ao atualizar perfil:", error);
+
+            // --- FLUXO DE ERRO / RECUPERAÇÃO ---
+            // 1. Exibe a mensagem de erro do backend (ex: "Não é possível alterar a função do último administrador...")
             if (feedback) {
                 feedback.textContent = error.message;
                 feedback.className = "feedback-perfil erro";
             }
+
+            // 2. RESTAURAÇÃO: Reseta o formulário de volta para os dados originais salvos na sessão (localStorage)
+            preencherDadosFormulario(usuarioSessao);
+
+            // 3. Limpa o campo de senha por segurança
+            const inputSenha = document.getElementById("perfil-senha");
+            if (inputSenha) inputSenha.value = "";
+
         } finally {
             if (btnSalvar) {
                 btnSalvar.disabled = false;

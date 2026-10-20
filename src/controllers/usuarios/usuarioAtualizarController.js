@@ -8,12 +8,12 @@ const usuarioAtualizarController = async (request, response, next) => {
         const dadosAtualizacao = request.body;
         const usuarioAutenticado = request.usuario;
 
-        const usuarioAtualizado = await usuarioAtualizarService(id, dadosAtualizacao, usuarioAutenticado);
+        const usuario = await usuarioAtualizarService(id, dadosAtualizacao, usuarioAutenticado);
 
         return response.status(200).json({
             sucesso: true,
             mensagem: MENSAGENS_SUCESSO.USUARIO.ATUALIZADO,
-            usuarioAtualizado
+            usuario
         });
         
     } catch (error) {
