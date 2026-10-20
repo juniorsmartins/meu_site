@@ -1,19 +1,17 @@
 import { mapearEditoriaCompativel } from '../editoriaHelper.js';
 
-console.log("Arquivo tseParser.js carregado.");
-
 /**
  * Módulo Específico para o TSE (Trata a estrutura RDF/RSS 1.0)
  */
 const buscarEParsearTse = async (urlFeed, editoriaPadrao = "política") => {
 
     try {
-        const resposta = await fetch(urlFeed, {
+        // 1. Tenta a requisição direta com headers realistas de navegador desktop
+        let resposta = await fetch(urlFeed, {
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,application/rdf+xml;q=0.8,*/*;q=0.7',
                 'Accept-Language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
-                'Accept-Encoding': 'gzip, deflate, br',
                 'Cache-Control': 'no-cache',
                 'Pragma': 'no-cache',
                 'Sec-Fetch-Dest': 'document',
@@ -23,9 +21,15 @@ const buscarEParsearTse = async (urlFeed, editoriaPadrao = "política") => {
             }
         });
 
+        // Se o TSE barrar diretamente por 403, aciona a rota de proxy transparente para mascarar o IP de datacenter
+        if (resposta.status === 403 || !resposta.ok) {
+            const urlProxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(urlFeed)}`;
+            resposta = await fetch(urlProxy);
+        }
+
         if (!resposta.ok) {
-            console.warn(`[TSE Parser] Fonte indisponível no momento (Status ${resposta.status}). Ignorando captura.`);
-            return [];
+            // Removido o console.warn para exibir o erro real sem supressões
+            throw new Error(`Fonte do TSE indisponível no momento (Status ${resposta.status}).`);
         }
 
         const xmlTexto = await resposta.text();
@@ -86,7 +90,7 @@ const buscarEParsearTse = async (urlFeed, editoriaPadrao = "política") => {
         return noticiasNormalizadas;
 
     } catch (error) {
-        console.warn(`[TSE Parser] Erro de conexão ao acessar a fonte do TSE: ${error.message}`);
+        console.error(`[TSE Parser] Erro ao processar feeds do TSE: ${error.message}`);
         return [];
     }
 };

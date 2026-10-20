@@ -3,8 +3,6 @@ import { Noticia } from '../models/noticiaSchema.js';
 import { EDITORIAS } from '../configs/constantsConfig.js';
 import { FONTES_RSS } from '../configs/fontesRssConfig.js';
 
-console.log("Arquivo automacaoImportarNoticiaService.js carregado.");
-
 process.removeAllListeners('warning');
 
 const parser = new Parser({
