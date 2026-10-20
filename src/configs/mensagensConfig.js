@@ -22,6 +22,7 @@ const MENSAGENS_ERRO = Object.freeze({ // Mensagens de erro padronizadas do sist
         CAMPOS_OBRIGATÓRIOS: "Nome, e-mail e senha são obrigatórios.",
         NAO_ENCONTRADO: "Usuário não encontrado.",
         EMAIL_DUPLICADO: "E-mail já cadastrado no sistema.",
+        ULTIMO_ADMIN: "Não é possível alterar a função do último administrador existente no sistema.",
         CAMPO_EMAIL_OBRIGATORIO: "O campo e-mail é obrigatório.",
         CAMPO_NOME_OBRIGATORIO: "O campo nome é obrigatório.",
         CAMPO_SENHA_OBRIGATORIO: "O campo senha é obrigatório.",

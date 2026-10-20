@@ -306,6 +306,30 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.body.sucesso).toBe(false);
             expect(response.body.mensagem).toBe(MENSAGENS_ERRO.USUARIO.EMAIL_DUPLICADO);
         });
+
+        it ('deve lançar erro 409 por admin mudar própria função sem haver outro admin.', async () => {
+            const adminUnico = await Usuario.create({
+                nome: 'Nome Antigo',
+                email: 'admin@gajeiro.com',
+                senha: '456',
+                funcao: 'admin'
+            });
+
+            const tokenAdminUnico = jwt.sign(
+                { id: adminUnico._id, funcao: adminUnico.funcao }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            const response = await request(app)
+                .put(`/v1/usuarios/${adminUnico._id}`)
+                .set('Authorization', `Bearer ${tokenAdminUnico}`)
+                .send({ funcao: 'editor' });
+
+            expect(response.status).toBe(409);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.USUARIO.ULTIMO_ADMIN);
+        });
     });
 
     describe('Pesquisar Usuários)', () => {

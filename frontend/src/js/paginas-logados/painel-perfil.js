@@ -128,7 +128,8 @@ function configurarFormularioPerfil(usuarioSessao) {
             const novaSessao = {
                 ...usuarioSessao,
                 nome: resultado.usuario ? resultado.usuario.nome : nome,
-                email: resultado.usuario ? resultado.usuario.email : email
+                email: resultado.usuario ? resultado.usuario.email : email,
+                funcao: resultado.usuario ? resultado.usuario.funcao : usuarioSessao.funcao
             };
 
             localStorage.setItem("gajeiro_usuario", JSON.stringify(novaSessao));
