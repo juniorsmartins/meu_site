@@ -126,10 +126,10 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.status).toBe(200);
             expect(response.body.sucesso).toBe(true);
             expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.ATUALIZADO);
-            expect(response.body.usuarioAtualizado.nome).toBe(nomeAtualizado);
-            expect(response.body.usuarioAtualizado.email).toBe(emailAtualizado);
-            expect(response.body.usuarioAtualizado.funcao).toBe(funcaoAtualizada);
-            expect(response.body.usuarioAtualizado).not.toHaveProperty('senha');
+            expect(response.body.usuario.nome).toBe(nomeAtualizado);
+            expect(response.body.usuario.email).toBe(emailAtualizado);
+            expect(response.body.usuario.funcao).toBe(funcaoAtualizada);
+            expect(response.body.usuario).not.toHaveProperty('senha');
 
             // Assert no Banco de Dados: Busca o usuário incluindo o campo senha (select: false)
             const usuarioDoBanco = await Usuario.findById(usuarioCriado._id).select('+senha');
@@ -171,10 +171,10 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.status).toBe(200);
             expect(response.body.sucesso).toBe(true);
             expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.ATUALIZADO);
-            expect(response.body.usuarioAtualizado.nome).toBe(nomeAtualizado);
-            expect(response.body.usuarioAtualizado.email).toBe(emailAtualizado);
+            expect(response.body.usuario.nome).toBe(nomeAtualizado);
+            expect(response.body.usuario.email).toBe(emailAtualizado);
             // Garante que a senha atualizada nunca vaza na resposta HTTP
-            expect(response.body.usuarioAtualizado).not.toHaveProperty('senha');
+            expect(response.body.usuario).not.toHaveProperty('senha');
 
             // Assert no Banco de Dados: Busca o usuário incluindo o campo senha (select: false)
             const usuarioDoBanco = await Usuario.findById(usuarioCriado._id).select('+senha');
