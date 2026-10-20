@@ -1,7 +1,5 @@
 import { SITE_CONFIG, API_URL_COMUNICACAO_CONTATO_LEITOR } from "./constantsConfig.js";
 
-console.log("Arquivo contato.js carregado.");
-
 document.addEventListener("DOMContentLoaded", () => {
     preencherInformacoesDinamicas();
     configurarEnvioContato();

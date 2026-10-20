@@ -1,7 +1,5 @@
 import { SITE_CONFIG } from "./constantsConfig.js";
 
-console.log("Arquivo sobre.js carregado.");
-
 document.addEventListener("DOMContentLoaded", () => {
     preencherInformacoesDinamicas();
 });

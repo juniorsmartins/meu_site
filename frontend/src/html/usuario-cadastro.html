@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gajeiro | Criar Nova Conta</title>
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/usuario-cadastro.css">
+    <link rel="stylesheet" href="../css/footer.css">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" href="../img/favicon.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+
+<body>
+
+    <!-- Cabeçalho Reutilizável -->
+    <div id="header-container"></div>
+
+    <!-- Container do Formulário de Cadastro -->
+    <main class="container-cadastro-wrapper">
+        <section class="card-cadastro">
+            
+            <header class="card-cadastro-cabecalho">
+                <span class="icone-cabecalho-cadastro"><i class="bi bi-person-plus-fill"></i></span>
+                <h2>Crie sua conta</h2>
+                <p>Preencha os campos abaixo para se cadastrar no portal</p>
+            </header>
+
+            <form id="form-cadastro-usuario" class="form-cadastro">
+                
+                <div class="campo-form">
+                    <label for="input-cadastro-nome">Nome Completo</label>
+                    <div class="input-com-icone">
+                        <i class="bi bi-person"></i>
+                        <input type="text" id="input-cadastro-nome" placeholder="Digite seu nome completo" required>
+                    </div>
+                </div>
+
+                <div class="campo-form">
+                    <label for="input-cadastro-email">E-mail</label>
+                    <div class="input-com-icone">
+                        <i class="bi bi-envelope"></i>
+                        <input type="email" id="input-cadastro-email" placeholder="seuemail@exemplo.com" required>
+                    </div>
+                </div>
+
+                <div class="campo-form">
+                    <label for="input-cadastro-senha">Senha</label>
+                    <div class="input-com-icone">
+                        <i class="bi bi-lock"></i>
+                        <input type="password" id="input-cadastro-senha" placeholder="Mínimo de 6 caracteres" required>
+                    </div>
+                </div>
+
+                <div class="campo-form">
+                    <label for="input-cadastro-confirmar-senha">Confirmar Senha</label>
+                    <div class="input-com-icone">
+                        <i class="bi bi-lock-fill"></i>
+                        <input type="password" id="input-cadastro-confirmar-senha" placeholder="Repita a senha digitada" required>
+                    </div>
+                </div>
+
+                <!-- Divs para mensagens de feedback -->
+                <div id="msg-erro-cadastro" class="caixa-feedback feedback-erro escondido"></div>
+                <div id="msg-sucesso-cadastro" class="caixa-feedback feedback-sucesso escondido"></div>
+
+                <button type="submit" id="btn-submeter-cadastro" class="btn-submeter-cadastro">
+                    <i class="bi bi-check-circle-fill"></i> Concluir Cadastro
+                </button>
+
+            </form>
+
+        </section>
+    </main>
+
+    <!-- Rodapé Reutilizável -->
+    <div id="footer-container"></div>
+
+    <!-- Scripts JavaScript -->
+    <script type="module" src="../js/header.js"></script>
+    <script type="module" src="../js/usuario-cadastro.js"></script>
+    <script type="module" src="../js/footer.js"></script>
+
+</body>
+
+</html>
+

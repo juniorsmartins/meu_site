@@ -1,7 +1,5 @@
 import { obterDadosCapa } from './index.js';
 
-console.log("Arquivo carrossel.js carregado.");
-
 document.addEventListener("DOMContentLoaded", async () => {
 
     const carrosselContainer = document.getElementById("carrossel-container");
