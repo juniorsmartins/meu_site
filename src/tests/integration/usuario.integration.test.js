@@ -206,7 +206,7 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.body.mensagem).toBe(MENSAGENS_ERRO.GERAL.ID_INVALIDO);
         });
 
-        it('deve lançar erro 403 se leitor tentar alterar o nome de outro usuário.', async () => {
+        it('deve lançar erro 403 se leitor tentar alterar outro usuário.', async () => {
             const tokenLeitor = jwt.sign(
                 { id: '456', funcao: 'leitor' }, 
                 process.env.JWT_SECRET || 'secret_teste_jwt', 
@@ -230,7 +230,7 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.body.mensagem).toBe(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_OUTRO_PERFIL);
         });
 
-        it('deve lançar erro 403 se leitor tentar alterar a própria função.', async () => {
+        it('deve lançar erro 403 se leitor tentar alterar função.', async () => {
             const usuarioComum = await Usuario.create({
                 nome: 'Comum',
                 email: 'comum@gajeiro.com',
