@@ -240,6 +240,58 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.body.mensagem).toBe(MENSAGENS_ERRO.GERAL.ID_INVALIDO);
         });
 
+        it('deve lançar erro 400 por nome com limite mínimo de caracteres não atendido.', async () => {
+            const usuarioCriado = await Usuario.create({
+                nome: 'Comum',
+                email: 'comum@gajeiro.com',
+                senha: '123',
+                funcao: 'leitor'
+            });
+
+            const tokenAdmin = jwt.sign(
+                { id: '123', funcao: 'admin' }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            const nomeInvalido = 'T';
+
+            const response = await request(app)
+                .put(`/v1/usuarios/${usuarioCriado._id}`)
+                .set('Authorization', `Bearer ${tokenAdmin}`)
+                .send({ nome: nomeInvalido });
+
+            expect(response.status).toBe(400);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.USUARIO.CAMPO_NOME_MINIMO_CARACTERES());
+        });
+
+        it('deve lançar erro 400 por senha com limite mínimo de caracteres não atendido.', async () => {
+            const usuarioCriado = await Usuario.create({
+                nome: 'Comum',
+                email: 'comum@gajeiro.com',
+                senha: '123',
+                funcao: 'leitor'
+            });
+
+            const tokenAdmin = jwt.sign(
+                { id: '123', funcao: 'admin' }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            const senhaInvalida = '1';
+
+            const response = await request(app)
+                .put(`/v1/usuarios/${usuarioCriado._id}`)
+                .set('Authorization', `Bearer ${tokenAdmin}`)
+                .send({ senha: senhaInvalida });
+
+            expect(response.status).toBe(400);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.USUARIO.CAMPO_SENHA_MINIMO_CARACTERES());
+        });
+
         it('deve lançar erro 403 se leitor tentar alterar outro usuário.', async () => {
             const tokenLeitor = jwt.sign(
                 { id: '456', funcao: 'leitor' }, 
