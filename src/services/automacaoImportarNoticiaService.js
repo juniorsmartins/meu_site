@@ -55,7 +55,7 @@ const automacaoImportarNoticiaService = async (portalFiltro = null) => {
                 ...resultado
             });
 
-            await aguardarMs(250); // Pequena pausa entre cada fonte RSS para evitar sobrecarga de requisições
+            await aguardarMs(300); // Pequena pausa entre cada fonte RSS para evitar sobrecarga de requisições
 
         } catch (error) {
             console.warn(`[Automação RSS] Aviso na fonte '${fonte.nome}': ${error.message}`);
