@@ -295,8 +295,19 @@ function configurarEventosAutenticacao() {
     // 4. Executar Logout
     if (btnLogout) {
         btnLogout.addEventListener("click", () => {
+
+            // Remove os dados do usuário da sessão local (LocalStorage)
             localStorage.removeItem("gajeiro_usuario");
+
+            // Atualiza o estado visual do header para deslogado
             verificarEstadoSessao();
+
+            // REDIRECIONAMENTO: Envia o usuário para a página inicial (Home) do site
+            const caminhoHome = window.location.pathname.includes('/paginas-logados/') 
+                ? '../index.html' 
+                : './index.html';
+                
+            window.location.href = caminhoHome;
         });
     }
 }
