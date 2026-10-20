@@ -1,7 +1,5 @@
 import { API_URL_NOTICIAS_CAPA } from './constantsConfig.js';
 
-console.log("Arquivo index.js carregado.");
-
 let promessaDadosCapa = null;
 
 /**

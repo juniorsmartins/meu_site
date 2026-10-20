@@ -1,5 +1,3 @@
-console.log("Arquivo utils.js carregado.");
-
 function getFormattedDate() {
     const now = new Date();
     const day = String(now.getDate()).padStart(2, '0');

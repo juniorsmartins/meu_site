@@ -8,8 +8,6 @@ const API_URL_COMUNICACAO_CONTATO_LEITOR = '/api/v1/comunicacao/contato-leitor';
 const API_URL_NOTICIAS_CAPA = '/api/v1/noticias/capa';
 const API_URL_NOTICIAS = '/api/v1/noticias';
 
-console.log("Arquivo constantsConfig.js carregado.");
-
 // Lista única das editorias usadas no frontend
 const OPCOES_EDITORIA = [
     "geral",
