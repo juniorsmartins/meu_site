@@ -40,7 +40,7 @@ describe('Testes de Integração - Usuários', () => {
 
     describe('Criar Usuário', () => {
         
-        it('deve criar novo usuário com sucesso', async () => {
+        it('deve criar novo usuário com sucesso.', async () => {
             const novoUsuario = {
                 nome: 'Usuário Teste',
                 email: 'teste.integracao@gajeiro.com',
@@ -54,15 +54,15 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.status).toBe(201);
             expect(response.body.sucesso).toBe(true);
             expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.CRIADO);
-            expect(response.body).toHaveProperty('usuarioCriado._id');
-            expect(response.body.usuarioCriado.nome).toBe(novoUsuario.nome);
-            expect(response.body.usuarioCriado.email).toBe(novoUsuario.email);
-            expect(response.body.usuarioCriado.funcao).toBe('leitor'); // Valor padrão para novos usuários
+            expect(response.body).toHaveProperty('usuario._id');
+            expect(response.body.usuario.nome).toBe(novoUsuario.nome);
+            expect(response.body.usuario.email).toBe(novoUsuario.email);
+            expect(response.body.usuario.funcao).toBe('leitor'); // Valor padrão para novos usuários
             // Garante que a senha nunca é exposta no JSON de resposta (Clean Code & Segurança)
-            expect(response.body.usuarioCriado).not.toHaveProperty('senha');
+            expect(response.body.usuario).not.toHaveProperty('senha');
         });
 
-        it('deve lançar erro 400 ao tentar criar usuário sem informar email', async () => {
+        it('deve lançar erro 400 por não informar email.', async () => {
             const novoUsuario = {
                 nome: 'Usuário Teste',
                 senha: 'senhaSegura123'
@@ -77,7 +77,7 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.body.mensagem).toBe(MENSAGENS_ERRO.USUARIO.CAMPO_EMAIL_OBRIGATORIO);
         });
 
-        it('deve lançar erro 409 ao tentar cadastrar e-mail duplicado', async () => {
+        it('deve lançar erro 409 por e-mail duplicado.', async () => {
             const dadosDuplicados = {
                 nome: 'Duplicado',
                 email: 'duplicado@gajeiro.com',
