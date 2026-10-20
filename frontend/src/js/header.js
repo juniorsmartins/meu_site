@@ -268,6 +268,9 @@ function configurarEventosAutenticacao() {
                     msgErro.textContent = error.message;
                     msgErro.classList.remove("escondido");
                 }
+
+                formLogin.reset();
+                
             } finally {
                 // Restaura o botão ao estado normal
                 if (btnSubmeter) {
