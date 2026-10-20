@@ -1,7 +1,5 @@
 import { obterDadosCapa } from "./index.js";
 
-console.log("Arquivo noticia-editoria.js carregado.");
-
 // CONFIGURAÇÕES GLOBAIS E ESTRUTURA DAS EDITORIAS (JS-FIRST)
 // ============================================================================
 
