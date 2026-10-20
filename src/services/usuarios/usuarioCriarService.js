@@ -1,9 +1,9 @@
 import { usuarioRepository } from "../../repositories/usuarios/usuarioRepository.js";
 import { verificarDuplicidadeDeEmail } from "../../helpers/usuarioUtils.js";
 
-const usuarioCriarService = async (usuario) => {
+const usuarioCriarService = async (dadosUsuario) => {
 
-    const { nome, email, senha } = usuario;
+    const { nome, email, senha } = dadosUsuario;
 
     await verificarDuplicidadeDeEmail(email);
 

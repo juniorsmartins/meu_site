@@ -1,3 +1,5 @@
+import { REGRAS_USUARIO } from './constantsConfig.js';
+
 const MENSAGENS_ERRO = Object.freeze({ // Mensagens de erro padronizadas do sistema - utilizadas em toda a aplicação para consistência e manutenção facilitada
 
     GERAL: {
@@ -26,8 +28,10 @@ const MENSAGENS_ERRO = Object.freeze({ // Mensagens de erro padronizadas do sist
         CAMPO_EMAIL_OBRIGATORIO: "O campo e-mail é obrigatório.",
         CAMPO_NOME_OBRIGATORIO: "O campo nome é obrigatório.",
         CAMPO_SENHA_OBRIGATORIO: "O campo senha é obrigatório.",
-        CAMPO_NOME_MINIMO_CARACTERES: "O campo nome deve ter pelo menos 2 caracteres.",
-        CAMPO_SENHA_MINIMO_CARACTERES: "O campo senha deve ter no mínimo 3 caracteres.",
+        CAMPO_NOME_MINIMO_CARACTERES: (min = REGRAS_USUARIO.NOME.MIN) => `O campo nome deve ter pelo menos ${min} caracteres.`,
+        CAMPO_NOME_MAXIMO_CARACTERES: (max = REGRAS_USUARIO.NOME.MAX) => `O campo nome não pode ter mais de ${max} caracteres.`,
+        CAMPO_SENHA_MINIMO_CARACTERES: (min = REGRAS_USUARIO.SENHA.MIN) => `O campo senha deve ter no mínimo ${min} caracteres.`,
+        CAMPO_SENHA_MAXIMO_CARACTERES: (max = REGRAS_USUARIO.SENHA.MAX) => `O campo senha não pode ter mais de ${max} caracteres.`,
         CAMPO_EMAIL_FORMATO_INVALIDO: "O campo e-mail deve ter um formato válido."
     }
     // Outros domínios do sistema (noticias, comunicacao, etc.) podem entrar aqui futuramente

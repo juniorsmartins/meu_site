@@ -4,8 +4,8 @@ import { MENSAGENS_SUCESSO } from '../../configs/mensagensConfig.js';
 const usuarioCriarController = async (request, response, next) => {
 
     try {
-        const usuarioParaCriar = request.body;
-        const usuario = await usuarioCriarService(usuarioParaCriar);
+        const dadosUsuario = request.body;
+        const usuario = await usuarioCriarService(dadosUsuario);
 
         response.status(201).json({ 
             sucesso: true,
