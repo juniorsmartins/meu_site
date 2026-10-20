@@ -35,10 +35,10 @@ function configurarFormularioCadastro() {
             return;
         }
 
-        if (senha.length < 6) {
-            exibirMensagem(msgErro, "A senha deve conter no mínimo 6 caracteres.");
-            return;
-        }
+        // if (senha.length < 3) {
+        //     exibirMensagem(msgErro, "A senha deve conter no mínimo 3 caracteres.");
+        //     return;
+        // }
 
         try {
             btnSubmeter.disabled = true;
