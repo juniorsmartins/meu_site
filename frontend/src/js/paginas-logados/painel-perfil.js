@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function preencherDadosFormulario(usuario) {
-    const elNomeHeader = document.getElementById("label-nome-usuario");
+const elNomeHeader = document.getElementById("label-nome-usuario");
     const elBadgeFuncao = document.getElementById("badge-funcao-usuario");
     
     const inputNome = document.getElementById("perfil-nome");
@@ -32,20 +32,21 @@ function preencherDadosFormulario(usuario) {
     const iconeBloqueio = document.querySelector(".icone-bloqueio");
     const subtextoBloqueio = document.querySelector(".subtexto-bloqueio");
 
-    if (elNomeHeader) elNomeHeader.textContent = usuarioSessao.nome || "Usuário";
-    if (elBadgeFuncao) elBadgeFuncao.textContent = formatarNomeFuncao(usuarioSessao.funcao);
+    // CORREÇÃO: Utilizando o parâmetro 'usuario' enviado para a função, evitando o ReferenceError
+    if (elNomeHeader) elNomeHeader.textContent = usuario.nome || "Usuário";
+    if (elBadgeFuncao) elBadgeFuncao.textContent = formatarNomeFuncao(usuario.funcao);
 
-    if (inputNome) inputNome.value = usuarioSessao.nome || "";
-    if (inputEmail) inputEmail.value = usuarioSessao.email || "";
-    if (selectFuncao) selectFuncao.value = usuarioSessao.funcao || "leitor";
+    if (inputNome) inputNome.value = usuario.nome || "";
+    if (inputEmail) inputEmail.value = usuario.email || "";
+    if (selectFuncao) selectFuncao.value = usuario.funcao || "leitor";
 
     // LIBERAÇÃO PARA ADMINISTRADOR:
-    // Se o usuário logado for 'admin', destravamos o campo de função para edição
-    if (usuarioSessao.funcao === 'admin' && selectFuncao) {
-        selectFuncao.disabled = false; // Habilita o select
-        selectFuncao.classList.remove("campo-desabilitado"); // Remove o estilo visual de desabilitado
+    // Se o usuário logado na sessão possuir a função 'admin', destravamos o campo select
+    if (usuario.funcao === 'admin' && selectFuncao) {
+        selectFuncao.disabled = false; // Habilita o campo de seleção
+        selectFuncao.classList.remove("campo-desabilitado"); // Remove o estilo cinza de desativado
         
-        if (iconeBloqueio) iconeBloqueio.style.display = "none"; // Oculta o ícone de cadeado
+        if (iconeBloqueio) iconeBloqueio.style.display = "none"; // Oculta o ícone do cadeado
         if (subtextoBloqueio) {
             subtextoBloqueio.textContent = "Modo Administrador: Você pode alterar a função deste usuário.";
             subtextoBloqueio.style.color = "var(--blue-700)";
@@ -96,7 +97,6 @@ function configurarFormularioPerfil(usuarioSessao) {
         }
 
         // Se o select de função estiver habilitado (significa que é admin), incluímos a nova função no payload
-        
         if (funcao && !funcao.disabled) {
             payloadAtualizacao.funcao = funcao.value;
         }
