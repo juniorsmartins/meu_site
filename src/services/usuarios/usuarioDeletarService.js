@@ -8,19 +8,7 @@ const usuarioDeletarService = async (id, usuarioAutenticado) => {
 
     validarFormatoId(id);
     regraAutorizarAdminOuDonoDoPerfil(id, usuarioAutenticado);
-
-    // Regra de segurança para Admins deletando a si mesmos
-    const autenticadoEhAdmin = usuarioAutenticadoEhAdmin(usuarioAutenticado);
-    const ehOProprioUsuario = usuarioEhODonoPerfil(id, usuarioAutenticado);  
-
-    if (autenticadoEhAdmin && ehOProprioUsuario) {
-        const totalAdmins = await usuarioRepository.contarPorFuncao('admin');
-        
-        if (totalAdmins <= 1) {
-            throw new AppError(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_DELETAR_ADMIN_UNICO, 403);
-        }
-    }
-
+    await regraAdminUnicoNaoPodeDeletarASiMesmo(id, usuarioAutenticado);
     await verificarUsuarioExistePorId(id);
 
     await usuarioRepository.deletar(id);
@@ -28,7 +16,18 @@ const usuarioDeletarService = async (id, usuarioAutenticado) => {
     return id;
 };
 
+const regraAdminUnicoNaoPodeDeletarASiMesmo = async (idAlvo, usuarioAutenticado) => {
+    const ehAutenticadoAdmin = usuarioAutenticadoEhAdmin(usuarioAutenticado);
+    const ehDonoDoIdAlvo = usuarioEhODonoPerfil(idAlvo, usuarioAutenticado);  
+    const ehAdminUnico = await usuarioRepository.contarPorFuncao('admin') <= 1;
+
+    if (ehAutenticadoAdmin && ehDonoDoIdAlvo && ehAdminUnico) {
+        throw new AppError(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_DELETAR_ADMIN_UNICO, 403);
+    }
+};
+
 export {
     usuarioDeletarService
 };
+
 

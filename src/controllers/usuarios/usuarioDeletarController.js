@@ -5,7 +5,7 @@ const usuarioDeletarController = async (request, response, next) => {
 
     try {
         const { id } = request.params;
-        const usuarioAutenticado = request.usuario; // Usuário autenticado injetado pelo middleware de autenticação
+        const usuarioAutenticado = request.usuario; 
 
         const idDeletado = await usuarioDeletarService(id, usuarioAutenticado);
 

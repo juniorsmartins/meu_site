@@ -8,6 +8,24 @@ const API_URL_COMUNICACAO_CONTATO_LEITOR = '/api/v1/comunicacao/contato-leitor';
 const API_URL_NOTICIAS_CAPA = '/api/v1/noticias/capa';
 const API_URL_NOTICIAS = '/api/v1/noticias';
 
+// Dados Centrais do Portal (Fonte Única de Verdade)
+const SITE_CONFIG = {
+    nome: "Gajeiro",
+    slogan: "Olhos no horizonte, pés nos fatos",
+    fundador: "Junior Martins",
+    cargoFundador: "Fundador & Diretor Geral",
+    emailRedacao: "gajeiro.jor@gmail.com",
+    localizacaoPadrao: "Cuiabá - Mato Grosso, Brasil",
+    horarioAtendimento: "Segunda a Sexta, das 08h às 17h"
+};
+
+const FUNCOES_USUARIO = Object.freeze({
+    ADMIN: "admin",
+    EDITOR: "editor",
+    JORNALISTA: "jornalista",
+    LEITOR: "leitor"
+});
+
 // Lista única das editorias usadas no frontend
 const OPCOES_EDITORIA = [
     "geral",
@@ -20,22 +38,15 @@ const OPCOES_EDITORIA = [
     "opinião", 
     "editorial", 
     "turismo", 
-    "cultura", 
+    "cultura",
     "polícia",
     "meio ambiente", 
     "internacional"
 ];
 
-// Dados Centrais do Portal (Fonte Única de Verdade)
-const SITE_CONFIG = {
-    nome: "Gajeiro",
-    slogan: "Olhos no horizonte, pés nos fatos",
-    fundador: "Junior Martins",
-    cargoFundador: "Fundador & Diretor Geral",
-    emailRedacao: "gajeiro.jor@gmail.com",
-    localizacaoPadrao: "Cuiabá - Mato Grosso, Brasil",
-    horarioAtendimento: "Segunda a Sexta, das 08h às 17h"
-};
+// Limite de notícias exibidas por página
+const LIMITE_NOTICIAS_POR_PAGINA_ADMIN = 15;
+const LIMITE_USUARIOS_POR_PAGINA = 15;
 
 export { 
     API_URL_USUARIOS,
@@ -47,6 +58,10 @@ export {
     API_URL_NOTICIAS_CAPA,
     API_URL_NOTICIAS, 
     OPCOES_EDITORIA, 
-    SITE_CONFIG 
+    SITE_CONFIG,
+    FUNCOES_USUARIO,
+    LIMITE_NOTICIAS_POR_PAGINA_ADMIN,
+    LIMITE_USUARIOS_POR_PAGINA
 };
+
 

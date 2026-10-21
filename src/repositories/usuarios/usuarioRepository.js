@@ -7,16 +7,33 @@ const usuarioRepository = {
         return usuario.toObject ? usuario.toObject() : usuario;
     },
 
+    async atualizar(id, dadosAtualizacao) {
+        return await Usuario.findByIdAndUpdate(
+                id,
+                { $set: dadosAtualizacao },
+                { new: true, runValidators: true } // Atualiza o usuário e retorna o novo documento
+            )
+            .select("-senha")
+            .lean();
+    },
+
     async buscarPorEmail(email) {
-        return await Usuario.findOne({ email: email.toLowerCase() }).select("-senha");
+        return await Usuario.findOne({ email: email.toLowerCase() })
+            .select("-senha")
+            .lean();
     },
 
     async buscarPorId(id) {
-        return await Usuario.findById(id).select("-senha");
+        return await Usuario.findById(id)
+            .select("-senha") // Exclui o campo de senha do resultado
+            .lean(); // Converte o documento para um objeto JavaScript simples
     },
 
     async listarTodos() {
-        return await Usuario.find().select("-senha").sort({ createdAt: -1 });
+        return await Usuario.find()
+            .select("-senha")
+            .sort({ createdAt: -1 })
+            .lean();
     },
 
     async pesquisarComFiltroPaginado({ filtro, pular, limitePorPagina }) {
@@ -31,16 +48,9 @@ const usuarioRepository = {
         ]);
     },
 
-    async atualizar(id, dadosAtualizacao) {
-        return await Usuario.findByIdAndUpdate(
-            id,
-            { $set: dadosAtualizacao },
-            { new: true, runValidators: true } // Atualiza o usuário e retorna o novo documento
-        ).select("-senha");
-    },
-
     async deletar(id) {
-        return await Usuario.findByIdAndDelete(id);
+        return await Usuario.findByIdAndDelete(id)
+            .lean();
     },
 
     async contarPorFuncao(funcao) {
@@ -48,7 +58,9 @@ const usuarioRepository = {
     },
 
     async existePorId(id) { 
-        return await Usuario.exists({ _id: id }); // O retorno será um objeto se existir ou null se não existir. Não é um booleano direto.
+        const resultado = await Usuario.exists({ _id: id }) // Retorna um objeto se existir ou null se não existir.
+            .lean();
+        return !!resultado; // Converte o resultado em um booleano
     }
 };
 

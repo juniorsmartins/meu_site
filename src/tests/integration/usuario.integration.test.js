@@ -418,70 +418,6 @@ describe('Testes de Integração - Usuários', () => {
         });
     });
 
-    describe('Pesquisar Usuários)', () => {
-
-        it('admin deve pesquisar usuários com sucesso', async () => {
-            const usuarioLeitor = await Usuario.create({
-                nome: 'Leitor',
-                email: 'leitor@gajeiro.com',
-                senha: '123',
-                funcao: 'leitor'
-            });
-
-            const usuarioEditor = await Usuario.create({
-                nome: 'Editor',
-                email: 'editor@gajeiro.com',
-                senha: '123',
-                funcao: 'editor'
-            });
-
-            const tokenAdmin = jwt.sign(
-                { id: '123', funcao: 'admin' }, 
-                process.env.JWT_SECRET, 
-                { expiresIn: '1h' }
-            );
-
-            const response = await request(app)
-                .get('/v1/usuarios')
-                .set('Authorization', `Bearer ${tokenAdmin}`);
-
-            expect(response.status).toBe(200);
-            expect(response.body.sucesso).toBe(true);
-            expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.PESQUISADO);
-            expect(Array.isArray(response.body.usuarios)).toBe(true);
-            expect(response.body.usuarios).toEqual(
-                expect.arrayContaining([
-                    expect.objectContaining({ email: usuarioLeitor.email }),
-                    expect.objectContaining({ email: usuarioEditor.email })
-                ])
-            );
-        });
-
-        it('deve lançar erro 401 se nenhum token de autenticação for fornecido', async () => {
-            const response = await request(app).get('/v1/usuarios');
-
-            expect(response.status).toBe(401);
-            expect(response.body.sucesso).toBe(false);
-            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.AUTENTICAÇÃO.TOKEN_NAO_FORNECIDO);
-        });
-
-        it('deve lançar erro 403 se usuário não admin tentar acessar endpoint exclusivo para admins', async () => {
-            const tokenLeitor = jwt.sign(
-                { id: '123', funcao: 'leitor' }, 
-                process.env.JWT_SECRET, 
-                { expiresIn: '1h' }
-            );
-
-            const response = await request(app)
-                .get('/v1/usuarios')
-                .set('Authorization', `Bearer ${tokenLeitor}`);
-
-            expect(response.status).toBe(403);
-            expect(response.body.sucesso).toBe(false);
-            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_ADMIN_OBRIGATÓRIO);
-        });
-    });
-
     describe('Deletar Usuário', () => {
 
         it('admin deve deletar usuário comum com sucesso.', async () => {
@@ -512,7 +448,6 @@ describe('Testes de Integração - Usuários', () => {
         });
 
         it('admin deve deletar a si próprio com sucesso.', async () => {
-            // Arrange (preparação)
             await Usuario.create({
                 nome: 'Usuário Admin1',
                 email: 'admin1@gajeiro.com',
@@ -533,12 +468,10 @@ describe('Testes de Integração - Usuários', () => {
                 { expiresIn: '1h' }
             );
 
-            // Act (ação)
             const response = await request(app)
                 .delete(`/v1/usuarios/${usuarioAdminPraDeletar._id}`)
                 .set('Authorization', `Bearer ${tokenAdmin}`);
 
-            // Assert (verificação)
             expect(response.status).toBe(200);
             expect(response.body.sucesso).toBe(true);
             expect(response.body.idDeletado).toEqual(String(usuarioAdminPraDeletar._id));
@@ -546,7 +479,6 @@ describe('Testes de Integração - Usuários', () => {
         });
 
         it('leitor deve deletar a si próprio com sucesso.', async () => {
-            // Arrange (preparação)
             const usuarioLeitor = await Usuario.create({
                 nome: 'Usuário Leitor',
                 email: 'leitor@gajeiro.com',
@@ -560,12 +492,10 @@ describe('Testes de Integração - Usuários', () => {
                 { expiresIn: '1h' }
             );
 
-            // Act (ação)
             const response = await request(app)
                 .delete(`/v1/usuarios/${usuarioLeitor._id}`)
                 .set('Authorization', `Bearer ${tokenLeitor}`);
 
-            // Assert (verificação)
             expect(response.status).toBe(200);
             expect(response.body.sucesso).toBe(true);
             expect(response.body.idDeletado).toEqual(String(usuarioLeitor._id));
@@ -574,7 +504,6 @@ describe('Testes de Integração - Usuários', () => {
         });
     
         it('deve lançar erro 400 por ID inválido.', async () => {
-            // Arrange (preparação)
             const idInvalido = 'id-invalido';
 
             const tokenLeitor = jwt.sign(
@@ -583,19 +512,16 @@ describe('Testes de Integração - Usuários', () => {
                 { expiresIn: '1h' }
             );
 
-            // Act (ação)
             const response = await request(app)
                 .delete(`/v1/usuarios/${idInvalido}`)
                 .set('Authorization', `Bearer ${tokenLeitor}`);
 
-            // Assert (verificação)
             expect(response.status).toBe(400);
             expect(response.body.sucesso).toBe(false);
             expect(response.body.mensagem).toContain(MENSAGENS_ERRO.GERAL.ID_INVALIDO);
         });
         
         it('deve lançar erro 404 por usuário não encontrado.', async () => {
-            // Arrange (preparação)
             const idValidoInexistente = new mongoose.Types.ObjectId();
 
             const tokenAdmin = jwt.sign(
@@ -604,19 +530,16 @@ describe('Testes de Integração - Usuários', () => {
                 { expiresIn: '1h' }
             );
 
-            // Act (ação)
             const response = await request(app)
                 .delete(`/v1/usuarios/${idValidoInexistente}`)
                 .set('Authorization', `Bearer ${tokenAdmin}`);
 
-            // Assert (verificação)
             expect(response.status).toBe(404);
             expect(response.body.sucesso).toBe(false);
             expect(response.body.mensagem).toContain(MENSAGENS_ERRO.USUARIO.NAO_ENCONTRADO);
         });
 
-        it('deve lançar erro 403 por não-admin tentar deletar outro usuário.', async () => {
-            // Arrange (preparação)
+        it('deve lançar erro 403 por não-admin tentar deletar outro.', async () => {
             const usuarioLeitor = await Usuario.create({
                 nome: 'Usuário Leitor1',
                 email: 'leitor1@gajeiro.com',
@@ -637,19 +560,16 @@ describe('Testes de Integração - Usuários', () => {
                 { expiresIn: '1h' }
             );
 
-            // Act (ação)
             const response = await request(app)
                 .delete(`/v1/usuarios/${usuarioLeitorPraDeletar._id}`)
                 .set('Authorization', `Bearer ${tokenLeitor}`);
 
-            // Assert (verificação)
             expect(response.status).toBe(403);
             expect(response.body.sucesso).toBe(false);
             expect(response.body.mensagem).toContain(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_OUTRO_PERFIL);
         });
 
-        it('deve lançar erro 403 por admin tentar se deletar sem outro admin presente.', async () => {
-            // Arrange (preparação)
+        it('deve lançar erro 403 por admin único tentar se deletar.', async () => {
             const usuarioAdmin = await Usuario.create({
                 nome: 'Usuário Admin1',
                 email: 'admin1@gajeiro.com',
@@ -663,12 +583,10 @@ describe('Testes de Integração - Usuários', () => {
                 { expiresIn: '1h' }
             );
 
-            // Act (ação)
             const response = await request(app)
                 .delete(`/v1/usuarios/${usuarioAdmin._id}`)
                 .set('Authorization', `Bearer ${tokenAdmin}`);
 
-            // Assert (verificação)
             expect(response.status).toBe(403);
             expect(response.body.sucesso).toBe(false);
             expect(response.body.mensagem).toContain(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_DELETAR_ADMIN_UNICO);
@@ -788,6 +706,70 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.status).toBe(404);
             expect(response.body.sucesso).toBe(false);
             expect(response.body.mensagem).toContain(MENSAGENS_ERRO.USUARIO.NAO_ENCONTRADO);
+        });
+    });
+
+    describe('Pesquisar Usuários)', () => {
+
+        it('admin deve pesquisar usuários com sucesso.', async () => {
+            const usuarioLeitor = await Usuario.create({
+                nome: 'Leitor',
+                email: 'leitor@gajeiro.com',
+                senha: '123',
+                funcao: 'leitor'
+            });
+
+            const usuarioEditor = await Usuario.create({
+                nome: 'Editor',
+                email: 'editor@gajeiro.com',
+                senha: '123',
+                funcao: 'editor'
+            });
+
+            const tokenAdmin = jwt.sign(
+                { id: '123', funcao: 'admin' }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            const response = await request(app)
+                .get('/v1/usuarios')
+                .set('Authorization', `Bearer ${tokenAdmin}`);
+
+            expect(response.status).toBe(200);
+            expect(response.body.sucesso).toBe(true);
+            expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.PESQUISADO);
+            expect(Array.isArray(response.body.usuarios)).toBe(true);
+            expect(response.body.usuarios).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({ email: usuarioLeitor.email }),
+                    expect.objectContaining({ email: usuarioEditor.email })
+                ])
+            );
+        });
+
+        it('deve lançar erro 401 por ausência de token de autenticação.', async () => {
+            const response = await request(app).get('/v1/usuarios');
+
+            expect(response.status).toBe(401);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.AUTENTICAÇÃO.TOKEN_NAO_FORNECIDO);
+        });
+
+        it('deve lançar erro 403 por não-admin tentar acesso não autorizado.', async () => {
+            const tokenLeitor = jwt.sign(
+                { id: '123', funcao: 'leitor' }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            const response = await request(app)
+                .get('/v1/usuarios')
+                .set('Authorization', `Bearer ${tokenLeitor}`);
+
+            expect(response.status).toBe(403);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_ADMIN_OBRIGATÓRIO);
         });
     });
 });

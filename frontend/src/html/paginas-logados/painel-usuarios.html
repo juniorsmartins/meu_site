@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gazeta Central - Painel de Usuários</title>
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="../../css/index.css">
+    <link rel="stylesheet" href="../../css/header.css">
+    <link rel="stylesheet" href="../../css/paginas-logados/painel-usuarios.css">
+    <link rel="stylesheet" href="../../css/footer.css">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" href="../../img/favicon.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+
+<body>
+
+    <!-- Scripts do Cabeçalho/Rodapé e do Painel -->
+    <script type="module" src="../../js/header.js"></script>
+    <script type="module" src="../../js/paginas-logados/painel-usuarios.js"></script>
+    <script type="module" src="../../js/footer.js"></script> 
+
+    <!-- Cabeçalho Reutilizado -->
+    <div id="header-container"></div>
+
+    <!-- Conteúdo Principal -->
+    <main id="container-usuario-admin">
+
+        <div class="admin-wrapper">
+            
+            <!-- Cabeçalho da Página Administrativa -->
+            <div class="admin-header-titulo">
+                <h2>Painel de Usuários</h2>
+                <p>Gerencie as contas registradas, altere permissões de acesso e filtre colaboradores.</p>
+            </div>
+
+            <!-- 1. Grid de Cards KPI (Estatísticas e Filtros Rápidos) -->
+            <div id="grid-kpis-usuarios">
+
+                <!-- Card 1: Total de Usuários -->
+                <div class="card-kpi">
+                    <div class="kpi-header">
+                        <span class="kpi-titulo">Total na Base</span>
+                        <i class="bi bi-people-fill kpi-icone"></i>
+                    </div>
+                    <div class="kpi-body">
+                        <h2 id="kpi-total-usuarios">--</h2>
+                        <p class="kpi-subtexto">Contas ativas registradas</p>
+                    </div>
+                </div>
+
+                <!-- Card 2: Filtros de Pesquisa Rápida -->
+                <div class="card-kpi card-pesquisa-kpi">
+                    <div class="kpi-header">
+                        <span class="kpi-titulo">Filtros de Busca</span>
+                        <i class="bi bi-search kpi-icone"></i>
+                    </div>
+                    <div class="kpi-body filtros-body">
+                        <input type="text" id="input-filtro-nome" placeholder="Filtrar por nome...">
+                        <select id="select-filtro-funcao">
+                            <option value="">Todas as Funções</option>
+                            <option value="admin">Admin</option>
+                            <option value="editor">Editor</option>
+                            <option value="jornalista">Jornalista</option>
+                            <option value="leitor">Leitor</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 2. Tabela de Usuários Cadastrados -->
+            <section id="container-tabela-usuarios">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>E-mail</th>
+                            <th>Função / Cargo</th>
+                            <th>Data de Cadastro</th>
+                            <th class="text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpo-tabela-usuarios">
+                        <tr>
+                            <td colspan="5" style="text-align: center;">Carregando usuários...</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Paginação -->
+                <div id="container-paginacao-usuarios" class="paginacao-flex">
+                    <button id="btn-pagina-anterior" disabled>&laquo; Anterior</button>
+                    <span id="info-paginacao">Página 1 de 1</span>
+                    <button id="btn-pagina-proxima" disabled>Próxima &raquo;</button>
+                </div>
+            </section>
+
+        </div>
+
+    </main>
+
+    <!-- Rodapé Reutilizado -->
+    <div id="footer-container"></div>
+
+</body>
+
+</html>
+
