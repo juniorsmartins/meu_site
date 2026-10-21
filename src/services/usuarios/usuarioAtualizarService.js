@@ -47,15 +47,13 @@ const regraApenasAdminPodeAlterarFuncao = (usuarioAutenticado, dadosAtualizacao)
 };
 
 const regraAdminUnicoNaoPodeAlterarPropriaFuncao = async (idAlvo, usuarioAutenticado, dadosAtualizacao) => {
-    const ehAdmin = usuarioAutenticadoEhAdmin(usuarioAutenticado);
     const solicitouAlteracaoDeFuncao = Object.prototype.hasOwnProperty.call(dadosAtualizacao, 'funcao'); 
-    const ehPerfilPropriio = usuarioEhODonoPerfil(idAlvo, usuarioAutenticado);
+    const ehAutenticadoAdmin = usuarioAutenticadoEhAdmin(usuarioAutenticado);
+    const ehDonoDoIdAlvo = usuarioEhODonoPerfil(idAlvo, usuarioAutenticado);
+    const ehAdminUnico = await usuarioRepository.contarPorFuncao('admin') <= 1;
 
-    if (solicitouAlteracaoDeFuncao && ehAdmin && ehPerfilPropriio) {
-        const numeroDeAdmins = await usuarioRepository.contarPorFuncao("admin");
-        if (numeroDeAdmins === 1) {
-            throw new AppError(MENSAGENS_ERRO.USUARIO.ULTIMO_ADMIN, 409);
-        }
+    if (solicitouAlteracaoDeFuncao && ehAutenticadoAdmin && ehDonoDoIdAlvo && ehAdminUnico) {
+        throw new AppError(MENSAGENS_ERRO.USUARIO.ULTIMO_ADMIN, 409);
     }
 };
 
