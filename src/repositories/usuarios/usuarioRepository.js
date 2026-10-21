@@ -12,7 +12,9 @@ const usuarioRepository = {
     },
 
     async buscarPorId(id) {
-        return await Usuario.findById(id).select("-senha");
+        return await Usuario.findById(id)
+            .select("-senha") // Exclui o campo de senha do resultado
+            .lean(); // Converte o documento para um objeto JavaScript simples
     },
 
     async listarTodos() {
