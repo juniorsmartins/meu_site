@@ -512,7 +512,6 @@ describe('Testes de Integração - Usuários', () => {
         });
 
         it('admin deve deletar a si próprio com sucesso.', async () => {
-            // Arrange (preparação)
             await Usuario.create({
                 nome: 'Usuário Admin1',
                 email: 'admin1@gajeiro.com',
@@ -533,12 +532,10 @@ describe('Testes de Integração - Usuários', () => {
                 { expiresIn: '1h' }
             );
 
-            // Act (ação)
             const response = await request(app)
                 .delete(`/v1/usuarios/${usuarioAdminPraDeletar._id}`)
                 .set('Authorization', `Bearer ${tokenAdmin}`);
 
-            // Assert (verificação)
             expect(response.status).toBe(200);
             expect(response.body.sucesso).toBe(true);
             expect(response.body.idDeletado).toEqual(String(usuarioAdminPraDeletar._id));
@@ -546,7 +543,6 @@ describe('Testes de Integração - Usuários', () => {
         });
 
         it('leitor deve deletar a si próprio com sucesso.', async () => {
-            // Arrange (preparação)
             const usuarioLeitor = await Usuario.create({
                 nome: 'Usuário Leitor',
                 email: 'leitor@gajeiro.com',
@@ -560,12 +556,10 @@ describe('Testes de Integração - Usuários', () => {
                 { expiresIn: '1h' }
             );
 
-            // Act (ação)
             const response = await request(app)
                 .delete(`/v1/usuarios/${usuarioLeitor._id}`)
                 .set('Authorization', `Bearer ${tokenLeitor}`);
 
-            // Assert (verificação)
             expect(response.status).toBe(200);
             expect(response.body.sucesso).toBe(true);
             expect(response.body.idDeletado).toEqual(String(usuarioLeitor._id));
@@ -574,7 +568,6 @@ describe('Testes de Integração - Usuários', () => {
         });
     
         it('deve lançar erro 400 por ID inválido.', async () => {
-            // Arrange (preparação)
             const idInvalido = 'id-invalido';
 
             const tokenLeitor = jwt.sign(
@@ -583,19 +576,16 @@ describe('Testes de Integração - Usuários', () => {
                 { expiresIn: '1h' }
             );
 
-            // Act (ação)
             const response = await request(app)
                 .delete(`/v1/usuarios/${idInvalido}`)
                 .set('Authorization', `Bearer ${tokenLeitor}`);
 
-            // Assert (verificação)
             expect(response.status).toBe(400);
             expect(response.body.sucesso).toBe(false);
             expect(response.body.mensagem).toContain(MENSAGENS_ERRO.GERAL.ID_INVALIDO);
         });
         
         it('deve lançar erro 404 por usuário não encontrado.', async () => {
-            // Arrange (preparação)
             const idValidoInexistente = new mongoose.Types.ObjectId();
 
             const tokenAdmin = jwt.sign(
@@ -604,19 +594,16 @@ describe('Testes de Integração - Usuários', () => {
                 { expiresIn: '1h' }
             );
 
-            // Act (ação)
             const response = await request(app)
                 .delete(`/v1/usuarios/${idValidoInexistente}`)
                 .set('Authorization', `Bearer ${tokenAdmin}`);
 
-            // Assert (verificação)
             expect(response.status).toBe(404);
             expect(response.body.sucesso).toBe(false);
             expect(response.body.mensagem).toContain(MENSAGENS_ERRO.USUARIO.NAO_ENCONTRADO);
         });
 
-        it('deve lançar erro 403 por não-admin tentar deletar outro usuário.', async () => {
-            // Arrange (preparação)
+        it('deve lançar erro 403 por não-admin tentar deletar outro.', async () => {
             const usuarioLeitor = await Usuario.create({
                 nome: 'Usuário Leitor1',
                 email: 'leitor1@gajeiro.com',
@@ -637,19 +624,16 @@ describe('Testes de Integração - Usuários', () => {
                 { expiresIn: '1h' }
             );
 
-            // Act (ação)
             const response = await request(app)
                 .delete(`/v1/usuarios/${usuarioLeitorPraDeletar._id}`)
                 .set('Authorization', `Bearer ${tokenLeitor}`);
 
-            // Assert (verificação)
             expect(response.status).toBe(403);
             expect(response.body.sucesso).toBe(false);
             expect(response.body.mensagem).toContain(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_OUTRO_PERFIL);
         });
 
-        it('deve lançar erro 403 por admin tentar se deletar sem outro admin presente.', async () => {
-            // Arrange (preparação)
+        it('deve lançar erro 403 por admin único tentar se deletar.', async () => {
             const usuarioAdmin = await Usuario.create({
                 nome: 'Usuário Admin1',
                 email: 'admin1@gajeiro.com',
@@ -663,12 +647,10 @@ describe('Testes de Integração - Usuários', () => {
                 { expiresIn: '1h' }
             );
 
-            // Act (ação)
             const response = await request(app)
                 .delete(`/v1/usuarios/${usuarioAdmin._id}`)
                 .set('Authorization', `Bearer ${tokenAdmin}`);
 
-            // Assert (verificação)
             expect(response.status).toBe(403);
             expect(response.body.sucesso).toBe(false);
             expect(response.body.mensagem).toContain(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_DELETAR_ADMIN_UNICO);
