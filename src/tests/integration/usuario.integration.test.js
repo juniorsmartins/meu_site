@@ -418,70 +418,6 @@ describe('Testes de Integração - Usuários', () => {
         });
     });
 
-    describe('Pesquisar Usuários)', () => {
-
-        it('admin deve pesquisar usuários com sucesso', async () => {
-            const usuarioLeitor = await Usuario.create({
-                nome: 'Leitor',
-                email: 'leitor@gajeiro.com',
-                senha: '123',
-                funcao: 'leitor'
-            });
-
-            const usuarioEditor = await Usuario.create({
-                nome: 'Editor',
-                email: 'editor@gajeiro.com',
-                senha: '123',
-                funcao: 'editor'
-            });
-
-            const tokenAdmin = jwt.sign(
-                { id: '123', funcao: 'admin' }, 
-                process.env.JWT_SECRET, 
-                { expiresIn: '1h' }
-            );
-
-            const response = await request(app)
-                .get('/v1/usuarios')
-                .set('Authorization', `Bearer ${tokenAdmin}`);
-
-            expect(response.status).toBe(200);
-            expect(response.body.sucesso).toBe(true);
-            expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.PESQUISADO);
-            expect(Array.isArray(response.body.usuarios)).toBe(true);
-            expect(response.body.usuarios).toEqual(
-                expect.arrayContaining([
-                    expect.objectContaining({ email: usuarioLeitor.email }),
-                    expect.objectContaining({ email: usuarioEditor.email })
-                ])
-            );
-        });
-
-        it('deve lançar erro 401 se nenhum token de autenticação for fornecido', async () => {
-            const response = await request(app).get('/v1/usuarios');
-
-            expect(response.status).toBe(401);
-            expect(response.body.sucesso).toBe(false);
-            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.AUTENTICAÇÃO.TOKEN_NAO_FORNECIDO);
-        });
-
-        it('deve lançar erro 403 se usuário não admin tentar acessar endpoint exclusivo para admins', async () => {
-            const tokenLeitor = jwt.sign(
-                { id: '123', funcao: 'leitor' }, 
-                process.env.JWT_SECRET, 
-                { expiresIn: '1h' }
-            );
-
-            const response = await request(app)
-                .get('/v1/usuarios')
-                .set('Authorization', `Bearer ${tokenLeitor}`);
-
-            expect(response.status).toBe(403);
-            expect(response.body.sucesso).toBe(false);
-            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_ADMIN_OBRIGATÓRIO);
-        });
-    });
-
     describe('Deletar Usuário', () => {
 
         it('admin deve deletar usuário comum com sucesso.', async () => {
@@ -770,6 +706,70 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.status).toBe(404);
             expect(response.body.sucesso).toBe(false);
             expect(response.body.mensagem).toContain(MENSAGENS_ERRO.USUARIO.NAO_ENCONTRADO);
+        });
+    });
+
+    describe('Pesquisar Usuários)', () => {
+
+        it('admin deve pesquisar usuários com sucesso.', async () => {
+            const usuarioLeitor = await Usuario.create({
+                nome: 'Leitor',
+                email: 'leitor@gajeiro.com',
+                senha: '123',
+                funcao: 'leitor'
+            });
+
+            const usuarioEditor = await Usuario.create({
+                nome: 'Editor',
+                email: 'editor@gajeiro.com',
+                senha: '123',
+                funcao: 'editor'
+            });
+
+            const tokenAdmin = jwt.sign(
+                { id: '123', funcao: 'admin' }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            const response = await request(app)
+                .get('/v1/usuarios')
+                .set('Authorization', `Bearer ${tokenAdmin}`);
+
+            expect(response.status).toBe(200);
+            expect(response.body.sucesso).toBe(true);
+            expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.PESQUISADO);
+            expect(Array.isArray(response.body.usuarios)).toBe(true);
+            expect(response.body.usuarios).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({ email: usuarioLeitor.email }),
+                    expect.objectContaining({ email: usuarioEditor.email })
+                ])
+            );
+        });
+
+        it('deve lançar erro 401 por ausência de token de autenticação.', async () => {
+            const response = await request(app).get('/v1/usuarios');
+
+            expect(response.status).toBe(401);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.AUTENTICAÇÃO.TOKEN_NAO_FORNECIDO);
+        });
+
+        it('deve lançar erro 403 por não-admin tentar acesso não autorizado.', async () => {
+            const tokenLeitor = jwt.sign(
+                { id: '123', funcao: 'leitor' }, 
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
+            );
+
+            const response = await request(app)
+                .get('/v1/usuarios')
+                .set('Authorization', `Bearer ${tokenLeitor}`);
+
+            expect(response.status).toBe(403);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_ADMIN_OBRIGATÓRIO);
         });
     });
 });
