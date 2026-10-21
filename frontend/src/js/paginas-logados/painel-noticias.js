@@ -3,10 +3,9 @@ import {
     API_URL_ADMIN_IMPORTAR_NOTICIA, 
     API_URL_ADMIN_LIMPAR_DATABASE, 
     API_URL_NOTICIAS, 
-    OPCOES_EDITORIA 
+    OPCOES_EDITORIA,
+    LIMITE_NOTICIAS_POR_PAGINA_ADMIN 
 } from '../constantsConfig.js';
-
-const LIMITE_NOTICIAS_POR_PAGINA = 12;
 
 // Armazena o HTML original das linhas em edição para permitir a ação de cancelar
 const linhasEmEdicao = {};
@@ -210,7 +209,7 @@ async function carregarTabelaNoticias() {
     if (!corpoTabela) return;
 
     try {
-        const dadosPaginados = await buscarNoticiasPaginadas(paginaAtual, LIMITE_NOTICIAS_POR_PAGINA);
+        const dadosPaginados = await buscarNoticiasPaginadas(paginaAtual, LIMITE_NOTICIAS_POR_PAGINA_ADMIN);
 
         const listaNoticias = dadosPaginados.noticias || [];
         totalPaginas = dadosPaginados.totalPaginas || 1;
