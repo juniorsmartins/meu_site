@@ -1,4 +1,4 @@
-import { API_URL_USUARIOS, FUNCOES_USUARIO } from '../../constantsConfig.js';
+import { API_URL_USUARIOS, FUNCOES_USUARIO } from '../constantsConfig.js';
 
 console.log("Arquivo painel-usuarios.js carregado.");
 
@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             window.location.href = "/html/index.html";
             return;
         }
+
     } catch (e) {
         window.location.href = "/html/index.html";
         return;
