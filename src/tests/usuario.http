@@ -13,8 +13,8 @@ POST http://localhost:3000/v1/usuarios
 Content-Type: application/json
 
 {
-    "nome": "Dom Quixote",
-    "email": "domquixote@gmail.com",
+    "nome": "Martin Fowler",
+    "email": "martin@gmail.com",
     "senha": "111"
 }
 

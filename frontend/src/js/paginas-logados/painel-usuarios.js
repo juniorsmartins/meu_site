@@ -1,9 +1,12 @@
-import { API_URL_USUARIOS, FUNCOES_USUARIO } from '../constantsConfig.js';
+import { API_URL_USUARIOS, FUNCOES_USUARIO, LIMITE_USUARIOS_POR_PAGINA } from '../constantsConfig.js';
 
-const LIMITE_POR_PAGINA = 10;
 let paginaAtual = 1;
 let totalPaginas = 1;
 const linhasEmEdicao = {};
+
+// Variáveis de controle para o estado de confirmação por linha (Chave: ID do usuário)
+const estadosConfirmacaoDeletar = {};
+const timersConfirmacaoDeletar = {};
 
 document.addEventListener("DOMContentLoaded", async () => {
     // 1. Verificação de Segurança no Front-end: Garante que apenas admins acessem
@@ -91,7 +94,7 @@ async function carregarTabelaUsuarios() {
         const nomeFiltro = inputNome ? inputNome.value.trim() : "";
         const funcaoFiltro = selectFuncao ? selectFuncao.value : "";
 
-        let url = `${API_URL_USUARIOS}?pagina=${paginaAtual}&limite=${LIMITE_POR_PAGINA}`;
+        let url = `${API_URL_USUARIOS}?pagina=${paginaAtual}&limite=${LIMITE_USUARIOS_POR_PAGINA}`;
         if (nomeFiltro) url += `&nome=${encodeURIComponent(nomeFiltro)}`;
         if (funcaoFiltro) url += `&funcao=${encodeURIComponent(funcaoFiltro)}`;
 
@@ -142,7 +145,7 @@ function renderizarLinhas(corpoTabela, lista) {
             <td class="text-center">
                 <div class="acoes-wrapper">
                     <button class="btn-acao btn-editar" title="Editar Usuário"><i class="bi bi-pencil"></i></button>
-                    <button class="btn-acao btn-deletar" title="Excluir Usuário"><i class="bi bi-trash"></i></button>
+                    <button id="btn-deletar-${usuario._id}" class="btn-acao btn-deletar" title="Excluir Usuário"><i class="bi bi-trash"></i></button>
                 </div>
             </td>
         `;
@@ -150,7 +153,10 @@ function renderizarLinhas(corpoTabela, lista) {
         tr.dataset.usuario = JSON.stringify(usuario);
 
         tr.querySelector(".btn-editar").addEventListener("click", () => ativarModoEdicao(usuario._id));
-        tr.querySelector(".btn-deletar").addEventListener("click", () => deletarUsuario(usuario._id));
+        
+        // Evento de exclusão com confirmação inline (duplo clique amigável)
+        const btnDeletar = tr.querySelector(`#btn-deletar-${usuario._id}`);
+        btnDeletar.addEventListener("click", () => solicitarOuExecutarExclusao(usuario._id, btnDeletar));
 
         corpoTabela.appendChild(tr);
     });
@@ -199,11 +205,6 @@ function cancelarEdicao(id) {
     const tr = document.getElementById(`linha-usuario-${id}`);
     if (!tr || !linhasEmEdicao[id]) return;
 
-    const usuario = JSON.parse(tr.dataset.usuario);
-    const trOriginal = document.createElement("tr");
-    trOriginal.id = `linha-usuario-${id}`;
-    
-    // Restaura HTML original
     carregarTabelaUsuarios();
     delete linhasEmEdicao[id];
 }
@@ -238,9 +239,45 @@ async function salvarEdicao(id) {
     }
 }
 
-async function deletarUsuario(id) {
-    if (!confirm("Tem certeza que deseja excluir este usuário?")) return;
+// Lógica de Confirmação Inline para Exclusão (Substitui o confirm() nativo)
+function solicitarOuExecutarExclusao(id, btnElement) {
+    if (!estadosConfirmacaoDeletar[id]) {
+        // Primeiro clique: entra no estado de confirmação
+        estadosConfirmacaoDeletar[id] = true;
+        btnElement.innerHTML = `<i class="bi bi-exclamation-triangle-fill"></i>`;
+        btnElement.style.width = "auto";
+        btnElement.style.padding = "0 0.4rem";
+        btnElement.title = "Clique novamente para confirmar a exclusão";
+        btnElement.classList.add("btn-confirmando-exclusao");
 
+        // Timeout de 4 segundos para expirar a confirmação caso o usuário desista
+        timersConfirmacaoDeletar[id] = setTimeout(() => {
+            resetarBotaoDeletar(id, btnElement);
+        }, 4000);
+
+        return;
+    }
+
+    // Segundo clique: confirmação aceita, limpa o timer e executa a deleção
+    clearTimeout(timersConfirmacaoDeletar[id]);
+    resetarBotaoDeletar(id, btnElement);
+    deletarUsuario(id);
+}
+
+function resetarBotaoDeletar(id, btnElement) {
+    estadosConfirmacaoDeletar[id] = false;
+    if (timersConfirmacaoDeletar[id]) clearTimeout(timersConfirmacaoDeletar[id]);
+    
+    if (btnElement) {
+        btnElement.innerHTML = `<i class="bi bi-trash"></i>`;
+        btnElement.style.width = "28px";
+        btnElement.style.padding = "0";
+        btnElement.title = "Excluir Usuário";
+        btnElement.classList.remove("btn-confirmando-exclusao");
+    }
+}
+
+async function deletarUsuario(id) {
     try {
         const usuarioSessao = JSON.parse(localStorage.getItem("gajeiro_usuario"));
         const resposta = await fetch(`${API_URL_USUARIOS}/${id}`, {
@@ -251,6 +288,7 @@ async function deletarUsuario(id) {
         const dados = await resposta.json();
         if (!resposta.ok) throw new Error(dados.mensagem || "Erro ao excluir usuário.");
 
+        // CORREÇÃO: Recarrega imediatamente a tabela e os contadores de KPI após excluir com sucesso
         await carregarTabelaUsuarios();
 
     } catch (error) {
