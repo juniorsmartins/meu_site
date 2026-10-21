@@ -1,0 +1,264 @@
+/* ==========================================
+   DIAGRAMAÇÃO PRINCIPAL DO PAINEL DE USUÁRIOS
+   ========================================== */
+
+#container-usuario-admin {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 2rem 0;
+}
+
+.admin-wrapper {
+    width: 95%;
+    max-width: 1280px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.admin-header-titulo {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.admin-header-titulo h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--blue-900);
+    margin-bottom: 0.35rem;
+}
+
+.admin-header-titulo p {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    color: var(--secondary-text-color);
+}
+
+/* ==========================================
+   GRID DE CARDS KPI E FILTROS
+   ========================================== */
+
+#grid-kpis-usuarios {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.card-kpi {
+    background: #FFFFFF;
+    border: 1px solid var(--blue-100);
+    border-radius: 8px;
+    padding: 1.25rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.kpi-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.kpi-titulo {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--secondary-text-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.kpi-icone {
+    font-size: 1.2rem;
+    color: var(--blue-600);
+}
+
+.kpi-body {
+    margin: 0.85rem 0;
+}
+
+.kpi-body h2 {
+    font-size: 1.8rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    color: var(--blue-900);
+    margin: 0;
+}
+
+.kpi-subtexto {
+    font-size: 0.8rem;
+    color: var(--tertiary-text-color);
+    margin-top: 0.25rem;
+}
+
+.filtros-body {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.filtros-body input,
+.filtros-body select {
+    flex: 1;
+    padding: 0.5rem;
+    font-size: 0.85rem;
+    border: 1px solid var(--blue-300);
+    border-radius: 6px;
+    outline: none;
+    background-color: #FFFFFF;
+}
+
+/* ==========================================
+   CONTAINER DA TABELA DE USUÁRIOS
+   ========================================== */
+
+#container-tabela-usuarios {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #FFFFFF;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+    table-layout: fixed;
+}
+
+table th, 
+table td {
+    padding: 0.85rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--blue-100);
+    font-size: 0.85rem;
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap !important;
+}
+
+table th {
+    background: var(--blue-900);
+    color: #FFFFFF;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+/* Distribuição das colunas */
+table th:nth-child(1), table td:nth-child(1) { width: 25%; } /* Nome */
+table th:nth-child(2), table td:nth-child(2) { width: 30%; } /* E-mail */
+table th:nth-child(3), table td:nth-child(3) { width: 15%; } /* Função */
+table th:nth-child(4), table td:nth-child(4) { width: 18%; } /* Data */
+table th:nth-child(5), table td:nth-child(5) { width: 12%; text-align: center; } /* Ações */
+
+/* Badges de Função */
+.badge-funcao {
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.badge-admin { background-color: #FEF3C7; color: #D97706; border: 1px solid #FCD34D; }
+.badge-editor { background-color: #DBEAFE; color: #1E40AF; border: 1px solid #BFDBFE; }
+.badge-jornalista { background-color: #D1FAE5; color: #059669; border: 1px solid #6EE7B7; }
+.badge-leitor { background-color: #F1F5F9; color: #475569; border: 1px solid #E2E8F0; }
+
+/* Botões de Ação na Tabela */
+.acoes-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    width: 100%;
+}
+
+.btn-acao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.btn-acao:hover {
+    opacity: 0.85;
+    transform: scale(1.05);
+}
+
+.btn-editar { background-color: #F39C12; color: #FFFFFF; }
+.btn-deletar { background-color: #E74C3C; color: #FFFFFF; }
+.btn-salvar { background-color: #27AE60; color: #FFFFFF; }
+.btn-cancelar { background-color: #7F8C8D; color: #FFFFFF; }
+
+/* Inputs para edição inline */
+table td select,
+table td input[type="text"] {
+    width: 100%;
+    padding: 0.35rem;
+    font-size: 0.8rem;
+    border: 1px solid var(--blue-300);
+    border-radius: 4px;
+    background-color: #FFFFFF;
+}
+
+/* ==========================================
+   PAGINAÇÃO
+   ========================================== */
+
+.paginacao-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+    padding: 0.5rem 0;
+    width: 100%;
+}
+
+.paginacao-flex button {
+    background-color: var(--blue-800);
+    color: #FFFFFF;
+    border: none;
+    padding: 0.55rem 1.25rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.paginacao-flex button:hover:not(:disabled) {
+    background-color: var(--blue-600);
+}
+
+.paginacao-flex button:disabled {
+    background-color: #CBD5E1 !important;
+    color: #94A3B8 !important;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+#info-paginacao {
+    font-size: 0.9rem;
+    color: var(--secondary-text-color);
+    font-weight: 600;
+}
+
