@@ -37,6 +37,13 @@ const SITE_CONFIG = {
     horarioAtendimento: "Segunda a Sexta, das 08h às 17h"
 };
 
+const FUNCOES_USUARIO = Object.freeze({
+    ADMIN: "admin",
+    EDITOR: "editor",
+    JORNALISTA: "jornalista",
+    LEITOR: "leitor"
+});
+
 export { 
     API_URL_USUARIOS,
     API_URL_ADMIN_METRICAS,
@@ -47,6 +54,7 @@ export {
     API_URL_NOTICIAS_CAPA,
     API_URL_NOTICIAS, 
     OPCOES_EDITORIA, 
-    SITE_CONFIG 
+    SITE_CONFIG,
+    FUNCOES_USUARIO
 };
 

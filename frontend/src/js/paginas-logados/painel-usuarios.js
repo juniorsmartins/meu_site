@@ -1,7 +1,5 @@
 import { API_URL_USUARIOS, FUNCOES_USUARIO } from '../constantsConfig.js';
 
-console.log("Arquivo painel-usuarios.js carregado.");
-
 const LIMITE_POR_PAGINA = 10;
 let paginaAtual = 1;
 let totalPaginas = 1;
