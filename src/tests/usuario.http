@@ -18,6 +18,16 @@ Content-Type: application/json
     "senha": "111"
 }
 
+### Criar usuário 3
+POST http://localhost:3000/v1/usuarios
+Content-Type: application/json
+
+{
+    "nome": "Para apagar",
+    "email": "testeapagar@gmail.com",
+    "senha": "111"
+}
+
 ### Atualizar usuário
 PUT http://localhost:3000/v1/usuarios/6ad4c55aaeae35fdfc809d9e
 Content-Type: application/json
