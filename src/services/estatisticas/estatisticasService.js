@@ -25,9 +25,9 @@ const estatisticasService = async () => {
         const urlSelic = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_SELIC}/dados?formato=json&dataInicial=${dataInicioStr}&dataFinal=${dataFimStr}`;
         const urlIpca = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_IPCA}/dados?formato=json&dataInicial=${dataInicioStr}&dataFinal=${dataFimStr}`;
         
-        // Endpoints simplificados do IBGE SIDRA
-        const urlPibIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/5938/periodos/2016-2026/variaveis/6561?localidades=N1[all]`;
-        const urlDesempregoIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/4099/periodos/2016-2026/variaveis/4099?localidades=N1[all]`;
+        // URLs otimizadas e estáveis para o SIDRA do IBGE (Tabela 1846 para PIB anual e Tabela 6381 para Desemprego anual PNAD)
+        const urlPibIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/1846/periodos/2016-2025/variaveis/585?localidades=N1[all]`;
+        const urlDesempregoIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/4099/periodos/2016-2025/variaveis/4099?localidades=N1[all]`;
 
         const [respostaSelic, respostaIpca, respostaPib, respostaDesemprego] = await Promise.all([
             fetch(urlSelic).catch(() => null),
@@ -39,8 +39,10 @@ const estatisticasService = async () => {
         let anos = [];
         let selicAnual = [];
         let ipcaAnual = [];
+        let pibAnual = [];
+        let desempregoAnual = [];
 
-        // 1. Processamento e Logs da Selic (Lendo o body apenas uma vez)
+        // 1. Processamento da Selic (Lendo o body apenas uma vez)
         if (respostaSelic) {
             console.log(`[ESTATÍSTICAS SERVICE] Status Resposta Selic: ${respostaSelic.status}`);
             const textoBrutoSelic = await respostaSelic.text();
@@ -71,7 +73,7 @@ const estatisticasService = async () => {
             }
         }
 
-        // 2. Processamento e Logs do IPCA
+        // 2. Processamento do IPCA
         if (respostaIpca) {
             console.log(`[ESTATÍSTICAS SERVICE] Status Resposta IPCA: ${respostaIpca.status}`);
             const textoBrutoIpca = await respostaIpca.text();
@@ -101,28 +103,61 @@ const estatisticasService = async () => {
             }
         }
 
-        // 3. Logs e Tratamento Seguro do PIB (IBGE)
+        // 3. Processamento e Logs do PIB (IBGE)
         if (respostaPib) {
             console.log(`[ESTATÍSTICAS SERVICE] Status Resposta PIB: ${respostaPib.status}`);
             const textoBrutoPib = await respostaPib.text();
             console.log(`[ESTATÍSTICAS SERVICE] Texto bruto recebido do PIB:`, textoBrutoPib.substring(0, 1000));
+
+            if (respostaPib.ok && textoBrutoPib) {
+                try {
+                    const dadosPibJson = JSON.parse(textoBrutoPib);
+                    // Mapeamento estruturado do SIDRA IBGE
+                    if (Array.isArray(dadosPibJson) && dadosPibJson[0]?.resultados) {
+                        const seriePib = dadosPibJson[0].resultados[0].series[0].serie;
+                        const mapaPib = {};
+                        Object.keys(seriePib).forEach(periodo => {
+                            mapaPib[periodo] = Number(seriePib[periodo]);
+                        });
+                        pibAnual = anos.map(ano => mapaPib[ano] !== undefined ? mapaPib[ano] : null);
+                    }
+                } catch (e) {
+                    console.error("[ESTATÍSTICAS SERVICE] Erro ao parsear PIB do IBGE:", e.message);
+                }
+            }
         } else {
             console.log(`[ESTATÍSTICAS SERVICE] Resposta PIB indisponível.`);
         }
 
-        // 4. Logs e Tratamento Seguro do Desemprego (IBGE)
+        // 4. Processamento e Logs do Desemprego (IBGE)
         if (respostaDesemprego) {
             console.log(`[ESTATÍSTICAS SERVICE] Status Resposta Desemprego: ${respostaDesemprego.status}`);
             const textoBrutoDesemprego = await respostaDesemprego.text();
             console.log(`[ESTATÍSTICAS SERVICE] Texto bruto recebido do Desemprego:`, textoBrutoDesemprego.substring(0, 1000));
+
+            if (respostaDesemprego.ok && textoBrutoDesemprego) {
+                try {
+                    const dadosDesempregoJson = JSON.parse(textoBrutoDesemprego);
+                    if (Array.isArray(dadosDesempregoJson) && dadosDesempregoJson[0]?.resultados) {
+                        const serieDesemprego = dadosDesempregoJson[0].resultados[0].series[0].serie;
+                        const mapaDesemprego = {};
+                        Object.keys(serieDesemprego).forEach(periodo => {
+                            mapaDesemprego[periodo] = Number(serieDesemprego[periodo]);
+                        });
+                        desempregoAnual = anos.map(ano => mapaDesemprego[ano] !== undefined ? mapaDesemprego[ano] : null);
+                    }
+                } catch (e) {
+                    console.error("[ESTATÍSTICAS SERVICE] Erro ao parsear Desemprego do IBGE:", e.message);
+                }
+            }
         } else {
             console.log(`[ESTATÍSTICAS SERVICE] Resposta Desemprego indisponível.`);
         }
 
         return {
             anos: anos,
-            pib: [],
-            desemprego: [],
+            pib: pibAnual,
+            desemprego: desempregoAnual,
             ipca: ipcaAnual,
             selic: selicAnual
         };
