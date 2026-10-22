@@ -28,15 +28,10 @@ const estatisticasService = async () => {
         const urlIpca = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_IPCA}/dados?formato=json&dataInicial=${dataInicioStr}&dataFinal=${dataFimStr}`;
         
         // PIB (Contas Nacionais Trimestrais - Tabela 1846 / Variação acumulada em quatro trimestres)
-        const urlPibIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/1846/periodos/201601-202404/variaveis/585?localidades=N1[all]`;
-        
+        const urlPibIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/1846/periodos/201601-202404/variaveis/585?localidades=N1%5Ball%5D`;
+
         // Desemprego (PNAD Contínua - Tabela 4099 que já comprovou funcionamento)
-        // const urlDesempregoIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/4099/periodos/201601-202412/variaveis/4099?localidades=N1[all]`;
-        // URL corrigida para o Desemprego utilizando o parâmetro 'last' suportado pelo SIDRA do IBGE
-        // const urlDesempregoIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/4099/periodos/last/40/variaveis/4099?localidades=N1[all]`;
-        // URL corrigida do Desemprego usando o formato padrão estável da API do IBGE (-36 para os últimos 36 trimestres)
-        // const urlDesempregoIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/4099/periodos/-36/variaveis/4099?localidades=N1[all]`;
-        const urlDesempregoIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/6381/periodos/-1/variaveis/4099?localidades=N1[all]`;
+        const urlDesempregoIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/4099/periodos/-36/variaveis/4099?localidades=N1%5Ball%5D`;
 
         // Executa as 4 requisições em paralelo garantindo transparência via httpClient
         const [resSelic, resIpca, resPib, resDesemprego] = await Promise.all([
