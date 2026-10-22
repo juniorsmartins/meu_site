@@ -8,43 +8,69 @@ const SERIE_BCB_IPCA = 433;
 
 const estatisticasService = async () => {
     try {
-        // 1. Requisições paralelas para as APIs do Banco Central
+        // 1. Requisições paralelas para as APIs oficiais do Banco Central
         const [respostaSelic, respostaIpca] = await Promise.all([
             fetch(`https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_SELIC}/dados?formato=json`),
             fetch(`https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_IPCA}/dados?formato=json`)
         ]);
 
-        let selicAnual = [6.50, 4.50, 2.00, 9.25, 13.75, 11.75, 10.50, 11.25];
-        let ipcaAnual = [3.75, 4.31, 4.52, 10.06, 5.79, 4.62, 4.15, 3.90];
-        const anosHistoricos = [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025];
+        let anos = [];
+        let selicAnual = [];
+        let ipcaAnual = [];
 
-        // 2. Blindagem: Valida se a resposta do Banco Central é um Array antes de usar .find()
+        // 2. Processamento Dinâmico da Selic a partir do início da série histórica
         if (respostaSelic.ok) {
             const dadosSelicBrutos = await respostaSelic.json();
-            if (Array.isArray(dadosSelicBrutos)) {
-                selicAnual = anosHistoricos.map(ano => {
-                    const registro = dadosSelicBrutos.find(d => d.data && (d.data.endsWith(`${ano}`) || d.data.includes(`/${ano}`)));
-                    return registro ? Number(registro.valor) : selicAnual[anosHistoricos.indexOf(ano)];
+            if (Array.isArray(dadosSelicBrutos) && dadosSelicBrutos.length > 0) {
+                
+                // Filtramos para pegar o valor de dezembro (ou o último mês disponível) de cada ano da série
+                const mapaAnualSelic = {};
+                dadosSelicBrutos.forEach(item => {
+                    // O formato da data na API do BC é "DD/MM/AAAA"
+                    if (item.data && item.data.includes('/')) {
+                        const partes = item.data.split('/'); // Divide a data em dia, mês e ano
+                        const ano = partes[2]; // Extrai o ano
+                        const mes = partes[1]; // Extrai o mês
+                        
+                        // Priorizamos o dado de dezembro (12) ou o último mês registrado do ano
+                        if (mes === '12' || !mapaAnualSelic[ano]) {
+                            mapaAnualSelic[ano] = Number(item.valor);
+                        }
+                    }
                 });
+
+                // Ordena os anos de forma cronológica (do início até o atual)
+                anos = Object.keys(mapaAnualSelic).sort((a, b) => a - b); // Ordena os anos de forma cronológica - do início até o atual
+                selicAnual = anos.map(ano => mapaAnualSelic[ano]); // Mapeia os valores da Selic para cada ano ordenado
             }
         }
 
-        if (respostaIpca.ok) {
+        // 3. Processamento Dinâmico do IPCA usando a mesma base de anos extraída
+        if (respostaIpca.ok && anos.length > 0) {
             const dadosIpcaBrutos = await respostaIpca.json();
             if (Array.isArray(dadosIpcaBrutos)) {
-                ipcaAnual = anosHistoricos.map(ano => {
-                    const registro = dadosIpcaBrutos.find(d => d.data && (d.data.endsWith(`${ano}`) || d.data.includes(`/${ano}`)));
-                    return registro ? Number(registro.valor) : ipcaAnual[anosHistoricos.indexOf(ano)];
+                const mapaAnualIpca = {};
+                dadosIpcaBrutos.forEach(item => {
+                    if (item.data && item.data.includes('/')) {
+                        const partes = item.data.split('/');
+                        const ano = partes[2];
+                        const mes = partes[1];
+                        if (mes === '12' || !mapaAnualIpca[ano]) {
+                            mapaAnualIpca[ano] = Number(item.valor);
+                        }
+                    }
                 });
+
+                ipcaAnual = anos.map(ano => mapaAnualIpca[ano] !== undefined ? mapaAnualIpca[ano] : null);
             }
         }
 
-        // Dados estruturados oficiais consolidados para PIB e Desemprego
-        const pibAnual = [1.8, 1.2, -3.3, 5.0, 3.0, 2.9, 2.5, 2.2];
-        const desempregoAnual = [12.3, 11.9, 13.5, 13.2, 9.6, 7.8, 7.1, 6.8];
+        // PIB e Desemprego (mantidos vazios até integrarmos o SIDRA/IBGE)
+        const pibAnual = []; 
+        const desempregoAnual = [];
 
         return {
-            anos: anosHistoricos,
+            anos: anos,
             pib: pibAnual,
             desemprego: desempregoAnual,
             ipca: ipcaAnual,
@@ -52,7 +78,7 @@ const estatisticasService = async () => {
         };
 
     } catch (error) {
-        console.error("Erro no serviço de estatísticas:", error);
+        console.error("Erro ao buscar estatísticas oficiais:", error);
         throw new AppError(MENSAGENS_ERRO.ESTATISTICAS.ERRO_AO_OBTER_DADOS, 503);
     }
 };
