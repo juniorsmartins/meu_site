@@ -1,37 +1,46 @@
 import { AppError } from '../../errors/AppError.js';
 import { MENSAGENS_ERRO } from '../../configs/mensagensConfig.js';
 
-// Códigos das Séries Temporais Oficiais no Banco Central do Brasil (SGS)
-// 432 = Taxa Selic acumulada / 433 = IPCA (Inflação oficial acumulada)
 const SERIE_BCB_SELIC = 432;
 const SERIE_BCB_IPCA = 433;
+
+/**
+ * Formata uma data no padrão dd/mm/aaaa exigido pela API do Banco Central
+ */
+function formatarDataBCB(data) {
+    const dia = String(data.getDate()).padStart(2, '0');
+    const mes = String(data.getMonth() + 1).padStart(2, '0');
+    const ano = data.getFullYear();
+    return `${dia}/${mes}/${ano}`;
+}
 
 const estatisticasService = async () => {
     try {
         console.log("[ESTATÍSTICAS SERVICE] Iniciando requisição para as APIs do Banco Central...");
 
-        // Usando o endpoint padrão sem parâmetros de data restritivos para testar a resposta pura
-        const urlSelic = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_SELIC}/dados?formato=json`;
-        const urlIpca = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_IPCA}/dados?formato=json`;
+        // Calcula dinamicamente a janela de 8 anos atrás até hoje (respeitando o limite de 10 anos do BCB)
+        const hoje = new Date();
+        const dataFimStr = formatarDataBCB(hoje);
+        
+        const dataInicio = new Date();
+        dataInicio.setFullYear(hoje.getFullYear() - 8);
+        const dataInicioStr = formatarDataBCB(dataInicio);
+
+        const urlSelic = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_SELIC}/dados?formato=json&dataInicial=${dataInicioStr}&dataFinal=${dataFimStr}`;
+        const urlIpca = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_IPCA}/dados?formato=json&dataInicial=${dataInicioStr}&dataFinal=${dataFimStr}`;
 
         const [respostaSelic, respostaIpca] = await Promise.all([
             fetch(urlSelic),
             fetch(urlIpca)
         ]);
 
-        console.log(`[ESTATÍSTICAS SERVICE] Status Resposta Selic: ${respostaSelic.status}`);
-        console.log(`[ESTATÍSTICAS SERVICE] Content-Type Selic: ${respostaSelic.headers.get("content-type")}`);
-
-        // CAPTURA O TEXTO BRUTO PARA INSPECIONAR NO CONSOLE DA VERCEL
-        const textoBrutoSelic = await respostaSelic.text();
-        console.log(`[ESTATÍSTICAS SERVICE] Texto bruto recebido da Selic (primeiros 300 caracteres):`, textoBrutoSelic.substring(0, 1000));
-
         let anos = [];
         let selicAnual = [];
         let ipcaAnual = [];
 
-        // Tenta converter o texto bruto capturado para JSON de forma segura
-        if (respostaSelic.ok && textoBrutoSelic) {
+        // 1. Processamento da Selic
+        if (respostaSelic.ok) {
+            const textoBrutoSelic = await respostaSelic.text();
             try {
                 const dadosSelicBrutos = JSON.parse(textoBrutoSelic);
                 if (Array.isArray(dadosSelicBrutos) && dadosSelicBrutos.length > 0) {
@@ -50,12 +59,12 @@ const estatisticasService = async () => {
                     anos = Object.keys(mapaAnualSelic).sort((a, b) => a - b);
                     selicAnual = anos.map(ano => mapaAnualSelic[ano]);
                 }
-            } catch (jsonError) {
-                console.error("[ESTATÍSTICAS SERVICE] Erro ao fazer parse do JSON da Selic:", jsonError.message);
+            } catch (e) {
+                console.error("[ESTATÍSTICAS SERVICE] Erro ao parsear JSON da Selic:", e.message);
             }
         }
 
-        // Processamento do IPCA utilizando a mesma lógica segura de texto bruto
+        // 2. Processamento do IPCA
         if (respostaIpca.ok && anos.length > 0) {
             const textoBrutoIpca = await respostaIpca.text();
             try {
@@ -75,8 +84,8 @@ const estatisticasService = async () => {
 
                     ipcaAnual = anos.map(ano => mapaAnualIpca[ano] !== undefined ? mapaAnualIpca[ano] : null);
                 }
-            } catch (jsonError) {
-                console.error("[ESTATÍSTICAS SERVICE] Erro ao fazer parse do JSON do IPCA:", jsonError.message);
+            } catch (e) {
+                console.error("[ESTATÍSTICAS SERVICE] Erro ao parsear JSON do IPCA:", e.message);
             }
         }
 
