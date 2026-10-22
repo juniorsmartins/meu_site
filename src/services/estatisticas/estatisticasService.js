@@ -42,7 +42,19 @@ const estatisticasService = async () => {
 
         console.log(`[ESTATÍSTICAS SERVICE] Status Resposta Selic: ${respostaSelic.status}`);
         const textoBrutoSelic = await respostaSelic.text();
-        console.log(`[ESTATÍSTICAS SERVICE] Texto bruto recebido da Selic:`, textoBrutoSelic.substring(0, 200));
+        console.log(`[ESTATÍSTICAS SERVICE] Texto bruto recebido da Selic:`, textoBrutoSelic.substring(0, 1000));
+
+        console.log(`[ESTATÍSTICAS SERVICE] Status Resposta IPCA: ${respostaIpca.status}`);
+        const textoBrutoIpca = await respostaIpca.text();
+        console.log(`[ESTATÍSTICAS SERVICE] Texto bruto recebido do IPCA:`, textoBrutoIpca.substring(0, 1000));
+
+        console.log(`[ESTATÍSTICAS SERVICE] Status Resposta PIB: ${respostaPib.status}`);
+        const textoBrutoPib = await respostaPib.text();
+        console.log(`[ESTATÍSTICAS SERVICE] Texto bruto recebido do PIB:`, textoBrutoPib.substring(0, 1000));
+
+        console.log(`[ESTATÍSTICAS SERVICE] Status Resposta Desemprego: ${respostaDesemprego.status}`);
+        const textoBrutoDesemprego = await respostaDesemprego.text();
+        console.log(`[ESTATÍSTICAS SERVICE] Texto bruto recebido do Desemprego:`, textoBrutoDesemprego.substring(0, 1000));
 
         let anos = [];
         let selicAnual = [];
