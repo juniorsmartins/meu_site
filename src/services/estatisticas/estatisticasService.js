@@ -1,12 +1,12 @@
 import { AppError } from '../../errors/AppError.js';
 import { MENSAGENS_ERRO } from '../../configs/mensagensConfig.js';
 
-const SERIE_BCB_SELIC = 432;
-const SERIE_BCB_IPCA = 433;
-
 /**
  * Formata uma data no padrão dd/mm/aaaa exigido pela API do Banco Central
  */
+const SERIE_BCB_SELIC = 432;
+const SERIE_BCB_IPCA = 433;
+
 function formatarDataBCB(data) {
     const dia = String(data.getDate()).padStart(2, '0');
     const mes = String(data.getMonth() + 1).padStart(2, '0');
@@ -18,7 +18,6 @@ const estatisticasService = async () => {
     try {
         console.log("[ESTATÍSTICAS SERVICE] Iniciando requisição para as APIs do Banco Central...");
 
-        // Calcula dinamicamente a janela de 8 anos atrás até hoje (respeitando o limite de 10 anos do BCB)
         const hoje = new Date();
         const dataFimStr = formatarDataBCB(hoje);
         
@@ -34,13 +33,17 @@ const estatisticasService = async () => {
             fetch(urlIpca)
         ]);
 
+        console.log(`[ESTATÍSTICAS SERVICE] Status Resposta Selic: ${respostaSelic.status}`);
+        
+        // CAPTURA E EXIBE O TEXTO BRUTO DIRETAMENTE NO CONSOLE NOVAMENTE
+        const textoBrutoSelic = await respostaSelic.text();
+        console.log(`[ESTATÍSTICAS SERVICE] Texto bruto recebido da Selic:`, textoBrutoSelic);
+
         let anos = [];
         let selicAnual = [];
         let ipcaAnual = [];
 
-        // 1. Processamento da Selic
-        if (respostaSelic.ok) {
-            const textoBrutoSelic = await respostaSelic.text();
+        if (respostaSelic.ok && textoBrutoSelic) {
             try {
                 const dadosSelicBrutos = JSON.parse(textoBrutoSelic);
                 if (Array.isArray(dadosSelicBrutos) && dadosSelicBrutos.length > 0) {
@@ -64,7 +67,6 @@ const estatisticasService = async () => {
             }
         }
 
-        // 2. Processamento do IPCA
         if (respostaIpca.ok && anos.length > 0) {
             const textoBrutoIpca = await respostaIpca.text();
             try {
