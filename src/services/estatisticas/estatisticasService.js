@@ -26,8 +26,8 @@ const estatisticasService = async () => {
         const urlSelic = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_SELIC}/dados?formato=json&dataInicial=${dataInicioStr}&dataFinal=${dataFimStr}`;
         const urlIpca = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_IPCA}/dados?formato=json&dataInicial=${dataInicioStr}&dataFinal=${dataFimStr}`;
         
-        // URL oficial da PNAD Contínua (Desemprego) do IBGE
-        const urlDesempregoIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/4099/periodos/201601,201701,201801,201901,202001,202101,202201,202301,202401/variaveis/4099?localidades=N1[all]`;
+        // URL da PNAD Contínua (Desemprego) restaurada para o padrão estável que funcionou
+        const urlDesempregoIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/4099/periodos/201601-202412/variaveis/4099?localidades=N1[all]`;
 
         const [resSelic, resIpca, resDesemprego] = await Promise.all([
             httpClient(urlSelic),
@@ -75,7 +75,7 @@ const estatisticasService = async () => {
             ipcaAnual = anos.map(ano => mapaAnualIpca[ano] !== undefined ? mapaAnualIpca[ano] : null);
         }
 
-        // 3. Processamento do Desemprego (IBGE)
+        // 3. Processamento do Desemprego (IBGE) restaurado
         if (resDesemprego.ok && Array.isArray(resDesemprego.data) && resDesemprego.data[0]?.resultados) {
             try {
                 const serieDesemprego = resDesemprego.data[0].resultados[0].series[0].serie;
