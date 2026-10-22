@@ -10,26 +10,30 @@ const estatisticasService = async () => {
     try {
         console.log("[ESTATÍSTICAS SERVICE] Iniciando requisição para as APIs do Banco Central...");
 
-        const dataInicio = "01/01/2018";
-        const dataFim = "31/12/2026";
-
-        const urlSelic = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_SELIC}/dados?formato=json&dataInicial=${dataInicio}&dataFinal=${dataFim}`;
-        const urlIpca = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_IPCA}/dados?formato=json&dataInicial=${dataInicio}&dataFinal=${dataFim}`;
+        // Usando o endpoint padrão sem parâmetros de data restritivos para testar a resposta pura
+        const urlSelic = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_SELIC}/dados?formato=json`;
+        const urlIpca = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_IPCA}/dados?formato=json`;
 
         const [respostaSelic, respostaIpca] = await Promise.all([
             fetch(urlSelic),
             fetch(urlIpca)
         ]);
 
+        console.log(`[ESTATÍSTICAS SERVICE] Status Resposta Selic: ${respostaSelic.status}`);
+        console.log(`[ESTATÍSTICAS SERVICE] Content-Type Selic: ${respostaSelic.headers.get("content-type")}`);
+
+        // CAPTURA O TEXTO BRUTO PARA INSPECIONAR NO CONSOLE DA VERCEL
+        const textoBrutoSelic = await respostaSelic.text();
+        console.log(`[ESTATÍSTICAS SERVICE] Texto bruto recebido da Selic (primeiros 300 caracteres):`, textoBrutoSelic.substring(0, 300));
+
         let anos = [];
         let selicAnual = [];
         let ipcaAnual = [];
 
-        // 1. Processamento seguro da Selic com validação de JSON
-        if (respostaSelic.ok) {
-            const contentType = respostaSelic.headers.get("content-type");
-            if (contentType && contentType.includes("application/json")) {
-                const dadosSelicBrutos = await respostaSelic.json();
+        // Tenta converter o texto bruto capturado para JSON de forma segura
+        if (respostaSelic.ok && textoBrutoSelic) {
+            try {
+                const dadosSelicBrutos = JSON.parse(textoBrutoSelic);
                 if (Array.isArray(dadosSelicBrutos) && dadosSelicBrutos.length > 0) {
                     const mapaAnualSelic = {};
                     dadosSelicBrutos.forEach(item => {
@@ -46,16 +50,16 @@ const estatisticasService = async () => {
                     anos = Object.keys(mapaAnualSelic).sort((a, b) => a - b);
                     selicAnual = anos.map(ano => mapaAnualSelic[ano]);
                 }
-            } else {
-                console.warn("[ESTATÍSTICAS SERVICE] A API da Selic não retornou um JSON válido.");
+            } catch (jsonError) {
+                console.error("[ESTATÍSTICAS SERVICE] Erro ao fazer parse do JSON da Selic:", jsonError.message);
             }
         }
 
-        // 2. Processamento seguro do IPCA com validação de JSON
+        // Processamento do IPCA utilizando a mesma lógica segura de texto bruto
         if (respostaIpca.ok && anos.length > 0) {
-            const contentType = respostaIpca.headers.get("content-type");
-            if (contentType && contentType.includes("application/json")) {
-                const dadosIpcaBrutos = await respostaIpca.json();
+            const textoBrutoIpca = await respostaIpca.text();
+            try {
+                const dadosIpcaBrutos = JSON.parse(textoBrutoIpca);
                 if (Array.isArray(dadosIpcaBrutos)) {
                     const mapaAnualIpca = {};
                     dadosIpcaBrutos.forEach(item => {
@@ -71,8 +75,8 @@ const estatisticasService = async () => {
 
                     ipcaAnual = anos.map(ano => mapaAnualIpca[ano] !== undefined ? mapaAnualIpca[ano] : null);
                 }
-            } else {
-                console.warn("[ESTATÍSTICAS SERVICE] A API do IPCA não retornou um JSON válido.");
+            } catch (jsonError) {
+                console.error("[ESTATÍSTICAS SERVICE] Erro ao fazer parse do JSON do IPCA:", jsonError.message);
             }
         }
 
