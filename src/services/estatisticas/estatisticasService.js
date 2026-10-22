@@ -35,7 +35,8 @@ const estatisticasService = async () => {
         // URL corrigida para o Desemprego utilizando o parâmetro 'last' suportado pelo SIDRA do IBGE
         // const urlDesempregoIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/4099/periodos/last/40/variaveis/4099?localidades=N1[all]`;
         // URL corrigida do Desemprego usando o formato padrão estável da API do IBGE (-36 para os últimos 36 trimestres)
-        const urlDesempregoIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/4099/periodos/-36/variaveis/4099?localidades=N1[all]`;
+        // const urlDesempregoIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/4099/periodos/-36/variaveis/4099?localidades=N1[all]`;
+        const urlDesempregoIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/6381/periodos/-1/variaveis/4099?localidades=N1[all]`;
 
         // Executa as 4 requisições em paralelo garantindo transparência via httpClient
         const [resSelic, resIpca, resPib, resDesemprego] = await Promise.all([
@@ -101,18 +102,22 @@ const estatisticasService = async () => {
             }
         }
 
-        // 4. Processamento da Taxa de Desemprego (IBGE)
+        // 4. Processamento da Taxa de Desemprego (IBGE - Tabela 6381)
         if (resDesemprego.ok && Array.isArray(resDesemprego.data) && resDesemprego.data[0]?.resultados) {
             try {
+                // A série da tabela 6381 já retorna a média anual por período.
+                // O formato da série é um objeto onde as chaves são os anos (ex: "2023") e os valores são as taxas.
                 const serieDesemprego = resDesemprego.data[0].resultados[0].series[0].serie;
-                const mapaDesemprego = {};
-                Object.keys(serieDesemprego).forEach(periodo => {
-                    const anoChave = periodo.substring(0, 4);
-                    mapaDesemprego[anoChave] = Number(serieDesemprego[periodo]);
+                
+                // Mapeia os valores diretamente para os anos que já temos no gráfico
+                desempregoAnual = anos.map(ano => {
+                    const valor = serieDesemprego[ano];
+                    // Retorna o valor numérico ou null se não existir para aquele ano
+                    return valor !== undefined ? Number(valor) : null;
                 });
-                desempregoAnual = anos.map(ano => mapaDesemprego[ano] !== undefined ? mapaDesemprego[ano] : null);
+
             } catch (e) {
-                console.error("[ESTATÍSTICAS SERVICE] Erro ao mapear Desemprego do IBGE:", e.message);
+                console.error("[ESTATÍSTICAS SERVICE] Erro ao mapear Desemprego do IBGE (Tabela 6381):", e.message);
             }
         }
 
