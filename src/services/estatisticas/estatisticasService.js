@@ -10,10 +10,16 @@ const estatisticasService = async () => {
     try {
         console.log("[ESTATÍSTICAS SERVICE] Iniciando requisição para as APIs do Banco Central...");
 
-        // 1. Requisições paralelas para as APIs oficiais do Banco Central
+        // Definimos um intervalo seguro de datas para atender aos requisitos da API do BCB
+        const dataInicio = "01/01/2000";
+        const dataFim = "31/12/2026";
+
+        const urlSelic = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_SELIC}/dados?formato=json&dataInicial=${dataInicio}&dataFinal=${dataFim}`;
+        const urlIpca = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_IPCA}/dados?formato=json&dataInicial=${dataInicio}&dataFinal=${dataFim}`;
+
         const [respostaSelic, respostaIpca] = await Promise.all([
-            fetch(`https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_SELIC}/dados?formato=json`),
-            fetch(`https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_IPCA}/dados?formato=json`)
+            fetch(urlSelic),
+            fetch(urlIpca)
         ]);
 
         console.log(`[ESTATÍSTICAS SERVICE] Status Resposta Selic: ${respostaSelic.status}`);
@@ -23,13 +29,11 @@ const estatisticasService = async () => {
         let selicAnual = [];
         let ipcaAnual = [];
 
-        // 2. Processamento da Selic com logs de inspeção
         if (respostaSelic.ok) {
             const dadosSelicBrutos = await respostaSelic.json();
-            console.log(`[ESTATÍSTICAS SERVICE] Total de registros brutos da Selic recebidos:`, dadosSelicBrutos ? dadosSelicBrutos.length : 0);
+            console.log(`[ESTATÍSTICAS SERVICE] Total de registros da Selic recebidos:`, Array.isArray(dadosSelicBrutos) ? dadosSelicBrutos.length : 'Não é array');
+
             if (Array.isArray(dadosSelicBrutos) && dadosSelicBrutos.length > 0) {
-                console.log(`[ESTATÍSTICAS SERVICE] Exemplo do primeiro item Selic:`, dadosSelicBrutos[0]);
-                
                 const mapaAnualSelic = {};
                 dadosSelicBrutos.forEach(item => {
                     if (item.data && item.data.includes('/')) {
@@ -37,6 +41,7 @@ const estatisticasService = async () => {
                         const ano = partes[2];
                         const mes = partes[1];
                         
+                        // Pega o valor de dezembro ou o último disponível no ano
                         if (mes === '12' || !mapaAnualSelic[ano]) {
                             mapaAnualSelic[ano] = Number(item.valor);
                         }
@@ -45,14 +50,11 @@ const estatisticasService = async () => {
 
                 anos = Object.keys(mapaAnualSelic).sort((a, b) => a - b);
                 selicAnual = anos.map(ano => mapaAnualSelic[ano]);
-                console.log(`[ESTATÍSTICAS SERVICE] Anos mapeados com sucesso:`, anos.length);
             }
         }
 
-        // 3. Processamento do IPCA com logs de inspeção
         if (respostaIpca.ok && anos.length > 0) {
             const dadosIpcaBrutos = await respostaIpca.json();
-            console.log(`[ESTATÍSTICAS SERVICE] Total de registros brutos do IPCA recebidos:`, dadosIpcaBrutos ? dadosIpcaBrutos.length : 0);
             if (Array.isArray(dadosIpcaBrutos)) {
                 const mapaAnualIpca = {};
                 dadosIpcaBrutos.forEach(item => {
@@ -70,13 +72,10 @@ const estatisticasService = async () => {
             }
         }
 
-        const pibAnual = []; 
-        const desempregoAnual = [];
-
         return {
             anos: anos,
-            pib: pibAnual,
-            desemprego: desempregoAnual,
+            pib: [],
+            desemprego: [],
             ipca: ipcaAnual,
             selic: selicAnual
         };
@@ -86,7 +85,6 @@ const estatisticasService = async () => {
         throw new AppError(MENSAGENS_ERRO.ESTATISTICAS.ERRO_AO_OBTER_DADOS, 503);
     }
 };
-
 export { 
     estatisticasService 
 };

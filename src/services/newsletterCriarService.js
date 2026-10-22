@@ -1,7 +1,5 @@
 import { Newsletter } from '../models/newsletterSchema.js';
 
-console.log("Arquivo newsletterCriarService.js carregado.");
-
 const newsletterCriarService = async (email) => {
 
     const emailFormatado = email.trim().toLowerCase();
