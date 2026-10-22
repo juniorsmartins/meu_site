@@ -8,46 +8,51 @@ const SERIE_BCB_IPCA = 433;
 
 const estatisticasService = async () => {
     try {
+        console.log("[ESTATÍSTICAS SERVICE] Iniciando requisição para as APIs do Banco Central...");
+
         // 1. Requisições paralelas para as APIs oficiais do Banco Central
         const [respostaSelic, respostaIpca] = await Promise.all([
             fetch(`https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_SELIC}/dados?formato=json`),
             fetch(`https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_IPCA}/dados?formato=json`)
         ]);
 
+        console.log(`[ESTATÍSTICAS SERVICE] Status Resposta Selic: ${respostaSelic.status}`);
+        console.log(`[ESTATÍSTICAS SERVICE] Status Resposta IPCA: ${respostaIpca.status}`);
+
         let anos = [];
         let selicAnual = [];
         let ipcaAnual = [];
 
-        // 2. Processamento Dinâmico da Selic a partir do início da série histórica
+        // 2. Processamento da Selic com logs de inspeção
         if (respostaSelic.ok) {
             const dadosSelicBrutos = await respostaSelic.json();
+            console.log(`[ESTATÍSTICAS SERVICE] Total de registros brutos da Selic recebidos:`, dadosSelicBrutos ? dadosSelicBrutos.length : 0);
             if (Array.isArray(dadosSelicBrutos) && dadosSelicBrutos.length > 0) {
+                console.log(`[ESTATÍSTICAS SERVICE] Exemplo do primeiro item Selic:`, dadosSelicBrutos[0]);
                 
-                // Filtramos para pegar o valor de dezembro (ou o último mês disponível) de cada ano da série
                 const mapaAnualSelic = {};
                 dadosSelicBrutos.forEach(item => {
-                    // O formato da data na API do BC é "DD/MM/AAAA"
                     if (item.data && item.data.includes('/')) {
-                        const partes = item.data.split('/'); // Divide a data em dia, mês e ano
-                        const ano = partes[2]; // Extrai o ano
-                        const mes = partes[1]; // Extrai o mês
+                        const partes = item.data.split('/');
+                        const ano = partes[2];
+                        const mes = partes[1];
                         
-                        // Priorizamos o dado de dezembro (12) ou o último mês registrado do ano
                         if (mes === '12' || !mapaAnualSelic[ano]) {
                             mapaAnualSelic[ano] = Number(item.valor);
                         }
                     }
                 });
 
-                // Ordena os anos de forma cronológica (do início até o atual)
-                anos = Object.keys(mapaAnualSelic).sort((a, b) => a - b); // Ordena os anos de forma cronológica - do início até o atual
-                selicAnual = anos.map(ano => mapaAnualSelic[ano]); // Mapeia os valores da Selic para cada ano ordenado
+                anos = Object.keys(mapaAnualSelic).sort((a, b) => a - b);
+                selicAnual = anos.map(ano => mapaAnualSelic[ano]);
+                console.log(`[ESTATÍSTICAS SERVICE] Anos mapeados com sucesso:`, anos.length);
             }
         }
 
-        // 3. Processamento Dinâmico do IPCA usando a mesma base de anos extraída
+        // 3. Processamento do IPCA com logs de inspeção
         if (respostaIpca.ok && anos.length > 0) {
             const dadosIpcaBrutos = await respostaIpca.json();
+            console.log(`[ESTATÍSTICAS SERVICE] Total de registros brutos do IPCA recebidos:`, dadosIpcaBrutos ? dadosIpcaBrutos.length : 0);
             if (Array.isArray(dadosIpcaBrutos)) {
                 const mapaAnualIpca = {};
                 dadosIpcaBrutos.forEach(item => {
@@ -65,7 +70,6 @@ const estatisticasService = async () => {
             }
         }
 
-        // PIB e Desemprego (mantidos vazios até integrarmos o SIDRA/IBGE)
         const pibAnual = []; 
         const desempregoAnual = [];
 
@@ -78,7 +82,7 @@ const estatisticasService = async () => {
         };
 
     } catch (error) {
-        console.error("Erro ao buscar estatísticas oficiais:", error);
+        console.error("[ESTATÍSTICAS SERVICE] Erro crítico ao buscar dados:", error);
         throw new AppError(MENSAGENS_ERRO.ESTATISTICAS.ERRO_AO_OBTER_DADOS, 503);
     }
 };
