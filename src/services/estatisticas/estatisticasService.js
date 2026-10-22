@@ -4,6 +4,13 @@ import { MENSAGENS_ERRO } from '../../configs/mensagensConfig.js';
 const SERIE_BCB_SELIC = 432;
 const SERIE_BCB_IPCA = 433;
 
+function formatarDataBCB(data) {
+    const dia = String(data.getDate()).padStart(2, '0');
+    const mes = String(data.getMonth() + 1).padStart(2, '0');
+    const ano = data.getFullYear();
+    return `${dia}/${mes}/${ano}`;
+}
+
 const estatisticasService = async () => {
     try {
         console.log("[ESTATÍSTICAS SERVICE] Iniciando requisição para as APIs do Banco Central e IBGE...");
