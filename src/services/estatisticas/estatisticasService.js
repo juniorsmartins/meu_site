@@ -1,6 +1,6 @@
 import { AppError } from '../../errors/AppError.js';
 import { MENSAGENS_ERRO } from '../../configs/mensagensConfig.js';
-import { httpClient } from '../utils/httpClient.js'; // Importa o cliente genérico
+import { httpClient } from './requisicaoEstatistica.js'; // Importa o cliente genérico
 
 const SERIE_BCB_SELIC = 432;
 const SERIE_BCB_IPCA = 433;
