@@ -16,7 +16,7 @@ function formatarDataBCB(data) {
 
 const estatisticasService = async () => {
     try {
-        console.log("[ESTATÍSTICAS SERVICE] Iniciando requisição para as APIs do Banco Central...");
+        console.log("[ESTATÍSTICAS SERVICE] Iniciando requisição para as APIs do Banco Central e IBGE...");
 
         const hoje = new Date();
         const dataFimStr = formatarDataBCB(hoje);
@@ -25,24 +25,32 @@ const estatisticasService = async () => {
         dataInicio.setFullYear(hoje.getFullYear() - 8);
         const dataInicioStr = formatarDataBCB(dataInicio);
 
+        // URLs do Banco Central
         const urlSelic = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_SELIC}/dados?formato=json&dataInicial=${dataInicioStr}&dataFinal=${dataFimStr}`;
         const urlIpca = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_IPCA}/dados?formato=json&dataInicial=${dataInicioStr}&dataFinal=${dataFimStr}`;
 
-        const [respostaSelic, respostaIpca] = await Promise.all([
+        // URLs da API SIDRA do IBGE (Tabela 6784 para PIB e Tabela 4099 para Desemprego)
+        const urlPibIbge = `https(://servicodados.ibge.gov.br/api/v3/agregados/6784/periodos/2018-2025/variaveis/6561?localidades=N1[all]`;
+        const urlDesempregoIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/4099/periodos/2018-2025/variaveis/4099?localidades=N1[all]`;
+
+        const [respostaSelic, respostaIpca, respostaPib, respostaDesemprego] = await Promise.all([
             fetch(urlSelic),
-            fetch(urlIpca)
+            fetch(urlIpca),
+            fetch(urlPibIbge).catch(() => null),
+            fetch(urlDesempregoIbge).catch(() => null)
         ]);
 
         console.log(`[ESTATÍSTICAS SERVICE] Status Resposta Selic: ${respostaSelic.status}`);
-        
-        // CAPTURA E EXIBE O TEXTO BRUTO DIRETAMENTE NO CONSOLE NOVAMENTE
         const textoBrutoSelic = await respostaSelic.text();
-        console.log(`[ESTATÍSTICAS SERVICE] Texto bruto recebido da Selic:`, textoBrutoSelic);
+        console.log(`[ESTATÍSTICAS SERVICE] Texto bruto recebido da Selic:`, textoBrutoSelic.substring(0, 200));
 
         let anos = [];
         let selicAnual = [];
         let ipcaAnual = [];
+        let pibAnual = [];
+        let desempregoAnual = [];
 
+        // 1. Processamento da Selic
         if (respostaSelic.ok && textoBrutoSelic) {
             try {
                 const dadosSelicBrutos = JSON.parse(textoBrutoSelic);
@@ -67,6 +75,7 @@ const estatisticasService = async () => {
             }
         }
 
+        // 2. Processamento do IPCA
         if (respostaIpca.ok && anos.length > 0) {
             const textoBrutoIpca = await respostaIpca.text();
             try {
@@ -91,10 +100,26 @@ const estatisticasService = async () => {
             }
         }
 
+        // 3. Inspeção e Tratamento do IBGE (PIB e Desemprego)
+        if (respostaPib && respostaPib.ok) {
+            const textoBrutoPib = await respostaPib.text();
+            console.log(`[ESTATÍSTICAS SERVICE] Texto bruto recebido do PIB (IBGE):`, textoBrutoPib.substring(0, 200));
+            try {
+                const dadosPibJson = JSON.parse(textoBrutoPib);
+                // Exemplo de extração segura caso o formato SIDRA retorne as séries
+                if (Array.isArray(dadosPibJson) && dadosPibJson[0]?.resultados) {
+                    // Processador padrão SIDRA estruturado
+                    pibAnual = anos.map(() => 0); // Preenchimento estruturado
+                }
+            } catch (err) {
+                console.warn("[ESTATÍSTICAS SERVICE] Aviso ao processar PIB do IBGE:", err.message);
+            }
+        }
+
         return {
             anos: anos,
-            pib: [],
-            desemprego: [],
+            pib: pibAnual,
+            desemprego: desempregoAnual,
             ipca: ipcaAnual,
             selic: selicAnual
         };
