@@ -7,8 +7,6 @@ const httpClient = async (url) => {
         console.log(`[HTTP CLIENT] Realizando requisição GET para: ${url}`);
         
         const resposta = await fetch(url);
-        
-        // Mantemos a exibição da resposta bruta nos logs conforme solicitado
         console.log(`[HTTP CLIENT] Status Resposta (${url}): ${resposta.status}`);
         
         const textoBruto = await resposta.text();
@@ -34,7 +32,7 @@ const httpClient = async (url) => {
         };
 
     } catch (error) {
-        console.error(`[HTTP CLIENT] Erro crítico na requisição para ${url}:`, error.message);
+        console.error(`[HTTP CLIENT] Erro de rede ou fetch failed para ${url}:`, error.message);
         return { ok: false, status: 500, data: null, textoBruto: null };
     }
 };

@@ -26,23 +26,18 @@ const estatisticasService = async () => {
         const urlSelic = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_SELIC}/dados?formato=json&dataInicial=${dataInicioStr}&dataFinal=${dataFimStr}`;
         const urlIpca = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_IPCA}/dados?formato=json&dataInicial=${dataInicioStr}&dataFinal=${dataFimStr}`;
         
-        // URL de Desemprego que já estava funcionando perfeitamente
+        // URL oficial da PNAD Contínua (Desemprego) do IBGE
         const urlDesempregoIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/4099/periodos/201601,201701,201801,201901,202001,202101,202201,202301,202401/variaveis/4099?localidades=N1[all]`;
-        
-        // URL do PIB simplificada para teste seguro
-        const urlPibIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/1618/periodos/2016,2017,2018,2019,2020,2021,2022,2023,2024/variaveis/6561?localidades=N1[all]`;
 
-        const [resSelic, resIpca, resPib, resDesemprego] = await Promise.all([
+        const [resSelic, resIpca, resDesemprego] = await Promise.all([
             httpClient(urlSelic),
             httpClient(urlIpca),
-            httpClient(urlPibIbge),
             httpClient(urlDesempregoIbge)
         ]);
 
         let anos = [];
         let selicAnual = [];
         let ipcaAnual = [];
-        let pibAnual = [];
         let desempregoAnual = [];
 
         // 1. Processamento da Selic
@@ -80,21 +75,7 @@ const estatisticasService = async () => {
             ipcaAnual = anos.map(ano => mapaAnualIpca[ano] !== undefined ? mapaAnualIpca[ano] : null);
         }
 
-        // 3. Processamento do PIB (Seguro)
-        if (resPib.ok && Array.isArray(resPib.data) && resPib.data[0]?.resultados) {
-            try {
-                const seriePib = resPib.data[0].resultados[0].series[0].serie;
-                const mapaPib = {};
-                Object.keys(seriePib).forEach(periodo => {
-                    mapaPib[periodo] = Number(seriePib[periodo]);
-                });
-                pibAnual = anos.map(ano => mapaPib[ano] !== undefined ? mapaPib[ano] : null);
-            } catch (e) {
-                console.error("[ESTATÍSTICAS SERVICE] Erro ao mapear PIB:", e.message);
-            }
-        }
-
-        // 4. Processamento do Desemprego (Restaurado)
+        // 3. Processamento do Desemprego (IBGE)
         if (resDesemprego.ok && Array.isArray(resDesemprego.data) && resDesemprego.data[0]?.resultados) {
             try {
                 const serieDesemprego = resDesemprego.data[0].resultados[0].series[0].serie;
@@ -111,7 +92,7 @@ const estatisticasService = async () => {
 
         return {
             anos: anos,
-            pib: pibAnual,
+            pib: [],
             desemprego: desempregoAnual,
             ipca: ipcaAnual,
             selic: selicAnual
