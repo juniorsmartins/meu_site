@@ -24,7 +24,7 @@ const estatisticasService = async () => {
 
         // CAPTURA O TEXTO BRUTO PARA INSPECIONAR NO CONSOLE DA VERCEL
         const textoBrutoSelic = await respostaSelic.text();
-        console.log(`[ESTATÍSTICAS SERVICE] Texto bruto recebido da Selic (primeiros 300 caracteres):`, textoBrutoSelic.substring(0, 300));
+        console.log(`[ESTATÍSTICAS SERVICE] Texto bruto recebido da Selic (primeiros 300 caracteres):`, textoBrutoSelic.substring(0, 1000));
 
         let anos = [];
         let selicAnual = [];
