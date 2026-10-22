@@ -31,7 +31,9 @@ const estatisticasService = async () => {
         const urlPibIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/1846/periodos/201601-202404/variaveis/585?localidades=N1[all]`;
         
         // Desemprego (PNAD Contínua - Tabela 4099 que já comprovou funcionamento)
-        const urlDesempregoIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/4099/periodos/201601-202412/variaveis/4099?localidades=N1[all]`;
+        // const urlDesempregoIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/4099/periodos/201601-202412/variaveis/4099?localidades=N1[all]`;
+        // URL corrigida para o Desemprego utilizando o parâmetro 'last' suportado pelo SIDRA do IBGE
+        const urlDesempregoIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/4099/periodos/last/40/variaveis/4099?localidades=N1[all]`;
 
         // Executa as 4 requisições em paralelo garantindo transparência via httpClient
         const [resSelic, resIpca, resPib, resDesemprego] = await Promise.all([
