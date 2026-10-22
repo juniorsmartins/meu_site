@@ -1,7 +1,5 @@
 import { adminMetricasService } from '../services/adminMetricasService.js';
 
-console.log("Arquivo adminMetricasController.js carregado.");
-
 const adminMetricasController = async (request, response) => {
 
     try {

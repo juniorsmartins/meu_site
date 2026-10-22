@@ -1,7 +1,5 @@
 import { newsletterCriarService } from '../services/newsletterCriarService.js';
 
-console.log("Arquivo newsletterCriarController.js carregado.");
-
 const newsletterCriarController = async (request, response) => {
 
     try {
