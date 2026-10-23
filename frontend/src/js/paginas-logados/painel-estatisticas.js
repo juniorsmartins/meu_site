@@ -1,4 +1,4 @@
-import { API_URL_BASE } from '../constantsConfig.js'; 
+import { API_URL_ESTATISTICAS } from '../constantsConfig.js'; 
 
 document.addEventListener("DOMContentLoaded", async () => {
     await carregarDadosPainelAdmin();
@@ -13,7 +13,7 @@ async function carregarDadosPainelAdmin() {
     try {
         // Endpoint que criaremos no backend para listar o status dos indicadores salvos
         const token = localStorage.getItem("token"); // Token JWT do Admin logado
-        const resposta = await fetch(`${API_URL_BASE}/v1/estatisticas/admin/status`, {
+        const resposta = await fetch(`${API_URL_ESTATISTICAS}/status`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -81,7 +81,7 @@ async function executarSincronizacao() {
         btnSincronizar.innerHTML = `<i class="bi bi-arrow-repeat bi-spin"></i> Sincronizando...`;
 
         const token = localStorage.getItem("token");
-        const resposta = await fetch(`${API_URL_BASE}/v1/estatisticas/admin/sincronizar`, {
+        const resposta = await fetch(`${API_URL_ESTATISTICAS}/sincronizar`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
