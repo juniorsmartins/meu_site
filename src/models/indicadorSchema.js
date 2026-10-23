@@ -38,7 +38,7 @@ const indicadorAnualSchema = new mongoose.Schema(
 
 indicadorAnualSchema.index({ slug: 1, createdAt: -1 });
 
-const IndicadorAnualModel = mongoose.model('IndicadorAnualModel', indicadorAnualSchema);
+const IndicadorAnualModel = mongoose.model('IndicadorAnual', indicadorAnualSchema);
 
 export { IndicadorAnualModel };
 
