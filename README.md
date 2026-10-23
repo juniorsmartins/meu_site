@@ -45,7 +45,7 @@ npm i -D nodemon
 npm install -D vitest
 npm install -D supertest 
 npm install -D mongodb-memory-server
-
+npm install undici
 
 
 -> Comandos para acionar
