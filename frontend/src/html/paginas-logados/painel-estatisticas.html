@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Estatísticas - Gajeiro (Admin)</title>
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="../../css/index.css">
+    <link rel="stylesheet" href="../../css/header.css">
+    <link rel="stylesheet" href="../../css/painel-estatisticas.css">
+    <link rel="stylesheet" href="../../css/footer.css">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" href="../../img/favicon.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+
+<body>
+
+    <!-- Scripts do Cabeçalho/Rodapé e Lógica do Painel Admin -->
+    <script type="module" src="../../js/header.js"></script>
+    <script type="module" src="../../js/admin/painel-estatisticas.js"></script>
+    <script type="module" src="../../js/footer.js"></script> 
+
+    <!-- Cabeçalho Reutilizado -->
+    <div id="header-container"></div>
+
+    <!-- Conteúdo Principal -->
+    <main>
+        <div class="admin-estatisticas-wrapper">
+            
+            <!-- Cabeçalho do Painel e Botão de Ação -->
+            <div class="admin-header-flex">
+                <div class="admin-header-titulo">
+                    <h1>Painel de Estatísticas</h1>
+                    <p>Gerencie a base de dados macroeconômica e execute sincronizações com as APIs oficiais.</p>
+                </div>
+                <div>
+                    <button id="btnSincronizar" class="btn-sincronizar">
+                        <i class="bi bi-arrow-repeat"></i> Sincronizar com Fontes Externas
+                    </button>
+                </div>
+            </div>
+
+            <!-- Cards de Métricas Superiores -->
+            <div class="admin-metrics-grid">
+                <div class="metric-card">
+                    <h3>Indicadores Ativos</h3>
+                    <div class="metric-value" id="totalIndicadores">--</div>
+                    <div class="metric-desc">Séries históricas cadastradas</div>
+                </div>
+                <div class="metric-card">
+                    <h3>Última Sincronização</h3>
+                    <div class="metric-value" id="ultimaAtualizacao" style="font-size: 1.2rem; margin-top: 5px;">--</div>
+                    <div class="metric-desc">Data da última atualização bem-sucedida</div>
+                </div>
+                <div class="metric-card">
+                    <h3>Status do Banco</h3>
+                    <div class="metric-value" style="color: #2E7D32; font-size: 1.4rem; margin-top: 8px;">
+                        <i class="bi bi-check-circle-fill"></i> Conectado
+                    </div>
+                    <div class="metric-desc">MongoDB Operacional</div>
+                </div>
+            </div>
+
+            <!-- Tabela Detalhada dos Indicadores Salvos -->
+            <div class="admin-content-card">
+                <h2>Indicadores Macroeconômicos Armazenados</h2>
+                <div style="overflow-x: auto;">
+                    <table class="tabela-indicadores">
+                        <thead>
+                            <tr>
+                                <th>Indicador</th>
+                                <th>Slug / ID</th>
+                                <th>Fonte Oficial</th>
+                                <th>Unidade</th>
+                                <th>Total de Períodos</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaIndicadoresBody">
+                            <!-- Preenchido via JavaScript -->
+                            <tr>
+                                <td colspan="6" style="text-align: center; color: #777;">Carregando indicadores...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Rodapé Reutilizado -->
+    <div id="footer-container"></div>
+
+</body>
+
+</html>
+

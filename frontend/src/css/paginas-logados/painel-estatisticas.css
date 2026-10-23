@@ -1,0 +1,141 @@
+/* Estilos específicos para o Painel Administrativo de Estatísticas */
+.admin-estatisticas-wrapper {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.admin-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.admin-header-titulo h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: #1a1a1a;
+    margin-bottom: 5px;
+}
+
+.admin-header-titulo p {
+    color: #666;
+    font-size: 0.95rem;
+}
+
+/* Botão de Sincronização */
+.btn-sincronizar {
+    background-color: #0D47A1;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-sincronizar:hover {
+    background-color: #1565C0;
+}
+
+.btn-sincronizar:active {
+    transform: scale(0.98);
+}
+
+.btn-sincronizar:disabled {
+    background-color: #90CAF9;
+    cursor: not-allowed;
+}
+
+/* Grid de Status / Cards Superiores */
+.admin-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.metric-card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.metric-card h3 {
+    font-size: 0.85rem;
+    color: #777;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.metric-card .metric-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #0D47A1;
+}
+
+.metric-card .metric-desc {
+    font-size: 0.85rem;
+    color: #555;
+    margin-top: 5px;
+}
+
+/* Seção da Tabela / Lista de Indicadores */
+.admin-content-card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.admin-content-card h2 {
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.tabela-indicadores {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+}
+
+.tabela-indicadores th, .tabela-indicadores td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.tabela-indicadores th {
+    background-color: #f8f9fa;
+    color: #444;
+    font-weight: 600;
+}
+
+.tabela-indicadores tr:hover {
+    background-color: #fdfdfd;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background-color: #E8F5E9;
+    color: #2E7D32;
+}
+
