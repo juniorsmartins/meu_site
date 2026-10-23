@@ -1,7 +1,7 @@
 import { IndicadorAnualModel } from '../../models/indicadorSchema.js';
 import { httpClient } from './chamadaExternaHttp.js';
 import { regraAutorizarApenasAdmin } from '../../helpers/usuarioUtils.js';
-import { AppError } from '../../helpers/errorHandler.js';
+import { AppError } from '../../errors/AppError.js';
 import { MENSAGENS_ERRO } from '../../configs/mensagensConfig.js';
 
 const SERIE_BCB_SELIC = 432;
