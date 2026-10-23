@@ -53,7 +53,7 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
                     await IndicadorAnualModel.findOneAndUpdate(
                         { slug: 'pib' },
                         { titulo: 'Crescimento do PIB (%)', fonte: 'IBGE (Agregado 9810)', unidade: '%', anos: anosPib, valores: valoresPib, ultimaAtualizacao: agora },
-                        { upsert: true, new: true }
+                        { upsert: true, returnDocument: 'after' }
                     );
                 }
             } catch (e) {
@@ -72,7 +72,7 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
                     await IndicadorAnualModel.findOneAndUpdate(
                         { slug: 'desemprego' },
                         { titulo: 'Taxa Média de Desemprego (%)', fonte: 'IBGE (PNAD - Tabela 4099)', unidade: '%', anos: anosDesemprego, valores: valoresDesemprego, ultimaAtualizacao: agora },
-                        { upsert: true, new: true }
+                        { upsert: true, returnDocument: 'after' }
                     );
                 }
             } catch (e) {
@@ -100,7 +100,7 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
                 await IndicadorAnualModel.findOneAndUpdate(
                     { slug: 'selic' },
                     { titulo: 'Taxa Básica de Juros - Selic (%)', fonte: 'Banco Central (Série 432)', unidade: '%', anos: anosSelic, valores: valoresSelic, ultimaAtualizacao: agora },
-                    { upsert: true, new: true }
+                    { upsert: true, returnDocument: 'after' }
                 );
             }
         }
@@ -125,7 +125,7 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
                 await IndicadorAnualModel.findOneAndUpdate(
                     { slug: 'ipca' },
                     { titulo: 'Inflação Oficial - IPCA (%)', fonte: 'Banco Central / IBGE (Série 433)', unidade: '%', anos: anosIpca, valores: valoresIpca, ultimaAtualizacao: agora },
-                    { upsert: true, new: true }
+                    { upsert: true, returnDocument: 'after' }
                 );
             }
         }
