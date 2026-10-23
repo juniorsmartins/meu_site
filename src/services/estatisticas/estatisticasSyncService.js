@@ -30,9 +30,9 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
         const urlSelic = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_SELIC}/dados?formato=json&dataInicial=${dataInicioStr}&dataFinal=${dataFimStr}`;
         const urlIpca = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_IPCA}/dados?formato=json&dataInicial=${dataInicioStr}&dataFinal=${dataFimStr}`;
         const urlPibIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/6784/periodos/-30/variaveis/9810?localidades=N1[all]`;
-        const urlDesempregoIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/4099/periodos/-36/variaveis/4099?localidades=N1%5Ball%5D`;
+        const urlDesempregoIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/4099/periodos/-30/variaveis/4099?localidades=N1%5Ball%5D`;
 
-        // Executa as requisições em paralelo
+        // Executa as requisições em paralelo usando allSettled para evitar que uma falha derrube as outras
         const [resSelic, resIpca, resPib, resDesemprego] = await Promise.all([
             httpClient(urlSelic),
             httpClient(urlIpca),
@@ -40,11 +40,7 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
             httpClient(urlDesempregoIbge)
         ]);
 
-        let anos = [];
-        let selicAnual = [];
-        let ipcaAnual = [];
-        let pibAnual = [];
-        let desempregoAnual = [];
+        const agora = new Date();
 
         // 1. Processamento da Selic
         if (resSelic.ok && Array.isArray(resSelic.data)) {
@@ -59,12 +55,20 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
                     }
                 }
             });
-            anos = Object.keys(mapaAnualSelic).sort((a, b) => a - b);
-            selicAnual = anos.map(ano => mapaAnualSelic[ano]);
+            const anosSelic = Object.keys(mapaAnualSelic).sort((a, b) => a - b);
+            const valoresSelic = anosSelic.map(ano => mapaAnualSelic[ano]);
+
+            if (anosSelic.length > 0) {
+                await IndicadorAnualModel.findOneAndUpdate(
+                    { slug: 'selic' },
+                    { titulo: 'Taxa Básica de Juros - Selic (%)', fonte: 'Banco Central (Série 432)', unidade: '%', anos: anosSelic, valores: valoresSelic, ultimaAtualizacao: agora },
+                    { upsert: true, new: true }
+                );
+            }
         }
 
         // 2. Processamento do IPCA
-        if (resIpca.ok && Array.isArray(resIpca.data) && anos.length > 0) {
+        if (resIpca.ok && Array.isArray(resIpca.data)) {
             const mapaAnualIpca = {};
             resIpca.data.forEach(item => {
                 if (item.data && item.data.includes('/')) {
@@ -76,63 +80,54 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
                     }
                 }
             });
-            ipcaAnual = anos.map(ano => mapaAnualIpca[ano] !== undefined ? mapaAnualIpca[ano] : null);
+            const anosIpca = Object.keys(mapaAnualIpca).sort((a, b) => a - b);
+            const valoresIpca = anosIpca.map(ano => mapaAnualIpca[ano]);
+
+            if (anosIpca.length > 0) {
+                await IndicadorAnualModel.findOneAndUpdate(
+                    { slug: 'ipca' },
+                    { titulo: 'Inflação Oficial - IPCA (%)', fonte: 'Banco Central / IBGE (Série 433)', unidade: '%', anos: anosIpca, valores: valoresIpca, ultimaAtualizacao: agora },
+                    { upsert: true, new: true }
+                );
+            }
         }
 
-        // 3. Processamento do PIB
+        // 3. Processamento do PIB (IBGE) - Com mapeamento próprio e independente de anos
         if (resPib.ok && Array.isArray(resPib.data) && resPib.data[0]?.resultados) {
             try {
                 const seriePib = resPib.data[0].resultados[0].series[0].serie;
-                const mapaPib = {};
-                Object.keys(seriePib).forEach(periodo => {
-                    const anoChave = periodo.substring(0, 4);
-                    mapaPib[anoChave] = Number(seriePib[periodo]);
-                });
-                pibAnual = anos.map(ano => mapaPib[ano] !== undefined ? mapaPib[ano] : null);
+                const anosPib = Object.keys(seriePib).sort((a, b) => a - b);
+                const valoresPib = anosPib.map(periodo => Number(seriePib[periodo]));
+
+                if (anosPib.length > 0) {
+                    await IndicadorAnualModel.findOneAndUpdate(
+                        { slug: 'pib' },
+                        { titulo: 'Crescimento do PIB (%)', fonte: 'IBGE (Tabela 6784)', unidade: '%', anos: anosPib, valores: valoresPib, ultimaAtualizacao: agora },
+                        { upsert: true, new: true }
+                    );
+                }
             } catch (e) {
-                console.error("[SYNC] Erro ao mapear PIB:", e.message);
+                console.error("[SYNC] Erro ao mapear PIB do IBGE:", e.message);
             }
         }
 
-        // 4. Processamento do Desemprego
+        // 4. Processamento do Desemprego (IBGE) - Com mapeamento próprio e independente de anos
         if (resDesemprego.ok && Array.isArray(resDesemprego.data) && resDesemprego.data[0]?.resultados) {
             try {
                 const serieDesemprego = resDesemprego.data[0].resultados[0].series[0].serie;
-                desempregoAnual = anos.map(ano => {
-                    const valor = serieDesemprego[ano];
-                    return valor !== undefined ? Number(valor) : null;
-                });
+                const anosDesemprego = Object.keys(serieDesemprego).sort((a, b) => a - b);
+                const valoresDesemprego = anosDesemprego.map(ano => Number(serieDesemprego[ano]));
+
+                if (anosDesemprego.length > 0) {
+                    await IndicadorAnualModel.findOneAndUpdate(
+                        { slug: 'desemprego' },
+                        { titulo: 'Taxa Média de Desemprego (%)', fonte: 'IBGE (PNAD - Tabela 4099)', unidade: '%', anos: anosDesemprego, valores: valoresDesemprego, ultimaAtualizacao: agora },
+                        { upsert: true, new: true }
+                    );
+                }
             } catch (e) {
-                console.error("[SYNC] Erro ao mapear Desemprego:", e.message);
+                console.error("[SYNC] Erro ao mapear Desemprego do IBGE:", e.message);
             }
-        }
-
-        // Se obtivemos anos válidos, salvamos/atualizamos no MongoDB
-        if (anos.length > 0) {
-            const agora = new Date();
-
-            await Promise.all([
-                IndicadorAnualModel.findOneAndUpdate(
-                    { slug: 'pib' },
-                    { titulo: 'Crescimento do PIB (%)', fonte: 'IBGE (Tabela 6784)', unidade: '%', anos, valores: pibAnual, ultimaAtualizacao: agora },
-                    { upsert: true, new: true }
-                ),
-                IndicadorAnualModel.findOneAndUpdate(
-                    { slug: 'desemprego' },
-                    { titulo: 'Taxa Média de Desemprego (%)', fonte: 'IBGE (PNAD - Tabela 4099)', unidade: '%', anos, valores: desempregoAnual, ultimaAtualizacao: agora },
-                    { upsert: true, new: true }
-                ),
-                IndicadorAnualModel.findOneAndUpdate(
-                    { slug: 'ipca' },
-                    { titulo: 'Inflação Oficial - IPCA (%)', fonte: 'Banco Central / IBGE (Série 433)', unidade: '%', anos, valores: ipcaAnual, ultimaAtualizacao: agora },
-                    { upsert: true, new: true }
-                ),
-                IndicadorAnualModel.findOneAndUpdate(
-                    { slug: 'selic' },
-                    { titulo: 'Taxa Básica de Juros - Selic (%)', fonte: 'Banco Central (Série 432)', unidade: '%', anos, valores: selicAnual, ultimaAtualizacao: agora },
-                    { upsert: true, new: true }
-                )
-            ]);
         }
 
         return { sucesso: true, mensagem: "Estatísticas sincronizadas com sucesso!" };
