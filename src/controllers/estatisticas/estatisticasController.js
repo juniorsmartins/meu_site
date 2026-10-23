@@ -6,8 +6,7 @@ import { AppError } from '../../errors/AppError.js';
 
 const estatisticasController = async (request, response, next) => {
     try {
-        const usuarioAutenticado = request.usuario;
-        const dadosEstatisticos = await estatisticasService(usuarioAutenticado);
+        const dadosEstatisticos = await estatisticasService();
 
         return response.status(200).json({
             sucesso: true,

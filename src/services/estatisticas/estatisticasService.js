@@ -1,11 +1,8 @@
 import { IndicadorAnualModel } from '../../models/indicadorSchema.js';
 import { AppError } from '../../errors/AppError.js';
 import { MENSAGENS_ERRO } from '../../configs/mensagensConfig.js';
-import { regraAutorizarAdmin } from '../../helpers/usuarioUtils.js';
 
-export const estatisticasService = async (usuarioAutenticado) => {
-
-    regraAutorizarAdmin(usuarioAutenticado);
+export const estatisticasService = async () => {
 
     try {
         const indicadores = await IndicadorAnualModel.find({});
