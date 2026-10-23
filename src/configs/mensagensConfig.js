@@ -33,8 +33,12 @@ const MENSAGENS_ERRO = Object.freeze({ // Mensagens de erro padronizadas do sist
         CAMPO_SENHA_MINIMO_CARACTERES: (min = REGRAS_USUARIO.SENHA.MIN) => `O campo senha deve ter no mínimo ${min} caracteres.`,
         CAMPO_SENHA_MAXIMO_CARACTERES: (max = REGRAS_USUARIO.SENHA.MAX) => `O campo senha não pode ter mais de ${max} caracteres.`,
         CAMPO_EMAIL_FORMATO_INVALIDO: "O campo e-mail deve ter um formato válido."
+    },
+
+    ESTATISTICAS: {
+        ERRO_AO_OBTER_DADOS: "Não foi possível obter as estatísticas no momento.", 
+        FALHA_COM_API_BANCO_CENTRAL: "Falha ao comunicar com a API do Banco Central."
     }
-    // Outros domínios do sistema (noticias, comunicacao, etc.) podem entrar aqui futuramente
 });
 
 const MENSAGENS_SUCESSO = Object.freeze({
@@ -45,6 +49,10 @@ const MENSAGENS_SUCESSO = Object.freeze({
         PESQUISADO: "Usuário pesquisado com sucesso.",
         BUSCADO: "Usuário buscado com sucesso.",
         DELETADO: "Usuário deletado com sucesso."
+    }, 
+
+    ESTATISTICAS: {
+        CARREGADAS_COM_SUCESSO: "Indicadores econômicos carregados com sucesso."
     }
 });
 

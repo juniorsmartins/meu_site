@@ -1,14 +1,10 @@
 import { usuarioRepository } from '../../repositories/usuarios/usuarioRepository.js';
 import { LIMITE_USUARIOS_POR_PAGINA } from '../../configs/constantsConfig.js';
-import { AppError } from '../../errors/AppError.js';
-import { MENSAGENS_ERRO } from '../../configs/mensagensConfig.js';
+import { regraAutorizarApenasAdmin } from '../../helpers/usuarioUtils.js';
 
 const usuarioPesquisarService = async (queryParams = {}, usuarioAutenticado = {}) => {
     
-    // Somente administradores podem usar a rota de pesquisa de usuários
-    if (usuarioAutenticado?.funcao !== 'admin') {
-        throw new AppError(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_ADMIN_OBRIGATÓRIO, 403);
-    }
+    regraAutorizarApenasAdmin(usuarioAutenticado);
 
     const { nome, email, funcao, pagina = 1, limite = LIMITE_USUARIOS_POR_PAGINA } = queryParams;
     const filtro = {};

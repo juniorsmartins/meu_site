@@ -1,7 +1,5 @@
 import mongoose from "mongoose";
 
-console.log("Arquivo contatoLeitorSchema.js carregado.");
-
 const contatoLeitorSchema = new mongoose.Schema(
     {
         nome: {

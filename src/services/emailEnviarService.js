@@ -1,8 +1,6 @@
 import nodemailer from "nodemailer";
 import { SITE_CONFIG } from "../configs/constantsConfig.js";
 
-console.log("Arquivo emailEnviarService.js carregado.");
-
 const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST || "smtp.gmail.com",
     port: Number(process.env.EMAIL_PORT) || 465,
