@@ -35,10 +35,10 @@ const regraAutorizarAdminOuDonoDoPerfil = (idUsuarioAlvo, usuarioAutenticado) =>
     }
 };
 
-const regraAutorizarAdmin = (usuarioAutenticado) => {
+const regraAutorizarApenasAdmin = (usuarioAutenticado) => {
     const ehAdmin = usuarioAutenticadoEhAdmin(usuarioAutenticado);
     if (!ehAdmin) {
-        throw new AppError(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO, 403);
+        throw new AppError(MENSAGENS_ERRO.AUTENTICAÇÃO.ACESSO_BLOQUEADO_ADMIN_OBRIGATÓRIO, 403);
     }
 };
 
@@ -48,6 +48,6 @@ export {
     verificarDuplicidadeDeEmail,
     regraAutorizarAdminOuDonoDoPerfil,
     usuarioEhODonoPerfil,
-    regraAutorizarAdmin
+    regraAutorizarApenasAdmin
 };
 

@@ -1,6 +1,6 @@
 import { IndicadorAnualModel } from '../../models/indicadorSchema.js';
 import { httpClient } from './chamadaExternaHttp.js';
-import { regraAutorizarAdmin } from '../../helpers/usuarioUtils.js';
+import { regraAutorizarApenasAdmin } from '../../helpers/usuarioUtils.js';
 
 const SERIE_BCB_SELIC = 432;
 const SERIE_BCB_IPCA = 433;
@@ -14,7 +14,7 @@ function formatarDataBCB(data) {
 
 const estatisticasSyncService = async (usuarioAutenticado) => {
 
-    regraAutorizarAdmin(usuarioAutenticado);
+    regraAutorizarApenasAdmin(usuarioAutenticado);
 
     try {
         console.log("[SYNC ESTATÍSTICAS] Iniciando sincronização com APIs oficiais (IBGE e BCB)...");
