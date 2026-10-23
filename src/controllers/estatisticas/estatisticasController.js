@@ -28,7 +28,7 @@ const estatisticasStatusController = async (request, response, next) => {
             sucesso: true,
             dados: indicadores
         });
-        
+
     } catch (error) {
         next(error);
     }
@@ -46,7 +46,7 @@ const estatisticasSincronizarController = async (request, response, next) => {
         });
 
     } catch (error) {
-        next(new AppError("Erro ao sincronizar estatísticas com fontes externas.", 500));
+        next(error);
     }
 };
 
