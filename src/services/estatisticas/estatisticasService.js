@@ -1,6 +1,6 @@
 import { AppError } from '../../errors/AppError.js';
 import { MENSAGENS_ERRO } from '../../configs/mensagensConfig.js';
-import { httpClient } from './requisicaoEstatistica.js'; // Importa o cliente genérico
+import { httpClient } from './chamadaExternaHttp.js'; // Importa o cliente genérico
 
 const SERIE_BCB_SELIC = 432;
 const SERIE_BCB_IPCA = 433;
@@ -27,8 +27,8 @@ const estatisticasService = async () => {
         const urlSelic = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_SELIC}/dados?formato=json&dataInicial=${dataInicioStr}&dataFinal=${dataFimStr}`;
         const urlIpca = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_IPCA}/dados?formato=json&dataInicial=${dataInicioStr}&dataFinal=${dataFimStr}`;
         
-        // PIB (Contas Nacionais Trimestrais - Tabela 1846 / Variação acumulada em quatro trimestres)
-        const urlPibIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/1846/periodos/201601-202404/variaveis/585?localidades=N1%5Ball%5D`;
+        // PIB (porcentagem anual)
+        const urlPibIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/6784/periodos/-30/variaveis/9810?localidades=N1[all]`;
 
         // Desemprego (PNAD Contínua - Tabela 4099 que já comprovou funcionamento)
         const urlDesempregoIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/4099/periodos/-36/variaveis/4099?localidades=N1%5Ball%5D`;
