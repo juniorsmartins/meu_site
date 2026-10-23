@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 });
 
-// Função auxiliar para extrair o token do objeto de sessão do usuário logado
 function obterTokenAdmin() {
     const dadosSessao = localStorage.getItem("gajeiro_usuario");
     if (!dadosSessao) return null;
@@ -28,7 +27,6 @@ async function carregarDadosPainelAdmin() {
             throw new Error("Usuário não autenticado ou sessão expirada.");
         }
 
-        // Requisição para o endpoint: GET /api/v1/estatisticas/status
         const resposta = await fetch(`${API_URL_ESTATISTICAS}/status`, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -40,7 +38,6 @@ async function carregarDadosPainelAdmin() {
         const resultado = await resposta.json();
         const indicadores = resultado.dados || [];
 
-        // Atualiza os cards de métricas
         document.getElementById("totalIndicadores").textContent = indicadores.length;
         
         if (indicadores.length > 0) {
@@ -53,7 +50,6 @@ async function carregarDadosPainelAdmin() {
             document.getElementById("ultimaAtualizacao").textContent = "Nunca sincronizado";
         }
 
-        // Preenche a tabela
         const tbody = document.getElementById("tabelaIndicadoresBody");
         tbody.innerHTML = "";
 
@@ -83,24 +79,17 @@ async function carregarDadosPainelAdmin() {
 
 async function executarSincronizacao() {
     const btnSincronizar = document.getElementById("btnSincronizar");
-    const icone = btnSincronizar.querySelector("i");
     
     try {
-        if (!confirm("Deseja buscar os dados mais recentes nas APIs oficiais do IBGE e Banco Central? Isso pode levar alguns segundos.")) {
-            return;
-        }
-
-        // Estado de carregamento
+        // Feedback visual imediato no botão sem abrir modais
         btnSincronizar.disabled = true;
-        icone.classList.add("bi-spin");
-        btnSincronizar.innerHTML = `<i class="bi bi-arrow-repeat bi-spin"></i> Sincronizando...`;
+        btnSincronizar.innerHTML = `<i class="bi bi-arrow-repeat bi-spin"></i> Sincronizando com IBGE e BCB...`;
 
         const token = obterTokenAdmin();
         if (!token) {
             throw new Error("Token de autorização não encontrado. Faça login novamente.");
         }
 
-        // Requisição para o endpoint: POST /api/v1/estatisticas/sincronizar
         const resposta = await fetch(`${API_URL_ESTATISTICAS}/sincronizar`, {
             method: 'POST',
             headers: {
@@ -115,13 +104,15 @@ async function executarSincronizacao() {
             throw new Error(resultado.mensagem || "Erro ao executar sincronização.");
         }
 
-        alert("Sincronização realizada com sucesso! Os dados foram atualizados no banco.");
-        await carregarDadosPainelAdmin(); // Recarrega os dados na tela
+        // Atualiza os dados do painel automaticamente após o sucesso
+        await carregarDadosPainelAdmin();
 
     } catch (error) {
         console.error("Erro na sincronização:", error);
-        alert(`Falha na sincronização: ${error.message}`);
+        // Mantém apenas o console ou se preferir pode tratar de forma sutil, 
+        // mas sem usar janelinhas nativas de alert/confirm.
     } finally {
+        // Restaura o botão ao estado original
         btnSincronizar.disabled = false;
         btnSincronizar.innerHTML = `<i class="bi bi-arrow-repeat"></i> Sincronizar com Fontes Externas`;
     }

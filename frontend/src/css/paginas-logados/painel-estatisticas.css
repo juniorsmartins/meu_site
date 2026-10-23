@@ -54,6 +54,17 @@
     cursor: not-allowed;
 }
 
+/* Animação de rotação para o ícone de carregamento */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.bi-spin {
+    display: inline-block;
+    animation: spin 1s linear infinite;
+}
+
 /* Grid de Status / Cards Superiores */
 .admin-metrics-grid {
     display: grid;
