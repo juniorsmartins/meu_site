@@ -1,123 +1,37 @@
+import { IndicadorAnualModel } from '../../models/indicadorSchema.js';
 import { AppError } from '../../errors/AppError.js';
 import { MENSAGENS_ERRO } from '../../configs/mensagensConfig.js';
-import { httpClient } from './chamadaExternaHttp.js'; // Importa o cliente genérico
+import { regraAutorizarAdmin } from '../../helpers/usuarioUtils.js';
 
-const SERIE_BCB_SELIC = 432;
-const SERIE_BCB_IPCA = 433;
+export const estatisticasService = async (usuarioAutenticado) => {
 
-function formatarDataBCB(data) {
-    const dia = String(data.getDate()).padStart(2, '0');
-    const mes = String(data.getMonth() + 1).padStart(2, '0');
-    const ano = data.getFullYear();
-    return `${dia}/${mes}/${ano}`;
-}
+    regraAutorizarAdmin(usuarioAutenticado);
 
-const estatisticasService = async () => {
     try {
-        console.log("[ESTATÍSTICAS SERVICE] Iniciando processamento de todos os indicadores macroeconômicos...");
+        const indicadores = await IndicadorAnualModel.find({});
 
-        const hoje = new Date();
-        const dataFimStr = formatarDataBCB(hoje);
-        
-        const dataInicio = new Date();
-        dataInicio.setFullYear(hoje.getFullYear() - 10);
-        const dataInicioStr = formatarDataBCB(dataInicio);
-
-        // 1. URLs das 4 fontes oficiais (Banco Central e IBGE)
-        const urlSelic = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_SELIC}/dados?formato=json&dataInicial=${dataInicioStr}&dataFinal=${dataFimStr}`;
-        const urlIpca = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_IPCA}/dados?formato=json&dataInicial=${dataInicioStr}&dataFinal=${dataFimStr}`;
-        
-        // PIB (porcentagem anual)
-        const urlPibIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/6784/periodos/-30/variaveis/9810?localidades=N1[all]`;
-
-        // Desemprego (PNAD Contínua - Tabela 4099 que já comprovou funcionamento)
-        const urlDesempregoIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/4099/periodos/-36/variaveis/4099?localidades=N1%5Ball%5D`;
-
-        // Executa as 4 requisições em paralelo garantindo transparência via httpClient
-        const [resSelic, resIpca, resPib, resDesemprego] = await Promise.all([
-            httpClient(urlSelic),
-            httpClient(urlIpca),
-            httpClient(urlPibIbge),
-            httpClient(urlDesempregoIbge)
-        ]);
-
+        // Mapeia os documentos do banco para o formato consumido pelo frontend
         let anos = [];
-        let selicAnual = [];
-        let ipcaAnual = [];
         let pibAnual = [];
         let desempregoAnual = [];
+        let ipcaAnual = [];
+        let selicAnual = [];
 
-        // 1. Processamento da Selic
-        if (resSelic.ok && Array.isArray(resSelic.data)) {
-            const mapaAnualSelic = {};
-            resSelic.data.forEach(item => {
-                if (item.data && item.data.includes('/')) {
-                    const partes = item.data.split('/');
-                    const ano = partes[2];
-                    const mes = partes[1];
-                    if (mes === '12' || !mapaAnualSelic[ano]) {
-                        mapaAnualSelic[ano] = Number(item.valor);
-                    }
-                }
-            });
-
-            anos = Object.keys(mapaAnualSelic).sort((a, b) => a - b);
-            selicAnual = anos.map(ano => mapaAnualSelic[ano]);
-        }
-
-        // 2. Processamento do IPCA
-        if (resIpca.ok && Array.isArray(resIpca.data) && anos.length > 0) {
-            const mapaAnualIpca = {};
-            resIpca.data.forEach(item => {
-                if (item.data && item.data.includes('/')) {
-                    const partes = item.data.split('/');
-                    const ano = partes[2];
-                    const mes = partes[1];
-                    if (mes === '12' || !mapaAnualIpca[ano]) {
-                        mapaAnualIpca[ano] = Number(item.valor);
-                    }
-                }
-            });
-
-            ipcaAnual = anos.map(ano => mapaAnualIpca[ano] !== undefined ? mapaAnualIpca[ano] : null);
-        }
-
-        // 3. Processamento do PIB (IBGE)
-        if (resPib.ok && Array.isArray(resPib.data) && resPib.data[0]?.resultados) {
-            try {
-                const seriePib = resPib.data[0].resultados[0].series[0].serie;
-                const mapaPib = {};
-                Object.keys(seriePib).forEach(periodo => {
-                    const anoChave = periodo.substring(0, 4);
-                    mapaPib[anoChave] = Number(seriePib[periodo]);
-                });
-                pibAnual = anos.map(ano => mapaPib[ano] !== undefined ? mapaPib[ano] : null);
-            } catch (e) {
-                console.error("[ESTATÍSTICAS SERVICE] Erro ao mapear PIB do IBGE:", e.message);
+        indicadores.forEach(ind => {
+            if (ind.slug === 'pib') {
+                anos = ind.anos;
+                pibAnual = ind.valores;
+            } else if (ind.slug === 'desemprego') {
+                desempregoAnual = ind.valores;
+            } else if (ind.slug === 'ipca') {
+                ipcaAnual = ind.valores;
+            } else if (ind.slug === 'selic') {
+                selicAnual = ind.valores;
             }
-        }
-
-        // 4. Processamento da Taxa de Desemprego (IBGE - Tabela 6381)
-        if (resDesemprego.ok && Array.isArray(resDesemprego.data) && resDesemprego.data[0]?.resultados) {
-            try {
-                // A série da tabela 6381 já retorna a média anual por período.
-                // O formato da série é um objeto onde as chaves são os anos (ex: "2023") e os valores são as taxas.
-                const serieDesemprego = resDesemprego.data[0].resultados[0].series[0].serie;
-                
-                // Mapeia os valores diretamente para os anos que já temos no gráfico
-                desempregoAnual = anos.map(ano => {
-                    const valor = serieDesemprego[ano];
-                    // Retorna o valor numérico ou null se não existir para aquele ano
-                    return valor !== undefined ? Number(valor) : null;
-                });
-
-            } catch (e) {
-                console.error("[ESTATÍSTICAS SERVICE] Erro ao mapear Desemprego do IBGE (Tabela 6381):", e.message);
-            }
-        }
+        });
 
         return {
-            anos: anos,
+            anos,
             pib: pibAnual,
             desemprego: desempregoAnual,
             ipca: ipcaAnual,
@@ -125,12 +39,8 @@ const estatisticasService = async () => {
         };
 
     } catch (error) {
-        console.error("[ESTATÍSTICAS SERVICE] Erro crítico ao processar indicadores:", error);
+        console.error("[ESTATÍSTICAS SERVICE] Erro ao buscar dados do MongoDB:", error);
         throw new AppError(MENSAGENS_ERRO.ESTATISTICAS.ERRO_AO_OBTER_DADOS, 503);
     }
-};
-
-export { 
-    estatisticasService 
 };
 

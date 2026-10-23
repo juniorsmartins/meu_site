@@ -19,7 +19,7 @@ import { noticiaDeletarPorIdController } from './controllers/noticiaDeleteContro
 import { noticiaCapaController } from './controllers/noticiaCapaController.js';
 import { validarSchema } from './middlewares/validarSchemaMiddleware.js';
 import { usuarioCriarSchema, usuarioAtualizarSchema } from './validators/usuarioValidator.js';
-import { estatisticasController } from './controllers/estatisticas/estatisticasController.js';
+import { estatisticasController, estatisticasStatusController, estatisticasSincronizarController } from './controllers/estatisticas/estatisticasController.js';
 
 const authRouter = express.Router();
 const usuarioRouter = express.Router();
@@ -57,6 +57,8 @@ noticiaRouter.delete("/:id", noticiaDeletarPorIdController);
 
 // ESTATÍSTICAS - Rotas de estatísticas do sistema
 estatisticasRouter.get("/", estatisticasController);
+estatisticasRouter.get("/status", autenticarToken, estatisticasStatusController);
+estatisticasRouter.post("/sincronizar", autenticarToken, estatisticasSincronizarController);
 
 export { 
     authRouter,
