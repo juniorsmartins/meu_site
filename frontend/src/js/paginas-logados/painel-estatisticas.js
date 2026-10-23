@@ -1,4 +1,4 @@
-import { API_URL_BASE } from '../../constantsConfig.js'; 
+import { API_URL_BASE } from '../constantsConfig.js'; 
 
 document.addEventListener("DOMContentLoaded", async () => {
     await carregarDadosPainelAdmin();
