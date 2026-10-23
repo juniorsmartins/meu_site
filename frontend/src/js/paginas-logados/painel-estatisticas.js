@@ -9,10 +9,26 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 });
 
+// Função auxiliar para extrair o token do objeto de sessão do usuário logado
+function obterTokenAdmin() {
+    const dadosSessao = localStorage.getItem("gajeiro_usuario");
+    if (!dadosSessao) return null;
+    try {
+        const usuario = JSON.parse(dadosSessao);
+        return usuario.token || null;
+    } catch (e) {
+        return null;
+    }
+}
+
 async function carregarDadosPainelAdmin() {
     try {
-        // Endpoint que criaremos no backend para listar o status dos indicadores salvos
-        const token = localStorage.getItem("token"); // Token JWT do Admin logado
+        const token = obterTokenAdmin();
+        if (!token) {
+            throw new Error("Usuário não autenticado ou sessão expirada.");
+        }
+
+        // Requisição para o endpoint: GET /api/v1/estatisticas/status
         const resposta = await fetch(`${API_URL_ESTATISTICAS}/status`, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -28,7 +44,6 @@ async function carregarDadosPainelAdmin() {
         document.getElementById("totalIndicadores").textContent = indicadores.length;
         
         if (indicadores.length > 0) {
-            // Pega a data mais recente entre os indicadores atualizados
             const ultimaData = indicadores.reduce((maisRecente, atual) => {
                 return new Date(atual.ultimaAtualizacao) > new Date(maisRecente) ? atual.ultimaAtualizacao : maisRecente;
             }, indicadores[0].ultimaAtualizacao);
@@ -77,10 +92,15 @@ async function executarSincronizacao() {
 
         // Estado de carregamento
         btnSincronizar.disabled = true;
-        icone.classList.add("bi-spin"); // Roda o ícone (se houver animação ou loader)
+        icone.classList.add("bi-spin");
         btnSincronizar.innerHTML = `<i class="bi bi-arrow-repeat bi-spin"></i> Sincronizando...`;
 
-        const token = localStorage.getItem("token");
+        const token = obterTokenAdmin();
+        if (!token) {
+            throw new Error("Token de autorização não encontrado. Faça login novamente.");
+        }
+
+        // Requisição para o endpoint: POST /api/v1/estatisticas/sincronizar
         const resposta = await fetch(`${API_URL_ESTATISTICAS}/sincronizar`, {
             method: 'POST',
             headers: {
