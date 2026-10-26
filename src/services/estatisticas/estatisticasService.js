@@ -7,32 +7,28 @@ export const estatisticasService = async () => {
     try {
         const indicadores = await IndicadorAnualModel.find({});
 
-        // Mapeia os documentos do banco para o formato consumido pelo frontend
-        let anos = [];
-        let pibAnual = [];
-        let desempregoAnual = [];
-        let ipcaAnual = [];
-        let selicAnual = [];
+        let pibData = { anos: [], valores: [] };
+        let desempregoData = { anos: [], valores: [] };
+        let ipcaData = { anos: [], valores: [] };
+        let selicData = { anos: [], valores: [] };
 
         indicadores.forEach(ind => {
             if (ind.slug === 'pib') {
-                anos = ind.anos;
-                pibAnual = ind.valores;
+                pibData = { anos: ind.anos || [], valores: ind.valores || [] };
             } else if (ind.slug === 'desemprego') {
-                desempregoAnual = ind.valores;
+                desempregoData = { anos: ind.anos || [], valores: ind.valores || [] };
             } else if (ind.slug === 'ipca') {
-                ipcaAnual = ind.valores;
+                ipcaData = { anos: ind.anos || [], valores: ind.valores || [] };
             } else if (ind.slug === 'selic') {
-                selicAnual = ind.valores;
+                selicData = { anos: ind.anos || [], valores: ind.valores || [] };
             }
         });
 
         return {
-            anos,
-            pib: pibAnual,
-            desemprego: desempregoAnual,
-            ipca: ipcaAnual,
-            selic: selicAnual
+            pib: pibData,
+            desemprego: desempregoData,
+            ipca: ipcaData,
+            selic: selicData
         };
 
     } catch (error) {
