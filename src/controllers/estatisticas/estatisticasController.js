@@ -2,7 +2,6 @@ import { estatisticasService } from '../../services/estatisticas/estatisticasSer
 import { estatisticasSyncService } from '../../services/estatisticas/estatisticasSyncService.js';
 import { IndicadorAnualModel } from '../../models/indicadorSchema.js';
 import { MENSAGENS_SUCESSO } from '../../configs/mensagensConfig.js';
-import { AppError } from '../../errors/AppError.js';
 
 const estatisticasController = async (request, response, next) => {
     try {
