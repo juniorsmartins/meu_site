@@ -1,7 +1,5 @@
 import mongoose from 'mongoose';
 
-console.log("Arquivo newsletterSchema.js carregado.");
-
 const newsletterSchema = new mongoose.Schema({
     email: {
         type: String,

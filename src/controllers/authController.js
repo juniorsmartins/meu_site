@@ -1,7 +1,5 @@
 import { loginService } from '../services/authService.js';
 
-console.log("Arquivo authController.js carregado.");
-
 // Controlador responsável por lidar com as requisições de login do sistema
 const loginController = async (request, response) => {
 

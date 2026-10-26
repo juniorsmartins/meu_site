@@ -19,12 +19,14 @@ import { noticiaDeletarPorIdController } from './controllers/noticiaDeleteContro
 import { noticiaCapaController } from './controllers/noticiaCapaController.js';
 import { validarSchema } from './middlewares/validarSchemaMiddleware.js';
 import { usuarioCriarSchema, usuarioAtualizarSchema } from './validators/usuarioValidator.js';
+import { estatisticasController, estatisticasStatusController, estatisticasSincronizarController } from './controllers/estatisticas/estatisticasController.js';
 
 const authRouter = express.Router();
 const usuarioRouter = express.Router();
 const adminRouter = express.Router();
 const comunicacaoRouter = express.Router();
 const noticiaRouter = express.Router();
+const estatisticasRouter = express.Router();
 
 // AUTH - Rotas de autenticação do sistema
 authRouter.post("/login", loginController);
@@ -53,12 +55,18 @@ noticiaRouter.get("/:id", noticiaConsultarPorIdController);
 noticiaRouter.put("/:id", noticiaAtualizarController);
 noticiaRouter.delete("/:id", noticiaDeletarPorIdController);
 
+// ESTATÍSTICAS - Rotas de estatísticas do sistema
+estatisticasRouter.get("/", estatisticasController);
+estatisticasRouter.get("/status", autenticarToken, estatisticasStatusController);
+estatisticasRouter.post("/sincronizar", autenticarToken, estatisticasSincronizarController);
+
 export { 
     authRouter,
     usuarioRouter,
     adminRouter,
     comunicacaoRouter,
-    noticiaRouter
+    noticiaRouter,
+    estatisticasRouter
 };
 
 

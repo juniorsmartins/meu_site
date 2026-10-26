@@ -1,8 +1,6 @@
 import { noticiaDeletarPorIdService } from '../services/noticiaDeleteService.js';
 import { isValidObjectId } from 'mongoose';
 
-console.log("Arquivo noticiaDeleteController.js carregado.");
-
 const noticiaDeletarPorIdController = async (request, response) => {
 
     const { id } = request.params;

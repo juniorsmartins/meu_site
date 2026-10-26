@@ -1,8 +1,6 @@
 import { contatoLeitorCriarService } from "../services/contatoLeitorCriarService.js";
 import { EmailEnviarService } from "../services/emailEnviarService.js";
 
-console.log("Arquivo contatoLeitorCriarController.js carregado.");
-
 const contatoLeitorCriarController = async (request, response) => {
     try {
         const { nome, email, assunto, mensagem } = request.body;

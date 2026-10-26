@@ -1,7 +1,5 @@
 import { noticiaCapaService } from '../services/noticiaCapaService.js';
 
-console.log("Arquivo noticiaCapaController.js carregado.");
-
 const noticiaCapaController = async (request, response) => {
     try {
 

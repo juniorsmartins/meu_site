@@ -7,7 +7,8 @@ import {
     usuarioRouter,
     adminRouter,
     comunicacaoRouter,
-    noticiaRouter
+    noticiaRouter,
+    estatisticasRouter
 } from './router.js';
 
 const app = express(); /* Cria uma instância do aplicativo Express */
@@ -33,6 +34,7 @@ app.use("/v1/usuarios", usuarioRouter);
 app.use("/v1/admin", adminRouter);
 app.use("/v1/comunicacao", comunicacaoRouter);
 app.use("/v1/noticias", noticiaRouter);
+app.use("/v1/estatisticas", estatisticasRouter);
 
 // REGISTRO OBRIGATÓRIO: Tratamento Global de Exceções
 // Middleware global de tratamento de erros. Deve ser registrado após todas as rotas e outros middlewares.

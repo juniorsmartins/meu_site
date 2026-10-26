@@ -1,8 +1,6 @@
 import { noticiaAtualizarPorIdService } from '../services/noticiaAtualizarService.js';
 import { isValidObjectId } from 'mongoose';
 
-console.log("Arquivo noticiaAtualizarController.js carregado.");
-
 const noticiaAtualizarController = async (request, response) => {
 
     const { id } = request.params;

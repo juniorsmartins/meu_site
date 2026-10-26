@@ -1,8 +1,6 @@
 import { Usuario } from '../models/usuarioSchema.js';
 import jwt from 'jsonwebtoken';
 
-console.log("Arquivo authService.js carregado.");
-
 const loginService = async (email, senha) => {
 
     // 1. Validação simples de preenchimento na regra de negócio

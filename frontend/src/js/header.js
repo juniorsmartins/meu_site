@@ -363,6 +363,9 @@ function gerarItensMenuPorFuncao(funcao = 'leitor') {
             <a href="/html/paginas-logados/painel-noticias.html" class="item-dropdown-usuario">
                 <i class="bi bi-sliders"></i> Painel de Notícias
             </a>
+            <a href="/html/paginas-logados/painel-estatisticas.html" class="item-dropdown-usuario">
+                <i class="bi bi-graph-up"></i> Painel de Estatísticas
+            </a>
             <a href="/html/paginas-logados/painel-contatos.html" class="item-dropdown-usuario">
                 <i class="bi bi-envelope-paper-fill"></i> Painel de Contatos
             </a>

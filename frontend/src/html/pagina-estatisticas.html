@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gajeiro - Estatísticas Econômicas e Sociais do Brasil</title>
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/pagina-estatisticas.css">
+    <link rel="stylesheet" href="../css/footer.css">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" href="../img/favicon.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <!-- Chart.js CDN para Gráficos Interativos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <!-- Scripts do Cabeçalho/Rodapé e Estatísticas -->
+    <script type="module" src="../js/header.js"></script>
+    <script type="module" src="../js/pagina-estatisticas.js"></script>
+    <script type="module" src="../js/footer.js"></script> 
+
+    <!-- Cabeçalho Reutilizado -->
+    <div id="header-container"></div>
+
+    <!-- Conteúdo Principal de Estatísticas -->
+    <main id="container-estatisticas-publico">
+
+        <div class="estatisticas-wrapper">
+            
+            <!-- Título da Seção -->
+            <div class="estatisticas-header-titulo">
+                <h2>Indicadores Macroeconômicos do Brasil</h2>
+                <p>Acompanhe a evolução histórica anual oficial baseada em dados de referência do IBGE e do Banco Central do Brasil.</p>
+            </div>
+
+            <!-- Grid de Gráficos (Séries Históricas Anuais) -->
+            <div class="grid-graficos">
+
+                <!-- Gráfico 1: PIB Anual -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>Crescimento do PIB (%)</h3>
+                        <p>Evolução percentual anual do Produto Interno Bruto (IBGE).</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoPib"></canvas>
+                    </div>
+                </div>
+
+                <!-- Gráfico 2: Taxa de Desemprego -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>Taxa Média de Desemprego (%)</h3>
+                        <p>Média anual de desocupação da força de trabalho (IBGE).</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoDesemprego"></canvas>
+                    </div>
+                </div>
+
+                <!-- Gráfico 3: Inflação Anual (IPCA) -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>Inflação Oficial - IPCA (%)</h3>
+                        <p>Variação acumulada anual do Índice de Preços ao Consumidor Amplo (Banco Central do Brasil - BCB).</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoIpca"></canvas>
+                    </div>
+                </div>
+
+                <!-- Gráfico 4: Taxa Selic Acumulada -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>Taxa Básica de Juros - Selic (%)</h3>
+                        <p>Meta da taxa Selic ao final de cada período anual (Banco Central do Brasil - BCB).</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoSelic"></canvas>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Rodapé Reutilizado -->
+    <div id="footer-container"></div>
+
+</body>
+
+</html>
