@@ -31,7 +31,7 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
         const tarefasSincronizacao = [
             // sincronizarPib(agora),
             // sincronizarDesemprego(agora),
-            sincronizarSelic(dataInicioStr, dataFimStr, agora)
+            sincronizarSelic(agora)
             // ,
             // sincronizarIpca(dataInicioStr, dataFimStr, agora)
             // Futuros adaptadores (ex: sincronizarCambio(agora), sincronizarDivida(agora), etc.) entram aqui automaticamente!

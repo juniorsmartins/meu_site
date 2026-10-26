@@ -1,55 +1,67 @@
 import { httpClient } from '../chamadaHttpClient.js';
 import { IndicadorAnualModel } from '../../../models/indicadorSchema.js';
 
-// Código 4390 = Taxa Selic mensal do Banco Central
-const SERIE_BCB_SELIC_MENSAL = 4390;
+// Código 432 = Taxa de juros - Meta Selic definida pelo Copom
+const SERIE_BCB_META_SELIC = 432;
 
-async function sincronizarSelic(dataInicioStr, dataFimStr, agora) {
-
+async function sincronizarSelic(agora) {
     try {
+        // Define o intervalo de 20 anos concluídos (do ano anterior para trás)
+        const anoAtual = new Date().getFullYear();
+        const anoFimBloco1 = anoAtual - 1;       // Ex: 2025
+        const anoInicioBloco1 = anoFimBloco1 - 9; // Ex: 2016 (Bloco 1: 10 anos)
 
-        const url = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_SELIC_MENSAL}/dados?formato=json&dataInicial=${dataInicioStr}&dataFinal=${dataFimStr}`;
-        const resposta = await httpClient(url);
+        const anoFimBloco2 = anoInicioBloco1 - 1; // Ex: 2015
+        const anoInicioBloco2 = anoFimBloco2 - 9; // Ex: 2006 (Bloco 2: 10 anos)
 
-        if (!resposta.ok || !Array.isArray(resposta.data)) {
-            console.warn("[SELIC ADAPTER] Falha ao obter dados mensais da Selic.");
+        const urlBloco1 = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_META_SELIC}/dados?formato=json&dataInicial=01/01/${anoInicioBloco1}&dataFinal=31/12/${anoFimBloco1}`;
+        const urlBloco2 = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_META_SELIC}/dados?formato=json&dataInicial=01/01/${anoInicioBloco2}&dataFinal=31/12/${anoFimBloco2}`;
+
+        console.log(`[SELIC ADAPTER] Busca Meta Selic histórica de 20 anos (${anoInicioBloco2} a ${anoFimBloco1})...`);
+
+        // Executa as duas requisições de 10 anos em paralelo para respeitar o limite da API do BCB
+        const [respostaBloco1, respostaBloco2] = await Promise.all([
+            httpClient(urlBloco2), // Mais antigo (2006 - 2015)
+            httpClient(urlBloco1)  // Mais recente (2016 - 2025)
+        ]);
+
+        const dadosCompletos = [
+            ...(Array.isArray(respostaBloco2.data) ? respostaBloco2.data : []),
+            ...(Array.isArray(respostaBloco1.data) ? respostaBloco1.data : [])
+        ];
+
+        if (dadosCompletos.length === 0) {
+            console.warn("[SELIC ADAPTER] Falha ao obter dados da Meta Selic.");
             return { sucesso: false, slug: 'selic' };
         }
 
-        const acumuladorAnual = {};
+        const mapaAnual = {};
 
-        // Itera sobre os dados mensais para acumular os valores e contar os meses por ano
-        resposta.data.forEach(item => {
+        // Varre todos os dados diários consolidados e captura a última meta de cada ano
+        dadosCompletos.forEach(item => {
             if (item.data && item.data.includes('/')) {
                 const partes = item.data.split('/');
                 const ano = partes[2];
+                const mes = partes[1];
                 const valorNumerico = Number(item.valor);
                 
-                if (!isNaN(valorNumerico)) {
-                    if (!acumuladorAnual[ano]) {
-                        acumuladorAnual[ano] = { soma: 0, count: 0 };
+                if (!isNaN(valorNumerico)) { // Apenas considera valores numéricos válidos
+                    if (mes === '12' || !mapaAnual[ano]) {
+                        mapaAnual[ano] = valorNumerico;
                     }
-                    acumuladorAnual[ano].soma += valorNumerico;
-                    acumuladorAnual[ano].count += 1;
                 }
             }
         });
 
-        const anos = Object.keys(acumuladorAnual).sort((a, b) => Number(a) - Number(b));
-        
-        // Calcula a média aritmética dos meses para cada ano (ou ajuste se preferir o último mês)
-        const valores = anos.map(ano => {
-            const { soma, count } = acumuladorAnual[ano];
-            const media = soma / count;
-            return Number(media.toFixed(2)); // Arredonda para 2 casas decimais
-        });
+        const anos = Object.keys(mapaAnual).sort((a, b) => Number(a) - Number(b));
+        const valores = anos.map(ano => mapaAnual[ano]);
 
         if (anos.length > 0) {
             await IndicadorAnualModel.findOneAndUpdate(
                 { slug: 'selic' },
                 { 
-                    titulo: 'Taxa Média da Selic (% ao mês / média anual)', 
-                    fonte: 'Banco Central (Série 4390)', 
+                    titulo: 'Taxa Básica de Juros - Selic (% a.a.)', 
+                    fonte: 'Banco Central (Meta Selic - Copom)', 
                     unidade: '%', 
                     anos, 
                     valores, 
@@ -57,7 +69,7 @@ async function sincronizarSelic(dataInicioStr, dataFimStr, agora) {
                 },
                 { upsert: true, returnDocument: 'after' }
             );
-            console.log("[SELIC ADAPTER] Selic anual calculada via média mensal com sucesso!");
+            console.log("[SELIC ADAPTER] Meta Selic de 20 anos sincronizada com sucesso!");
             return { sucesso: true, slug: 'selic' };
         }
 
