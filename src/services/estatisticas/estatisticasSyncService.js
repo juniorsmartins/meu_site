@@ -1,6 +1,6 @@
 import { regraAutorizarApenasAdmin } from '../../helpers/usuarioUtils.js';
 import { AppError } from '../../errors/AppError.js';
-import { MENSAGENS_ERRO } from '../../configs/mensagensConfig.js';
+import { MENSAGENS_ERRO, MENSAGENS_SUCESSO } from '../../configs/mensagensConfig.js';
 import { sincronizarPib } from './adapters/pibAdapter.js';
 import { sincronizarDesemprego } from './adapters/desempregoAdapter.js';
 import { sincronizarSelic } from './adapters/selicAdapter.js';
@@ -29,10 +29,11 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
 
         // Agrupa todas as chamadas dos adaptadores de forma limpa e escalável
         const tarefasSincronizacao = [
-            sincronizarPib(agora),
-            sincronizarDesemprego(agora),
-            sincronizarSelic(dataInicioStr, dataFimStr, agora),
-            sincronizarIpca(dataInicioStr, dataFimStr, agora)
+            // sincronizarPib(agora),
+            // sincronizarDesemprego(agora),
+            sincronizarSelic(dataInicioStr, dataFimStr, agora)
+            // ,
+            // sincronizarIpca(dataInicioStr, dataFimStr, agora)
             // Futuros adaptadores (ex: sincronizarCambio(agora), sincronizarDivida(agora), etc.) entram aqui automaticamente!
         ];
 
@@ -46,7 +47,10 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
             }
         });
 
-        return { sucesso: true, mensagem: "Estatísticas sincronizadas com sucesso!" };
+        return { 
+            sucesso: true, 
+            mensagem: MENSAGENS_SUCESSO.ESTATISTICAS.CARREGADAS_COM_SUCESSO 
+        };
 
     } catch (error) {
         console.error("[SYNC ESTATÍSTICAS] Erro crítico na sincronização:", error);
