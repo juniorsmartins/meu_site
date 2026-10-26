@@ -28,15 +28,10 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
         dataInicio.setFullYear(dataHoje.getFullYear() - 10);
         const dataInicioStr = formatarDataBCB(dataInicio);
 
-        // const urlPibIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/6784/periodos/-30/variaveis/9810?localidades=N1[all]`;
-        // const urlDesempregoIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/4099/periodos/-30/variaveis/4099?localidades=N1%5Ball%5D`;
-        // const urlPibIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/6784/periodos/-30/variaveis/9810?localidades=N1%5Ball%5D`;
-
+        // IBGE Sidra - Indicadores Econômicos
         // T = tabela; V = variável; P = período de tempo; C = classificação; G = visão territorial ou N = nível territorial (n1 = Brasil); H = header; F = formato; A = agregação; D = detalhe; M = moeda
-        // const urlPibIbge = `https://apisidra.ibge.gov.br/values/t/6784/n1/all/v/9810/p/all/h/y/f/a/d/m`;
-        // O desemprego já estava correto, mas garanta que esteja assim:
-        // const urlDesempregoIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/4099/periodos/-30/variaveis/4099?localidades=N1%5Ball%5D`;
-        const urlDesempregoIbge = 'https://servicodados.ibge.gov.br/api/v3/agregados/4562/periodos/all/variaveis/4099?localidades=N1[all]';
+        const urlPibIbge = `https://apisidra.ibge.gov.br/values/t/6784/n1/all/v/9810/p/all/h/y/f/a/d/m`;
+        const urlDesempregoIbge = 'https://apisidra.ibge.gov.br/values/t/4562/n1/all/v/4099/p/all/h/y/f/a/d/m';
 
         // const urlSelicBc = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_SELIC}/dados?formato=json&dataInicial=${dataInicioStr}&dataFinal=${dataFimStr}`;
         // const urlIpcaBc = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_IPCA}/dados?formato=json&dataInicial=${dataInicioStr}&dataFinal=${dataFimStr}`;
@@ -49,18 +44,80 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
         //     httpClient(urlIpcaBc)
         // ]);
 
-        const [ resDesemprego ] = await Promise.all([
+        const [ resPib, resDesemprego ] = await Promise.all([
+            httpClient(urlPibIbge),
             httpClient(urlDesempregoIbge)
         ]);
 
         const agora = new Date();
 
-                // 2. Processamento do Desemprego (IBGE) - Com mapeamento próprio e independente de anos
-        if (resDesemprego?.ok && Array.isArray(resDesemprego?.data) && resDesemprego?.data[0]?.resultados[0]?.series[0]?.serie) {
+        // 1. Processamento do PIB (IBGE SIDRA)
+        if (resPib?.ok && Array.isArray(resPib.data) && resPib.data.length > 1) {
             try {
-                const dadosDesemprego = resDesemprego.data[0].resultados[0].series[0].serie; // Objeto com anos como chaves e valores como taxas de desemprego
-                const anosDesemprego = Object.keys(dadosDesemprego).sort((a, b) => a - b);
-                const valoresDesemprego = anosDesemprego.map(ano => Number(dadosDesemprego[ano]));
+                // O SIDRA retorna um array. O índice 0 são os cabeçalhos.
+                // Pegamos do índice 1 em diante, que são os dados reais.
+                const dadosPib = resPib.data.slice(1);
+
+                // Mapeia para o formato { ano: '1996', valor: 2.2 }
+                const paresPib = dadosPib.map(item => {
+                    const ano = item.D3N;     // Ex: "1996"
+                    const valorStr = item.V;  // Ex: "2.2"
+                    const valor = Number(valorStr);
+                    
+                    return { 
+                        ano, 
+                        valor: Number.isFinite(valor) ? valor : null 
+                    };
+                }).filter(item => item.ano && item.valor !== null); // Remove valores nulos ou inválidos ("...", "-")
+
+                // Ordena os anos do mais antigo para o mais recente
+                paresPib.sort((a, b) => Number(a.ano) - Number(b.ano));
+                const anosPib = paresPib.map(item => item.ano);
+                const valoresPib = paresPib.map(item => item.valor);
+
+                if (anosPib.length > 0) {
+                    await IndicadorAnualModel.findOneAndUpdate(
+                        { slug: 'pib' },
+                        { 
+                            titulo: 'Crescimento do PIB (%)', 
+                            fonte: 'IBGE (SIDRA - Tabela 6784)', 
+                            unidade: '%', 
+                            anos: anosPib, 
+                            valores: valoresPib, 
+                            ultimaAtualizacao: agora 
+                        },
+                        { upsert: true, returnDocument: 'after' }
+                    );
+                    console.log("[SYNC] PIB sincronizado com sucesso via SIDRA!");
+                }
+            } catch (e) {
+                console.error("[SYNC] Erro ao mapear PIB do IBGE (SIDRA):", e.message);
+            }
+        } else {
+            console.warn("[SYNC] Falha ao obter dados do PIB na API SIDRA. Verifique o log do HTTP Client.");
+        }
+
+        // 2. Processamento do Desemprego (IBGE) - Com mapeamento próprio e independente de anos
+        if (resDesemprego?.ok && Array.isArray(resDesemprego?.data) && resDesemprego?.data.length > 1) {
+            try {
+
+                const dadosDesemprego = resDesemprego.data.slice(1);
+
+                // Mapeia para o formato { ano: '1996', valor: 2.2 }
+                const paresDesemprego = dadosDesemprego.map(item => {
+                    const ano = item.D3N;     // Ex: "1996"
+                    const valorStr = item.V;  // Ex: "2.2"
+                    const valor = Number(valorStr);
+                    
+                    return { 
+                        ano, 
+                        valor: Number.isFinite(valor) ? valor : null 
+                    };
+                }).filter(item => item.ano && item.valor !== null); // Remove valores nulos ou inválidos ("...", "-")
+
+                paresDesemprego.sort((a, b) => Number(a.ano) - Number(b.ano));
+                const anosDesemprego = paresDesemprego.map(item => item.ano);
+                const valoresDesemprego = paresDesemprego.map(item => item.valor);
 
                 if (anosDesemprego.length > 0) {
                     await IndicadorAnualModel.findOneAndUpdate(
@@ -76,60 +133,13 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
                         { upsert: true, returnDocument: 'after' }
                     );
                     console.log("[SYNC] Desemprego sincronizado com sucesso via IBGE!");
-                } 
+                }
             } catch (e) {
                 console.error("[SYNC] Erro ao mapear Desemprego do IBGE:", e.message);
             }
         } else {
             console.warn("[SYNC] Falha ao obter dados do Desemprego na API IBGE. Verifique o log do HTTP Client.");
         }
-
-        // 1. Processamento do PIB (IBGE SIDRA)
-        // if (resPib?.ok && Array.isArray(resPib.data) && resPib.data.length > 1) {
-        //     try {
-        //         // O SIDRA retorna um array. O índice 0 são os cabeçalhos.
-        //         // Pegamos do índice 1 em diante, que são os dados reais.
-        //         const dadosPib = resPib.data.slice(1);
-
-        //         // Mapeia para o formato { ano: '1996', valor: 2.2 }
-        //         const paresPib = dadosPib.map(item => {
-        //             const ano = item.D3N;     // Ex: "1996"
-        //             const valorStr = item.V;  // Ex: "2.2"
-        //             const valor = Number(valorStr);
-                    
-        //             return { 
-        //                 ano, 
-        //                 valor: Number.isFinite(valor) ? valor : null 
-        //             };
-        //         }).filter(item => item.ano && item.valor !== null); // Remove valores nulos ou inválidos ("...", "-")
-
-        //         // Ordena os anos do mais antigo para o mais recente
-        //         paresPib.sort((a, b) => Number(a.ano) - Number(b.ano));
-
-        //         const anosPib = paresPib.map(item => item.ano);
-        //         const valoresPib = paresPib.map(item => item.valor);
-
-        //         if (anosPib.length > 0) {
-        //             await IndicadorAnualModel.findOneAndUpdate(
-        //                 { slug: 'pib' },
-        //                 { 
-        //                     titulo: 'Crescimento do PIB (%)', 
-        //                     fonte: 'IBGE (SIDRA - Tabela 6784)', 
-        //                     unidade: '%', 
-        //                     anos: anosPib, 
-        //                     valores: valoresPib, 
-        //                     ultimaAtualizacao: agora 
-        //                 },
-        //                 { upsert: true, returnDocument: 'after' }
-        //             );
-        //             console.log("[SYNC] PIB sincronizado com sucesso via SIDRA!");
-        //         }
-        //     } catch (e) {
-        //         console.error("[SYNC] Erro ao mapear PIB do IBGE (SIDRA):", e.message);
-        //     }
-        // } else {
-        //     console.warn("[SYNC] Falha ao obter dados do PIB na API SIDRA. Verifique o log do HTTP Client.");
-        // }
 
         // 1. Processamento do PIB (IBGE)
         // 1. Processamento do PIB (IBGE) - Com mapeamento próprio e independente de anos
