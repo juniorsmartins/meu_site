@@ -1,11 +1,10 @@
-import { IndicadorAnualModel } from '../../models/indicadorSchema.js';
-import { httpClient } from './chamadaExternaHttp.js';
 import { regraAutorizarApenasAdmin } from '../../helpers/usuarioUtils.js';
 import { AppError } from '../../errors/AppError.js';
 import { MENSAGENS_ERRO } from '../../configs/mensagensConfig.js';
-
-const SERIE_BCB_SELIC = 432;
-const SERIE_BCB_IPCA = 433;
+import { sincronizarPib } from './adapters/pibAdapter.js';
+import { sincronizarDesemprego } from './adapters/desempregoAdapter.js';
+import { sincronizarSelic } from './adapters/selicAdapter.js';
+import { sincronizarIpca } from './adapters/ipcaAdapter.js';
 
 function formatarDataBCB(data) {
     const dia = String(data.getDate()).padStart(2, '0');
@@ -15,11 +14,10 @@ function formatarDataBCB(data) {
 }
 
 const estatisticasSyncService = async (usuarioAutenticado) => {
-
     regraAutorizarApenasAdmin(usuarioAutenticado);
 
     try {
-        console.log("[SYNC ESTATÍSTICAS] Iniciando sincronização com APIs oficiais (IBGE e BCB)...");
+        console.log("[SYNC ESTATÍSTICAS] Iniciando sincronização via Arquitetura de Adapters (Modular)...");
 
         const dataHoje = new Date();
         const dataFimStr = formatarDataBCB(dataHoje);
@@ -27,177 +25,26 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
         const dataInicio = new Date();
         dataInicio.setFullYear(dataHoje.getFullYear() - 10);
         const dataInicioStr = formatarDataBCB(dataInicio);
-
-        // IBGE Sidra - Indicadores Econômicos
-        // T = tabela; V = variável; P = período de tempo; C = classificação; G = visão territorial ou N = nível territorial (n1 = Brasil); H = header; F = formato; A = agregação; D = detalhe; M = moeda
-        const urlPibIbge = `https://apisidra.ibge.gov.br/values/t/6784/n1/all/v/9810/p/all/h/y/f/a/d/m`;
-        const urlDesempregoIbge = 'https://apisidra.ibge.gov.br/values/t/4562/n1/all/v/4099/p/all/h/y/f/a/d/m';
-
-        const urlSelicBc = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_SELIC}/dados?formato=json&dataInicial=${dataInicioStr}&dataFinal=${dataFimStr}`;
-        const urlIpcaBc = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_IPCA}/dados?formato=json&dataInicial=${dataInicioStr}&dataFinal=${dataFimStr}`;
-
-        const [ resPib, resDesemprego, resSelic, resIpca ] = await Promise.all([
-            httpClient(urlPibIbge),
-            httpClient(urlDesempregoIbge),
-            httpClient(urlSelicBc),
-            httpClient(urlIpcaBc)
-        ]);
-
         const agora = new Date();
 
-        // 1. Processamento do PIB (IBGE SIDRA)
-        if (resPib?.ok && Array.isArray(resPib.data) && resPib.data.length > 1) {
-            try {
-                // O SIDRA retorna um array. O índice 0 são os cabeçalhos.
-                // Pegamos do índice 1 em diante, que são os dados reais.
-                const dadosPib = resPib.data.slice(1);
+        // Agrupa todas as chamadas dos adaptadores de forma limpa e escalável
+        const tarefasSincronizacao = [
+            sincronizarPib(agora),
+            sincronizarDesemprego(agora),
+            sincronizarSelic(dataInicioStr, dataFimStr, agora),
+            sincronizarIpca(dataInicioStr, dataFimStr, agora)
+            // Futuros adaptadores (ex: sincronizarCambio(agora), sincronizarDivida(agora), etc.) entram aqui automaticamente!
+        ];
 
-                // Mapeia para o formato { ano: '1996', valor: 2.2 }
-                const paresPib = dadosPib.map(item => {
-                    const ano = item.D3N;     // Ex: "1996"
-                    const valorStr = item.V;  // Ex: "2.2"
-                    const valor = Number(valorStr);
-                    
-                    return { 
-                        ano, 
-                        valor: Number.isFinite(valor) ? valor : null 
-                    };
-                }).filter(item => item.ano && item.valor !== null); // Remove valores nulos ou inválidos ("...", "-")
+        // Executa todas as tarefas em paralelo com segurança total (Promise.allSettled)
+        const resultados = await Promise.allSettled(tarefasSincronizacao);
 
-                // Ordena os anos do mais antigo para o mais recente
-                paresPib.sort((a, b) => Number(a.ano) - Number(b.ano));
-                const anosPib = paresPib.map(item => item.ano);
-                const valoresPib = paresPib.map(item => item.valor);
-
-                if (anosPib.length > 0) {
-                    await IndicadorAnualModel.findOneAndUpdate(
-                        { slug: 'pib' },
-                        { 
-                            titulo: 'Crescimento do PIB (%)', 
-                            fonte: 'IBGE (SIDRA - Tabela 6784)', 
-                            unidade: '%', 
-                            anos: anosPib, 
-                            valores: valoresPib, 
-                            ultimaAtualizacao: agora 
-                        },
-                        { upsert: true, returnDocument: 'after' }
-                    );
-                    console.log("[SYNC] PIB sincronizado com sucesso via SIDRA!");
-                }
-            } catch (e) {
-                console.error("[SYNC] Erro ao mapear PIB do IBGE (SIDRA):", e.message);
+        // Opcional: logar quais obtiveram sucesso ou falha individualmente
+        resultados.forEach((res, index) => {
+            if (res.status === 'rejected') {
+                console.error(`[SYNC] Tarefa ${index} falhou com erro:`, res.reason);
             }
-        } else {
-            console.warn("[SYNC] Falha ao obter dados do PIB na API SIDRA. Verifique o log do HTTP Client.");
-        }
-
-        // 2. Processamento do Desemprego (IBGE) - Com mapeamento próprio e independente de anos
-        if (resDesemprego?.ok && Array.isArray(resDesemprego?.data) && resDesemprego?.data.length > 1) {
-            try {
-
-                const dadosDesemprego = resDesemprego.data.slice(1);
-
-                // Mapeia para o formato { ano: '1996', valor: 2.2 }
-                const paresDesemprego = dadosDesemprego.map(item => {
-                    const ano = item.D3N;     // Ex: "1996"
-                    const valorStr = item.V;  // Ex: "2.2"
-                    const valor = Number(valorStr);
-                    
-                    return { 
-                        ano, 
-                        valor: Number.isFinite(valor) ? valor : null 
-                    };
-                }).filter(item => item.ano && item.valor !== null); // Remove valores nulos ou inválidos ("...", "-")
-
-                paresDesemprego.sort((a, b) => Number(a.ano) - Number(b.ano));
-                const anosDesemprego = paresDesemprego.map(item => item.ano);
-                const valoresDesemprego = paresDesemprego.map(item => item.valor);
-
-                if (anosDesemprego.length > 0) {
-                    await IndicadorAnualModel.findOneAndUpdate(
-                        { slug: 'desemprego' },
-                        { 
-                            titulo: 'Taxa Média de Desemprego (%)', 
-                            fonte: 'IBGE (PNAD - Tabela 4099)', 
-                            unidade: '%', 
-                            anos: anosDesemprego, 
-                            valores: valoresDesemprego, 
-                            ultimaAtualizacao: agora 
-                        },
-                        { upsert: true, returnDocument: 'after' }
-                    );
-                    console.log("[SYNC] Desemprego sincronizado com sucesso via IBGE!");
-                }
-            } catch (e) {
-                console.error("[SYNC] Erro ao mapear Desemprego do IBGE:", e.message);
-            }
-        } else {
-            console.warn("[SYNC] Falha ao obter dados do Desemprego na API IBGE. Verifique o log do HTTP Client.");
-        }
-
-        // 3. Processamento da Selic (BCB)
-        if (resSelic.ok && Array.isArray(resSelic.data)) {
-            const mapaAnualSelic = {};
-            resSelic.data.forEach(item => {
-                if (item.data && item.data.includes('/')) {
-                    const partes = item.data.split('/');
-                    const ano = partes[2];
-                    const mes = partes[1];
-                    if (mes === '12' || !mapaAnualSelic[ano]) {
-                        mapaAnualSelic[ano] = Number(item.valor);
-                    }
-                }
-            });
-            const anosSelic = Object.keys(mapaAnualSelic).sort((a, b) => a - b);
-            const valoresSelic = anosSelic.map(ano => mapaAnualSelic[ano]);
-
-            if (anosSelic.length > 0) {
-                await IndicadorAnualModel.findOneAndUpdate(
-                    { slug: 'selic' },
-                    { 
-                        titulo: 'Taxa Básica de Juros - Selic (%)', 
-                        fonte: 'Banco Central (Série 432)', 
-                        unidade: '%', 
-                        anos: anosSelic, 
-                        valores: valoresSelic, 
-                        ultimaAtualizacao: agora 
-                    },
-                    { upsert: true, returnDocument: 'after' }
-                );
-            }
-        }
-
-        // 4. Processamento do IPCA (BCB)
-        if (resIpca.ok && Array.isArray(resIpca.data)) {
-            const mapaAnualIpca = {};
-            resIpca.data.forEach(item => {
-                if (item.data && item.data.includes('/')) {
-                    const partes = item.data.split('/');
-                    const ano = partes[2];
-                    const mes = partes[1];
-                    if (mes === '12' || !mapaAnualIpca[ano]) {
-                        mapaAnualIpca[ano] = Number(item.valor);
-                    }
-                }
-            });
-            const anosIpca = Object.keys(mapaAnualIpca).sort((a, b) => a - b);
-            const valoresIpca = anosIpca.map(ano => mapaAnualIpca[ano]);
-
-            if (anosIpca.length > 0) {
-                await IndicadorAnualModel.findOneAndUpdate(
-                    { slug: 'ipca' },
-                    { 
-                        titulo: 'Inflação Oficial - IPCA (%)', 
-                        fonte: 'Banco Central / IBGE (Série 433)', 
-                        unidade: '%', 
-                        anos: anosIpca, 
-                        valores: valoresIpca, 
-                        ultimaAtualizacao: agora 
-                    },
-                    { upsert: true, returnDocument: 'after' }
-                );
-            }
-        }
+        });
 
         return { sucesso: true, mensagem: "Estatísticas sincronizadas com sucesso!" };
 
