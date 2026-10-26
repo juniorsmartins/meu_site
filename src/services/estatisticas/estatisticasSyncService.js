@@ -28,15 +28,15 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
         dataInicio.setFullYear(dataHoje.getFullYear() - 10);
         const dataInicioStr = formatarDataBCB(dataInicio);
 
-        // URLs oficiais
         // const urlPibIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/6784/periodos/-30/variaveis/9810?localidades=N1[all]`;
         // const urlDesempregoIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/4099/periodos/-30/variaveis/4099?localidades=N1%5Ball%5D`;
-
-        // 1. Na declaração das URLs, troque os colchetes por %5B e %5D
         // const urlPibIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/6784/periodos/-30/variaveis/9810?localidades=N1%5Ball%5D`;
+
+        // T = tabela; V = variável; P = período de tempo; C = classificação; G = visão territorial ou N = nível territorial (n1 = Brasil); H = header; F = formato; A = agregação; D = detalhe; M = moeda
         const urlPibIbge = `https://apisidra.ibge.gov.br/values/t/6784/n1/all/v/9810/p/all/h/y/f/a/d/m`;
         // O desemprego já estava correto, mas garanta que esteja assim:
-        const urlDesempregoIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/4099/periodos/-30/variaveis/4099?localidades=N1%5Ball%5D`;
+        // const urlDesempregoIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/4099/periodos/-30/variaveis/4099?localidades=N1%5Ball%5D`;
+        const urlDesempregoIbge = 'https://servicodados.ibge.gov.br/api/v3/agregados/4562/periodos/all/variaveis/4099?localidades=N1[all]';
 
         const urlSelicBc = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_SELIC}/dados?formato=json&dataInicial=${dataInicioStr}&dataFinal=${dataFimStr}`;
         const urlIpcaBc = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_IPCA}/dados?formato=json&dataInicial=${dataInicioStr}&dataFinal=${dataFimStr}`;
