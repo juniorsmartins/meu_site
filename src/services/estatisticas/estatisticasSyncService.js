@@ -55,6 +55,35 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
 
         const agora = new Date();
 
+                // 2. Processamento do Desemprego (IBGE) - Com mapeamento próprio e independente de anos
+        if (resDesemprego?.ok && Array.isArray(resDesemprego?.data) && resDesemprego?.data[0]?.resultados[0]?.series[0]?.serie) {
+            try {
+                const dadosDesemprego = resDesemprego.data[0].resultados[0].series[0].serie; // Objeto com anos como chaves e valores como taxas de desemprego
+                const anosDesemprego = Object.keys(dadosDesemprego).sort((a, b) => a - b);
+                const valoresDesemprego = anosDesemprego.map(ano => Number(dadosDesemprego[ano]));
+
+                if (anosDesemprego.length > 0) {
+                    await IndicadorAnualModel.findOneAndUpdate(
+                        { slug: 'desemprego' },
+                        { 
+                            titulo: 'Taxa Média de Desemprego (%)', 
+                            fonte: 'IBGE (PNAD - Tabela 4099)', 
+                            unidade: '%', 
+                            anos: anosDesemprego, 
+                            valores: valoresDesemprego, 
+                            ultimaAtualizacao: agora 
+                        },
+                        { upsert: true, returnDocument: 'after' }
+                    );
+                    console.log("[SYNC] Desemprego sincronizado com sucesso via IBGE!");
+                } 
+            } catch (e) {
+                console.error("[SYNC] Erro ao mapear Desemprego do IBGE:", e.message);
+            }
+        } else {
+            console.warn("[SYNC] Falha ao obter dados do Desemprego na API IBGE. Verifique o log do HTTP Client.");
+        }
+
         // 1. Processamento do PIB (IBGE SIDRA)
         // if (resPib?.ok && Array.isArray(resPib.data) && resPib.data.length > 1) {
         //     try {
@@ -123,23 +152,23 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
         // }
 
         // 2. Processamento do Desemprego (IBGE) - Com mapeamento próprio e independente de anos
-        if (resDesemprego?.ok && Array.isArray(resDesemprego.data) && resDesemprego.data.length > 1) {
-            try {
-                const serieDesemprego = resDesemprego.data[0].resultados[0].series[0].serie;
-                const anosDesemprego = Object.keys(serieDesemprego).sort((a, b) => a - b);
-                const valoresDesemprego = anosDesemprego.map(ano => Number(serieDesemprego[ano]));
+        // if (resDesemprego?.ok && Array.isArray(resDesemprego.data) && resDesemprego.data[0]?.resultados) {
+        //     try {
+        //         const serieDesemprego = resDesemprego.data[0].resultados[0].series[0].serie;
+        //         const anosDesemprego = Object.keys(serieDesemprego).sort((a, b) => a - b);
+        //         const valoresDesemprego = anosDesemprego.map(ano => Number(serieDesemprego[ano]));
 
-                if (anosDesemprego.length > 0) {
-                    await IndicadorAnualModel.findOneAndUpdate(
-                        { slug: 'desemprego' },
-                        { titulo: 'Taxa Média de Desemprego (%)', fonte: 'IBGE (PNAD - Tabela 4099)', unidade: '%', anos: anosDesemprego, valores: valoresDesemprego, ultimaAtualizacao: agora },
-                        { upsert: true, returnDocument: 'after' }
-                    );
-                }
-            } catch (e) {
-                console.error("[SYNC] Erro ao mapear Desemprego do IBGE:", e.message);
-            }
-        }
+        //         if (anosDesemprego.length > 0) {
+        //             await IndicadorAnualModel.findOneAndUpdate(
+        //                 { slug: 'desemprego' },
+        //                 { titulo: 'Taxa Média de Desemprego (%)', fonte: 'IBGE (PNAD - Tabela 4099)', unidade: '%', anos: anosDesemprego, valores: valoresDesemprego, ultimaAtualizacao: agora },
+        //                 { upsert: true, returnDocument: 'after' }
+        //             );
+        //         }
+        //     } catch (e) {
+        //         console.error("[SYNC] Erro ao mapear Desemprego do IBGE:", e.message);
+        //     }
+        // }
 
         // // 3. Processamento da Selic (BCB)
         // if (resSelic.ok && Array.isArray(resSelic.data)) {
