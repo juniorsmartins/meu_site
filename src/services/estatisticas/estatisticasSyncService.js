@@ -33,72 +33,76 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
         // const urlPibIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/6784/periodos/-30/variaveis/9810?localidades=N1%5Ball%5D`;
 
         // T = tabela; V = variável; P = período de tempo; C = classificação; G = visão territorial ou N = nível territorial (n1 = Brasil); H = header; F = formato; A = agregação; D = detalhe; M = moeda
-        const urlPibIbge = `https://apisidra.ibge.gov.br/values/t/6784/n1/all/v/9810/p/all/h/y/f/a/d/m`;
+        // const urlPibIbge = `https://apisidra.ibge.gov.br/values/t/6784/n1/all/v/9810/p/all/h/y/f/a/d/m`;
         // O desemprego já estava correto, mas garanta que esteja assim:
         // const urlDesempregoIbge = `https://servicodados.ibge.gov.br/api/v3/agregados/4099/periodos/-30/variaveis/4099?localidades=N1%5Ball%5D`;
         const urlDesempregoIbge = 'https://servicodados.ibge.gov.br/api/v3/agregados/4562/periodos/all/variaveis/4099?localidades=N1[all]';
 
-        const urlSelicBc = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_SELIC}/dados?formato=json&dataInicial=${dataInicioStr}&dataFinal=${dataFimStr}`;
-        const urlIpcaBc = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_IPCA}/dados?formato=json&dataInicial=${dataInicioStr}&dataFinal=${dataFimStr}`;
+        // const urlSelicBc = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_SELIC}/dados?formato=json&dataInicial=${dataInicioStr}&dataFinal=${dataFimStr}`;
+        // const urlIpcaBc = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_IPCA}/dados?formato=json&dataInicial=${dataInicioStr}&dataFinal=${dataFimStr}`;
 
         // Executa as requisições em paralelo usando allSettled para evitar que uma falha derrube as outras
-        const [resPib, resDesemprego, resSelic, resIpca] = await Promise.all([
-            httpClient(urlPibIbge),
-            httpClient(urlDesempregoIbge),
-            httpClient(urlSelicBc),
-            httpClient(urlIpcaBc)
+        // const [resPib, resDesemprego, resSelic, resIpca] = await Promise.all([
+        //     httpClient(urlPibIbge),
+        //     httpClient(urlDesempregoIbge),
+        //     httpClient(urlSelicBc),
+        //     httpClient(urlIpcaBc)
+        // ]);
+
+        const [ resDesemprego ] = await Promise.all([
+            httpClient(urlDesempregoIbge)
         ]);
 
         const agora = new Date();
 
-        // 1. Processamento do PIB (IBGE)
         // 1. Processamento do PIB (IBGE SIDRA)
-        if (resPib?.ok && Array.isArray(resPib.data) && resPib.data.length > 1) {
-            try {
-                // O SIDRA retorna um array. O índice 0 são os cabeçalhos.
-                // Pegamos do índice 1 em diante, que são os dados reais.
-                const dadosPib = resPib.data.slice(1);
+        // if (resPib?.ok && Array.isArray(resPib.data) && resPib.data.length > 1) {
+        //     try {
+        //         // O SIDRA retorna um array. O índice 0 são os cabeçalhos.
+        //         // Pegamos do índice 1 em diante, que são os dados reais.
+        //         const dadosPib = resPib.data.slice(1);
 
-                // Mapeia para o formato { ano: '1996', valor: 2.2 }
-                const paresPib = dadosPib.map(item => {
-                    const ano = item.D3N;     // Ex: "1996"
-                    const valorStr = item.V;  // Ex: "2.2"
-                    const valor = Number(valorStr);
+        //         // Mapeia para o formato { ano: '1996', valor: 2.2 }
+        //         const paresPib = dadosPib.map(item => {
+        //             const ano = item.D3N;     // Ex: "1996"
+        //             const valorStr = item.V;  // Ex: "2.2"
+        //             const valor = Number(valorStr);
                     
-                    return { 
-                        ano, 
-                        valor: Number.isFinite(valor) ? valor : null 
-                    };
-                }).filter(item => item.ano && item.valor !== null); // Remove valores nulos ou inválidos ("...", "-")
+        //             return { 
+        //                 ano, 
+        //                 valor: Number.isFinite(valor) ? valor : null 
+        //             };
+        //         }).filter(item => item.ano && item.valor !== null); // Remove valores nulos ou inválidos ("...", "-")
 
-                // Ordena os anos do mais antigo para o mais recente
-                paresPib.sort((a, b) => Number(a.ano) - Number(b.ano));
+        //         // Ordena os anos do mais antigo para o mais recente
+        //         paresPib.sort((a, b) => Number(a.ano) - Number(b.ano));
 
-                const anosPib = paresPib.map(item => item.ano);
-                const valoresPib = paresPib.map(item => item.valor);
+        //         const anosPib = paresPib.map(item => item.ano);
+        //         const valoresPib = paresPib.map(item => item.valor);
 
-                if (anosPib.length > 0) {
-                    await IndicadorAnualModel.findOneAndUpdate(
-                        { slug: 'pib' },
-                        { 
-                            titulo: 'Crescimento do PIB (%)', 
-                            fonte: 'IBGE (SIDRA - Tabela 6784)', 
-                            unidade: '%', 
-                            anos: anosPib, 
-                            valores: valoresPib, 
-                            ultimaAtualizacao: agora 
-                        },
-                        { upsert: true, returnDocument: 'after' }
-                    );
-                    console.log("[SYNC] PIB sincronizado com sucesso via SIDRA!");
-                }
-            } catch (e) {
-                console.error("[SYNC] Erro ao mapear PIB do IBGE (SIDRA):", e.message);
-            }
-        } else {
-            console.warn("[SYNC] Falha ao obter dados do PIB na API SIDRA. Verifique o log do HTTP Client.");
-        }
+        //         if (anosPib.length > 0) {
+        //             await IndicadorAnualModel.findOneAndUpdate(
+        //                 { slug: 'pib' },
+        //                 { 
+        //                     titulo: 'Crescimento do PIB (%)', 
+        //                     fonte: 'IBGE (SIDRA - Tabela 6784)', 
+        //                     unidade: '%', 
+        //                     anos: anosPib, 
+        //                     valores: valoresPib, 
+        //                     ultimaAtualizacao: agora 
+        //                 },
+        //                 { upsert: true, returnDocument: 'after' }
+        //             );
+        //             console.log("[SYNC] PIB sincronizado com sucesso via SIDRA!");
+        //         }
+        //     } catch (e) {
+        //         console.error("[SYNC] Erro ao mapear PIB do IBGE (SIDRA):", e.message);
+        //     }
+        // } else {
+        //     console.warn("[SYNC] Falha ao obter dados do PIB na API SIDRA. Verifique o log do HTTP Client.");
+        // }
 
+        // 1. Processamento do PIB (IBGE)
         // 1. Processamento do PIB (IBGE) - Com mapeamento próprio e independente de anos
         // if (resPib?.ok && Array.isArray(resPib.data) && resPib.data[0]?.resultados?.length) {
         //     try {
@@ -119,7 +123,7 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
         // }
 
         // 2. Processamento do Desemprego (IBGE) - Com mapeamento próprio e independente de anos
-        if (resDesemprego.ok && Array.isArray(resDesemprego.data) && resDesemprego.data[0]?.resultados) {
+        if (resDesemprego?.ok && Array.isArray(resDesemprego.data) && resDesemprego.data.length > 1) {
             try {
                 const serieDesemprego = resDesemprego.data[0].resultados[0].series[0].serie;
                 const anosDesemprego = Object.keys(serieDesemprego).sort((a, b) => a - b);
