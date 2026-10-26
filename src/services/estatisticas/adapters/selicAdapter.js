@@ -4,30 +4,35 @@ import { IndicadorAnualModel } from '../../../models/indicadorSchema.js';
 // Código 432 = Taxa de juros - Meta Selic definida pelo Copom
 const SERIE_BCB_META_SELIC = 432;
 
-async function sincronizarSelic(agora) {
+async function sincronizarSelic(dataInicioStr, dataFimStr, agora) {
     try {
-        // Define o intervalo de 20 anos concluídos (do ano anterior para trás)
         const anoAtual = new Date().getFullYear();
-        const anoFimBloco1 = anoAtual - 1;       // Ex: 2025
-        const anoInicioBloco1 = anoFimBloco1 - 9; // Ex: 2016 (Bloco 1: 10 anos)
+        const anoFim = anoAtual - 1;       // 2025
+        const anoInicio = anoFim - 19;     // 2006 (Total de 20 anos)
 
-        const anoFimBloco2 = anoInicioBloco1 - 1; // Ex: 2015
-        const anoInicioBloco2 = anoFimBloco2 - 9; // Ex: 2006 (Bloco 2: 10 anos)
+        console.log(`[SELIC ADAPTER] Buscando Meta Selic histórica de 20 anos (${anoInicio} a ${anoFim}) em blocos de 5 anos...`);
 
-        const urlBloco1 = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_META_SELIC}/dados?formato=json&dataInicial=01/01/${anoInicioBloco1}&dataFinal=31/12/${anoFimBloco1}`;
-        const urlBloco2 = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_META_SELIC}/dados?formato=json&dataInicial=01/01/${anoInicioBloco2}&dataFinal=31/12/${anoFimBloco2}`;
+        // Divide os 20 anos em 4 blocos de 5 anos para evitar timeout na API do BCB
+        const bloco1 = { inicio: anoInicio, fim: anoInicio + 4 };     // 2006 - 2010
+        const bloco2 = { inicio: bloco1.fim + 1, fim: bloco1.fim + 5 }; // 2011 - 2015
+        const bloco3 = { inicio: bloco2.fim + 1, fim: bloco2.fim + 5 }; // 2016 - 2020
+        const bloco4 = { inicio: bloco3.fim + 1, fim: anoFim };         // 2021 - 2025
 
-        console.log(`[SELIC ADAPTER] Busca Meta Selic histórica de 20 anos (${anoInicioBloco2} a ${anoFimBloco1})...`);
+        const criarUrl = (ini, fim) => `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_META_SELIC}/dados?formato=json&dataInicial=01/01/${ini}&dataFinal=31/12/${fim}`;
 
-        // Executa as duas requisições de 10 anos em paralelo para respeitar o limite da API do BCB
-        const [respostaBloco1, respostaBloco2] = await Promise.all([
-            httpClient(urlBloco2), // Mais antigo (2006 - 2015)
-            httpClient(urlBloco1)  // Mais recente (2016 - 2025)
+        // Executa as 4 requisições em paralelo de forma muito mais leve e rápida
+        const [res1, res2, res3, res4] = await Promise.all([
+            httpClient(criarUrl(bloco1.inicio, bloco1.fim)),
+            httpClient(criarUrl(bloco2.inicio, bloco2.fim)),
+            httpClient(criarUrl(bloco3.inicio, bloco3.fim)),
+            httpClient(criarUrl(bloco4.inicio, bloco4.fim))
         ]);
 
         const dadosCompletos = [
-            ...(Array.isArray(respostaBloco2.data) ? respostaBloco2.data : []),
-            ...(Array.isArray(respostaBloco1.data) ? respostaBloco1.data : [])
+            ...(Array.isArray(res1.data) ? res1.data : []),
+            ...(Array.isArray(res2.data) ? res2.data : []),
+            ...(Array.isArray(res3.data) ? res3.data : []),
+            ...(Array.isArray(res4.data) ? res4.data : [])
         ];
 
         if (dadosCompletos.length === 0) {
@@ -37,7 +42,7 @@ async function sincronizarSelic(agora) {
 
         const mapaAnual = {};
 
-        // Varre todos os dados diários consolidados e captura a última meta de cada ano
+        // Varre todos os dados e captura a última meta de dezembro de cada ano
         dadosCompletos.forEach(item => {
             if (item.data && item.data.includes('/')) {
                 const partes = item.data.split('/');
@@ -45,7 +50,7 @@ async function sincronizarSelic(agora) {
                 const mes = partes[1];
                 const valorNumerico = Number(item.valor);
                 
-                if (!isNaN(valorNumerico)) { // Apenas considera valores numéricos válidos
+                if (!isNaN(valorNumerico)) {
                     if (mes === '12' || !mapaAnual[ano]) {
                         mapaAnual[ano] = valorNumerico;
                     }
@@ -69,7 +74,7 @@ async function sincronizarSelic(agora) {
                 },
                 { upsert: true, returnDocument: 'after' }
             );
-            console.log("[SELIC ADAPTER] Meta Selic de 20 anos sincronizada com sucesso!");
+            console.log(`[SELIC ADAPTER] Meta Selic de 20 anos (${anos.length} anos carregados) sincronizada com sucesso!`);
             return { sucesso: true, slug: 'selic' };
         }
 
