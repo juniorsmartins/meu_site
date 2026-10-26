@@ -42,7 +42,7 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
 
         // Opcional: logar quais obtiveram sucesso ou falha individualmente
         resultados.forEach((res, index) => {
-            if (res.status === 'rejected') {
+            if (res.status === 'rejected' || res.statusCode !== 200) {
                 console.error(`[SYNC] Tarefa ${index} falhou com erro:`, res.reason);
             }
         });
