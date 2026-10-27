@@ -11,16 +11,35 @@ export const estatisticasService = async () => {
         let desempregoData = { anos: [], valores: [] };
         let ipcaData = { anos: [], valores: [] };
         let selicData = { anos: [], valores: [] };
+        let dividaData = { anos: [], valores: [], meta: { labels: ['Dívida Líquida', 'Dívida Bruta'] } };
 
         indicadores.forEach(ind => {
             if (ind.slug === 'pib') {
-                pibData = { anos: ind.anos || [], valores: ind.valores || [] };
+                pibData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
             } else if (ind.slug === 'desemprego') {
-                desempregoData = { anos: ind.anos || [], valores: ind.valores || [] };
+                desempregoData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
             } else if (ind.slug === 'ipca') {
-                ipcaData = { anos: ind.anos || [], valores: ind.valores || [] };
+                ipcaData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
             } else if (ind.slug === 'selic') {
-                selicData = { anos: ind.anos || [], valores: ind.valores || [] };
+                selicData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
+            } else if (ind.slug === 'divida') {
+                dividaData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [], 
+                    meta: ind.meta || { labels: ['Dívida Líquida', 'Dívida Bruta'] }
+                };
             }
         });
 
@@ -28,7 +47,8 @@ export const estatisticasService = async () => {
             pib: pibData,
             desemprego: desempregoData,
             ipca: ipcaData,
-            selic: selicData
+            selic: selicData,
+            divida: dividaData
         };
 
     } catch (error) {
