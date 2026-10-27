@@ -6,6 +6,8 @@ import { sincronizarDesemprego } from './adapters/desempregoAdapter.js';
 import { sincronizarSelic } from './adapters/selicAdapter.js';
 import { sincronizarIpca } from './adapters/ipcaAdapter.js';
 import { sincronizarDivida } from './adapters/dividaPublicaAdapter.js';
+import { sincronizarCambio } from './adapters/cambioAdapter.js';
+import { sincronizarReservas } from './adapters/reservasAdapter.js';
 
 const estatisticasSyncService = async (usuarioAutenticado) => {
 
@@ -20,7 +22,9 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
             // { nome: 'IPCA', fn: sincronizarIpca },
             // { nome: 'PIB', fn: sincronizarPib },
             // { nome: 'Desemprego', fn: sincronizarDesemprego },
-            { nome: 'Dívida', fn: sincronizarDivida }
+            // { nome: 'Dívida', fn: sincronizarDivida },
+            { nome: 'Câmbio', fn: sincronizarCambio },
+            { nome: 'Reservas', fn: sincronizarReservas }
         ];
 
         // Executa sequencialmente
