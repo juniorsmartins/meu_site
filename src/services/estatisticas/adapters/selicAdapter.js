@@ -16,7 +16,7 @@ async function sincronizarSelic() {
         const anoAtual = agora.getFullYear();
 
         // A série 432 começa em 05/03/1999.
-        const anoInicio = 1999;
+        const anoInicio = 2000; 
 
         // Mantemos a exclusão do ano corrente para não gerar médias parciais.
         const anoFim = anoAtual - 1; 
@@ -25,13 +25,15 @@ async function sincronizarSelic() {
 
         // Vamos fazer blocos menores (de 4 anos) para aliviar a carga
         const blocos = [];
-        for (let ano = anoInicio; ano <= anoFim; ano += 5) {
-            const fimBloco = Math.min(ano + 4, anoFim);
+        for (let ano = anoInicio; ano <= anoFim; ano += 4) {
+            const fimBloco = Math.min(ano + 3, anoFim);
             blocos.push({ inicio: ano, fim: fimBloco });
         }
 
         const criarUrl = (inicio, fim) => `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_META_SELIC}/dados?formato=json&dataInicial=01/01/${inicio}&dataFinal=31/12/${fim}`;
 
+        const dadosCompletos = [];
+        
         for (const bloco of blocos) {
             const url = criarUrl(bloco.inicio, bloco.fim);
 
