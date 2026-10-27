@@ -6,7 +6,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (!resposta.ok) throw new Error("Erro ao buscar estatísticas do servidor.");
 
         const resultado = await resposta.json();
-        const { pib, desemprego, ipca, selic, divida_liquida, divida_bruta } = resultado.dados;
+        const { 
+            pib, 
+            desemprego, 
+            ipca, 
+            selic, 
+            divida_liquida, 
+            divida_bruta, 
+            cambio, 
+            reservas 
+        } = resultado.dados;
 
         // Renderiza cada gráfico utilizando seus próprios anos e valores de forma independente
         renderizarGraficoLinha('graficoPib', pib.anos, pib.valores, 'Crescimento do PIB (%)', '#0D47A1', '#E3F2FD');
