@@ -21,9 +21,12 @@ async function sincronizarPib() {
         const dados = resposta.data.slice(1);
         const pares = dados.map(item => {
             const ano = item.D3N;
-            const valor = Number(item.V);
-            return { ano, valor: Number.isFinite(valor) ? valor : null };
-        }).filter(item => item.ano && item.valor !== null);
+            const valorNumerico = Number(item.V);
+            const valor = Number.isFinite(valorNumerico) ? valorNumerico : null;
+            
+            return { ano, valor };
+        })
+        .filter(item => item.ano !== null); 
 
         pares.sort((a, b) => Number(a.ano) - Number(b.ano));
 
@@ -51,7 +54,7 @@ async function sincronizarPib() {
             { upsert: true, returnDocument: 'after' }
         );
 
-        console.log(`[PIB ADAPTER] PIB sincronizado com sucesso! (${anos.length} anos carregados)`);
+        console.log(`[PIB ADAPTER] PIB sincronizado com sucesso! (${anos.length} anos carregados, sendo ${valores.filter(v => v === null).length} sem dados)`);
         return { sucesso: true, slug: 'pib' };
 
     } catch (e) {
