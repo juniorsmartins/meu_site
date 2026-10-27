@@ -29,11 +29,12 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
 
         // Agrupa todas as chamadas dos adaptadores de forma limpa e escalável
         const tarefasSincronizacao = [
+            // sincronizarSelic(),
+            sincronizarIpca()
+
             // sincronizarPib(agora),
             // sincronizarDesemprego(agora),
-            sincronizarSelic()
-            // ,
-            // sincronizarIpca(dataInicioStr, dataFimStr, agora)
+
             // Futuros adaptadores (ex: sincronizarCambio(agora), sincronizarDivida(agora), etc.) entram aqui automaticamente!
         ];
 
@@ -42,10 +43,14 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
 
         // Opcional: logar quais obtiveram sucesso ou falha individualmente
         resultados.forEach((res, index) => {
-            if (res.status === 'rejected' || res.value?.sucesso === false) {
-                console.error(`[SYNC] Tarefa ${index} falhou com erro: `, res.reason);
+            if (res.status === 'rejected') {
+                console.error(`[SYNC ESTATÍSTICAS] Tarefa ${index} sofreu uma rejeição inesperada: `, res.reason);
+            } else if (res.value?.sucesso === false) {
+                console.error(`[SYNC ESTATÍSTICAS] Tarefa ${index} falhou internamente. Slug: ${res.value?.slug || 'desconhecido'}`);
             }
         });
+
+        console.log("[SYNC ESTATÍSTICAS] Sincronização concluída.");
 
         return { 
             sucesso: true, 
