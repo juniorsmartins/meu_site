@@ -8,6 +8,8 @@ import { sincronizarIpca } from './adapters/ipcaAdapter.js';
 import { sincronizarDivida } from './adapters/dividaPublicaAdapter.js';
 import { sincronizarCambio } from './adapters/cambioAdapter.js';
 import { sincronizarReservas } from './adapters/reservasAdapter.js';
+import { sincronizarCredito } from './adapters/creditoAdapter.js';
+import { sincronizarInadimplencia } from './adapters/inadimplenciaAdapter.js';
 
 const estatisticasSyncService = async (usuarioAutenticado) => {
 
@@ -24,7 +26,9 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
             // { nome: 'Desemprego', fn: sincronizarDesemprego },
             // { nome: 'Dívida', fn: sincronizarDivida },
             { nome: 'Câmbio', fn: sincronizarCambio },
-            { nome: 'Reservas', fn: sincronizarReservas }
+            { nome: 'Reservas', fn: sincronizarReservas },
+            { nome: 'Crédito', fn: sincronizarCredito }, 
+            { nome: 'Inadimplência', fn: sincronizarInadimplencia } 
         ];
 
         // Executa sequencialmente

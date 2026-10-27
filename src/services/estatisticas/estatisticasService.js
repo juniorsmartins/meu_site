@@ -15,6 +15,8 @@ export const estatisticasService = async () => {
         let dividaBrutaData = { anos: [], valores: [] };
         let cambioData = { anos: [], valores: [] };
         let reservasData = { anos: [], valores: [] };
+        let creditoData = { anos: [], valores: [] };
+        let inadimplenciaData = { anos: [], valores: [] };
 
         indicadores.forEach(ind => {
             if (ind.slug === 'pib') {
@@ -57,6 +59,16 @@ export const estatisticasService = async () => {
                     anos: ind.anos || [], 
                     valores: ind.valores || [] 
                 };
+            } else if (ind.slug === 'credito') {
+                creditoData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
+            } else if (ind.slug === 'inadimplencia') {
+                inadimplenciaData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
             }
         });
 
@@ -68,7 +80,9 @@ export const estatisticasService = async () => {
             divida_liquida: dividaLiquidaData,
             divida_bruta: dividaBrutaData,
             cambio: cambioData,
-            reservas: reservasData
+            reservas: reservasData,
+            credito: creditoData, 
+            inadimplencia: inadimplenciaData 
         };
 
     } catch (error) {
