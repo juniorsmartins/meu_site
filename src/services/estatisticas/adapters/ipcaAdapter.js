@@ -46,7 +46,7 @@ async function sincronizarIpca(dataInicioStr, dataFimStr, agora) {
         }
         return { sucesso: false, slug: 'ipca' };
     } catch (e) {
-        console.error("[IPCA ADAPTER] Erro:", e.message);
+        console.error("[IPCA ADAPTER] Erro: ", e.message);
         return { sucesso: false, slug: 'ipca' };
     }
 }
