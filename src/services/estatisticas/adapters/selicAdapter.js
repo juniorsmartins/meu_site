@@ -1,10 +1,7 @@
 import { httpClient } from '../chamadaHttpClient.js';
 import { IndicadorAnualModel } from '../../../models/indicadorSchema.js';
 
-// Código 432 = Taxa de juros - Meta Selic definida pelo Copom
 const SERIE_BCB_META_SELIC = 432;
-
-// Função auxiliar para criar pausas (sleep)
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 async function sincronizarSelic() {
@@ -14,14 +11,10 @@ async function sincronizarSelic() {
     try {
         const agora = new Date();
         const anoAtual = agora.getFullYear();
-
-        // A série 432 começa em 05/03/1999.
         const anoInicio = 2000; 
-
-        // Mantemos a exclusão do ano corrente para não gerar médias parciais.
         const anoFim = anoAtual - 1; 
 
-        console.log(`[SELIC ADAPTER] Buscando Meta Selic histórica de 20 anos (${anoInicio} a ${anoFim}) em blocos de 5 anos...`);
+        console.log(`[SELIC ADAPTER] Buscando Meta Selic histórica (${anoInicio} a ${anoFim}) em blocos de 4 anos...`);
 
         // Vamos fazer blocos menores (de 4 anos) para aliviar a carga
         const blocos = [];
@@ -41,7 +34,6 @@ async function sincronizarSelic() {
                 const res = await httpClient(url);
                 if (Array.isArray(res.data)) {
                     dadosCompletos.push(...res.data);
-
                     console.log(`[SELIC ADAPTER] Bloco ${bloco.inicio}-${bloco.fim} OK (${res.data.length} registros)`);
                 }
 
@@ -49,7 +41,6 @@ async function sincronizarSelic() {
                 console.warn(`[SELIC ADAPTER] Falha no bloco ${bloco.inicio}-${bloco.fim}:`, err.message);
             }
             
-            // ⏳ Pausa de 3 segundos entre cada requisição para não bloquear no BCB
             await sleep(3000); 
         }
 
