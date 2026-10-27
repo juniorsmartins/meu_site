@@ -1,8 +1,16 @@
 import { httpClient } from '../chamadaHttpClient.js';
 import { IndicadorAnualModel } from '../../../models/indicadorSchema.js';
 
-async function sincronizarDesemprego(agora) {
+const SERIE_BCB_DESEMPREGO = 24369;
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+async function sincronizarDesemprego() {
+
+    console.log(`[DESEMPREGO ADAPTER] Iniciando sincronização (BCB Série 24369)...`);
+
     try {
+        const agora = new Date();
+        
         const url = 'https://apisidra.ibge.gov.br/values/t/4562/n1/all/v/4099/p/all/h/y/f/a/d/m';
         const resposta = await httpClient(url);
 
