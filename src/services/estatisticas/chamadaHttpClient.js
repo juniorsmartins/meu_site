@@ -7,7 +7,7 @@ setGlobalDispatcher(new Agent({
   keepAliveMaxTimeout: 60_000,
 }));
 
-const httpClient = async (url, tentativasMaximas = 3) => {
+const httpClient = async (url, tentativasMaximas = 5) => {
   for (let tentativa = 1; tentativa <= tentativasMaximas; tentativa++) {
     try {
       console.log(`[HTTP CLIENT] Tentativa ${tentativa}/${tentativasMaximas} - GET: ${url}`);
@@ -18,8 +18,8 @@ const httpClient = async (url, tentativasMaximas = 3) => {
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
           'Accept': 'application/json'
         },
-        // Timeout total da requisição (aborta se demorar mais que 15s)
-        signal: AbortSignal.timeout(15_000)
+        // Timeout total da requisição (aborta se demorar mais que 30s)
+        signal: AbortSignal.timeout(30_000)
       });
 
       console.log(`[HTTP CLIENT] Status Resposta (${url}): ${resposta.status}`);

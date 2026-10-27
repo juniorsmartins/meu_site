@@ -1,52 +1,51 @@
 import { regraAutorizarApenasAdmin } from '../../helpers/usuarioUtils.js';
 import { AppError } from '../../errors/AppError.js';
-import { MENSAGENS_ERRO } from '../../configs/mensagensConfig.js';
+import { MENSAGENS_ERRO, MENSAGENS_SUCESSO } from '../../configs/mensagensConfig.js';
 import { sincronizarPib } from './adapters/pibAdapter.js';
 import { sincronizarDesemprego } from './adapters/desempregoAdapter.js';
 import { sincronizarSelic } from './adapters/selicAdapter.js';
 import { sincronizarIpca } from './adapters/ipcaAdapter.js';
 
-function formatarDataBCB(data) {
-    const dia = String(data.getDate()).padStart(2, '0');
-    const mes = String(data.getMonth() + 1).padStart(2, '0'); 
-    const ano = data.getFullYear();
-    return `${dia}/${mes}/${ano}`;
-}
-
 const estatisticasSyncService = async (usuarioAutenticado) => {
+
     regraAutorizarApenasAdmin(usuarioAutenticado);
 
     try {
         console.log("[SYNC ESTATÍSTICAS] Iniciando sincronização via Arquitetura de Adapters (Modular)...");
 
-        const dataHoje = new Date();
-        const dataFimStr = formatarDataBCB(dataHoje);
-                
-        const dataInicio = new Date();
-        dataInicio.setFullYear(dataHoje.getFullYear() - 10);
-        const dataInicioStr = formatarDataBCB(dataInicio);
-        const agora = new Date();
-
-        // Agrupa todas as chamadas dos adaptadores de forma limpa e escalável
-        const tarefasSincronizacao = [
-            sincronizarPib(agora),
-            sincronizarDesemprego(agora),
-            sincronizarSelic(dataInicioStr, dataFimStr, agora),
-            sincronizarIpca(dataInicioStr, dataFimStr, agora)
-            // Futuros adaptadores (ex: sincronizarCambio(agora), sincronizarDivida(agora), etc.) entram aqui automaticamente!
+        // Agrupa os adaptadores (sem executá-los ainda)
+        const adapters = [
+            { nome: 'Selic', fn: sincronizarSelic },
+            { nome: 'IPCA', fn: sincronizarIpca },
+            { nome: 'PIB', fn: sincronizarPib },
+            { nome: 'Desemprego', fn: sincronizarDesemprego }
         ];
 
-        // Executa todas as tarefas em paralelo com segurança total (Promise.allSettled)
-        const resultados = await Promise.allSettled(tarefasSincronizacao);
+        // Executa sequencialmente
+        for (const adapter of adapters) {
+            try {
+                const resultado = await adapter.fn();
 
-        // Opcional: logar quais obtiveram sucesso ou falha individualmente
-        resultados.forEach((res, index) => {
-            if (res.status === 'rejected') {
-                console.error(`[SYNC] Tarefa ${index} falhou com erro:`, res.reason);
+                if (!resultado.sucesso) {
+                    console.error(`[SYNC ESTATÍSTICAS] Adapter ${adapter.nome} falhou.`);
+                } else {
+                    console.log(`[SYNC ESTATÍSTICAS] Adapter ${adapter.nome} finalizado.`);
+                }
+
+            } catch (error) {
+                console.error(`[SYNC ESTATÍSTICAS] Erro inesperado no adapter ${adapter.nome}:`, error.message);
             }
-        });
+            
+            // Pausa de 2 segundos entre um adaptador e outro
+            await new Promise(resolve => setTimeout(resolve, 2000));
+        }
 
-        return { sucesso: true, mensagem: "Estatísticas sincronizadas com sucesso!" };
+        console.log("[SYNC ESTATÍSTICAS] Sincronização de todos os adaptadores concluída.");
+
+        return { 
+            sucesso: true, 
+            mensagem: MENSAGENS_SUCESSO.ESTATISTICAS.CARREGADAS_COM_SUCESSO 
+        };
 
     } catch (error) {
         console.error("[SYNC ESTATÍSTICAS] Erro crítico na sincronização:", error);
