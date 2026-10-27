@@ -75,6 +75,11 @@ async function sincronizarIpca() {
 
         Object.keys(dadosPorAno).forEach(ano => {
             const variacoesMensais = dadosPorAno[ano];
+
+            // Opcional: Avisar se o ano não tiver os 12 meses (útil para debug)
+            if (variacoesMensais.length < 12) {
+                console.warn(`[IPCA ADAPTER] Atenção: O ano ${ano} possui apenas ${variacoesMensais.length} meses de dados.`);
+            }
             
             let fatorAcumulado = 1;
             variacoesMensais.forEach(variacao => {
@@ -84,7 +89,7 @@ async function sincronizarIpca() {
             const acumuladoPercentual = (fatorAcumulado - 1) * 100;
             
             // Arredonda para 2 casas decimais
-            mapaAnual[ano] = Math.round(acumuladoPercentual * 100) / 100;
+            mapaAnual[ano] = Number(acumuladoPercentual.toFixed(2));
         });
 
         const anos = Object.keys(mapaAnual).sort((a, b) => Number(a) - Number(b));

@@ -30,9 +30,8 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
         // Agrupa todas as chamadas dos adaptadores de forma limpa e escalável
         const tarefasSincronizacao = [
             // sincronizarSelic(),
-            sincronizarIpca()
-
-            // sincronizarPib(agora),
+            // sincronizarIpca(),
+            sincronizarPib()
             // sincronizarDesemprego(agora),
 
             // Futuros adaptadores (ex: sincronizarCambio(agora), sincronizarDivida(agora), etc.) entram aqui automaticamente!
