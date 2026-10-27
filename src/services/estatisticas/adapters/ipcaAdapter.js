@@ -12,7 +12,7 @@ async function sincronizarIpca() {
         const agora = new Date();
         const anoAtual = agora.getFullYear();
 
-        const anoInicio = 1980; 
+        const anoInicio = 1995; 
         const anoFim = anoAtual - 1; // Exclui o ano atual para não ter acumulado parcial
 
         console.log(`[IPCA ADAPTER] Buscando IPCA histórico (${anoInicio} a ${anoFim}) em blocos de 4 anos...`);
