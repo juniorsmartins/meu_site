@@ -11,7 +11,8 @@ export const estatisticasService = async () => {
         let desempregoData = { anos: [], valores: [] };
         let ipcaData = { anos: [], valores: [] };
         let selicData = { anos: [], valores: [] };
-        let dividaData = { anos: [], valores: [], meta: { labels: ['Dívida Líquida', 'Dívida Bruta'] } };
+        let dividaLiquidaData = { anos: [], valores: [] };
+        let dividaBrutaData = { anos: [], valores: [] };
 
         indicadores.forEach(ind => {
             if (ind.slug === 'pib') {
@@ -34,11 +35,15 @@ export const estatisticasService = async () => {
                     anos: ind.anos || [], 
                     valores: ind.valores || [] 
                 };
-            } else if (ind.slug === 'divida') {
-                dividaData = { 
+            } else if (ind.slug === 'divida_liquida') {
+                dividaLiquidaData = { 
                     anos: ind.anos || [], 
-                    valores: ind.valores || [], 
-                    meta: ind.meta || { labels: ['Dívida Líquida', 'Dívida Bruta'] }
+                    valores: ind.valores || [] 
+                };
+            } else if (ind.slug === 'divida_bruta') {
+                dividaBrutaData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
                 };
             }
         });
@@ -48,7 +53,8 @@ export const estatisticasService = async () => {
             desemprego: desempregoData,
             ipca: ipcaData,
             selic: selicData,
-            divida: dividaData
+            divida_liquida: dividaLiquidaData,
+            divida_bruta: dividaBrutaData
         };
 
     } catch (error) {

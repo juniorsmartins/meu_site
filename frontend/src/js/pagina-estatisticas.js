@@ -6,14 +6,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (!resposta.ok) throw new Error("Erro ao buscar estatísticas do servidor.");
 
         const resultado = await resposta.json();
-        const { pib, desemprego, ipca, selic, divida } = resultado.dados;
+        const { pib, desemprego, ipca, selic, divida_liquida, divida_bruta } = resultado.dados;
 
         // Renderiza cada gráfico utilizando seus próprios anos e valores de forma independente
         renderizarGraficoLinha('graficoPib', pib.anos, pib.valores, 'Crescimento do PIB (%)', '#0D47A1', '#E3F2FD');
         renderizarGraficoLinha('graficoDesemprego', desemprego.anos, desemprego.valores, 'Desemprego (%)', '#D32F2F', '#FDEDEC');
         renderizarGraficoLinha('graficoIpca', ipca.anos, ipca.valores, 'IPCA / Inflação (%)', '#F39C12', '#FEF9E7');
         renderizarGraficoLinha('graficoSelic', selic.anos, selic.valores, 'Taxa Selic (%)', '#27AE60', '#EAFAF1');
-        renderizarGraficoDivida(divida);
+        renderizarGraficoDivida(divida_liquida, divida_bruta);
 
     } catch (error) {
         console.error("Erro ao carregar gráficos reais:", error);
@@ -70,42 +70,56 @@ function renderizarGraficoLinha(canvasId, rotulos, dados, labelDataset, corPrinc
     });
 }
 
-function renderizarGraficoDivida(dados) {
-    // PROTEÇÃO: Se não houver dados ou o array de valores estiver incompleto, não renderiza
-    if (!dados || !dados.valores || dados.valores.length < 2) {
+function renderizarGraficoDivida(dividaLiquida, dividaBruta) {
+
+    if (!dividaLiquida || !dividaBruta || !dividaLiquida.anos) {
         console.warn("[FRONT-END] Dados da Dívida Pública indisponíveis para renderização.");
         return; 
     }
 
     const ctx = document.getElementById('graficoDivida').getContext('2d');
-    
+
     // Se o gráfico já existir, destrua antes de criar outro (evita sobreposição)
     if (window.chartDivida) window.chartDivida.destroy();
+
+    // Une os anos das duas séries para que o eixo X fique contínuo
+    const todosAnos = Array.from(new Set([...liquida.anos, ...bruta.anos])).sort((a, b) => Number(a) - Number(b));
+
+    // Mapeia os valores de cada série para os anos unificados (preenchendo com null onde não houver)
+    const dataLiquida = todosAnos.map(ano => {
+        const index = liquida.anos.indexOf(ano);
+        return index !== -1 ? liquida.valores[index] : null;
+    });
+
+    const dataBruta = todosAnos.map(ano => {
+        const index = bruta.anos.indexOf(ano);
+        return index !== -1 ? bruta.valores[index] : null;
+    });
 
     window.chartDivida = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: dados.anos,
+            labels: todosAnos,
             datasets: [
                 {
                     label: 'Dívida Líquida',
-                    data: dados.valores[0], // Array com os valores da DLSP
-                    borderColor: '#0d6efd', // Azul
+                    data: dataLiquida,
+                    borderColor: '#0d6efd',
                     backgroundColor: 'rgba(13, 110, 253, 0.1)',
                     borderWidth: 2,
-                    tension: 0.3, // Deixa a linha levemente curvada
+                    tension: 0.3,
                     pointRadius: 3,
-                    fill: true // Preenche a área abaixo da linha
+                    fill: true
                 },
                 {
                     label: 'Dívida Bruta',
-                    data: dados.valores[1], // Array com os valores da DBGG
-                    borderColor: '#dc3545', // Vermelho
+                    data: dataBruta,
+                    borderColor: '#dc3545',
                     backgroundColor: 'rgba(220, 53, 69, 0.1)',
                     borderWidth: 2,
                     tension: 0.3,
                     pointRadius: 3,
-                    fill: false
+                    fill: false // Deixa sem fill para não sobrepor a líquida
                 }
             ]
         },
@@ -113,10 +127,7 @@ function renderizarGraficoDivida(dados) {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: {
-                    display: true,
-                    position: 'top'
-                },
+                legend: { display: true, position: 'top' },
                 tooltip: {
                     callbacks: {
                         label: function(context) {
@@ -127,7 +138,7 @@ function renderizarGraficoDivida(dados) {
             },
             scales: {
                 y: {
-                    beginAtZero: false, // A dívida não começa em zero, então false é melhor
+                    beginAtZero: false,
                     title: { display: true, text: '% do PIB' }
                 }
             }
