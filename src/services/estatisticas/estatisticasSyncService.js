@@ -5,6 +5,7 @@ import { sincronizarPib } from './adapters/pibAdapter.js';
 import { sincronizarDesemprego } from './adapters/desempregoAdapter.js';
 import { sincronizarSelic } from './adapters/selicAdapter.js';
 import { sincronizarIpca } from './adapters/ipcaAdapter.js';
+import { sincronizarDivida } from './adapters/dividaPublicaAdapter.js';
 
 const estatisticasSyncService = async (usuarioAutenticado) => {
 
@@ -15,10 +16,11 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
 
         // Agrupa os adaptadores (sem executá-los ainda)
         const adapters = [
-            { nome: 'Selic', fn: sincronizarSelic },
-            { nome: 'IPCA', fn: sincronizarIpca },
-            { nome: 'PIB', fn: sincronizarPib },
-            { nome: 'Desemprego', fn: sincronizarDesemprego }
+            // { nome: 'Selic', fn: sincronizarSelic },
+            // { nome: 'IPCA', fn: sincronizarIpca },
+            // { nome: 'PIB', fn: sincronizarPib },
+            // { nome: 'Desemprego', fn: sincronizarDesemprego },
+            { nome: 'Dívida', fn: sincronizarDivida }
         ];
 
         // Executa sequencialmente

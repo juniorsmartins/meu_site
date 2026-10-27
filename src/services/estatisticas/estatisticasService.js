@@ -11,16 +11,40 @@ export const estatisticasService = async () => {
         let desempregoData = { anos: [], valores: [] };
         let ipcaData = { anos: [], valores: [] };
         let selicData = { anos: [], valores: [] };
+        let dividaLiquidaData = { anos: [], valores: [] };
+        let dividaBrutaData = { anos: [], valores: [] };
 
         indicadores.forEach(ind => {
             if (ind.slug === 'pib') {
-                pibData = { anos: ind.anos || [], valores: ind.valores || [] };
+                pibData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
             } else if (ind.slug === 'desemprego') {
-                desempregoData = { anos: ind.anos || [], valores: ind.valores || [] };
+                desempregoData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
             } else if (ind.slug === 'ipca') {
-                ipcaData = { anos: ind.anos || [], valores: ind.valores || [] };
+                ipcaData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
             } else if (ind.slug === 'selic') {
-                selicData = { anos: ind.anos || [], valores: ind.valores || [] };
+                selicData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
+            } else if (ind.slug === 'divida_liquida') {
+                dividaLiquidaData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
+            } else if (ind.slug === 'divida_bruta') {
+                dividaBrutaData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
             }
         });
 
@@ -28,7 +52,9 @@ export const estatisticasService = async () => {
             pib: pibData,
             desemprego: desempregoData,
             ipca: ipcaData,
-            selic: selicData
+            selic: selicData,
+            divida_liquida: dividaLiquidaData,
+            divida_bruta: dividaBrutaData
         };
 
     } catch (error) {
