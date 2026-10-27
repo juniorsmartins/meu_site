@@ -30,7 +30,7 @@ async function sincronizarPib() {
 
         const pares = resposta.data.map(item => {
             // O BCB retorna a data no formato "DD/MM/YYYY". Pegamos só o ano.
-            const ano = item.data.split('/')[2];
+            const ano = (item.data && item.data.includes('/')) ? item.data.split('/')[2] : null;
             
             // O Number() transforma vazio ou texto em NaN. Number.isFinite garante que é um número válido.
             const valorNumerico = Number(item.valor);
@@ -38,7 +38,7 @@ async function sincronizarPib() {
             
             return { ano, valor };
         })
-        .filter(item => item.ano); // Mantém anos sem dados (valor null) para que o gráfico mostre a lacuna
+        .filter(item => item.ano !== null); // Remove itens sem ano válido
 
         pares.sort((a, b) => Number(a.ano) - Number(b.ano));
 
