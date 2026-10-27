@@ -79,21 +79,19 @@ function renderizarGraficoDivida(dividaLiquida, dividaBruta) {
 
     const ctx = document.getElementById('graficoDivida').getContext('2d');
 
-    // Se o gráfico já existir, destrua antes de criar outro (evita sobreposição)
     if (window.chartDivida) window.chartDivida.destroy();
 
-    // Une os anos das duas séries para que o eixo X fique contínuo
-    const todosAnos = Array.from(new Set([...liquida.anos, ...bruta.anos])).sort((a, b) => Number(a) - Number(b));
+    // CORREÇÃO AQUI: usando dividaLiquida e dividaBruta
+    const todosAnos = Array.from(new Set([...dividaLiquida.anos, ...dividaBruta.anos])).sort((a, b) => Number(a) - Number(b));
 
-    // Mapeia os valores de cada série para os anos unificados (preenchendo com null onde não houver)
     const dataLiquida = todosAnos.map(ano => {
-        const index = liquida.anos.indexOf(ano);
-        return index !== -1 ? liquida.valores[index] : null;
+        const index = dividaLiquida.anos.indexOf(ano);
+        return index !== -1 ? dividaLiquida.valores[index] : null;
     });
 
     const dataBruta = todosAnos.map(ano => {
-        const index = bruta.anos.indexOf(ano);
-        return index !== -1 ? bruta.valores[index] : null;
+        const index = dividaBruta.anos.indexOf(ano);
+        return index !== -1 ? dividaBruta.valores[index] : null;
     });
 
     window.chartDivida = new Chart(ctx, {
@@ -144,5 +142,5 @@ function renderizarGraficoDivida(dividaLiquida, dividaBruta) {
             }
         }
     });
-}
+};
 
