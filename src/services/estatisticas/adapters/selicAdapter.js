@@ -33,7 +33,7 @@ async function sincronizarSelic() {
         const criarUrl = (inicio, fim) => `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_META_SELIC}/dados?formato=json&dataInicial=01/01/${inicio}&dataFinal=31/12/${fim}`;
 
         const dadosCompletos = [];
-        
+
         for (const bloco of blocos) {
             const url = criarUrl(bloco.inicio, bloco.fim);
 
@@ -49,8 +49,8 @@ async function sincronizarSelic() {
                 console.warn(`[SELIC ADAPTER] Falha no bloco ${bloco.inicio}-${bloco.fim}:`, err.message);
             }
             
-            // ⏳ Pausa de 1 segundo entre cada requisição para não bloquear no BCB
-            await sleep(1000); 
+            // ⏳ Pausa de 3 segundos entre cada requisição para não bloquear no BCB
+            await sleep(3000); 
         }
 
         if (dadosCompletos.length === 0) {
