@@ -7,34 +7,40 @@ import { sincronizarSelic } from './adapters/selicAdapter.js';
 import { sincronizarIpca } from './adapters/ipcaAdapter.js';
 
 const estatisticasSyncService = async (usuarioAutenticado) => {
-    
+
     regraAutorizarApenasAdmin(usuarioAutenticado);
 
     try {
         console.log("[SYNC ESTATÍSTICAS] Iniciando sincronização via Arquitetura de Adapters (Modular)...");
 
-        // Agrupa todas as chamadas dos adaptadores de forma limpa e escalável
-        const tarefasSincronizacao = [
-            sincronizarSelic(),
-            sincronizarIpca(),
-            sincronizarPib(),
-            sincronizarDesemprego()
-            // Futuros adaptadores (ex: sincronizarCambio(agora), sincronizarDivida(agora), etc.) entram aqui automaticamente!
+        // Agrupa os adaptadores (sem executá-los ainda)
+        const adapters = [
+            { nome: 'Selic', fn: sincronizarSelic },
+            { nome: 'IPCA', fn: sincronizarIpca },
+            { nome: 'PIB', fn: sincronizarPib },
+            { nome: 'Desemprego', fn: sincronizarDesemprego }
         ];
 
-        // Executa todas as tarefas em paralelo com segurança total (Promise.allSettled)
-        const resultados = await Promise.allSettled(tarefasSincronizacao);
+        // Executa sequencialmente
+        for (const adapter of adapters) {
+            try {
+                const resultado = await adapter.fn();
 
-        // Opcional: logar quais obtiveram sucesso ou falha individualmente
-        resultados.forEach((res, index) => {
-            if (res.status === 'rejected') {
-                console.error(`[SYNC ESTATÍSTICAS] Tarefa ${index} sofreu uma rejeição inesperada: `, res.reason);
-            } else if (res.value?.sucesso === false) {
-                console.error(`[SYNC ESTATÍSTICAS] Tarefa ${index} falhou internamente. Slug: ${res.value?.slug || 'desconhecido'}`);
+                if (!resultado.sucesso) {
+                    console.error(`[SYNC ESTATÍSTICAS] Adapter ${adapter.nome} falhou.`);
+                } else {
+                    console.log(`[SYNC ESTATÍSTICAS] Adapter ${adapter.nome} finalizado.`);
+                }
+
+            } catch (error) {
+                console.error(`[SYNC ESTATÍSTICAS] Erro inesperado no adapter ${adapter.nome}:`, error.message);
             }
-        });
+            
+            // Pausa de 2 segundos entre um adaptador e outro
+            await new Promise(resolve => setTimeout(resolve, 2000));
+        }
 
-        console.log("[SYNC ESTATÍSTICAS] Sincronização concluída.");
+        console.log("[SYNC ESTATÍSTICAS] Sincronização de todos os adaptadores concluída.");
 
         return { 
             sucesso: true, 
