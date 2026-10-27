@@ -6,7 +6,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (!resposta.ok) throw new Error("Erro ao buscar estatísticas do servidor.");
 
         const resultado = await resposta.json();
-        const { pib, desemprego, ipca, selic, divida_liquida, divida_bruta } = resultado.dados;
+        const { 
+            pib, 
+            desemprego, 
+            ipca, 
+            selic, 
+            divida_liquida, 
+            divida_bruta, 
+            cambio, 
+            reservas 
+        } = resultado.dados;
 
         // Renderiza cada gráfico utilizando seus próprios anos e valores de forma independente
         renderizarGraficoLinha('graficoPib', pib.anos, pib.valores, 'Crescimento do PIB (%)', '#0D47A1', '#E3F2FD');
@@ -14,23 +23,25 @@ document.addEventListener("DOMContentLoaded", async () => {
         renderizarGraficoLinha('graficoIpca', ipca.anos, ipca.valores, 'IPCA / Inflação (%)', '#F39C12', '#FEF9E7');
         renderizarGraficoLinha('graficoSelic', selic.anos, selic.valores, 'Taxa Selic (%)', '#27AE60', '#EAFAF1');
         renderizarGraficoDivida(divida_liquida, divida_bruta);
+        renderizarGraficoLinha('graficoCambio', cambio.anos, cambio.valores, 'Câmbio (R$/US$)', '#8E44AD', '#F4ECF7', 'R$ ');
+        renderizarGraficoLinha('graficoReservas', reservas.anos, reservas.valores, 'Reservas (US$ Bilhões)', '#16A085', '#E8F8F5', 'US$ ');
 
     } catch (error) {
         console.error("Erro ao carregar gráficos reais:", error);
     }
 });
 
-function renderizarGraficoLinha(canvasId, rotulos, dados, labelDataset, corPrincipal, corFundo) {
+function renderizarGraficoLinha(canvasId, rotulos, dados, labelDataset, corPrincipal, corFundo, prefixo = '') {
     const ctx = document.getElementById(canvasId);
     if (!ctx) return;
 
     new Chart(ctx, {
         type: 'line',
         data: {
-            labels: rotulos, // Eixo X específico de cada indicador
+            labels: rotulos,
             datasets: [{
                 label: labelDataset,
-                data: dados,    // Valores específicos de cada indicador
+                data: dados,
                 borderColor: corPrincipal,
                 backgroundColor: corFundo,
                 borderWidth: 2.5,
@@ -50,7 +61,19 @@ function renderizarGraficoLinha(canvasId, rotulos, dados, labelDataset, corPrinc
                 },
                 tooltip: {
                     mode: 'index',
-                    intersect: false
+                    intersect: false,
+                    callbacks: {
+                        label: function(context) {
+                            // Exibe o prefixo (%, R$, US$) formatado
+                            let valor = context.raw;
+                            if (valor !== null && valor !== undefined) {
+                                if (prefixo === 'R$ ') return `Câmbio: R$ ${valor.toFixed(2).replace('.', ',')}`;
+                                if (prefixo === 'US$ ') return `Reservas: US$ ${valor.toFixed(1).replace('.', ',')} bi`;
+                                return `${prefixo}${valor.toString().replace('.', ',')}`;
+                            }
+                            return 'Sem dados';
+                        }
+                    }
                 }
             },
             scales: {

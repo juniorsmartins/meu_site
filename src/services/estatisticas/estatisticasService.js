@@ -13,6 +13,8 @@ export const estatisticasService = async () => {
         let selicData = { anos: [], valores: [] };
         let dividaLiquidaData = { anos: [], valores: [] };
         let dividaBrutaData = { anos: [], valores: [] };
+        let cambioData = { anos: [], valores: [] };
+        let reservasData = { anos: [], valores: [] };
 
         indicadores.forEach(ind => {
             if (ind.slug === 'pib') {
@@ -45,6 +47,16 @@ export const estatisticasService = async () => {
                     anos: ind.anos || [], 
                     valores: ind.valores || [] 
                 };
+            } else if (ind.slug === 'cambio') {
+                cambioData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
+            } else if (ind.slug === 'reservas') {
+                reservasData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
             }
         });
 
@@ -54,7 +66,9 @@ export const estatisticasService = async () => {
             ipca: ipcaData,
             selic: selicData,
             divida_liquida: dividaLiquidaData,
-            divida_bruta: dividaBrutaData
+            divida_bruta: dividaBrutaData,
+            cambio: cambioData,
+            reservas: reservasData
         };
 
     } catch (error) {
