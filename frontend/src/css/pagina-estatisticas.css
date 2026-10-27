@@ -77,8 +77,8 @@
     height: 280px; /* Altura controlada para excelente responsividade */
 }
 
-/* Faz o 5º card (Dívida) ocupar as duas colunas */
-.card-grafico:nth-child(5) {
+/* Faz o 1º card (Dívida) ocupar as duas colunas */
+.card-grafico:nth-child(1) {
     grid-column: span 2;
 }
 
