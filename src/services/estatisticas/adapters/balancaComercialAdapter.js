@@ -29,6 +29,7 @@ async function sincronizarBalancaComercial() {
                 const res = await httpClient(url);
                 if (Array.isArray(res.data)) {
                     dadosCompletos.push(...res.data);
+                    console.log(`[BALANÇA ADAPTER] Bloco ${bloco.inicio}-${bloco.fim} OK (${res.data.length} registros)`);
                 }
 
             } catch (err) {

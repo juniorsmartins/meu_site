@@ -5,7 +5,7 @@ const SERIE_BCB_VAREJO = 1453; // Variação % mensal do volume de vendas no var
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 async function sincronizarVendasVarejo() {
-    
+
     console.log(`[VAREJO ADAPTER] Iniciando sincronização (Série 1453)...`);
 
     try {
@@ -29,6 +29,7 @@ async function sincronizarVendasVarejo() {
                 const res = await httpClient(url);
                 if (Array.isArray(res.data)) {
                     dadosCompletos.push(...res.data);
+                    console.log(`[VAREJO ADAPTER] Bloco ${bloco.inicio}-${bloco.fim} OK (${res.data.length} registros)`);
                 }
 
             } catch (err) {
