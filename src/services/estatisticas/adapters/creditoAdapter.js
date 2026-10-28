@@ -2,7 +2,6 @@ import { httpClient } from '../chamadaHttpClient.js';
 import { IndicadorAnualModel } from '../../../models/indicadorSchema.js';
 
 const SERIE_BCB_CREDITO = 20622; // Saldo da carteira de crédito em relação ao PIB (%)
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 async function sincronizarCredito() {
     
