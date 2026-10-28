@@ -35,7 +35,7 @@ async function sincronizarReservas() {
             } catch (err) {
                 console.warn(`[RESERVAS ADAPTER] Falha no bloco ${bloco.inicio}-${bloco.fim}:`, err.message);
             }
-            await sleep(3000);
+            await sleep(1000);
         }
 
         if (dadosCompletos.length === 0) {

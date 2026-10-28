@@ -14,6 +14,8 @@ async function sincronizarBalancaComercial() {
         const anoInicio = 1997; // A série começa em 1997
         const anoFim = anoAtual - 1;
 
+        console.log(`[BALANÇA ADAPTER] Buscando Balança Comercial histórica (${anoInicio} a ${anoFim}) em blocos de 4 anos...`);
+
         const blocos = [];
         for (let ano = anoInicio; ano <= anoFim; ano += 4) {
             const fimBloco = Math.min(ano + 3, anoFim);
@@ -35,7 +37,7 @@ async function sincronizarBalancaComercial() {
             } catch (err) {
                 console.warn(`[BALANÇA ADAPTER] Falha no bloco ${bloco.inicio}-${bloco.fim}:`, err.message);
             }
-            await sleep(3000);
+            await sleep(1000);
         }
 
         if (dadosCompletos.length === 0) return { sucesso: false, slug: 'balanca_comercial' };

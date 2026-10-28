@@ -35,7 +35,7 @@ async function sincronizarCambio() {
             } catch (err) {
                 console.warn(`[CÂMBIO ADAPTER] Falha no bloco ${bloco.inicio}-${bloco.fim}:`, err.message);
             }
-            await sleep(3000);
+            await sleep(1000);
         }
 
         if (dadosCompletos.length === 0) {

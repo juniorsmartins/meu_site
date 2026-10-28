@@ -57,7 +57,7 @@ async function sincronizarDivida() {
                 } catch (err) {
                     console.warn(`[DÍVIDA ADAPTER] Falha série ${serieConfig.codigo} bloco ${ano}-${fimBloco}:`, err.message);
                 }
-                await sleep(3000); // Pausa para não bloquear o BCB
+                await sleep(1000); // Pausa para não bloquear o BCB
             }
             return dadosMapa;
         };

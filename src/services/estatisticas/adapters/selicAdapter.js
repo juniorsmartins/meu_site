@@ -41,7 +41,7 @@ async function sincronizarSelic() {
                 console.warn(`[SELIC ADAPTER] Falha no bloco ${bloco.inicio}-${bloco.fim}:`, err.message);
             }
             
-            await sleep(3000); 
+            await sleep(1000); 
         }
 
         if (dadosCompletos.length === 0) {
@@ -135,6 +135,7 @@ async function sincronizarSelic() {
         }
 
         return { sucesso: false, slug: 'selic' };
+        
     } catch (e) {
         console.error("[SELIC ADAPTER] Erro crítico: ", e.message);
         return { sucesso: false, slug: 'selic' };

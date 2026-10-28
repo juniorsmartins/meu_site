@@ -14,6 +14,8 @@ async function sincronizarVendasVarejo() {
         const anoInicio = 2000; 
         const anoFim = anoAtual - 1;
 
+        console.log(`[VAREJO ADAPTER] Buscando Vendas no Varejo histórica (${anoInicio} a ${anoFim}) em blocos de 4 anos...`);
+
         const blocos = [];
         for (let ano = anoInicio; ano <= anoFim; ano += 4) {
             const fimBloco = Math.min(ano + 3, anoFim);
@@ -35,7 +37,7 @@ async function sincronizarVendasVarejo() {
             } catch (err) {
                 console.warn(`[VAREJO ADAPTER] Falha no bloco ${bloco.inicio}-${bloco.fim}:`, err.message);
             }
-            await sleep(3000);
+            await sleep(1000);
         }
 
         if (dadosCompletos.length === 0) return { sucesso: false, slug: 'vendas_varejo' };
