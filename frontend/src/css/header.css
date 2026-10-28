@@ -451,3 +451,94 @@
     text-align: center;
 }
 
+/* ==========================================================================
+   MENU DROPDOWN DE ESTATÍSTICAS (NAVBAR)
+   ========================================================================== */
+
+.nav-dropdown-container {
+    position: relative;
+    cursor: pointer;
+}
+
+.nav-dropdown-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    user-select: none;
+}
+
+.dropdown-seta-mini {
+    font-size: 0.75rem;
+    transition: transform 0.3s ease;
+}
+
+/* Caixa Flutuante do Dropdown */
+.nav-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background-color: #ffffff;
+    min-width: 220px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    border-radius: 6px;
+    padding: 8px 0;
+    list-style: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1000;
+}
+
+/* Seta pequena apontando para cima no topo do dropdown */
+.nav-dropdown-menu::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 12px;
+    height: 12px;
+    background-color: #ffffff;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    border-left: 1px solid rgba(0,0,0,0.05);
+}
+
+/* Itens individuais do dropdown */
+.nav-dropdown-menu li {
+    width: 100%;
+}
+
+.dropdown-item-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    color: #333333;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.dropdown-item-link i {
+    color: #0d47a1; /* Azul corporativo Gajeiro */
+    font-size: 1.1rem;
+}
+
+.dropdown-item-link:hover {
+    background-color: #f0f4f8;
+    color: #0d47a1;
+}
+
+/* Comportamento de Hover (Abre o menu) */
+.nav-dropdown-container:hover .nav-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.nav-dropdown-container:hover .dropdown-seta-mini {
+    transform: rotate(180deg);
+}
+

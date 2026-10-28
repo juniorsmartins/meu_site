@@ -69,8 +69,34 @@
     <nav id="header-navbar"> 
         <ul class="flex flex-center">
             <li><a href="/html/index.html" class="nav-link">Home</a></li>
-            <li><a href="/html/pagina-estatisticas.html" class="nav-link">Estatísticas</a></li>
             <li><a href="/html/sobre.html" class="nav-link">Sobre</a></li>
+
+            <!-- Menu Dropdown de Estatísticas (Sem link na raiz) -->
+            <li class="nav-dropdown-container">
+                <div class="nav-link nav-dropdown-toggle">
+                    Estatísticas <i class="bi bi-chevron-down dropdown-seta-mini"></i>
+                </div>
+                
+                <!-- Caixa Flutuante do Menu -->
+                <ul class="nav-dropdown-menu">
+                    <li>
+                        <a href="/html/pagina-graficos-economia.html" class="dropdown-item-link">
+                            <i class="bi bi-graph-up-arrow"></i> Economia
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/html/pagina-graficos-demografia.html" class="dropdown-item-link">
+                            <i class="bi bi-people-fill"></i> Demografia
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/html/pagina-graficos-infraestrutura.html" class="dropdown-item-link">
+                            <i class="bi bi-building-fill-gear"></i> Infraestrutura
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
             <li><a href="/html/contato.html" class="nav-link">Contato</a></li>
         </ul>
     </nav>
