@@ -2,7 +2,6 @@ import { httpClient } from '../chamadaHttpClient.js';
 import { IndicadorAnualModel } from '../../../models/indicadorSchema.js';
 
 const SERIE_BCB_DESEMPREGO = 24369;
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 async function sincronizarDesemprego() {
 

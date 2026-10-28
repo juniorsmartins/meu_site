@@ -56,10 +56,15 @@
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>Dívida Pública (% do PIB)</h3>
-                        <p>Evolução do endividamento bruto e líquido do setor público (BCB).</p>
+                        <p>Evolução do endividamento bruto e líquido do setor público. Posição de fechamento (dezembro) de cada ano (BCB).</p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoDivida"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> O acúmulo de dívidas do governo em relação a tudo que o país produz.</p>
+                        <p><strong>Por que a queda é ideal?</strong> Menos dívida significa que o governo gasta menos com juros, sobrando mais recursos para investir em saúde, educação e infraestrutura. Além disso, passa segurança para investidores, ajudando a manter os juros baixos.</p>
+                        <p class="tag-tendencia tendencia-boa">📉 Tendência ideal: Queda</p>
                     </div>
                 </div>
 
@@ -67,10 +72,15 @@
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>Câmbio (R$/US$)</h3>
-                        <p>Média anual da taxa de câmbio comercial de venda (BCB).</p>
+                        <p>Média aritmética simples das cotações diárias de venda de cada ano (BCB).</p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoCambio"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> O preço do dólar em reais. Afeta a inflação de produtos importados e a competitividade das nossas exportações.</p>
+                        <p><strong>Por que o equilíbrio é ideal?</strong> Não existe um "dólar perfeito". Se estiver muito baixo, prejudica as indústrias e o agronegócio que exportam. Se estiver muito alto, encarece os produtos importados (como combustíveis e remédios) e gera inflação. O ideal é a estabilidade.</p>
+                        <p class="tag-tendencia tendencia-neutra">⚖️ Tendência ideal: Equilíbrio</p>
                     </div>
                 </div>
 
@@ -78,10 +88,15 @@
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>Reservas Internacionais (US$ Bilhões)</h3>
-                        <p>Volume de ativos estrangeiros acumulados pelo Banco Central (BCB).</p>
+                        <p>Volume de ativos estrangeiros acumulados. Posição de fechamento (dezembro) de cada ano (BCB).</p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoReservas"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> É a "poupança" do país em moeda estrangeira (principalmente dólares).</p>
+                        <p><strong>Por que a alta é ideal?</strong> Mais reservas funcionam como um seguro contra crises internacionais. Com um bom "colchão" de dólares, o país consegue pagar suas dívidas externas, controlar a volatilidade do câmbio e não quebra em momentos de crise global.</p>
+                        <p class="tag-tendencia tendencia-boa">📈 Tendência ideal: Alta</p>
                     </div>
                 </div>
 
@@ -89,10 +104,15 @@
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>Crescimento do PIB (%)</h3>
-                        <p>Variação real anual do PIB (Banco Central do Brasil - BCB).</p>
+                        <p>Taxa de variação real acumulada no ano, conforme divulgado oficialmente (BCB).</p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoPib"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> A soma de todas as riquezas produzidas no país. É o termômetro oficial da economia.</p>
+                        <p><strong>Por que a alta é ideal?</strong> Quando o PIB sobe, significa que as fábricas estão produzindo mais, o comércio está vendendo mais e, consequentemente, mais empregos são gerados. É a base para a melhora da renda e da qualidade de vida das pessoas.</p>
+                        <p class="tag-tendencia tendencia-boa">📈 Tendência ideal: Alta</p>
                     </div>
                 </div>
 
@@ -100,10 +120,15 @@
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>Taxa Básica de Juros - Selic (%)</h3>
-                        <p>Média ponderada anual da Meta da taxa Selic (Banco Central do Brasil - BCB).</p>
+                        <p>Média ponderada pelo tempo de vigência das metas definidas pelo Copom em cada ano (BCB).</p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoSelic"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> A taxa básica de juros do Brasil. Ela dita o custo de todo o crédito no país e atrai (ou espanta) investimentos.</p>
+                        <p><strong>Por que depende?</strong> É uma ferramenta de controle. Se a inflação está alta, o BC sobe a Selic (juros altos) para segurar o consumo. Se a economia está travada, o BC baixa a Selic para estimular as pessoas a pegarem empréstimos e comprarem. O ideal depende do momento da economia.</p>
+                        <p class="tag-tendencia tendencia-neutra">⚖️ Tendência ideal: Depende do momento</p>
                     </div>
                 </div>
 
@@ -111,21 +136,31 @@
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>Inflação Oficial - IPCA (%)</h3>
-                        <p>Variação acumulada anual do Índice de Preços ao Consumidor Amplo (BCB).</p>
+                        <p>Variação acumulada nos 12 meses de cada ano, calculada via juros compostos (BCB).</p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoIpca"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> Mede o aumento generalizado dos preços no supermercado, aluguel, transporte, etc.</p>
+                        <p><strong>Por que a baixa é ideal?</strong> A inflação corrói o seu salário. Se os preços sobem 10% e o seu salário não aumenta, você perde poder de compra. Uma inflação baixa e estável (dentro da meta do governo) permite que as pessoas planejem o futuro e mantém o dinheiro valendo mais.</p>
+                        <p class="tag-tendencia tendencia-boa">📉 Tendência ideal: Baixa e Controlada</p>
                     </div>
                 </div>
 
                 <!-- Gráfico 7: Taxa de Desemprego -->
                 <div class="card-grafico">
                     <div class="grafico-info">
-                        <h3>Taxa Média de Desemprego (%)</h3>
-                        <p>Média anual de desocupação da força de trabalho (PNAD Contínua - BCB/IBGE).</p>
+                        <h3>Taxa de Desemprego (%)</h3>
+                        <p>Média aritmética simples das taxas mensais de desocupação apuradas em cada ano (PNAD Contínua - BCB).</p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoDesemprego"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> O percentual de pessoas que procuram trabalho e não conseguem encontrar.</p>
+                        <p><strong>Por que a queda é ideal?</strong> O desemprego é o indicador mais sentido no dia a dia. Quando cai, mais famílias têm renda garantida, o comércio vende mais e há menos pressão sobre os programas sociais do governo.</p>
+                        <p class="tag-tendencia tendencia-boa">📉 Tendência ideal: Queda</p>
                     </div>
                 </div>               
 
@@ -133,21 +168,63 @@
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>Estoque de Crédito (% do PIB)</h3>
-                        <p>Saldo da carteira de crédito em relação ao PIB (BCB).</p>
+                        <p>Saldo da carteira de crédito em relação ao PIB. Posição de fechamento (dezembro) de cada ano (BCB).</p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoCredito"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> O volume total de dinheiro emprestado por bancos para famílias e empresas.</p>
+                        <p><strong>Por que o crescimento moderado é ideal?</strong> O crédito move a economia (ajuda a comprar casa, abrir negócios). Porém, se crescer rápido demais, as pessoas se endividam além do que podem pagar, criando uma "bolha" perigosa. O ideal é que cresça junto com a renda da população.</p>
+                        <p class="tag-tendencia tendencia-boa">📈 Tendência ideal: Crescimento Moderado</p>
                     </div>
                 </div>
 
                 <!-- Gráfico 9: Taxa de Inadimplência -->
                 <div class="card-grafico">
                     <div class="grafico-info">
-                        <h3>Taxa Média de Inadimplência (%)</h3>
-                        <p>Média anual da inadimplência da carteira de crédito (BCB).</p>
+                        <h3>Taxa de Inadimplência (%)</h3>
+                        <p>Média aritmética simples das taxas mensais de inadimplência apuradas em cada ano (BCB).</p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoInadimplencia"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> A porcentagem de empréstimos e financiamentos não pagos no prazo (o famoso "calote").</p>
+                        <p><strong>Por que a queda é ideal?</strong> Quando a inadimplência está alta, significa que as famílias estão sem dinheiro no bolso e os bancos perdem. Para se protegerem, os bancos aumentam os juros para <em>todos</em>. Com inadimplência baixa, a saúde financeira está em dia e o crédito fica mais barato.</p>
+                        <p class="tag-tendencia tendencia-boa">📉 Tendência ideal: Queda</p>
+                    </div>
+                </div>
+
+                <!-- Gráfico 10: Balança Comercial -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>Balança Comercial (US$ Bilhões)</h3>
+                        <p>Saldo acumulado no ano (exportações menos importações) em US$ bilhões (BCB).</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoBalanca"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> A diferença entre tudo que o país vende (exporta) e compra (importa) do exterior.</p>
+                        <p><strong>Por que a alta é ideal?</strong> Um saldo positivo (superávit) significa que o país está vendendo mais do que comprando, trazendo dólares para a economia. Isso fortalece o Real, ajuda a controlar a inflação e gera empregos na indústria e no agronegócio.</p>
+                        <p class="tag-tendencia tendencia-boa">📈 Tendência ideal: Alta (Superávit)</p>
+                    </div>
+                </div>
+
+                <!-- Gráfico 11: Vendas no Varejo -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>Vendas no Varejo (%)</h3>
+                        <p>Variação acumulada no ano do volume de vendas do comércio varejista (BCB/IBGE).</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoVarejo"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> Mede o crescimento real (descontando a inflação) do volume de vendas no comércio (lojas, supermercados, etc.).</p>
+                        <p><strong>Por que o crescimento moderado é ideal?</strong> Mostra que as famílias estão consumindo e o comércio aquecido. Isso gera mais empregos e renda. Porém, o crescimento precisa ser sustentável para não gerar inflação.</p>
+                        <p class="tag-tendencia tendencia-boa">📈 Tendência ideal: Crescimento Moderado</p>
                     </div>
                 </div>
 

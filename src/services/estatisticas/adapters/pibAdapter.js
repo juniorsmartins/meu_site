@@ -19,7 +19,6 @@ async function sincronizarPib() {
         // O BCB permite puxar toda a série anual de uma vez, sem precisar de blocos
         const url = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_PIB}/dados?formato=json&dataInicial=01/01/${anoInicio}&dataFinal=31/12/${anoFim}`;
 
-
         console.log(`[PIB ADAPTER] Buscando dados no BCB (Série ${SERIE_BCB_PIB})...`);
         const resposta = await httpClient(url);
 

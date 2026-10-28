@@ -7,7 +7,7 @@ setGlobalDispatcher(new Agent({
   keepAliveMaxTimeout: 60_000,
 }));
 
-const httpClient = async (url, tentativasMaximas = 5) => {
+const httpClient = async (url, tentativasMaximas = 4) => {
   for (let tentativa = 1; tentativa <= tentativasMaximas; tentativa++) {
     try {
       console.log(`[HTTP CLIENT] Tentativa ${tentativa}/${tentativasMaximas} - GET: ${url}`);
