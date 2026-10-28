@@ -22,15 +22,15 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
 
         // Agrupa os adaptadores (sem executá-los ainda)
         const adapters = [
-            // { nome: 'Selic', fn: sincronizarSelic },
-            // { nome: 'IPCA', fn: sincronizarIpca },
-            // { nome: 'PIB', fn: sincronizarPib },
-            // { nome: 'Desemprego', fn: sincronizarDesemprego },
-            // { nome: 'Dívida', fn: sincronizarDivida },
-            // { nome: 'Câmbio', fn: sincronizarCambio },
-            // { nome: 'Reservas', fn: sincronizarReservas },
-            // { nome: 'Crédito', fn: sincronizarCredito }, 
-            // { nome: 'Inadimplência', fn: sincronizarInadimplencia },
+            { nome: 'Selic', fn: sincronizarSelic },
+            { nome: 'IPCA', fn: sincronizarIpca },
+            { nome: 'PIB', fn: sincronizarPib },
+            { nome: 'Desemprego', fn: sincronizarDesemprego },
+            { nome: 'Dívida', fn: sincronizarDivida },
+            { nome: 'Câmbio', fn: sincronizarCambio },
+            { nome: 'Reservas', fn: sincronizarReservas },
+            { nome: 'Crédito', fn: sincronizarCredito }, 
+            { nome: 'Inadimplência', fn: sincronizarInadimplencia },
             { nome: 'Balança Comercial', fn: sincronizarBalancaComercial },
             { nome: 'Vendas no Varejo', fn: sincronizarVendasVarejo }
         ];
