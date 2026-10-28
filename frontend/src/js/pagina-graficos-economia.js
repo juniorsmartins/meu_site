@@ -1,6 +1,7 @@
 import { API_URL_ESTATISTICAS } from './constantsConfig.js';
 
 document.addEventListener("DOMContentLoaded", async () => {
+    
     try {
         const resposta = await fetch(API_URL_ESTATISTICAS);
         if (!resposta.ok) throw new Error("Erro ao buscar estatísticas do servidor.");
