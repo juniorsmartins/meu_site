@@ -17,6 +17,8 @@ export const estatisticasService = async () => {
         let reservasData = { anos: [], valores: [] };
         let creditoData = { anos: [], valores: [] };
         let inadimplenciaData = { anos: [], valores: [] };
+        let balancaComercialData = { anos: [], valores: [] };
+        let vendasVarejoData = { anos: [], valores: [] };
 
         indicadores.forEach(ind => {
             if (ind.slug === 'pib') {
@@ -69,6 +71,16 @@ export const estatisticasService = async () => {
                     anos: ind.anos || [], 
                     valores: ind.valores || [] 
                 };
+            } else if (ind.slug === 'balanca_comercial') {
+                balancaComercialData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
+            } else if (ind.slug === 'vendas_varejo') {
+                vendasVarejoData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
             }
         });
 
@@ -82,7 +94,9 @@ export const estatisticasService = async () => {
             cambio: cambioData,
             reservas: reservasData,
             credito: creditoData, 
-            inadimplencia: inadimplenciaData 
+            inadimplencia: inadimplenciaData,
+            balanca_comercial: balancaComercialData,
+            vendas_varejo: vendasVarejoData
         };
 
     } catch (error) {

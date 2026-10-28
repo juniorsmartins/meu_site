@@ -10,6 +10,8 @@ import { sincronizarCambio } from './adapters/cambioAdapter.js';
 import { sincronizarReservas } from './adapters/reservasAdapter.js';
 import { sincronizarCredito } from './adapters/creditoAdapter.js';
 import { sincronizarInadimplencia } from './adapters/inadimplenciaAdapter.js';
+import { sincronizarBalancaComercial } from './adapters/balancaComercialAdapter.js';
+import { sincronizarVendasVarejo } from './adapters/vendasVarejoAdapter.js';
 
 const estatisticasSyncService = async (usuarioAutenticado) => {
 
@@ -25,10 +27,12 @@ const estatisticasSyncService = async (usuarioAutenticado) => {
             // { nome: 'PIB', fn: sincronizarPib },
             // { nome: 'Desemprego', fn: sincronizarDesemprego },
             // { nome: 'Dívida', fn: sincronizarDivida },
-            { nome: 'Câmbio', fn: sincronizarCambio },
-            { nome: 'Reservas', fn: sincronizarReservas },
-            { nome: 'Crédito', fn: sincronizarCredito }, 
-            { nome: 'Inadimplência', fn: sincronizarInadimplencia } 
+            // { nome: 'Câmbio', fn: sincronizarCambio },
+            // { nome: 'Reservas', fn: sincronizarReservas },
+            // { nome: 'Crédito', fn: sincronizarCredito }, 
+            // { nome: 'Inadimplência', fn: sincronizarInadimplencia },
+            { nome: 'Balança Comercial', fn: sincronizarBalancaComercial },
+            { nome: 'Vendas no Varejo', fn: sincronizarVendasVarejo }
         ];
 
         // Executa sequencialmente
