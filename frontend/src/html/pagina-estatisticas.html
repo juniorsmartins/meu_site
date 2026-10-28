@@ -56,7 +56,7 @@
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>Dívida Pública (% do PIB)</h3>
-                        <p>Evolução do endividamento bruto e líquido do setor público (BCB).</p>
+                        <p>Evolução do endividamento bruto e líquido do setor público. <strong>Posição de fechamento (dezembro) de cada ano (BCB).</strong></p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoDivida"></canvas>
@@ -72,7 +72,7 @@
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>Câmbio (R$/US$)</h3>
-                        <p>Média anual da taxa de câmbio comercial de venda (BCB).</p>
+                        <p><strong>Média aritmética simples</strong> das cotações diárias de venda de cada ano (BCB).</p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoCambio"></canvas>
@@ -88,7 +88,7 @@
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>Reservas Internacionais (US$ Bilhões)</h3>
-                        <p>Volume de ativos estrangeiros acumulados pelo Banco Central (BCB).</p>
+                        <p>Volume de ativos estrangeiros acumulados. <strong>Posição de fechamento (dezembro) de cada ano (BCB).</strong></p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoReservas"></canvas>
@@ -104,7 +104,7 @@
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>Crescimento do PIB (%)</h3>
-                        <p>Variação real anual do PIB (Banco Central do Brasil - BCB).</p>
+                        <p><strong>Taxa de variação real acumulada</strong> no ano, conforme divulgado oficialmente (BCB).</p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoPib"></canvas>
@@ -120,7 +120,7 @@
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>Taxa Básica de Juros - Selic (%)</h3>
-                        <p>Média ponderada anual da Meta da taxa Selic (Banco Central do Brasil - BCB).</p>
+                        <p><strong>Média ponderada pelo tempo de vigência</strong> das metas definidas pelo Copom em cada ano (BCB).</p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoSelic"></canvas>
@@ -136,7 +136,7 @@
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>Inflação Oficial - IPCA (%)</h3>
-                        <p>Variação acumulada anual do Índice de Preços ao Consumidor Amplo (BCB).</p>
+                        <p><strong>Variação acumulada nos 12 meses</strong> de cada ano, calculada via juros compostos (BCB).</p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoIpca"></canvas>
@@ -152,7 +152,7 @@
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>Taxa Média de Desemprego (%)</h3>
-                        <p>Média anual de desocupação da força de trabalho (PNAD Contínua - BCB/IBGE).</p>
+                        <p><strong>Média aritmética simples</strong> das taxas mensais de desocupação apuradas em cada ano (PNAD Contínua - BCB).</p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoDesemprego"></canvas>
@@ -168,7 +168,7 @@
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>Estoque de Crédito (% do PIB)</h3>
-                        <p>Saldo da carteira de crédito em relação ao PIB (BCB).</p>
+                        <p>Saldo da carteira de crédito em relação ao PIB. <strong>Posição de fechamento (dezembro) de cada ano (BCB).</strong></p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoCredito"></canvas>
@@ -184,13 +184,13 @@
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>Taxa Média de Inadimplência (%)</h3>
-                        <p>Média anual da inadimplência da carteira de crédito (BCB).</p>
+                        <p><strong>Média aritmética simples</strong> das taxas mensais de inadimplência apuradas em cada ano (BCB).</p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoInadimplencia"></canvas>
                     </div>
                     <div class="grafico-explicacao">
-                        <p><strong>O que é:</strong> A porcentagem de contas e empréstimos não pagos no prazo (o famoso "calote").</p>
+                        <p><strong>O que é:</strong> A porcentagem de empréstimos e financiamentos não pagos no prazo (o famoso "calote").</p>
                         <p><strong>Por que a queda é ideal?</strong> Quando a inadimplência está alta, significa que as famílias estão sem dinheiro no bolso e os bancos perdem. Para se protegerem, os bancos aumentam os juros para <em>todos</em>. Com inadimplência baixa, a saúde financeira está em dia e o crédito fica mais barato.</p>
                         <p class="tag-tendencia tendencia-boa">📉 Tendência ideal: Queda</p>
                     </div>

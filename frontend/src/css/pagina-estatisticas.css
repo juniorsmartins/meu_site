@@ -69,6 +69,12 @@
 .grafico-info p {
     font-size: 0.85rem;
     color: var(--tertiary-text-color);
+    line-height: 1.4; /* Dá um respiro entre as linhas do subtítulo */
+}
+
+.grafico-info p strong {
+    color: #555; /* Deixa o texto técnico em destaque, mas sem chamar mais atenção que o título */
+    font-weight: 600;
 }
 
 .canvas-wrapper {
