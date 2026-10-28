@@ -1,12 +1,11 @@
 import { httpClient } from '../chamadaHttpClient.js';
 import { IndicadorAnualModel } from '../../../models/indicadorSchema.js';
 
-const SERIE_BCB_VAREJO = 1453; // Variação % mensal do volume de vendas no varejo
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+const SERIE_BCB_VAREJO = 1453;
 
 async function sincronizarVendasVarejo() {
-
-    console.log(`[VAREJO ADAPTER] Iniciando sincronização (Série 1453)...`);
+    
+    console.log(`[VAREJO ADAPTER] Iniciando sincronização...`);
 
     try {
         const agora = new Date();
@@ -14,36 +13,15 @@ async function sincronizarVendasVarejo() {
         const anoInicio = 2000; 
         const anoFim = anoAtual - 1;
 
-        console.log(`[VAREJO ADAPTER] Buscando Vendas no Varejo histórica (${anoInicio} a ${anoFim}) em blocos de 4 anos...`);
+        const url = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_VAREJO}/dados?formato=json&dataInicial=01/01/${anoInicio}&dataFinal=31/12/${anoFim}`;
+        const res = await httpClient(url);
 
-        const blocos = [];
-        for (let ano = anoInicio; ano <= anoFim; ano += 4) {
-            const fimBloco = Math.min(ano + 3, anoFim);
-            blocos.push({ inicio: ano, fim: fimBloco });
+        if (!res.ok || !Array.isArray(res.data) || res.data.length === 0) {
+            return { sucesso: false, slug: 'vendas_varejo' };
         }
-
-        const dadosCompletos = [];
-
-        for (const bloco of blocos) {
-            const url = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_VAREJO}/dados?formato=json&dataInicial=01/01/${bloco.inicio}&dataFinal=31/12/${bloco.fim}`;
-
-            try {
-                const res = await httpClient(url);
-                if (Array.isArray(res.data)) {
-                    dadosCompletos.push(...res.data);
-                    console.log(`[VAREJO ADAPTER] Bloco ${bloco.inicio}-${bloco.fim} OK (${res.data.length} registros)`);
-                }
-
-            } catch (err) {
-                console.warn(`[VAREJO ADAPTER] Falha no bloco ${bloco.inicio}-${bloco.fim}:`, err.message);
-            }
-            await sleep(1000);
-        }
-
-        if (dadosCompletos.length === 0) return { sucesso: false, slug: 'vendas_varejo' };
 
         const dadosPorAno = {};
-        dadosCompletos.forEach(item => {
+        res.data.forEach(item => {
             if (item.data && item.data.includes('/')) {
                 const [, , ano] = item.data.split('/');
                 const valor = Number(item.valor);
@@ -54,7 +32,6 @@ async function sincronizarVendasVarejo() {
             }
         });
 
-        // Acumula via juros compostos
         const mapaAnual = {};
         Object.keys(dadosPorAno).forEach(ano => {
             const variacoesMensais = dadosPorAno[ano];
@@ -74,8 +51,8 @@ async function sincronizarVendasVarejo() {
                 titulo: 'Vendas no Varejo (%)',
                 fonte: 'Banco Central do Brasil (Série 1453)',
                 unidade: '%',
-                anos,
-                valores,
+                anos, 
+                valores, 
                 ultimaAtualizacao: agora
             },
             { upsert: true, returnDocument: 'after' }
