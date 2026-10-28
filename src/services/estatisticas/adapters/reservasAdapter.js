@@ -1,11 +1,11 @@
 import { httpClient } from '../chamadaHttpClient.js';
 import { IndicadorAnualModel } from '../../../models/indicadorSchema.js';
 
-const SERIE_BCB_RESERVAS = 13621;
+const SERIE_BCB_RESERVAS = 13621; // Série diária
 
 async function sincronizarReservas() {
     
-    console.log(`[RESERVAS ADAPTER] Iniciando sincronização...`);
+    console.log(`[RESERVAS ADAPTER] Iniciando sincronização (Série 13621 - Diária)...`);
 
     try {
         const agora = new Date();
@@ -13,15 +13,30 @@ async function sincronizarReservas() {
         const anoInicio = 1995; 
         const anoFim = anoAtual - 1;
 
-        const url = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_RESERVAS}/dados?formato=json&dataInicial=01/01/${anoInicio}&dataFinal=31/12/${anoFim}`;
-        const res = await httpClient(url);
+        // A API do BCB limita séries diárias a 10 anos por consulta.
+        // Vamos fatiar em blocos de 10 anos.
+        const dadosCompletos = [];
 
-        if (!res.ok || !Array.isArray(res.data) || res.data.length === 0) {
+        for (let ano = anoInicio; ano <= anoFim; ano += 10) {
+            const fimBloco = Math.min(ano + 9, anoFim);
+            const url = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_RESERVAS}/dados?formato=json&dataInicial=01/01/${ano}&dataFinal=31/12/${fimBloco}`;
+            
+            console.log(`[RESERVAS ADAPTER] Buscando bloco ${ano}-${fimBloco}...`);
+            const res = await httpClient(url);
+
+            if (res.ok && Array.isArray(res.data)) {
+                dadosCompletos.push(...res.data);
+            } else {
+                console.warn(`[RESERVAS ADAPTER] Falha no bloco ${ano}-${fimBloco}`);
+            }
+        }
+
+        if (dadosCompletos.length === 0) {
             return { sucesso: false, slug: 'reservas' };
         }
 
         const mapaAnual = {};
-        res.data.forEach(item => {
+        dadosCompletos.forEach(item => {
             if (item.data && item.data.includes('/')) {
                 const [, mes, ano] = item.data.split('/');
                 const valor = Number(item.valor);
