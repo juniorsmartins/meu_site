@@ -1,11 +1,11 @@
 import { httpClient } from '../chamadaHttpClient.js';
 import { IndicadorAnualModel } from '../../../models/indicadorSchema.js';
 
-const SERIE_BCB_VAREJO = 1453;
+// Mudamos para a Série 1455 (Índice de Volume de Vendas - Base 100)
+const SERIE_BCB_VAREJO = 1455; 
 
 async function sincronizarVendasVarejo() {
-    
-    console.log(`[VAREJO ADAPTER] Iniciando sincronização...`);
+    console.log(`[VAREJO ADAPTER] Iniciando sincronização (Série 1455)...`);
 
     try {
         const agora = new Date();
@@ -13,52 +13,64 @@ async function sincronizarVendasVarejo() {
         const anoInicio = 2000; 
         const anoFim = anoAtual - 1;
 
+        // Busca todos os anos de uma vez (série mensal)
         const url = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_VAREJO}/dados?formato=json&dataInicial=01/01/${anoInicio}&dataFinal=31/12/${anoFim}`;
+        
         const res = await httpClient(url);
 
         if (!res.ok || !Array.isArray(res.data) || res.data.length === 0) {
+            console.warn("[VAREJO ADAPTER] Falha ao obter dados.");
             return { sucesso: false, slug: 'vendas_varejo' };
         }
 
-        const dadosPorAno = {};
+        // Agrupa apenas o valor de DEZEMBRO de cada ano (fechamento)
+        const dadosDezembro = {};
         res.data.forEach(item => {
             if (item.data && item.data.includes('/')) {
-                const [, , ano] = item.data.split('/');
+                const [, mes, ano] = item.data.split('/');
                 const valor = Number(item.valor);
-                if (!isNaN(valor)) {
-                    if (!dadosPorAno[ano]) dadosPorAno[ano] = [];
-                    dadosPorAno[ano].push(valor);
+                
+                // Só guarda se for dezembro e for um número válido
+                if (mes === '12' && !isNaN(valor)) {
+                    dadosDezembro[ano] = valor;
                 }
             }
         });
 
-        const mapaAnual = {};
-        Object.keys(dadosPorAno).forEach(ano => {
-            const variacoesMensais = dadosPorAno[ano];
-            let fatorAcumulado = 1;
-            variacoesMensais.forEach(variacao => {
-                fatorAcumulado *= (1 + (variacao / 100));
-            });
-            mapaAnual[ano] = Number(((fatorAcumulado - 1) * 100).toFixed(2));
-        });
+        const anosDisponiveis = Object.keys(dadosDezembro).sort((a, b) => Number(a) - Number(b));
+        
+        const anosFinais = [];
+        const valoresFinais = [];
 
-        const anos = Object.keys(mapaAnual).sort((a, b) => Number(a) - Number(b));
-        const valores = anos.map(ano => mapaAnual[ano]);
+        // Calcula a variação percentual ano a ano comparando os meses de dezembro
+        for (let i = 1; i < anosDisponiveis.length; i++) {
+            const anoAtualStr = anosDisponiveis[i];
+            const anoAnteriorStr = anosDisponiveis[i - 1];
+
+            const valorAtual = dadosDezembro[anoAtualStr];
+            const valorAnterior = dadosDezembro[anoAnteriorStr];
+
+            // Fórmula da variação: ((Atual / Anterior) - 1) * 100
+            const variacao = ((valorAtual / valorAnterior) - 1) * 100;
+
+            anosFinais.push(anoAtualStr);
+            valoresFinais.push(Number(variacao.toFixed(2)));
+        }
 
         await IndicadorAnualModel.findOneAndUpdate(
             { slug: 'vendas_varejo' },
             {
                 titulo: 'Vendas no Varejo (%)',
-                fonte: 'Banco Central do Brasil (Série 1453)',
+                fonte: 'Banco Central do Brasil (Série 1455)',
                 unidade: '%',
-                anos, 
-                valores, 
+                anos: anosFinais, 
+                valores: valoresFinais, 
                 ultimaAtualizacao: agora
             },
             { upsert: true, returnDocument: 'after' }
         );
 
-        console.log(`[VAREJO ADAPTER] Sincronizado com sucesso! (${anos.length} anos)`);
+        console.log(`[VAREJO ADAPTER] Sincronizado com sucesso! (${anosFinais.length} anos)`);
         return { sucesso: true, slug: 'vendas_varejo' };
 
     } catch (e) {
