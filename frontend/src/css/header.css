@@ -452,7 +452,7 @@
 }
 
 /* ==========================================================================
-   MENU DROPDOWN DE ESTATÍSTICAS (NAVBAR)
+   MENU DROPDOWN DE ESTATÍSTICAS (NAVBAR) - VERTICAL
    ========================================================================== */
 
 .nav-dropdown-container {
@@ -479,11 +479,17 @@
     left: 50%;
     transform: translateX(-50%) translateY(10px);
     background-color: #ffffff;
-    min-width: 220px;
+    min-width: 200px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     border-radius: 6px;
     padding: 8px 0;
     list-style: none;
+    
+    /* FORÇA A ORGANIZAÇÃO VERTICAL */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -504,9 +510,10 @@
     border-left: 1px solid rgba(0,0,0,0.05);
 }
 
-/* Itens individuais do dropdown */
+/* Garante que cada item ocupará 100% da largura do dropdown em bloco */
 .nav-dropdown-menu li {
     width: 100%;
+    display: block;
 }
 
 .dropdown-item-link {
@@ -515,9 +522,11 @@
     gap: 10px;
     padding: 10px 18px;
     color: #333333;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 500;
     text-decoration: none;
+    text-align: left;
+    white-space: nowrap;
     transition: background-color 0.2s, color 0.2s;
 }
 
