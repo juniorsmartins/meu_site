@@ -16,7 +16,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             cambio, 
             reservas, 
             credito, 
-            inadimplencia 
+            inadimplencia,
+            balanca_comercial,
+            vendas_varejo
         } = resultado.dados;
 
         // Renderiza cada gráfico utilizando seus próprios anos e valores de forma independente
@@ -27,16 +29,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         renderizarGraficoDivida(divida_liquida, divida_bruta);
         renderizarGraficoLinha('graficoCambio', cambio.anos, cambio.valores, 'Câmbio (R$/US$)', '#8E44AD', '#F4ECF7', 'R$ ');
         renderizarGraficoLinha('graficoReservas', reservas.anos, reservas.valores, 'Reservas (US$ Bilhões)', '#16A085', '#E8F8F5', 'US$ ');
-
-        if (credito && credito.anos) {
-            // Cor: Laranja escuro (#D35400) com fundo (#FADBD8) para remeter a "crédito/alavancagem"
-            renderizarGraficoLinha('graficoCredito', credito.anos, credito.valores, 'Crédito (% do PIB)', '#D35400', '#FADBD8', '%');
-        }
-        
-        if (inadimplencia && inadimplencia.anos) {
-            // Cor: Marrom escuro (#6E2C00) com fundo (#EBDEF0) para remeter a "risco/inadimplência"
-            renderizarGraficoLinha('graficoInadimplencia', inadimplencia.anos, inadimplencia.valores, 'Inadimplência (%)', '#6E2C00', '#EBDEF0', '%');
-        }
+        renderizarGraficoLinha('graficoCredito', credito.anos, credito.valores, 'Crédito (% do PIB)', '#D35400', '#FADBD8', '%');
+        renderizarGraficoLinha('graficoInadimplencia', inadimplencia.anos, inadimplencia.valores, 'Inadimplência (%)', '#6E2C00', '#EBDEF0', '%');
+        renderizarGraficoLinha('graficoBalanca', balanca_comercial.anos, balanca_comercial.valores, 'Saldo (US$ Bi)', '#2980B9', '#EAF2F8', 'US$ ');
+        renderizarGraficoLinha('graficoVarejo', vendas_varejo.anos, vendas_varejo.valores, 'Vendas no Varejo (%)', '#8E44AD', '#F4ECF7', '%');
 
     } catch (error) {
         console.error("Erro ao carregar gráficos reais:", error);

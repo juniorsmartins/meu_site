@@ -2,11 +2,10 @@ import { httpClient } from '../chamadaHttpClient.js';
 import { IndicadorAnualModel } from '../../../models/indicadorSchema.js';
 
 const SERIE_BCB_META_SELIC = 432;
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 async function sincronizarSelic() {
-
-    console.log(`[SELIC ADAPTER] Iniciando sincronização da Meta Selic...`);
+    
+    console.log(`[SELIC ADAPTER] Iniciando sincronização (Série 432 - Diária)...`);
 
     try {
         const agora = new Date();
@@ -14,38 +13,25 @@ async function sincronizarSelic() {
         const anoInicio = 2000; 
         const anoFim = anoAtual - 1; 
 
-        console.log(`[SELIC ADAPTER] Buscando Meta Selic histórica (${anoInicio} a ${anoFim}) em blocos de 4 anos...`);
-
-        // Vamos fazer blocos menores (de 4 anos) para aliviar a carga
-        const blocos = [];
-        for (let ano = anoInicio; ano <= anoFim; ano += 4) {
-            const fimBloco = Math.min(ano + 3, anoFim);
-            blocos.push({ inicio: ano, fim: fimBloco });
-        }
-
-        const criarUrl = (inicio, fim) => `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_META_SELIC}/dados?formato=json&dataInicial=01/01/${inicio}&dataFinal=31/12/${fim}`;
-
+        // A API do BCB limita séries diárias a 10 anos por consulta.
+        // Vamos fatiar em blocos de 10 anos.
         const dadosCompletos = [];
 
-        for (const bloco of blocos) {
-            const url = criarUrl(bloco.inicio, bloco.fim);
-
-            try {
-                const res = await httpClient(url);
-                if (Array.isArray(res.data)) {
-                    dadosCompletos.push(...res.data);
-                    console.log(`[SELIC ADAPTER] Bloco ${bloco.inicio}-${bloco.fim} OK (${res.data.length} registros)`);
-                }
-
-            } catch (err) {
-                console.warn(`[SELIC ADAPTER] Falha no bloco ${bloco.inicio}-${bloco.fim}:`, err.message);
-            }
+        for (let ano = anoInicio; ano <= anoFim; ano += 10) {
+            const fimBloco = Math.min(ano + 9, anoFim);
+            const url = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${SERIE_BCB_META_SELIC}/dados?formato=json&dataInicial=01/01/${ano}&dataFinal=31/12/${fimBloco}`;
             
-            await sleep(3000); 
+            console.log(`[SELIC ADAPTER] Buscando bloco ${ano}-${fimBloco}...`);
+            const res = await httpClient(url);
+
+            if (res.ok && Array.isArray(res.data)) {
+                dadosCompletos.push(...res.data);
+            } else {
+                console.warn(`[SELIC ADAPTER] Falha no bloco ${ano}-${fimBloco}`);
+            }
         }
 
         if (dadosCompletos.length === 0) {
-            console.warn("[SELIC ADAPTER] Falha ao obter dados da Meta Selic.");
             return { sucesso: false, slug: 'selic' };
         }
 
@@ -75,7 +61,6 @@ async function sincronizarSelic() {
             const proxima = entradas[i + 1];
 
             // Primeira entrada: assume vigência desde 1º/jan do ano dela
-            // (evita perder alguns dias no início da série)
             const inicio = (i === 0)
                 ? new Date(atual.data.getFullYear(), 0, 1)
                 : atual.data;
@@ -117,24 +102,22 @@ async function sincronizarSelic() {
         const anos = Object.keys(mapaAnual).sort((a, b) => Number(a) - Number(b));
         const valores = anos.map(ano => mapaAnual[ano]);
 
-        if (anos.length > 0) {
-            await IndicadorAnualModel.findOneAndUpdate(
-                { slug: 'selic' },
-                {
-                    titulo: 'Taxa Básica de Juros - Selic - Média Anual (% a.a.)',
-                    fonte: 'Banco Central (Meta Selic - Copom, média ponderada pelo tempo)',
-                    unidade: '%',
-                    anos,
-                    valores,
-                    ultimaAtualizacao: agora
-                },
-                { upsert: true, returnDocument: 'after' }
-            );
-            console.log(`[SELIC ADAPTER] Meta Selic média anual (${anos.length} anos) sincronizada com sucesso!`);
-            return { sucesso: true, slug: 'selic' };
-        }
+        await IndicadorAnualModel.findOneAndUpdate(
+            { slug: 'selic' },
+            {
+                titulo: 'Taxa Básica de Juros - Selic - Média Anual (% a.a.)',
+                fonte: 'Banco Central (Meta Selic - Copom, média ponderada pelo tempo)',
+                unidade: '%',
+                anos,
+                valores,
+                ultimaAtualizacao: agora
+            },
+            { upsert: true, returnDocument: 'after' }
+        );
 
-        return { sucesso: false, slug: 'selic' };
+        console.log(`[SELIC ADAPTER] Sincronizado com sucesso! (${anos.length} anos)`);
+        return { sucesso: true, slug: 'selic' };
+        
     } catch (e) {
         console.error("[SELIC ADAPTER] Erro crítico: ", e.message);
         return { sucesso: false, slug: 'selic' };

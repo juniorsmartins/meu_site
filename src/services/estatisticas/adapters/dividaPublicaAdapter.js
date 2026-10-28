@@ -16,11 +16,9 @@ const SERIES = {
     }
 };
 
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
 async function sincronizarDivida() {
 
-    console.log(`[DÍVIDA ADAPTER] Iniciando sincronização (DLSP e DBGG)...`);
+    console.log(`[DÍVIDA ADAPTER] Iniciando sincronização...`);
 
     try {
         const agora = new Date();
@@ -28,46 +26,29 @@ async function sincronizarDivida() {
         const anoInicio = 2000; 
         const anoFim = anoAtual - 1;
 
-        // Função interna para buscar uma série em blocos de 4 anos
-        const buscarSerieEmBlocos = async (serieConfig) => {
+        const buscarSerie = async (serieConfig) => {
             const dadosMapa = {};
+            const url = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${serieConfig.codigo}/dados?formato=json&dataInicial=01/01/${anoInicio}&dataFinal=31/12/${anoFim}`;
             
-            for (let ano = anoInicio; ano <= anoFim; ano += 4) {
-                const fimBloco = Math.min(ano + 3, anoFim);
-                const url = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${serieConfig.codigo}/dados?formato=json&dataInicial=01/01/${ano}&dataFinal=31/12/${fimBloco}`;
-                
-                try {
-                    const res = await httpClient(url);
-                    if (Array.isArray(res.data)) {
-                        res.data.forEach(item => {
-                            if (item.data && item.data.includes('/')) {
-                                const [dia, mes, anoStr] = item.data.split('/');
-                                const valor = Number(item.valor);
-                                
-                                if (!isNaN(valor)) {
-                                    // Guarda o valor de dezembro (fechamento do ano)
-                                    if (!dadosMapa[anoStr] || mes === '12') {
-                                        dadosMapa[anoStr] = valor;
-                                    }
-                                }
+            const res = await httpClient(url);
+            if (res.ok && Array.isArray(res.data)) {
+                res.data.forEach(item => {
+                    if (item.data && item.data.includes('/')) {
+                        const [, mes, anoStr] = item.data.split('/');
+                        const valor = Number(item.valor);
+                        if (!isNaN(valor)) {
+                            if (!dadosMapa[anoStr] || mes === '12') {
+                                dadosMapa[anoStr] = valor;
                             }
-                        });
-                        console.log(`[DÍVIDA ADAPTER] Série ${serieConfig.codigo} bloco ${ano}-${fimBloco} OK`);
+                        }
                     }
-                } catch (err) {
-                    console.warn(`[DÍVIDA ADAPTER] Falha série ${serieConfig.codigo} bloco ${ano}-${fimBloco}:`, err.message);
-                }
-                await sleep(3000); // Pausa para não bloquear o BCB
+                });
             }
             return dadosMapa;
         };
 
-        // Executa para Dívida Líquida
-        console.log(`[DÍVIDA ADAPTER] Buscando Dívida Líquida (${SERIES.liquida.codigo})...`);
-        const dadosLiquida = await buscarSerieEmBlocos(SERIES.liquida);
+        const dadosLiquida = await buscarSerie(SERIES.liquida);
         const anosLiquida = Object.keys(dadosLiquida).sort((a, b) => Number(a) - Number(b));
-        const valoresLiquida = anosLiquida.map(ano => dadosLiquida[ano]);
-
         if (anosLiquida.length > 0) {
             await IndicadorAnualModel.findOneAndUpdate(
                 { slug: SERIES.liquida.slug },
@@ -76,20 +57,15 @@ async function sincronizarDivida() {
                     fonte: SERIES.liquida.fonte, 
                     unidade: '%', 
                     anos: anosLiquida, 
-                    valores: valoresLiquida, 
+                    valores: anosLiquida.map(a => dadosLiquida[a]), 
                     ultimaAtualizacao: agora 
                 },
                 { upsert: true, returnDocument: 'after' }
             );
-            console.log(`[DÍVIDA ADAPTER] Dívida Líquida salva (${anosLiquida.length} anos).`);
         }
 
-        // Executa para Dívida Bruta
-        console.log(`[DÍVIDA ADAPTER] Buscando Dívida Bruta (${SERIES.bruta.codigo})...`);
-        const dadosBruta = await buscarSerieEmBlocos(SERIES.bruta);
+        const dadosBruta = await buscarSerie(SERIES.bruta);
         const anosBruta = Object.keys(dadosBruta).sort((a, b) => Number(a) - Number(b));
-        const valoresBruta = anosBruta.map(ano => dadosBruta[ano]);
-
         if (anosBruta.length > 0) {
             await IndicadorAnualModel.findOneAndUpdate(
                 { slug: SERIES.bruta.slug },
@@ -98,14 +74,14 @@ async function sincronizarDivida() {
                     fonte: SERIES.bruta.fonte, 
                     unidade: '%', 
                     anos: anosBruta, 
-                    valores: valoresBruta, 
+                    valores: anosBruta.map(a => dadosBruta[a]), 
                     ultimaAtualizacao: agora 
                 },
                 { upsert: true, returnDocument: 'after' }
             );
-            console.log(`[DÍVIDA ADAPTER] Dívida Bruta salva (${anosBruta.length} anos).`);
         }
 
+        console.log(`[DÍVIDA ADAPTER] Sincronizado com sucesso!`);
         return { sucesso: true, slug: 'divida' };
 
     } catch (e) {
