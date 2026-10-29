@@ -1,4 +1,4 @@
-import { indicadorRepository } from '../../repositories/indicadorRepository.js';
+import { indicadorRepository } from '../../repositories/estatisticas/indicadorRepository.js';
 import { AppError } from '../../errors/AppError.js';
 import { MENSAGENS_ERRO } from '../../configs/mensagensConfig.js';
 

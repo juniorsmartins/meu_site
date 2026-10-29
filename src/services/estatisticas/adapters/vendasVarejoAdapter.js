@@ -1,5 +1,5 @@
 import { httpClient } from '../chamadaHttpClient.js';
-import { indicadorRepository } from '../../../repositories/indicadorRepository.js';
+import { indicadorRepository } from '../../../repositories/estatisticas/indicadorRepository.js';
 
 // Mudamos para a Série 1455 (Índice de Volume de Vendas - Base 100)
 const SERIE_BCB_VAREJO = 1455; 

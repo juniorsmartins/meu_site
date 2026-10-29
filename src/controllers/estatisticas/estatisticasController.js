@@ -1,6 +1,6 @@
 import { estatisticasService } from '../../services/estatisticas/estatisticasService.js';
 import { estatisticasSyncService } from '../../services/estatisticas/estatisticasSyncService.js';
-import { indicadorRepository } from '../../repositories/indicadorRepository.js';
+import { indicadorRepository } from '../../repositories/estatisticas/indicadorRepository.js';
 import { MENSAGENS_SUCESSO } from '../../configs/mensagensConfig.js';
 
 const estatisticasController = async (request, response, next) => {

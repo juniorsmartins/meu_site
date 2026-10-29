@@ -1,5 +1,5 @@
 import { httpClient } from '../chamadaHttpClient.js';
-import { indicadorRepository } from '../../../repositories/indicadorRepository.js'; 
+import { indicadorRepository } from '../../../repositories/estatisticas/indicadorRepository.js';
 
 const SERIE_BCB_CREDITO = 20622; // Saldo da carteira de crédito em relação ao PIB (%)
 

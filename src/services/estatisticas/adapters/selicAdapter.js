@@ -1,5 +1,5 @@
 import { httpClient } from '../chamadaHttpClient.js';
-import { indicadorRepository } from '../../../repositories/indicadorRepository.js'; 
+import { indicadorRepository } from '../../../repositories/estatisticas/indicadorRepository.js';
 
 const SERIE_BCB_META_SELIC = 432;
 

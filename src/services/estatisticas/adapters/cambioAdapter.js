@@ -1,5 +1,5 @@
 import { httpClient } from '../chamadaHttpClient.js';
-import { indicadorRepository } from '../../../repositories/indicadorRepository.js'; 
+import { indicadorRepository } from '../../../repositories/estatisticas/indicadorRepository.js';
 
 const SERIE_BCB_CAMBIO = 3695; // Taxa de câmbio comercial para venda (R$/US$)
 

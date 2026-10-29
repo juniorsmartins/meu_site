@@ -1,5 +1,5 @@
 import { httpClient } from '../chamadaHttpClient.js';
-import { indicadorRepository } from '../../../repositories/indicadorRepository.js'; 
+import { indicadorRepository } from '../../../repositories/estatisticas/indicadorRepository.js';
 
 // Código 7326 = PIB - Taxa de variação real no ano
 const SERIE_BCB_PIB = 7326;

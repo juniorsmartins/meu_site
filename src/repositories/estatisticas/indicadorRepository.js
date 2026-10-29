@@ -1,4 +1,4 @@
-import { IndicadorModel } from '../models/indicadorSchema.js';
+import { IndicadorModel } from '../../models/indicadorSchema.js';
 
 const indicadorRepository = {
     
