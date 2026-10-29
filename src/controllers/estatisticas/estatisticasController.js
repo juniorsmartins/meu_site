@@ -35,9 +35,15 @@ const estatisticasStatusController = async (request, response, next) => {
 
 // Executa a busca nas APIs externas e salva no banco
 const estatisticasSincronizarController = async (request, response, next) => {
+
     try {
         const usuarioAutenticado = request.usuario;
-        const resultado = await estatisticasSyncService(usuarioAutenticado);
+
+        // Captura a fonte selecionada no frontend
+        const { fonte } = request.query; 
+
+        // Repassa a fonte para o serviço
+        const resultado = await estatisticasSyncService(usuarioAutenticado, fonte);
 
         return response.status(200).json({
             sucesso: true,
