@@ -12,6 +12,8 @@ import { sincronizarCredito } from './adapters/creditoAdapter.js';
 import { sincronizarInadimplencia } from './adapters/inadimplenciaAdapter.js';
 import { sincronizarBalancaComercial } from './adapters/balancaComercialAdapter.js';
 import { sincronizarVendasVarejo } from './adapters/vendasVarejoAdapter.js';
+import { sincronizarPopulacaoTotal } from './adapters/populacaoTotalAdapter.js';
+import { sincronizarCrescimentoPopulacional } from './adapters/crescimentoPopulacionalAdapter.js';
 
 const estatisticasSyncService = async (usuarioAutenticado, fonteFiltro = null) => {
 
@@ -32,7 +34,9 @@ const estatisticasSyncService = async (usuarioAutenticado, fonteFiltro = null) =
             { nome: 'Crédito', fn: sincronizarCredito }, 
             { nome: 'Inadimplência', fn: sincronizarInadimplencia },
             { nome: 'Balança Comercial', fn: sincronizarBalancaComercial },
-            { nome: 'Vendas no Varejo', fn: sincronizarVendasVarejo }
+            { nome: 'Vendas no Varejo', fn: sincronizarVendasVarejo },
+            { nome: 'População Total', fn: sincronizarPopulacaoTotal },
+            { nome: 'Crescimento Populacional', fn: sincronizarCrescimentoPopulacional }
         ];
 
         // Filtra os adaptadores com base na escolha do frontend
