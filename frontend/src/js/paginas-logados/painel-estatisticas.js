@@ -2,12 +2,42 @@ import { API_URL_ESTATISTICAS } from '../constantsConfig.js';
 
 document.addEventListener("DOMContentLoaded", async () => {
     await carregarDadosPainelAdmin();
-
-    const btnSincronizar = document.getElementById("btnSincronizar");
-    if (btnSincronizar) {
-        btnSincronizar.addEventListener("click", executarSincronizacao);
-    }
+    configurarEventosSync();
 });
+
+function configurarEventosSync() {
+    const btnSincronizar = document.getElementById("btnSincronizar");
+    const btnToggleDropdown = document.getElementById("btnToggleDropdownSync");
+    const menuDropdown = document.getElementById("menuDropdownSync");
+
+    // Sincronizar Todos (botão principal)
+    if (btnSincronizar) {
+        btnSincronizar.addEventListener("click", () => executarSincronizacao("TODOS"));
+    }
+
+    // Abre/Fecha o menu dropdown
+    if (btnToggleDropdown && menuDropdown) {
+        btnToggleDropdown.addEventListener("click", (e) => {
+            e.stopPropagation();
+            menuDropdown.classList.toggle("escondido");
+        });
+
+        // Fecha ao clicar fora
+        document.addEventListener("click", () => {
+            menuDropdown.classList.add("escondido");
+        });
+    }
+
+    // Ação para os itens do dropdown
+    const itensDropdown = document.querySelectorAll(".item-dropdown-sync");
+    itensDropdown.forEach(btnItem => {
+        btnItem.addEventListener("click", (e) => {
+            const fonteSelecionada = e.currentTarget.dataset.fonte;
+            if (menuDropdown) menuDropdown.classList.add("escondido");
+            executarSincronizacao(fonteSelecionada);
+        });
+    });
+}
 
 function obterTokenAdmin() {
     const dadosSessao = localStorage.getItem("gajeiro_usuario");
@@ -23,17 +53,13 @@ function obterTokenAdmin() {
 async function carregarDadosPainelAdmin() {
     try {
         const token = obterTokenAdmin();
-        if (!token) {
-            throw new Error("Usuário não autenticado ou sessão expirada.");
-        }
+        if (!token) throw new Error("Usuário não autenticado.");
 
         const resposta = await fetch(`${API_URL_ESTATISTICAS}/status`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
+            headers: { 'Authorization': `Bearer ${token}` }
         });
 
-        if (!resposta.ok) throw new Error("Erro ao carregar dados administrativos.");
+        if (!resposta.ok) throw new Error("Erro ao carregar dados.");
 
         const resultado = await resposta.json();
         const indicadores = resultado.dados || [];
@@ -44,7 +70,6 @@ async function carregarDadosPainelAdmin() {
             const ultimaData = indicadores.reduce((maisRecente, atual) => {
                 return new Date(atual.ultimaAtualizacao) > new Date(maisRecente) ? atual.ultimaAtualizacao : maisRecente;
             }, indicadores[0].ultimaAtualizacao);
-
             document.getElementById("ultimaAtualizacao").textContent = new Date(ultimaData).toLocaleString('pt-BR');
         } else {
             document.getElementById("ultimaAtualizacao").textContent = "Nunca sincronizado";
@@ -54,7 +79,7 @@ async function carregarDadosPainelAdmin() {
         tbody.innerHTML = "";
 
         if (indicadores.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #777;">Nenhum indicador encontrado. Clique em "Sincronizar" para buscar os dados.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #777;">Nenhum indicador encontrado.</td></tr>`;
             return;
         }
 
@@ -72,25 +97,31 @@ async function carregarDadosPainelAdmin() {
         });
 
     } catch (error) {
-        console.error("Erro ao buscar status do painel:", error);
-        document.getElementById("tabelaIndicadoresBody").innerHTML = `<tr><td colspan="6" style="text-align: center; color: #d32f2f;">Erro ao carregar dados do servidor.</td></tr>`;
+        console.error("Erro ao buscar status:", error);
+        document.getElementById("tabelaIndicadoresBody").innerHTML = `<tr><td colspan="6" style="text-align: center; color: #d32f2f;">Erro ao carregar dados.</td></tr>`;
     }
 }
 
-async function executarSincronizacao() {
-    const btnSincronizar = document.getElementById("btnSincronizar");
+async function executarSincronizacao(fonte = "TODOS") {
+    const btnPrincipal = document.getElementById("btnSincronizar");
+    const btnArrow = document.getElementById("btnToggleDropdownSync");
     
     try {
-        // Feedback visual imediato no botão sem abrir modais
-        btnSincronizar.disabled = true;
-        btnSincronizar.innerHTML = `<i class="bi bi-arrow-repeat bi-spin"></i> Sincronizando com IBGE e BCB...`;
+        btnPrincipal.disabled = true;
+        btnArrow.disabled = true;
+
+        const textoBotao = fonte === "TODOS" ? "Sincronizando Tudo..." : `Sincronizando ${fonte}...`;
+        btnPrincipal.innerHTML = `<i class="bi bi-arrow-repeat bi-spin"></i> ${textoBotao}`;
 
         const token = obterTokenAdmin();
-        if (!token) {
-            throw new Error("Token de autorização não encontrado. Faça login novamente.");
-        }
+        if (!token) throw new Error("Token não encontrado.");
 
-        const resposta = await fetch(`${API_URL_ESTATISTICAS}/sincronizar`, {
+        // Monta a URL com query string se não for TODOS
+        const urlCompleta = fonte === "TODOS" 
+            ? `${API_URL_ESTATISTICAS}/sincronizar` 
+            : `${API_URL_ESTATISTICAS}/sincronizar?fonte=${encodeURIComponent(fonte)}`;
+
+        const resposta = await fetch(urlCompleta, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -99,22 +130,17 @@ async function executarSincronizacao() {
         });
 
         const resultado = await resposta.json();
+        if (!resposta.ok) throw new Error(resultado.mensagem || "Erro na sincronização.");
 
-        if (!resposta.ok) {
-            throw new Error(resultado.mensagem || "Erro ao executar sincronização.");
-        }
-
-        // Atualiza os dados do painel automaticamente após o sucesso
         await carregarDadosPainelAdmin();
 
     } catch (error) {
         console.error("Erro na sincronização:", error);
-        // Mantém apenas o console ou se preferir pode tratar de forma sutil, 
-        // mas sem usar janelinhas nativas de alert/confirm.
+        alert(error.message || "Não foi possível sincronizar os dados.");
     } finally {
-        // Restaura o botão ao estado original
-        btnSincronizar.disabled = false;
-        btnSincronizar.innerHTML = `<i class="bi bi-arrow-repeat"></i> Sincronizar com Fontes Externas`;
+        btnPrincipal.disabled = false;
+        btnArrow.disabled = false;
+        btnPrincipal.innerHTML = `<i class="bi bi-arrow-repeat"></i> Sincronizar Tudo`;
     }
 }
 

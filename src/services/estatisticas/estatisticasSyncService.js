@@ -12,49 +12,61 @@ import { sincronizarCredito } from './adapters/creditoAdapter.js';
 import { sincronizarInadimplencia } from './adapters/inadimplenciaAdapter.js';
 import { sincronizarBalancaComercial } from './adapters/balancaComercialAdapter.js';
 import { sincronizarVendasVarejo } from './adapters/vendasVarejoAdapter.js';
+import { sincronizarPopulacao } from './adapters/populacaoAdapter.js';
 
-const estatisticasSyncService = async (usuarioAutenticado) => {
+const estatisticasSyncService = async (usuarioAutenticado, fonteFiltro = null) => {
 
     regraAutorizarApenasAdmin(usuarioAutenticado);
 
     try {
-        console.log("[SYNC ESTATÍSTICAS] Iniciando sincronização via Arquitetura de Adapters (Modular)...");
+        console.log(`[SYNC ESTATÍSTICAS] Iniciando sincronização. Filtro: ${fonteFiltro || 'TODOS'}...`);
 
-        // Agrupa os adaptadores (sem executá-los ainda)
-        const adapters = [
+        // Lista completa de adaptadores
+        const todosAdapters = [
             { nome: 'Selic', fn: sincronizarSelic },
             { nome: 'IPCA', fn: sincronizarIpca },
             { nome: 'PIB', fn: sincronizarPib },
             { nome: 'Desemprego', fn: sincronizarDesemprego },
-            { nome: 'Dívida', fn: sincronizarDivida },
+            { nome: 'Dívida', fn: sincronizarDivida }, // O dropdown envia 'Dívida'
             { nome: 'Câmbio', fn: sincronizarCambio },
             { nome: 'Reservas', fn: sincronizarReservas },
             { nome: 'Crédito', fn: sincronizarCredito }, 
             { nome: 'Inadimplência', fn: sincronizarInadimplencia },
             { nome: 'Balança Comercial', fn: sincronizarBalancaComercial },
-            { nome: 'Vendas no Varejo', fn: sincronizarVendasVarejo }
+            { nome: 'Vendas no Varejo', fn: sincronizarVendasVarejo },
+            // Demográficos (Unificado)
+            { nome: 'População', fn: sincronizarPopulacao } // Adaptador unificado para indicadores de População Total e Crescimento Populacional
         ];
 
-        // Executa sequencialmente
-        for (const adapter of adapters) {
+        // Filtra os adaptadores com base na escolha do frontend
+        const adaptersParaRodar = (fonteFiltro && fonteFiltro !== 'TODOS')
+            ? todosAdapters.filter(a => a.nome.toLowerCase() === fonteFiltro.toLowerCase())
+            : todosAdapters;
+
+        if (adaptersParaRodar.length === 0) {
+            throw new Error(`Fonte "${fonteFiltro}" não encontrada.`);
+        }
+
+        // Executa os adaptadores SEQUENCIALMENTE
+        for (const adapter of adaptersParaRodar) {
             try {
                 const resultado = await adapter.fn();
 
                 if (!resultado.sucesso) {
                     console.error(`[SYNC ESTATÍSTICAS] Adapter ${adapter.nome} falhou.`);
                 } else {
-                    console.log(`[SYNC ESTATÍSTICAS] Adapter ${adapter.nome} finalizado.`);
+                    console.log(`[SYNC ESTATÍSTICAS] Adapter ${adapter.nome} finalizado com SUCESSO.`);
                 }
 
             } catch (error) {
+                // Se um adaptador der erro, o catch interno impede que os outros parem
                 console.error(`[SYNC ESTATÍSTICAS] Erro inesperado no adapter ${adapter.nome}:`, error.message);
             }
             
-            // Pausa de 2 segundos entre um adaptador e outro
             await new Promise(resolve => setTimeout(resolve, 2000));
         }
 
-        console.log("[SYNC ESTATÍSTICAS] Sincronização de todos os adaptadores concluída.");
+        console.log("[SYNC ESTATÍSTICAS] Sincronização concluída.");
 
         return { 
             sucesso: true, 

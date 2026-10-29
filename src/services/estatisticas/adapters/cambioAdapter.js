@@ -1,5 +1,5 @@
 import { httpClient } from '../chamadaHttpClient.js';
-import { IndicadorAnualModel } from '../../../models/indicadorSchema.js';
+import { indicadorRepository } from '../../../repositories/estatisticas/indicadorRepository.js';
 
 const SERIE_BCB_CAMBIO = 3695; // Taxa de câmbio comercial para venda (R$/US$)
 
@@ -43,18 +43,13 @@ async function sincronizarCambio() {
         const anos = Object.keys(mapaAnual).sort((a, b) => Number(a) - Number(b));
         const valores = anos.map(ano => mapaAnual[ano]);
 
-        await IndicadorAnualModel.findOneAndUpdate(
-            { slug: 'cambio' },
-            {
-                titulo: 'Taxa de Câmbio Média Anual (R$/US$)',
-                fonte: 'Banco Central do Brasil (Série 3695)',
-                unidade: 'R$',
-                anos, 
-                valores, 
-                ultimaAtualizacao: agora
-            },
-            { upsert: true, returnDocument: 'after' }
-        );
+        await indicadorRepository.upsert('cambio', {
+            titulo: 'Taxa de Câmbio Média Anual (R$/US$)',
+            fonte: 'Banco Central do Brasil (Série 3695)',
+            unidade: 'R$',
+            anos, 
+            valores
+        });
 
         console.log(`[CÂMBIO ADAPTER] Sincronizado com sucesso! (${anos.length} anos)`);
         return { sucesso: true, slug: 'cambio' };

@@ -1,5 +1,5 @@
 import { httpClient } from '../chamadaHttpClient.js';
-import { IndicadorAnualModel } from '../../../models/indicadorSchema.js';
+import { indicadorRepository } from '../../../repositories/estatisticas/indicadorRepository.js';
 
 const SERIE_BCB_BALANCA = 22707; // Balança comercial - saldo mensal (US$ milhões)
 
@@ -41,18 +41,13 @@ async function sincronizarBalancaComercial() {
         const anos = Object.keys(mapaAnual).sort((a, b) => Number(a) - Number(b));
         const valores = anos.map(ano => mapaAnual[ano]);
 
-        await IndicadorAnualModel.findOneAndUpdate(
-            { slug: 'balanca_comercial' },
-            {
-                titulo: 'Balança Comercial (US$ Bilhões)',
-                fonte: 'Banco Central do Brasil (Série 22707)',
-                unidade: 'US$',
-                anos, 
-                valores, 
-                ultimaAtualizacao: agora
-            },
-            { upsert: true, returnDocument: 'after' }
-        );
+        await indicadorRepository.upsert('balanca_comercial', {
+            titulo: 'Balança Comercial (US$ Bilhões)',
+            fonte: 'Banco Central do Brasil (Série 22707)',
+            unidade: 'US$',
+            anos, 
+            valores
+        });
 
         console.log(`[BALANÇA ADAPTER] Sincronizado com sucesso! (${anos.length} anos)`);
         return { sucesso: true, slug: 'balanca_comercial' };

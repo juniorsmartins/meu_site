@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gajeiro - Indicadores Demográficos do Brasil</title>
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/pagina-graficos-demografia.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="shortcut icon" type="image/png" href="../img/favicon.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <!-- Scripts do Cabeçalho e Rodapé -->
+    <script type="module" src="../js/header.js"></script>
+    <script type="module" src="../js/pagina-graficos-demografia.js"></script>  
+    <script type="module" src="../js/footer.js"></script> 
+
+    <div id="header-container"></div>
+
+    <main id="container-estatisticas-publico">
+        <div class="estatisticas-wrapper">
+            
+            <div class="estatisticas-header-titulo">
+                <h2>Indicadores Demográficos do Brasil</h2>
+                <p>Acompanhe a evolução da população brasileira com base em dados oficiais do IBGE.</p>
+            </div>
+
+            <div class="grid-graficos">
+
+                <!-- 1. População Total (Gráfico de Barras) -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>População Total Residente</h3>
+                        <p>Número total de habitantes no Brasil (em milhões). Fonte: BCB (Série 21774, base IBGE).</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoPopulacao"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> O número total de pessoas que vivem no país.</p>
+                        <p><strong>Por que é importante?</strong> É a base para o planejamento de políticas públicas em saúde, educação, infraestrutura e previdência. Mostra o tamanho do mercado consumidor e da força de trabalho.</p>
+                        <p class="tag-tendencia tendencia-boa">📈 Tendência ideal: Crescimento Estável</p>
+                    </div>
+                </div>
+
+                <!-- 2. Taxa de Crescimento -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>Taxa de Crescimento Populacional (%)</h3>
+                        <p>Variação percentual anual da população total. Fonte: BCB (Série 21774, base IBGE).</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoCrescimentoPop"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> A velocidade com que a população aumenta ou diminui a cada ano.</p>
+                        <p><strong>Por que é importante?</strong> O Brasil está passando pela transição demográfica. A taxa de crescimento está desacelerando, o que exige uma adaptação da economia e das políticas sociais para uma população que envelhece.</p>
+                        <p class="tag-tendencia tendencia-neutra">⚖️ Tendência ideal: Equilíbrio</p>
+                    </div>
+                </div>
+
+                <!-- 3. Expectativa de Vida (Gráfico de Duas Linhas) -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>Expectativa de Vida ao Nascer (Anos)</h3>
+                        <p>Expectativa de vida por sexo (feminino e masculino).</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoExpectativaVida"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> O número médio de anos que se espera que uma pessoa viva.</p>
+                        <p><strong>Por que é importante?</strong> É um dos melhores indicadores de qualidade de vida. A diferença entre os sexos reflete fatores biológicos e, principalmente, sociais.</p>
+                        <p class="tag-tendencia tendencia-boa">📈 Tendência ideal: Alta</p>
+                    </div>
+                </div>
+
+                <!-- 4. Fecundidade -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>Taxa de Fecundidade Total</h3>
+                        <p>Número médio de filhos por mulher em idade reprodutiva.</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoFecundidade"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> A média de filhos que uma mulher teria ao longo da vida.</p>
+                        <p><strong>Por que é importante?</strong> A queda acentuada é o motor do envelhecimento populacional. Reflete avanços em educação e saúde, mas se ficar muito abaixo de 2,1 (nível de reposição), pode gerar desafios econômicos futuros.</p>
+                        <p class="tag-tendencia tendencia-neutra">⚖️ Tendência ideal: Equilíbrio (~2,1)</p>
+                    </div>
+                </div>
+
+                <!-- 5. Urbanização -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>Grau de Urbanização (%)</h3>
+                        <p>Percentual da população vivendo em áreas urbanas.</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoUrbanizacao"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> A proporção de pessoas que vivem em cidades em relação ao total.</p>
+                        <p><strong>Por que é importante?</strong> Mostra a transformação do território. Uma população altamente urbana demanda mais investimentos em transporte público, saneamento e moradia.</p>
+                        <p class="tag-tendencia tendencia-neutra">⚖️ Tendência ideal: Equilíbrio Regional</p>
+                    </div>
+                </div>
+
+                <!-- 6. Mortalidade Infantil -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>Taxa de Mortalidade Infantil</h3>
+                        <p>Óbitos de menores de 1 ano por mil nascidos vivos.</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoMortalidadeInfantil"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> O risco de uma criança morrer antes de completar 1 ano de idade.</p>
+                        <p><strong>Por que é importante?</strong> É um termômetro da saúde pública e do saneamento básico. Sua redução é um dos Objetivos de Desenvolvimento Sustentável da ONU.</p>
+                        <p class="tag-tendencia tendencia-boa">📉 Tendência ideal: Queda</p>
+                    </div>
+                </div>
+
+                <!-- 7. Envelhecimento -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>Índice de Envelhecimento (%)</h3>
+                        <p>Razão entre idosos (60+) e jovens (0-14 anos).</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoEnvelhecimento"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> Mede a velocidade da transição demográfica, comparando o número de idosos com o de jovens.</p>
+                        <p><strong>Por que é importante?</strong> Um índice alto indica uma população mais velha, com grandes implicações para a previdência social e os sistemas de saúde.</p>
+                        <p class="tag-tendencia tendencia-neutra">⚖️ Tendência ideal: Depende</p>
+                    </div>
+                </div>
+
+                <!-- 8. IDH -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>IDH - Índice de Desenvolvimento Humano</h3>
+                        <p>Medida de renda, educação e saúde (0 a 1).</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoIdh"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> Uma medida resumida do progresso em três dimensões: renda, educação e saúde.</p>
+                        <p><strong>Por que é importante?</strong> Vai além do PIB, mostrando se o crescimento econômico está se traduzindo em bem-estar real para as pessoas.</p>
+                        <p class="tag-tendencia tendencia-boa">📈 Tendência ideal: Alta</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-container"></div>
+</body>
+</html>
+

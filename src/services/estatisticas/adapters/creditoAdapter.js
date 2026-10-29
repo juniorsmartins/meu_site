@@ -1,5 +1,5 @@
 import { httpClient } from '../chamadaHttpClient.js';
-import { IndicadorAnualModel } from '../../../models/indicadorSchema.js';
+import { indicadorRepository } from '../../../repositories/estatisticas/indicadorRepository.js';
 
 const SERIE_BCB_CREDITO = 20622; // Saldo da carteira de crédito em relação ao PIB (%)
 
@@ -38,18 +38,13 @@ async function sincronizarCredito() {
         const anos = Object.keys(mapaAnual).sort((a, b) => Number(a) - Number(b));
         const valores = anos.map(ano => mapaAnual[ano]);
 
-        await IndicadorAnualModel.findOneAndUpdate(
-            { slug: 'credito' },
-            {
-                titulo: 'Estoque de Crédito (% do PIB)',
-                fonte: 'Banco Central do Brasil (Série 20622)',
-                unidade: '%',
-                anos, 
-                valores, 
-                ultimaAtualizacao: agora
-            },
-            { upsert: true, returnDocument: 'after' }
-        );
+        await indicadorRepository.upsert('credito', {
+            titulo: 'Estoque de Crédito (% do PIB)',
+            fonte: 'Banco Central do Brasil (Série 20622)',
+            unidade: '%',
+            anos, 
+            valores
+        });
 
         console.log(`[CRÉDITO ADAPTER] Sincronizado com sucesso! (${anos.length} anos)`);
         return { sucesso: true, slug: 'credito' };

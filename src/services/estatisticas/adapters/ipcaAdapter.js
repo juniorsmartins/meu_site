@@ -1,5 +1,5 @@
 import { httpClient } from '../chamadaHttpClient.js';
-import { IndicadorAnualModel } from '../../../models/indicadorSchema.js';
+import { indicadorRepository } from '../../../repositories/estatisticas/indicadorRepository.js';
 
 const SERIE_BCB_IPCA = 433;
 
@@ -45,18 +45,13 @@ async function sincronizarIpca() {
         const anos = Object.keys(mapaAnual).sort((a, b) => Number(a) - Number(b));
         const valores = anos.map(ano => mapaAnual[ano]);
 
-        await IndicadorAnualModel.findOneAndUpdate(
-            { slug: 'ipca' },
-            {
-                titulo: 'Inflação Oficial - IPCA Acumulado Anual (%)',
-                fonte: 'Banco Central / IBGE (Série 433)',
-                unidade: '%',
-                anos, 
-                valores, 
-                ultimaAtualizacao: agora
-            },
-            { upsert: true, returnDocument: 'after' }
-        );
+        await indicadorRepository.upsert('ipca', {
+            titulo: 'Inflação Oficial - IPCA Acumulado Anual (%)',
+            fonte: 'Banco Central / IBGE (Série 433)',
+            unidade: '%',
+            anos, 
+            valores
+        });
 
         console.log(`[IPCA ADAPTER] Sincronizado com sucesso! (${anos.length} anos)`);
         return { sucesso: true, slug: 'ipca' };

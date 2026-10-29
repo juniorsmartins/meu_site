@@ -1,11 +1,11 @@
-import { IndicadorAnualModel } from '../../models/indicadorSchema.js';
+import { indicadorRepository } from '../../repositories/estatisticas/indicadorRepository.js';
 import { AppError } from '../../errors/AppError.js';
 import { MENSAGENS_ERRO } from '../../configs/mensagensConfig.js';
 
 export const estatisticasService = async () => {
 
     try {
-        const indicadores = await IndicadorAnualModel.find({});
+        const indicadores = await indicadorRepository.findAll();
 
         let pibData = { anos: [], valores: [] };
         let desempregoData = { anos: [], valores: [] };
@@ -19,6 +19,8 @@ export const estatisticasService = async () => {
         let inadimplenciaData = { anos: [], valores: [] };
         let balancaComercialData = { anos: [], valores: [] };
         let vendasVarejoData = { anos: [], valores: [] };
+        let populacaoTotalData = { anos: [], valores: [] };
+        let crescimentoPopulacionalData = { anos: [], valores: [] };
 
         indicadores.forEach(ind => {
             if (ind.slug === 'pib') {
@@ -81,6 +83,16 @@ export const estatisticasService = async () => {
                     anos: ind.anos || [], 
                     valores: ind.valores || [] 
                 };
+            } else if (ind.slug === 'populacao_total') {
+                populacaoTotalData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
+            } else if (ind.slug === 'crescimento_populacional') {
+                crescimentoPopulacionalData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
             }
         });
 
@@ -96,7 +108,9 @@ export const estatisticasService = async () => {
             credito: creditoData, 
             inadimplencia: inadimplenciaData,
             balanca_comercial: balancaComercialData,
-            vendas_varejo: vendasVarejoData
+            vendas_varejo: vendasVarejoData,
+            populacao_total: populacaoTotalData,
+            crescimento_populacional: crescimentoPopulacionalData
         };
 
     } catch (error) {
