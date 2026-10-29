@@ -1,5 +1,5 @@
 import { httpClient } from '../chamadaHttpClient.js';
-import { IndicadorAnualModel } from '../../../models/indicadorSchema.js';
+import { indicadorRepository } from '../../../repositories/indicadorRepository.js'; 
 
 // Código 7326 = PIB - Taxa de variação real no ano
 const SERIE_BCB_PIB = 7326;
@@ -52,18 +52,13 @@ async function sincronizarPib() {
         // ---------------------------------------------------------------
         // Salva no MongoDB
         // ---------------------------------------------------------------
-        await IndicadorAnualModel.findOneAndUpdate(
-            { slug: 'pib' },
-            { 
-                titulo: 'Crescimento do PIB Anual (%)', 
-                fonte: 'Banco Central do Brasil (Série 7326)', 
-                unidade: '%', 
-                anos, 
-                valores, 
-                ultimaAtualizacao: agora 
-            },
-            { upsert: true, returnDocument: 'after' }
-        );
+        await indicadorRepository.upsert('pib', {
+            titulo: 'Crescimento do PIB Anual (%)', 
+            fonte: 'Banco Central do Brasil (Série 7326)', 
+            unidade: '%', 
+            anos, 
+            valores
+        });
 
         console.log(`[PIB ADAPTER] PIB sincronizado com sucesso! (${anos.length} anos carregados)`);
         return { sucesso: true, slug: 'pib' };

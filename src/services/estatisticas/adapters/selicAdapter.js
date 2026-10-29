@@ -1,5 +1,5 @@
 import { httpClient } from '../chamadaHttpClient.js';
-import { IndicadorAnualModel } from '../../../models/indicadorSchema.js';
+import { indicadorRepository } from '../../../repositories/indicadorRepository.js'; 
 
 const SERIE_BCB_META_SELIC = 432;
 
@@ -102,18 +102,13 @@ async function sincronizarSelic() {
         const anos = Object.keys(mapaAnual).sort((a, b) => Number(a) - Number(b));
         const valores = anos.map(ano => mapaAnual[ano]);
 
-        await IndicadorAnualModel.findOneAndUpdate(
-            { slug: 'selic' },
-            {
-                titulo: 'Taxa Básica de Juros - Selic - Média Anual (% a.a.)',
-                fonte: 'Banco Central (Meta Selic - Copom, média ponderada pelo tempo)',
-                unidade: '%',
-                anos,
-                valores,
-                ultimaAtualizacao: agora
-            },
-            { upsert: true, returnDocument: 'after' }
-        );
+        await indicadorRepository.upsert('selic', {
+            titulo: 'Taxa Básica de Juros - Selic - Média Anual (% a.a.)',
+            fonte: 'Banco Central (Meta Selic - Copom, média ponderada pelo tempo)',
+            unidade: '%',
+            anos,
+            valores
+        });
 
         console.log(`[SELIC ADAPTER] Sincronizado com sucesso! (${anos.length} anos)`);
         return { sucesso: true, slug: 'selic' };

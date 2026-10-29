@@ -1,5 +1,5 @@
 import { httpClient } from '../chamadaHttpClient.js';
-import { IndicadorAnualModel } from '../../../models/indicadorSchema.js';
+import { indicadorRepository } from '../../../repositories/indicadorRepository.js'; 
 
 const SERIE_BCB_RESERVAS = 13621; // Série diária
 
@@ -52,18 +52,13 @@ async function sincronizarReservas() {
         const anos = Object.keys(mapaAnual).sort((a, b) => Number(a) - Number(b));
         const valores = anos.map(ano => mapaAnual[ano]);
 
-        await IndicadorAnualModel.findOneAndUpdate(
-            { slug: 'reservas' },
-            {
-                titulo: 'Reservas Internacionais (US$ Bilhões)',
-                fonte: 'Banco Central do Brasil (Série 13621)',
-                unidade: 'US$',
-                anos, 
-                valores, 
-                ultimaAtualizacao: agora
-            },
-            { upsert: true, returnDocument: 'after' }
-        );
+        await indicadorRepository.upsert('reservas', {
+            titulo: 'Reservas Internacionais (US$ Bilhões)',
+            fonte: 'Banco Central do Brasil (Série 13621)',
+            unidade: 'US$',
+            anos, 
+            valores
+        });
 
         console.log(`[RESERVAS ADAPTER] Sincronizado com sucesso! (${anos.length} anos)`);
         return { sucesso: true, slug: 'reservas' };

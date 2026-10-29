@@ -1,5 +1,5 @@
 import { httpClient } from '../chamadaHttpClient.js';
-import { IndicadorAnualModel } from '../../../models/indicadorSchema.js';
+import { indicadorRepository } from '../../../repositories/indicadorRepository.js'; 
 
 const SERIE_BCB_INADIMPLENCIA = 21082;
 
@@ -42,18 +42,13 @@ async function sincronizarInadimplencia() {
         const anos = Object.keys(mapaAnual).sort((a, b) => Number(a) - Number(b));
         const valores = anos.map(ano => mapaAnual[ano]);
 
-        await IndicadorAnualModel.findOneAndUpdate(
-            { slug: 'inadimplencia' },
-            {
-                titulo: 'Taxa Média de Inadimplência (%)',
-                fonte: 'Banco Central do Brasil (Série 21082)',
-                unidade: '%',
-                anos, 
-                valores, 
-                ultimaAtualizacao: agora
-            },
-            { upsert: true, returnDocument: 'after' }
-        );
+        await indicadorRepository.upsert('inadimplencia', {
+            titulo: 'Taxa Média de Inadimplência (%)',
+            fonte: 'Banco Central do Brasil (Série 21082)',
+            unidade: '%',
+            anos, 
+            valores
+        });
 
         console.log(`[INADIMPLÊNCIA ADAPTER] Sincronizado com sucesso! (${anos.length} anos)`);
         return { sucesso: true, slug: 'inadimplencia' };

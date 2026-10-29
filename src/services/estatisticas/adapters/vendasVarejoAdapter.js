@@ -1,5 +1,5 @@
 import { httpClient } from '../chamadaHttpClient.js';
-import { IndicadorAnualModel } from '../../../models/indicadorSchema.js';
+import { indicadorRepository } from '../../../repositories/indicadorRepository.js';
 
 // Mudamos para a Série 1455 (Índice de Volume de Vendas - Base 100)
 const SERIE_BCB_VAREJO = 1455; 
@@ -57,18 +57,13 @@ async function sincronizarVendasVarejo() {
             valoresFinais.push(Number(variacao.toFixed(2)));
         }
 
-        await IndicadorAnualModel.findOneAndUpdate(
-            { slug: 'vendas_varejo' },
-            {
-                titulo: 'Vendas no Varejo (%)',
-                fonte: 'Banco Central do Brasil (Série 1455)',
-                unidade: '%',
-                anos: anosFinais, 
-                valores: valoresFinais, 
-                ultimaAtualizacao: agora
-            },
-            { upsert: true, returnDocument: 'after' }
-        );
+        await indicadorRepository.upsert('vendas_varejo', {
+            titulo: 'Vendas no Varejo (%)',
+            fonte: 'Banco Central do Brasil (Série 1455)',
+            unidade: '%',
+            anos: anosFinais, 
+            valores: valoresFinais
+        });
 
         console.log(`[VAREJO ADAPTER] Sincronizado com sucesso! (${anosFinais.length} anos)`);
         return { sucesso: true, slug: 'vendas_varejo' };

@@ -1,5 +1,5 @@
 import { httpClient } from '../chamadaHttpClient.js';
-import { IndicadorAnualModel } from '../../../models/indicadorSchema.js';
+import { indicadorRepository } from '../../../repositories/indicadorRepository.js'; 
 
 const SERIES = {
     liquida: { 
@@ -50,35 +50,25 @@ async function sincronizarDivida() {
         const dadosLiquida = await buscarSerie(SERIES.liquida);
         const anosLiquida = Object.keys(dadosLiquida).sort((a, b) => Number(a) - Number(b));
         if (anosLiquida.length > 0) {
-            await IndicadorAnualModel.findOneAndUpdate(
-                { slug: SERIES.liquida.slug },
-                { 
-                    titulo: SERIES.liquida.titulo, 
-                    fonte: SERIES.liquida.fonte, 
-                    unidade: '%', 
-                    anos: anosLiquida, 
-                    valores: anosLiquida.map(a => dadosLiquida[a]), 
-                    ultimaAtualizacao: agora 
-                },
-                { upsert: true, returnDocument: 'after' }
-            );
+            await indicadorRepository.upsert(SERIES.liquida.slug, {
+                titulo: SERIES.liquida.titulo, 
+                fonte: SERIES.liquida.fonte, 
+                unidade: '%', 
+                anos: anosLiquida, 
+                valores: anosLiquida.map(a => dadosLiquida[a])
+            });
         }
 
         const dadosBruta = await buscarSerie(SERIES.bruta);
         const anosBruta = Object.keys(dadosBruta).sort((a, b) => Number(a) - Number(b));
         if (anosBruta.length > 0) {
-            await IndicadorAnualModel.findOneAndUpdate(
-                { slug: SERIES.bruta.slug },
-                { 
-                    titulo: SERIES.bruta.titulo, 
-                    fonte: SERIES.bruta.fonte, 
-                    unidade: '%', 
-                    anos: anosBruta, 
-                    valores: anosBruta.map(a => dadosBruta[a]), 
-                    ultimaAtualizacao: agora 
-                },
-                { upsert: true, returnDocument: 'after' }
-            );
+            await indicadorRepository.upsert(SERIES.bruta.slug, {
+                titulo: SERIES.bruta.titulo, 
+                fonte: SERIES.bruta.fonte, 
+                unidade: '%', 
+                anos: anosBruta, 
+                valores: anosBruta.map(a => dadosBruta[a])
+            });
         }
 
         console.log(`[DÍVIDA ADAPTER] Sincronizado com sucesso!`);

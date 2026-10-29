@@ -1,11 +1,11 @@
-import { IndicadorAnualModel } from '../../models/indicadorSchema.js';
+import { indicadorRepository } from '../../repositories/indicadorRepository.js';
 import { AppError } from '../../errors/AppError.js';
 import { MENSAGENS_ERRO } from '../../configs/mensagensConfig.js';
 
 export const estatisticasService = async () => {
 
     try {
-        const indicadores = await IndicadorAnualModel.find({});
+        const indicadores = await indicadorRepository.findAll();
 
         let pibData = { anos: [], valores: [] };
         let desempregoData = { anos: [], valores: [] };

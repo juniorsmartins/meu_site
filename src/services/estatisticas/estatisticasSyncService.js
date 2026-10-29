@@ -35,7 +35,7 @@ const estatisticasSyncService = async (usuarioAutenticado, fonteFiltro = null) =
             { nome: 'Balança Comercial', fn: sincronizarBalancaComercial },
             { nome: 'Vendas no Varejo', fn: sincronizarVendasVarejo },
             // Demográficos (Unificado)
-            { nome: 'População', fn: sincronizarPopulacao }
+            { nome: 'População', fn: sincronizarPopulacao } // Adaptador unificado para indicadores de População Total e Crescimento Populacional
         ];
 
         // Filtra os adaptadores com base na escolha do frontend

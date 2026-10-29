@@ -1,5 +1,5 @@
 import { httpClient } from '../chamadaHttpClient.js';
-import { IndicadorAnualModel } from '../../../models/indicadorSchema.js';
+import { indicadorRepository } from '../../../repositories/indicadorRepository.js'; 
 
 const SERIE_BCB_POPULACAO = 21774; // População (Unidades: milhares)
 
@@ -58,34 +58,24 @@ async function sincronizarPopulacao() {
         }
 
         // --- Salvando População Total no MongoDB ---
-        await IndicadorAnualModel.findOneAndUpdate(
-            { slug: 'populacao_total' },
-            {
-                titulo: 'População Residente Total',
-                fonte: 'Banco Central do Brasil (Série 21774 - Base IBGE)',
-                unidade: 'Milhões',
-                anos: anosPop,
-                valores: valoresPop,
-                ultimaAtualizacao: agora
-            },
-            { upsert: true, returnDocument: 'after' }
-        );
+        await indicadorRepository.upsert('populacao_total', {
+            titulo: 'População Residente Total',
+            fonte: 'Banco Central do Brasil (Série 21774 - Base IBGE)',
+            unidade: 'Milhões',
+            anos: anosPop,
+            valores: valoresPop
+        });
         console.log(`[POPULAÇÃO ADAPTER] População Total salva (${anosPop.length} anos).`);
 
         // --- Salvando Taxa de Crescimento no MongoDB ---
         if (anosCresc.length > 0) {
-            await IndicadorAnualModel.findOneAndUpdate(
-                { slug: 'crescimento_populacional' },
-                {
-                    titulo: 'Taxa de Crescimento Populacional (%)',
-                    fonte: 'Banco Central do Brasil (Série 21774 - Base IBGE)',
-                    unidade: '%',
-                    anos: anosCresc,
-                    valores: valoresCresc,
-                    ultimaAtualizacao: agora
-                },
-                { upsert: true, returnDocument: 'after' }
-            );
+            await indicadorRepository.upsert('crescimento_populacional', {
+                titulo: 'Taxa de Crescimento Populacional (%)',
+                fonte: 'Banco Central do Brasil (Série 21774 - Base IBGE)',
+                unidade: '%',
+                anos: anosCresc,
+                valores: valoresCresc
+            });
             console.log(`[POPULAÇÃO ADAPTER] Taxa de Crescimento salva (${anosCresc.length} anos).`);
         }
 
