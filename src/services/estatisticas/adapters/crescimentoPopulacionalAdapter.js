@@ -10,6 +10,7 @@ async function sincronizarCrescimentoPopulacional() {
 
     try {
         const agora = new Date();
+        const anoAtual = agora.getFullYear();
         const url = `https://apisidra.ibge.gov.br/values/t/${SIDRA_TABELA}/n1/all/v/${SIDRA_VARIAVEL}/p/all?formato=json`;
 
         const res = await httpClient(url);
@@ -24,7 +25,10 @@ async function sincronizarCrescimentoPopulacional() {
         registros.forEach(item => {
             const ano = item.D3N;
             const valor = Number(item.V);
-            if (ano && !isNaN(valor) && valor > 0) {
+            const anoNum = Number(ano);
+
+            // Mantém a regra de não pegar o ano atual (dados parciais)
+            if (ano && !isNaN(valor) && valor > 0 && anoNum < anoAtual) {
                 mapaPopulacao[ano] = valor;
             }
         });
@@ -34,7 +38,7 @@ async function sincronizarCrescimentoPopulacional() {
         const anosFinais = [];
         const valoresFinais = [];
 
-        // Calcula a variação percentual ano a ano
+        // Calcula a variação percentual ano a ano, compensando os anos faltantes
         for (let i = 1; i < anosDisponiveis.length; i++) {
             const anoAtualStr = anosDisponiveis[i];
             const anoAnteriorStr = anosDisponiveis[i - 1];
@@ -42,10 +46,16 @@ async function sincronizarCrescimentoPopulacional() {
             const popAtual = mapaPopulacao[anoAtualStr];
             const popAnterior = mapaPopulacao[anoAnteriorStr];
 
-            if (popAnterior > 0) {
-                const taxa = ((popAtual / popAnterior) - 1) * 100;
+            // Calcula a diferença de anos entre os dois dados
+            const diferencaAnos = Number(anoAtualStr) - Number(anoAnteriorStr);
+
+            if (popAnterior > 0 && diferencaAnos > 0) {
+                // Fórmula CAGR: ((PopAtual / PopAnterior) ^ (1 / diferencaAnos)) - 1
+                // Isso "dilui" o crescimento ao longo dos anos que faltaram
+                const taxaAnualComposta = (Math.pow((popAtual / popAnterior), (1 / diferencaAnos)) - 1) * 100;
+                
                 anosFinais.push(anoAtualStr);
-                valoresFinais.push(Number(taxa.toFixed(2)));
+                valoresFinais.push(Number(taxaAnualComposta.toFixed(2)));
             }
         }
 
