@@ -1,6 +1,6 @@
 import { estatisticasService } from '../../services/estatisticas/estatisticasService.js';
 import { estatisticasSyncService } from '../../services/estatisticas/estatisticasSyncService.js';
-import { IndicadorAnualModel } from '../../models/indicadorSchema.js';
+import { indicadorRepository } from '../../repositories/estatisticas/indicadorRepository.js';
 import { MENSAGENS_SUCESSO } from '../../configs/mensagensConfig.js';
 
 const estatisticasController = async (request, response, next) => {
@@ -21,7 +21,7 @@ const estatisticasController = async (request, response, next) => {
 // Lista o status de todos os indicadores salvos para a tabela do painel admin
 const estatisticasStatusController = async (request, response, next) => {
     try {
-        const indicadores = await IndicadorAnualModel.find({}).sort({ updatedAt: -1 });
+        const indicadores = await indicadorRepository.findAllSorted();
 
         return response.status(200).json({
             sucesso: true,
@@ -35,9 +35,15 @@ const estatisticasStatusController = async (request, response, next) => {
 
 // Executa a busca nas APIs externas e salva no banco
 const estatisticasSincronizarController = async (request, response, next) => {
+
     try {
         const usuarioAutenticado = request.usuario;
-        const resultado = await estatisticasSyncService(usuarioAutenticado);
+
+        // Captura a fonte selecionada no frontend
+        const { fonte } = request.query; 
+
+        // Repassa a fonte para o serviço
+        const resultado = await estatisticasSyncService(usuarioAutenticado, fonte);
 
         return response.status(200).json({
             sucesso: true,

@@ -1,5 +1,5 @@
 import { httpClient } from '../chamadaHttpClient.js';
-import { IndicadorAnualModel } from '../../../models/indicadorSchema.js';
+import { indicadorRepository } from '../../../repositories/estatisticas/indicadorRepository.js';
 
 const SERIE_BCB_DESEMPREGO = 24369;
 
@@ -73,18 +73,13 @@ async function sincronizarDesemprego() {
         // ---------------------------------------------------------------
         // 3. Salva no MongoDB
         // ---------------------------------------------------------------
-        await IndicadorAnualModel.findOneAndUpdate(
-            { slug: 'desemprego' },
-            {
-                titulo: 'Taxa Média de Desemprego (%)',
-                fonte: 'Banco Central do Brasil (Série 24369 - PNAD Contínua)',
-                unidade: '%',
-                anos,
-                valores,
-                ultimaAtualizacao: agora
-            },
-            { upsert: true, returnDocument: 'after' }
-        );
+        await indicadorRepository.upsert('desemprego', {
+            titulo: 'Taxa Média de Desemprego (%)',
+            fonte: 'Banco Central do Brasil (Série 24369 - PNAD Contínua)',
+            unidade: '%',
+            anos,
+            valores
+        });
 
         console.log(`[DESEMPREGO ADAPTER] Sincronizado com sucesso! (${anos.length} anos carregados)`);
         return { sucesso: true, slug: 'desemprego' };

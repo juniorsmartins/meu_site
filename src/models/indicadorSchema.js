@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const indicadorAnualSchema = new mongoose.Schema(
+const indicadorSchema = new mongoose.Schema(
     
     {
         slug: { 
@@ -36,9 +36,11 @@ const indicadorAnualSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-indicadorAnualSchema.index({ slug: 1, createdAt: -1 });
+indicadorSchema.index({ slug: 1, createdAt: -1 });
 
-const IndicadorAnualModel = mongoose.model('IndicadorAnual', indicadorAnualSchema);
+const IndicadorModel = mongoose.model('Indicador', indicadorSchema);
 
-export { IndicadorAnualModel };
+export { 
+    IndicadorModel 
+};
 

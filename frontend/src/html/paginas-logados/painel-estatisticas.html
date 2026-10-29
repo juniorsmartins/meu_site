@@ -45,10 +45,40 @@
                     <h1>Painel de Estatísticas</h1>
                     <p>Gerencie a base de dados macroeconômica e execute sincronizações com as APIs oficiais.</p>
                 </div>
-                <div>
+                <!-- <div>
                     <button id="btnSincronizar" class="btn-sincronizar">
                         <i class="bi bi-arrow-repeat"></i> Sincronizar com Fontes Externas
                     </button>
+                </div> -->
+                <div>
+                    <div class="btn-split-container">
+                        <button id="btnSincronizar" class="btn-sincronizar btn-split-principal">
+                            <i class="bi bi-arrow-repeat"></i> Sincronizar Tudo
+                        </button>
+                        <button id="btnToggleDropdownSync" class="btn-sincronizar btn-split-arrow" title="Escolher Fonte Específica">
+                            <i class="bi bi-chevron-down"></i>
+                        </button>
+                        
+                        <ul id="menuDropdownSync" class="dropdown-menu-sync escondido">
+                            <li><button class="item-dropdown-sync" data-fonte="TODOS"><i class="bi bi-arrow-repeat"></i> Todas as Fontes</button></li>
+                            <li class="dropdown-divisor"></li>
+                            <li><button class="item-dropdown-sync" data-fonte="Selic"><i class="bi bi-graph-up"></i> Selic</button></li>
+                            <li><button class="item-dropdown-sync" data-fonte="IPCA"><i class="bi bi-cart"></i> IPCA</button></li>
+                            <li><button class="item-dropdown-sync" data-fonte="PIB"><i class="bi bi-bar-chart"></i> PIB</button></li>
+                            <li><button class="item-dropdown-sync" data-fonte="Desemprego"><i class="bi bi-person-x"></i> Desemprego</button></li>
+                            <li><button class="item-dropdown-sync" data-fonte="Dívida"><i class="bi bi-bank"></i> Dívida Pública</button></li>
+                            <li><button class="item-dropdown-sync" data-fonte="Câmbio"><i class="bi bi-currency-dollar"></i> Câmbio</button></li>
+                            <li><button class="item-dropdown-sync" data-fonte="Reservas"><i class="bi bi-piggy-bank"></i> Reservas</button></li>
+                            <li><button class="item-dropdown-sync" data-fonte="Crédito"><i class="bi bi-credit-card"></i> Crédito</button></li>
+                            <li><button class="item-dropdown-sync" data-fonte="Inadimplência"><i class="bi bi-exclamation-triangle"></i> Inadimplência</button></li>
+                            <li><button class="item-dropdown-sync" data-fonte="Balança Comercial"><i class="bi bi-globe-americas"></i> Balança Comercial</button></li>
+                            <li><button class="item-dropdown-sync" data-fonte="Vendas no Varejo"><i class="bi bi-shop"></i> Vendas no Varejo</button></li>
+                            <li class="dropdown-divisor"></li>
+                            
+                            <!-- Novo Indicador Demográfico Unificado -->
+                            <li><button class="item-dropdown-sync" data-fonte="População"><i class="bi bi-people-fill"></i> População</button></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
