@@ -73,7 +73,7 @@
 }
 
 .grafico-info p strong {
-    color: #555;
+    color: #555; 
     font-weight: 600;
 }
 
@@ -83,17 +83,17 @@
     height: 280px;
 }
 
-/* Faz cards específicos (como População e IDH) ocuparem as duas colunas */
-.card-destaque-largo {
+/* Faz o 1º card (População Total) ocupar as duas colunas */
+.card-grafico:nth-child(1) {
     grid-column: span 2;
 }
 
-/* Responsividade: volta a ser 1 coluna em telas menores */
+/* Responsividade */
 @media (max-width: 900px) {
     .grid-graficos {
         grid-template-columns: 1fr;
     }
-    .card-destaque-largo {
+    .card-grafico:nth-child(1) {
         grid-column: span 1;
     }
 }
@@ -119,6 +119,7 @@
     margin: 0;
 }
 
+/* Estilo base das tags de tendência */
 .tag-tendencia {
     display: inline-block;
     align-self: flex-start;
@@ -141,9 +142,5 @@
     border: 1px solid #F7DC6F;
 }
 
-.tendencia-estabilizada {
-    background-color: #EBF5FB;
-    color: #2471A3;
-    border: 1px solid #AED6F1;
-}
+
 

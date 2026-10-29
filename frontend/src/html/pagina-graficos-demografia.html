@@ -1,19 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gajeiro - Estatísticas Demográficas e Sociais do Brasil</title>
+    <title>Gajeiro - Indicadores Demográficos do Brasil</title>
 
     <!-- Estilos -->
     <link rel="stylesheet" href="../css/index.css">
     <link rel="stylesheet" href="../css/header.css">
     <link rel="stylesheet" href="../css/pagina-graficos-demografia.css">
     <link rel="stylesheet" href="../css/footer.css">
-
-    <!-- Favicon -->
     <link rel="shortcut icon" type="image/png" href="../img/favicon.png">
 
     <!-- Google Fonts -->
@@ -24,171 +20,161 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
-    <!-- Chart.js CDN para Gráficos Interativos -->
+    <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
 <body>
 
-    <!-- Scripts do Cabeçalho/Rodapé e Estatísticas -->
+    <!-- Scripts do Cabeçalho e Rodapé -->
     <script type="module" src="../js/header.js"></script>
-    <script type="module" src="../js/pagina-graficos-demografia.js"></script>
+    <!-- <script type="module" src="../js/pagina-graficos-demografia.js"></script>  Será ativado futuramente -->
     <script type="module" src="../js/footer.js"></script> 
 
-    <!-- Cabeçalho Reutilizado -->
     <div id="header-container"></div>
 
-    <!-- Conteúdo Principal de Demografia -->
     <main id="container-estatisticas-publico">
-
         <div class="estatisticas-wrapper">
             
-            <!-- Título da Seção -->
             <div class="estatisticas-header-titulo">
-                <h2>Indicadores Demográficos e Sociais do Brasil</h2>
-                <p>Acompanhe a evolução populacional, longevidade e transformação estrutural baseada em dados oficiais do IBGE.</p>
+                <h2>Indicadores Demográficos do Brasil</h2>
+                <p>Acompanhe a evolução da população brasileira com base em dados oficiais do IBGE.</p>
             </div>
 
-            <!-- Grid de Gráficos (Séries Históricas Demográficas) -->
             <div class="grid-graficos">
 
-                <!-- Gráfico 1: População Total Residente (Barras Verticais) -->
-                <div class="card-grafico card-destaque-largo">
+                <!-- 1. População Total (Gráfico de Barras) -->
+                <div class="card-grafico">
                     <div class="grafico-info">
-                        <h3>População Total Residente (Milhões de Habitantes)</h3>
-                        <p>Evolução do volume total da população brasileira ao longo dos Censos e contagens populacionais (IBGE).</p>
+                        <h3>População Total Residente</h3>
+                        <p>Número total de habitantes no Brasil (em milhões).</p>
                     </div>
                     <div class="canvas-wrapper">
-                        <canvas id="graficoPopulacaoTotal"></canvas>
+                        <canvas id="graficoPopulacao"></canvas>
                     </div>
                     <div class="grafico-explicacao">
-                        <p><strong>O que é:</strong> O tamanho absoluto da população que habita o território brasileiro.</p>
-                        <p><strong>Por que é importante:</strong> É a base fundamental para o planejamento de políticas públicas, dimensionamento de redes de saúde, habitação, escolas e investimentos em infraestrutura.</p>
-                        <p class="tag-tendencia tendencia-neutra">📊 Tendência: Crescimento desacelerado</p>
+                        <p><strong>O que é:</strong> O número total de pessoas que vivem no país.</p>
+                        <p><strong>Por que é importante?</strong> É a base para o planejamento de políticas públicas em saúde, educação, infraestrutura e previdência. Mostra o tamanho do mercado consumidor e da força de trabalho.</p>
+                        <p class="tag-tendencia tendencia-boa">📈 Tendência ideal: Crescimento Estável</p>
                     </div>
                 </div>
 
-                <!-- Gráfico 2: Taxa de Crescimento Populacional -->
+                <!-- 2. Taxa de Crescimento -->
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>Taxa de Crescimento Populacional (%)</h3>
-                        <p>Ritmo anual de aumento da população brasileira, evidenciando a transição demográfica (IBGE).</p>
+                        <p>Variação percentual anual da população total.</p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoCrescimentoPop"></canvas>
                     </div>
                     <div class="grafico-explicacao">
-                        <p><strong>O que é:</strong> O percentual de variação do tamanho da população de um ano para o outro.</p>
-                        <p><strong>Por que a queda é natural?</strong> O Brasil vem registrando taxas decrescentes ano a ano, refletindo a queda na natalidade e a mudança no planejamento familiar das novas gerações.</p>
-                        <p class="tag-tendencia tendencia-neutra">📉 Tendência: Desaceleração contínua</p>
+                        <p><strong>O que é:</strong> A velocidade com que a população aumenta ou diminui a cada ano.</p>
+                        <p><strong>Por que é importante?</strong> O Brasil está passando pela transição demográfica. A taxa de crescimento está desacelerando, o que exige uma adaptação da economia e das políticas sociais para uma população que envelhece.</p>
+                        <p class="tag-tendencia tendencia-neutra">⚖️ Tendência ideal: Equilíbrio</p>
                     </div>
                 </div>
 
-                <!-- Gráfico 3: Expectativa de Vida ao Nascer (Duas Linhas: Homens e Mulheres) -->
+                <!-- 3. Expectativa de Vida (Gráfico de Duas Linhas) -->
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>Expectativa de Vida ao Nascer (Anos)</h3>
-                        <p>Número médio de anos que recém-nascidos tendem a viver, segmentado por sexo (IBGE - Tábua de Mortalidade).</p>
+                        <p>Expectativa de vida por sexo (feminino e masculino).</p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoExpectativaVida"></canvas>
                     </div>
                     <div class="grafico-explicacao">
-                        <p><strong>O que é:</strong> O termômetro de longevidade e saúde pública da população.</p>
-                        <p><strong>Por que a alta é ideal?</strong> Maior longevidade indica melhorias estruturais em saneamento, medicina e qualidade de vida. Historicamente, as mulheres apresentam maior expectativa de vida que os homens.</p>
-                        <p class="tag-tendencia tendencia-boa">📈 Tendência ideal: Alta contínua</p>
+                        <p><strong>O que é:</strong> O número médio de anos que se espera que uma pessoa viva.</p>
+                        <p><strong>Por que é importante?</strong> É um dos melhores indicadores de qualidade de vida. A diferença entre os sexos reflete fatores biológicos e, principalmente, sociais.</p>
+                        <p class="tag-tendencia tendencia-boa">📈 Tendência ideal: Alta</p>
                     </div>
                 </div>
 
-                <!-- Gráfico 4: Taxa de Fecundidade Total -->
+                <!-- 4. Fecundidade -->
                 <div class="card-grafico">
                     <div class="grafico-info">
-                        <h3>Taxa de Fecundidade Total (Filhos por Mulher)</h3>
-                        <p>Número médio de filhos por mulher em idade fértil ao longo dos anos (IBGE / Projeções).</p>
+                        <h3>Taxa de Fecundidade Total</h3>
+                        <p>Número médio de filhos por mulher em idade reprodutiva.</p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoFecundidade"></canvas>
                     </div>
                     <div class="grafico-explicacao">
-                        <p><strong>O que é:</strong> A estimativa do número de filhos que uma mulher teria ao fim do período fértil.</p>
-                        <p><strong>Por que importa?</strong> O Brasil já se encontra abaixo da taxa de reposição geracional (2,1 filhos por mulher), o que acelera o envelhecimento da pirâmide populacional.</p>
-                        <p class="tag-tendencia tendencia-neutra">📉 Tendência: Queda abaixo da reposição</p>
+                        <p><strong>O que é:</strong> A média de filhos que uma mulher teria ao longo da vida.</p>
+                        <p><strong>Por que é importante?</strong> A queda acentuada é o motor do envelhecimento populacional. Reflete avanços em educação e saúde, mas se ficar muito abaixo de 2,1 (nível de reposição), pode gerar desafios econômicos futuros.</p>
+                        <p class="tag-tendencia tendencia-neutra">⚖️ Tendência ideal: Equilíbrio (~2,1)</p>
                     </div>
                 </div>
 
-                <!-- Gráfico 5: Grau de Urbanização -->
+                <!-- 5. Urbanização -->
                 <div class="card-grafico">
                     <div class="grafico-info">
-                        <h3>Grau de Urbanização (% População Urbana)</h3>
-                        <p>Proporção da população residente em áreas urbanas em comparação às zonas rurais (IBGE - Censos).</p>
+                        <h3>Grau de Urbanização (%)</h3>
+                        <p>Percentual da população vivendo em áreas urbanas.</p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoUrbanizacao"></canvas>
                     </div>
                     <div class="grafico-explicacao">
-                        <p><strong>O que é:</strong> O percentual de brasileiros que vivem nas cidades.</p>
-                        <p><strong>Por que importa?</strong> Retrata o intenso êxodo rural histórico do Brasil e como os centros urbanos concentram os desafios de mobilidade, habitação, saneamento e emprego.</p>
-                        <p class="tag-tendencia tendencia-estabilizada">⚖️ Tendência: Estabilização em patamar elevado</p>
+                        <p><strong>O que é:</strong> A proporção de pessoas que vivem em cidades em relação ao total.</p>
+                        <p><strong>Por que é importante?</strong> Mostra a transformação do território. Uma população altamente urbana demanda mais investimentos em transporte público, saneamento e moradia.</p>
+                        <p class="tag-tendencia tendencia-neutra">⚖️ Tendência ideal: Equilíbrio Regional</p>
                     </div>
                 </div>
 
-                <!-- Gráfico 6: Taxa de Mortalidade Infantil -->
+                <!-- 6. Mortalidade Infantil -->
                 <div class="card-grafico">
                     <div class="grafico-info">
-                        <h3>Taxa de Mortalidade Infantil (por mil)</h3>
-                        <p>Número de óbitos de crianças menores de um ano de idade por mil nascidos vivos (IBGE / Ministério da Saúde).</p>
+                        <h3>Taxa de Mortalidade Infantil</h3>
+                        <p>Óbitos de menores de 1 ano por mil nascidos vivos.</p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoMortalidadeInfantil"></canvas>
                     </div>
                     <div class="grafico-explicacao">
-                        <p><strong>O que é:</strong> O principal indicador de saúde infantil e condições socioeconômicas básicas.</p>
-                        <p><strong>Por que a queda é ideal?</strong> Quanto menor a taxa, mais avançada é a rede de atendimento médico materno-infantil, vacinação e saneamento básico no país.</p>
-                        <p class="tag-tendencia tendencia-boa">📉 Tendência ideal: Queda contínua</p>
+                        <p><strong>O que é:</strong> O risco de uma criança morrer antes de completar 1 ano de idade.</p>
+                        <p><strong>Por que é importante?</strong> É um termômetro da saúde pública e do saneamento básico. Sua redução é um dos Objetivos de Desenvolvimento Sustentável da ONU.</p>
+                        <p class="tag-tendencia tendencia-boa">📉 Tendência ideal: Queda</p>
                     </div>
                 </div>
 
-                <!-- Gráfico 7: Índice de Envelhecimento -->
+                <!-- 7. Envelhecimento -->
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>Índice de Envelhecimento (%)</h3>
-                        <p>Razão entre a população com 60 anos ou mais para cada 100 crianças menores de 15 anos (IBGE).</p>
+                        <p>Razão entre idosos (60+) e jovens (0-14 anos).</p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoEnvelhecimento"></canvas>
                     </div>
                     <div class="grafico-explicacao">
-                        <p><strong>O que é:</strong> Mede a proporção de idosos em relação à base de jovens da pirâmide populacional.</p>
-                        <p><strong>Por que importa?</strong> Com o avanço rápido desse índice, o Brasil precisa adaptar urgentemente sua rede de saúde geriátrica, previdência social e mercado de trabalho.</p>
-                        <p class="tag-tendencia tendencia-neutra">📈 Tendência: Alta acelerada</p>
+                        <p><strong>O que é:</strong> Mede a velocidade da transição demográfica, comparando o número de idosos com o de jovens.</p>
+                        <p><strong>Por que é importante?</strong> Um índice alto indica uma população mais velha, com grandes implicações para a previdência social e os sistemas de saúde.</p>
+                        <p class="tag-tendencia tendencia-neutra">⚖️ Tendência ideal: Depende</p>
                     </div>
                 </div>
 
-                <!-- Gráfico 8: Índice de Desenvolvimento Humano (IDH) -->
-                <div class="card-grafico card-destaque-largo">
+                <!-- 8. IDH -->
+                <div class="card-grafico">
                     <div class="grafico-info">
-                        <h3>Índice de Desenvolvimento Humano - IDH</h3>
-                        <p>Indicador composto que avalia três dimensões básicas: longevidade, educação e renda (PNUD / ONU).</p>
+                        <h3>IDH - Índice de Desenvolvimento Humano</h3>
+                        <p>Medida de renda, educação e saúde (0 a 1).</p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoIdh"></canvas>
                     </div>
                     <div class="grafico-explicacao">
-                        <p><strong>O que é:</strong> Uma medida resumida do progresso a longo prazo em três dimensões fundamentais do desenvolvimento humano.</p>
-                        <p><strong>Por que a alta é ideal?</strong> Varia de 0 a 1, onde valores mais altos indicam melhor qualidade de vida, acesso à educação de qualidade e maior expectativa de vida para os cidadãos.</p>
-                        <p class="tag-tendencia tendencia-boa">📈 Tendência ideal: Alta rumo ao desenvolvimento alto</p>
+                        <p><strong>O que é:</strong> Uma medida resumida do progresso em três dimensões: renda, educação e saúde.</p>
+                        <p><strong>Por que é importante?</strong> Vai além do PIB, mostrando se o crescimento econômico está se traduzindo em bem-estar real para as pessoas.</p>
+                        <p class="tag-tendencia tendencia-boa">📈 Tendência ideal: Alta</p>
                     </div>
                 </div>
 
             </div>
-
         </div>
-
     </main>
 
-    <!-- Rodapé Reutilizado -->
     <div id="footer-container"></div>
-
 </body>
-
 </html>
+
