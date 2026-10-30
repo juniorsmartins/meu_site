@@ -42,19 +42,19 @@
 
             <div class="grid-graficos">
 
-                <!-- 1. IDH -->
+                <!-- 1. IDH vs IDHI -->
                 <div class="card-grafico">
                     <div class="grafico-info">
-                        <h3>IDH - Índice de Desenvolvimento Humano</h3>
-                        <p>Medida de renda, educação e saúde (0 a 1).</p>
+                        <h3>IDH vs. IDH Ajustado pela Desigualdade</h3>
+                        <p>Comparação entre o IDH geral e o IDH que desconta as desigualdades sociais (0 a 1).</p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoIdh"></canvas>
                     </div>
                     <div class="grafico-explicacao">
-                        <p><strong>O que é:</strong> Uma medida resumida do progresso em três dimensões: renda, educação e saúde.</p>
-                        <p><strong>Por que é importante?</strong> Vai além do PIB, mostrando se o crescimento econômico está se traduzindo em bem-estar real para as pessoas.</p>
-                        <p class="tag-tendencia tendencia-boa">📈 Tendência ideal: Alta</p>
+                        <p><strong>O que é:</strong> O IDH mede a média de renda, educação e saúde. O IDHI desconta essa média pela desigualdade entre os brasileiros.</p>
+                        <p><strong>Por que é importante?</strong> O "abismo" entre as duas linhas mostra o quanto o Brasil perde de desenvolvimento humano apenas por causa da concentração de renda e oportunidades. Quanto menor o abismo, mais justo é o país.</p>
+                        <p class="tag-tendencia tendencia-boa">📈 Tendência ideal: Linhas próximas e em alta</p>
                     </div>
                 </div>
 
@@ -167,6 +167,22 @@
                         <p><strong>O que é:</strong> Mede a velocidade da transição demográfica, comparando o número de idosos com o de jovens.</p>
                         <p><strong>Por que é importante?</strong> Um índice alto indica uma população mais velha, com grandes implicações para a previdência social e os sistemas de saúde.</p>
                         <p class="tag-tendencia tendencia-neutra">⚖️ Tendência ideal: Depende</p>
+                    </div>
+                </div>
+
+                <!-- 9. Mortalidade Materna -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>Mortalidade Materna</h3>
+                        <p>Mortes de mães por 100 mil nascidos vivos.</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoMortalidadeMaterna"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> O número de mortes de mulheres durante a gestação, parto ou puerpério para cada 100 mil bebês nascidos vivos.</p>
+                        <p><strong>Por que é importante?</strong> É um dos indicadores mais sensíveis da qualidade da saúde pública e do acesso ao pré-natal. Quase todas essas mortes são evitáveis.</p>
+                        <p class="tag-tendencia tendencia-boa">📉 Tendência ideal: Queda</p>
                     </div>
                 </div>
 

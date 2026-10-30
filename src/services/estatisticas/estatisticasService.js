@@ -22,6 +22,8 @@ export const estatisticasService = async () => {
         let populacaoTotalData = { anos: [], valores: [] };
         let crescimentoPopulacionalData = { anos: [], valores: [] };
         let idhData = { anos: [], valores: [] };
+        let idhiData = { anos: [], valores: [] }; // NOVO
+        let mortalidadeMaternaData = { anos: [], valores: [] };
 
         indicadores.forEach(ind => {
             if (ind.slug === 'pib') {
@@ -99,6 +101,16 @@ export const estatisticasService = async () => {
                     anos: ind.anos || [], 
                     valores: ind.valores || [] 
                 };
+            } else if (ind.slug === 'idhi') { 
+                idhiData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
+            } else if (ind.slug === 'mortalidade_materna') { 
+                mortalidadeMaternaData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
             }
         });
 
@@ -117,7 +129,9 @@ export const estatisticasService = async () => {
             vendas_varejo: vendasVarejoData,
             populacao_total: populacaoTotalData,
             crescimento_populacional: crescimentoPopulacionalData,
-            idh: idhData
+            idh: idhData,
+            idhi: idhiData,
+            mortalidade_materna: mortalidadeMaternaData
         };
 
     } catch (error) {

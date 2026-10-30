@@ -1,13 +1,12 @@
 import { httpClient } from '../chamadaHttpClient.js';
 import { indicadorRepository } from '../../../repositories/estatisticas/indicadorRepository.js';
 
-const UNDP_API_KEY = process.env.UNDP_API_KEY; // Chave de API do PNUD
-const UNDP_INDICATOR_ID = 'hdi'; // Código oficial do IDH no PNUD. 
-const PAIS_ISO = 'BRA'; // Brasil - Código ISO 3166-1 alpha-3. Representa o Brasil na API do PNUD
+const UNDP_API_KEY = process.env.UNDP_API_KEY;
+const PAIS_ISO = 'BRA';
 
 async function sincronizarIdh() {
-
-    console.log(`[IDH ADAPTER] Iniciando sincronização via API do PNUD...`);
+    
+    console.log(`[IDH ADAPTER] Iniciando sincronização (IDH e IDHI)...`);
 
     if (!UNDP_API_KEY) {
         console.error("[IDH ADAPTER] Variável UNDP_API_KEY não configurada.");
@@ -19,44 +18,64 @@ async function sincronizarIdh() {
         const anoInicio = 1990;
         const anoFim = anoAtual - 1;
 
-        const anos = [];
-        const valores = [];
+        const mapaAnos = {}; // { "1990": { hdi: 0.6, ihdi: 0.4 }, ... }
 
-        // A API do PNUD exige a consulta ano a ano.
-        // Faremos requisições sequenciais com uma pequena pausa para evitar rate limit.
         for (let ano = anoInicio; ano <= anoFim; ano++) {
-            const url = `https://hdrdata.org/api/CompositeIndices/query?apikey=${UNDP_API_KEY}&countryOrAggregation=${PAIS_ISO}&year=${ano}&indicator=${UNDP_INDICATOR_ID}&v=3.6`;
-            
-            const res = await httpClient(url);
+            // Requisição para o HDI
+            const urlHdi = `https://hdrdata.org/api/CompositeIndices/query?apikey=${UNDP_API_KEY}&countryOrAggregation=${PAIS_ISO}&year=${ano}&indicator=hdi&v=3.6`;
+            const resHdi = await httpClient(urlHdi);
 
-            if (res.ok && Array.isArray(res.data) && res.data.length > 0) {
-                // A API retorna um array de objetos. O valor do IDH está em "value".
-                const item = res.data[0];
-                const valorHdi = Number(item.value);
+            // Requisição para o IHDI
+            const urlIhdi = `https://hdrdata.org/api/CompositeIndices/query?apikey=${UNDP_API_KEY}&countryOrAggregation=${PAIS_ISO}&year=${ano}&indicator=ihdi&v=3.6`;
+            const resIhdi = await httpClient(urlIhdi);
 
-                if (!isNaN(valorHdi) && valorHdi > 0) {
-                    anos.push(String(ano));
-                    valores.push(Number(valorHdi.toFixed(3))); // IDH tem 3 casas decimais
-                }
-            } else {
-                console.warn(`[IDH ADAPTER] Sem dados para o ano ${ano}.`);
+            let valorHdi = null;
+            let valorIhdi = null;
+
+            if (resHdi.ok && Array.isArray(resHdi.data) && resHdi.data.length > 0) {
+                valorHdi = Number(resHdi.data[0].value);
+            }
+            if (resIhdi.ok && Array.isArray(resIhdi.data) && resIhdi.data.length > 0) {
+                valorIhdi = Number(resIhdi.data[0].value);
             }
 
-            // Pausa de 500ms entre as requisições para não sobrecarregar a API do PNUD
+            // Só adiciona o ano se tivermos os dois valores (para o gráfico não quebrar)
+            if (valorHdi && !isNaN(valorHdi) && valorIhdi && !isNaN(valorIhdi)) {
+                mapaAnos[ano] = {
+                    hdi: Number(valorHdi.toFixed(3)),
+                    ihdi: Number(valorIhdi.toFixed(3))
+                };
+            }
+
             await new Promise(resolve => setTimeout(resolve, 500));
         }
 
+        const anos = Object.keys(mapaAnos).sort((a, b) => Number(a) - Number(b));
+        
         if (anos.length === 0) {
-            console.warn("[IDH ADAPTER] Nenhum dado válido foi retornado pela API do PNUD.");
+            console.warn("[IDH ADAPTER] Nenhum dado válido retornado.");
             return { sucesso: false, slug: 'idh' };
         }
 
+        const valoresHdi = anos.map(ano => mapaAnos[ano].hdi);
+        const valoresIhdi = anos.map(ano => mapaAnos[ano].ihdi);
+
+        // Salva IDH
         await indicadorRepository.upsert('idh', {
             titulo: 'IDH - Índice de Desenvolvimento Humano',
             fonte: 'PNUD - HDR Data API',
             unidade: 'Índice (0 a 1)',
             anos,
-            valores
+            valores: valoresHdi
+        });
+
+        // Salva IDHI
+        await indicadorRepository.upsert('idhi', {
+            titulo: 'IDH Ajustado pela Desigualdade',
+            fonte: 'PNUD - HDR Data API',
+            unidade: 'Índice (0 a 1)',
+            anos,
+            valores: valoresIhdi
         });
 
         console.log(`[IDH ADAPTER] Sincronizado com sucesso! (${anos.length} anos)`);
