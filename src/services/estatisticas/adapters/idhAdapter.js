@@ -1,12 +1,12 @@
 import { httpClient } from '../chamadaHttpClient.js';
-import { indicadorRepository } from '../../../repositories/indicadorRepository.js';
+import { indicadorRepository } from '../../../repositories/estatisticas/indicadorRepository.js';
 
 const UNDP_API_KEY = process.env.UNDP_API_KEY; // Chave de API do PNUD
 const UNDP_INDICATOR_ID = 137506; // Código oficial do IDH no PNUD. Representa o indicador de IDH na API do PNUD.
 const PAIS_ISO = 'BRA'; // Brasil - Código ISO 3166-1 alpha-3. Representa o Brasil na API do PNUD
 
 async function sincronizarIdh() {
-    
+
     console.log(`[IDH ADAPTER] Iniciando sincronização via API do PNUD...`);
 
     if (!UNDP_API_KEY) {
