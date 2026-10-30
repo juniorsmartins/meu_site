@@ -13,6 +13,10 @@ import { sincronizarInadimplencia } from './adapters/inadimplenciaAdapter.js';
 import { sincronizarBalancaComercial } from './adapters/balancaComercialAdapter.js';
 import { sincronizarVendasVarejo } from './adapters/vendasVarejoAdapter.js';
 import { sincronizarPopulacao } from './adapters/populacaoAdapter.js';
+import { sincronizarIdh } from './adapters/idhAdapter.js';
+import { sincronizarMortalidadeMaterna } from './adapters/mortalidadeMaternaAdapter.js'; 
+import { sincronizarExpectativaVida } from './adapters/expectativaVidaAdapter.js';
+import { sincronizarFecundidade } from './adapters/fecundidadeAdapter.js';
 
 const estatisticasSyncService = async (usuarioAutenticado, fonteFiltro = null) => {
 
@@ -35,7 +39,11 @@ const estatisticasSyncService = async (usuarioAutenticado, fonteFiltro = null) =
             { nome: 'Balança Comercial', fn: sincronizarBalancaComercial },
             { nome: 'Vendas no Varejo', fn: sincronizarVendasVarejo },
             // Demográficos (Unificado)
-            { nome: 'População', fn: sincronizarPopulacao } // Adaptador unificado para indicadores de População Total e Crescimento Populacional
+            { nome: 'População', fn: sincronizarPopulacao }, // Adaptador unificado para indicadores de População Total e Crescimento Populacional
+            { nome: 'IDH', fn: sincronizarIdh }, // Adaptador para o Índice de Desenvolvimento Humano (IDH)
+            { nome: 'Mortalidade Materna', fn: sincronizarMortalidadeMaterna },
+            { nome: 'Expectativa de Vida', fn: sincronizarExpectativaVida },
+            { nome: 'Fecundidade', fn: sincronizarFecundidade }
         ];
 
         // Filtra os adaptadores com base na escolha do frontend
