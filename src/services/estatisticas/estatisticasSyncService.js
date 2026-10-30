@@ -17,6 +17,8 @@ import { sincronizarIdh } from './adapters/idhAdapter.js';
 import { sincronizarMortalidadeMaterna } from './adapters/mortalidadeMaternaAdapter.js'; 
 import { sincronizarExpectativaVida } from './adapters/expectativaVidaAdapter.js';
 import { sincronizarFecundidade } from './adapters/fecundidadeAdapter.js';
+import { sincronizarUrbanizacao } from './adapters/urbanizacaoAdapter.js';
+import { sincronizarMortalidadeInfantil } from './adapters/mortalidadeInfantilAdapter.js';
 
 const estatisticasSyncService = async (usuarioAutenticado, fonteFiltro = null) => {
 
@@ -43,7 +45,9 @@ const estatisticasSyncService = async (usuarioAutenticado, fonteFiltro = null) =
             { nome: 'IDH', fn: sincronizarIdh }, // Adaptador para o Índice de Desenvolvimento Humano (IDH)
             { nome: 'Mortalidade Materna', fn: sincronizarMortalidadeMaterna },
             { nome: 'Expectativa de Vida', fn: sincronizarExpectativaVida },
-            { nome: 'Fecundidade', fn: sincronizarFecundidade }
+            { nome: 'Fecundidade', fn: sincronizarFecundidade },
+            { nome: 'Urbanização', fn: sincronizarUrbanizacao }, 
+            { nome: 'Mortalidade Infantil', fn: sincronizarMortalidadeInfantil } 
         ];
 
         // Filtra os adaptadores com base na escolha do frontend
