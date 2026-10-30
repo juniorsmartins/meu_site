@@ -19,6 +19,7 @@ import { sincronizarExpectativaVida } from './adapters/expectativaVidaAdapter.js
 import { sincronizarFecundidade } from './adapters/fecundidadeAdapter.js';
 import { sincronizarUrbanizacao } from './adapters/urbanizacaoAdapter.js';
 import { sincronizarMortalidadeInfantil } from './adapters/mortalidadeInfantilAdapter.js';
+import { sincronizarEnvelhecimento } from './adapters/envelhecimentoAdapter.js';
 
 const estatisticasSyncService = async (usuarioAutenticado, fonteFiltro = null) => {
 
@@ -47,7 +48,8 @@ const estatisticasSyncService = async (usuarioAutenticado, fonteFiltro = null) =
             { nome: 'Expectativa de Vida', fn: sincronizarExpectativaVida },
             { nome: 'Fecundidade', fn: sincronizarFecundidade },
             { nome: 'Urbanização', fn: sincronizarUrbanizacao }, 
-            { nome: 'Mortalidade Infantil', fn: sincronizarMortalidadeInfantil } 
+            { nome: 'Mortalidade Infantil', fn: sincronizarMortalidadeInfantil },
+            { nome: 'Envelhecimento', fn: sincronizarEnvelhecimento }
         ];
 
         // Filtra os adaptadores com base na escolha do frontend

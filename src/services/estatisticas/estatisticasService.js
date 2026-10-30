@@ -29,6 +29,7 @@ export const estatisticasService = async () => {
         let fecundidadeData = { anos: [], valores: [] };
         let urbanizacaoData = { anos: [], valores: [] }; 
         let mortalidadeInfantilData = { anos: [], valores: [] };
+        let envelhecimentoData = { anos: [], valores: [] }; 
 
         indicadores.forEach(ind => {
             if (ind.slug === 'pib') {
@@ -141,6 +142,11 @@ export const estatisticasService = async () => {
                     anos: ind.anos || [], 
                     valores: ind.valores || [] 
                 };
+            } else if (ind.slug === 'envelhecimento') { 
+                envelhecimentoData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
             }
         });
 
@@ -172,7 +178,8 @@ export const estatisticasService = async () => {
             expectativa_vida: expectativaVidaUnificada,
             fecundidade: fecundidadeData,
             urbanizacao: urbanizacaoData, 
-            mortalidade_infantil: mortalidadeInfantilData
+            mortalidade_infantil: mortalidadeInfantilData,
+            envelhecimento: envelhecimentoData
         };
 
     } catch (error) {

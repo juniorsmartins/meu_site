@@ -104,7 +104,7 @@ async function sincronizarSelic() {
 
         await indicadorRepository.upsert('selic', {
             titulo: 'Taxa Básica de Juros - Selic - Média Anual (% a.a.)',
-            fonte: 'Banco Central (Meta Selic - Copom, média ponderada pelo tempo)',
+            fonte: 'Banco Central do Brasil (Meta Selic - Copom, média ponderada pelo tempo)',
             unidade: '%',
             anos,
             valores
