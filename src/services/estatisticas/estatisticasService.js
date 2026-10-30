@@ -21,6 +21,7 @@ export const estatisticasService = async () => {
         let vendasVarejoData = { anos: [], valores: [] };
         let populacaoTotalData = { anos: [], valores: [] };
         let crescimentoPopulacionalData = { anos: [], valores: [] };
+        let idhData = { anos: [], valores: [] };
 
         indicadores.forEach(ind => {
             if (ind.slug === 'pib') {
@@ -93,6 +94,11 @@ export const estatisticasService = async () => {
                     anos: ind.anos || [], 
                     valores: ind.valores || [] 
                 };
+            } else if (ind.slug === 'idh') { 
+                idhData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
             }
         });
 
@@ -110,7 +116,8 @@ export const estatisticasService = async () => {
             balanca_comercial: balancaComercialData,
             vendas_varejo: vendasVarejoData,
             populacao_total: populacaoTotalData,
-            crescimento_populacional: crescimentoPopulacionalData
+            crescimento_populacional: crescimentoPopulacionalData,
+            idh: idhData
         };
 
     } catch (error) {
