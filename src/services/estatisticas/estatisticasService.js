@@ -21,6 +21,12 @@ export const estatisticasService = async () => {
         let vendasVarejoData = { anos: [], valores: [] };
         let populacaoTotalData = { anos: [], valores: [] };
         let crescimentoPopulacionalData = { anos: [], valores: [] };
+        let idhData = { anos: [], valores: [] };
+        let idhiData = { anos: [], valores: [] }; // NOVO
+        let mortalidadeMaternaData = { anos: [], valores: [] };
+        let expectativaVidaHomensData = { anos: [], valores: [] };
+        let expectativaVidaMulheresData = { anos: [], valores: [] };
+        let fecundidadeData = { anos: [], valores: [] };
 
         indicadores.forEach(ind => {
             if (ind.slug === 'pib') {
@@ -93,8 +99,45 @@ export const estatisticasService = async () => {
                     anos: ind.anos || [], 
                     valores: ind.valores || [] 
                 };
+            } else if (ind.slug === 'idh') { 
+                idhData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
+            } else if (ind.slug === 'idhi') { 
+                idhiData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
+            } else if (ind.slug === 'mortalidade_materna') { 
+                mortalidadeMaternaData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
+            } else if (ind.slug === 'expectativa_vida_homens') {
+                expectativaVidaHomensData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
+            } else if (ind.slug === 'expectativa_vida_mulheres') {
+                expectativaVidaMulheresData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
+            } else if (ind.slug === 'fecundidade') {
+                fecundidadeData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
             }
         });
+
+        // Junta os dados para o Frontend no formato que o Chart.js espera
+        const expectativaVidaUnificada = {
+            anos: expectativaVidaHomensData.anos, // Usa os anos dos homens como base (são iguais)
+            homens: expectativaVidaHomensData.valores,
+            mulheres: expectativaVidaMulheresData.valores
+        };
 
         return {
             pib: pibData,
@@ -110,7 +153,12 @@ export const estatisticasService = async () => {
             balanca_comercial: balancaComercialData,
             vendas_varejo: vendasVarejoData,
             populacao_total: populacaoTotalData,
-            crescimento_populacional: crescimentoPopulacionalData
+            crescimento_populacional: crescimentoPopulacionalData,
+            idh: idhData,
+            idhi: idhiData,
+            mortalidade_materna: mortalidadeMaternaData,
+            expectativa_vida: expectativaVidaUnificada,
+            fecundidade: fecundidadeData
         };
 
     } catch (error) {

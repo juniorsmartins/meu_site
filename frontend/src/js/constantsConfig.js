@@ -9,6 +9,10 @@ const API_URL_COMUNICACAO_CONTATO_LEITOR = '/api/v1/comunicacao/contato-leitor';
 const API_URL_NOTICIAS_CAPA = '/api/v1/noticias/capa';
 const API_URL_NOTICIAS = '/api/v1/noticias';
 
+// Limite de notícias exibidas por página
+const LIMITE_NOTICIAS_POR_PAGINA_ADMIN = 15;
+const LIMITE_USUARIOS_POR_PAGINA = 15;
+
 // Dados Centrais do Portal (Fonte Única de Verdade)
 const SITE_CONFIG = {
     nome: "Gajeiro",
@@ -45,10 +49,6 @@ const OPCOES_EDITORIA = [
     "internacional"
 ];
 
-// Limite de notícias exibidas por página
-const LIMITE_NOTICIAS_POR_PAGINA_ADMIN = 15;
-const LIMITE_USUARIOS_POR_PAGINA = 15;
-
 export { 
     API_URL_USUARIOS,
     API_URL_ADMIN_METRICAS,
@@ -65,5 +65,4 @@ export {
     LIMITE_NOTICIAS_POR_PAGINA_ADMIN,
     LIMITE_USUARIOS_POR_PAGINA
 };
-
 

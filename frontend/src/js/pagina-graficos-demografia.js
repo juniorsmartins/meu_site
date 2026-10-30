@@ -39,8 +39,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             renderizarGraficoLinhasDuplas(
                 'graficoExpectativaVida', 
                 dados.expectativa_vida.anos, 
-                dados.expectativa_vida.homens || [], 
-                dados.expectativa_vida.mulheres || []
+                dados.expectativa_vida.mulheres || [], // dados1
+                dados.expectativa_vida.homens || [],   // dados2
+                'Mulheres',                            // label1
+                'Homens',                              // label2
+                '#E91E63',                             // cor1 (Rosa)
+                '#2196F3'                              // cor2 (Azul)
             );
         }
 
@@ -94,15 +98,29 @@ document.addEventListener("DOMContentLoaded", async () => {
             );
         }
 
-        // 8. Gráfico de Linha: IDH
-        if (dados.idh && dados.idh.anos && dados.idh.anos.length > 0) {
-            renderizarGraficoLinha(
+        // 8. Gráfico de Linhas Duplas: IDH vs IDHI
+        if (dados.idh && dados.idh.anos && dados.idh.anos.length > 0 && dados.idhi && dados.idhi.anos) {
+            renderizarGraficoLinhasDuplas(
                 'graficoIdh', 
                 dados.idh.anos, 
-                dados.idh.valores, 
-                'IDH (0 a 1)', 
-                '#0D47A1', 
-                '#E3F2FD'
+                dados.idh.valores,   // dados1
+                dados.idhi.valores,  // dados2
+                'IDH',               // label1
+                'IDH Ajustado',       // label2
+                '#0D47A1',
+                '#D32F2F'
+            );
+        }
+
+        // 9. Gráfico de Linha: Mortalidade Materna
+        if (dados.mortalidade_materna && dados.mortalidade_materna.anos && dados.mortalidade_materna.anos.length > 0) {
+            renderizarGraficoLinha(
+                'graficoMortalidadeMaterna', 
+                dados.mortalidade_materna.anos, 
+                dados.mortalidade_materna.valores, 
+                'Mortes / 100 mil', 
+                '#C0392B', 
+                '#FADBD8' 
             );
         }
 
@@ -209,7 +227,8 @@ function renderizarGraficoBarra(canvasId, rotulos, dados, labelDataset, corPrinc
     });
 }
 
-function renderizarGraficoLinhasDuplas(canvasId, rotulos, dadosHomens, dadosMulheres) {
+function renderizarGraficoLinhasDuplas(canvasId, rotulos, dados1, dados2, label1, label2, cor1, cor2) {
+
     const ctx = document.getElementById(canvasId);
     if (!ctx) return;
 
@@ -219,20 +238,20 @@ function renderizarGraficoLinhasDuplas(canvasId, rotulos, dadosHomens, dadosMulh
             labels: rotulos,
             datasets: [
                 {
-                    label: 'Mulheres',
-                    data: dadosMulheres,
-                    borderColor: '#E91E63', // Rosa/Vermelho
-                    backgroundColor: 'rgba(233, 30, 99, 0.1)',
+                    label: label1,
+                    data: dados1,
+                    borderColor: cor1,
+                    backgroundColor: `${cor1}1A`,
                     borderWidth: 2.5,
                     tension: 0.3,
                     pointRadius: 3,
                     fill: false
                 },
                 {
-                    label: 'Homens',
-                    data: dadosHomens,
-                    borderColor: '#2196F3', // Azul
-                    backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                    label: label2,
+                    data: dados2,
+                    borderColor: cor2,
+                    backgroundColor: `${cor2}1A`,
                     borderWidth: 2.5,
                     tension: 0.3,
                     pointRadius: 3,

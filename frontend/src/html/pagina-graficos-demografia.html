@@ -37,12 +37,28 @@
             
             <div class="estatisticas-header-titulo">
                 <h2>Indicadores Demográficos do Brasil</h2>
-                <p>Acompanhe a evolução da população brasileira com base em dados oficiais do IBGE.</p>
+                <p>Acompanhe a evolução demográfica, social e de saúde do Brasil com base em dados oficiais do IBGE, Banco Central, PNUD e World Bank.</p>
             </div>
 
             <div class="grid-graficos">
 
-                <!-- 1. População Total (Gráfico de Barras) -->
+                <!-- 1. IDH vs IDHI -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>IDH vs. IDH Ajustado pela Desigualdade</h3>
+                        <p>Comparação entre o IDH geral e o IDH que desconta as desigualdades sociais (0 a 1). Fonte: PNUD (HDR Data API).</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoIdh"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> O IDH mede a média de renda, educação e saúde. O IDHI desconta essa média pela desigualdade entre os brasileiros.</p>
+                        <p><strong>Por que é importante?</strong> O "abismo" entre as duas linhas mostra o quanto o Brasil perde de desenvolvimento humano apenas por causa da concentração de renda e oportunidades. Quanto menor o abismo, mais justo é o país.</p>
+                        <p class="tag-tendencia tendencia-boa">📈 Tendência ideal: Linhas próximas e em alta</p>
+                    </div>
+                </div>
+
+                <!-- 2. População Total (Gráfico de Barras) -->
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>População Total Residente</h3>
@@ -58,7 +74,7 @@
                     </div>
                 </div>
 
-                <!-- 2. Taxa de Crescimento -->
+                <!-- 3. Taxa de Crescimento -->
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>Taxa de Crescimento Populacional (%)</h3>
@@ -74,11 +90,11 @@
                     </div>
                 </div>
 
-                <!-- 3. Expectativa de Vida (Gráfico de Duas Linhas) -->
+                <!-- 4. Expectativa de Vida (Gráfico de Duas Linhas) -->
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>Expectativa de Vida ao Nascer (Anos)</h3>
-                        <p>Expectativa de vida por sexo (feminino e masculino).</p>
+                        <p>Expectativa de vida por sexo (feminino e masculino). Fonte: World Bank (Open Data).</p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoExpectativaVida"></canvas>
@@ -90,11 +106,11 @@
                     </div>
                 </div>
 
-                <!-- 4. Fecundidade -->
+                <!-- 5. Fecundidade -->
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>Taxa de Fecundidade Total</h3>
-                        <p>Número médio de filhos por mulher em idade reprodutiva.</p>
+                        <p>Número médio de filhos por mulher em idade reprodutiva. Fonte: World Bank (Open Data).</p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoFecundidade"></canvas>
@@ -106,11 +122,11 @@
                     </div>
                 </div>
 
-                <!-- 5. Urbanização -->
+                <!-- 6. Urbanização -->
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>Grau de Urbanização (%)</h3>
-                        <p>Percentual da população vivendo em áreas urbanas.</p>
+                        <p>Percentual da população vivendo em áreas urbanas. Fonte: World Bank (Open Data).</p>
                     </div>
                     <div class="canvas-wrapper">
                         <canvas id="graficoUrbanizacao"></canvas>
@@ -122,7 +138,7 @@
                     </div>
                 </div>
 
-                <!-- 6. Mortalidade Infantil -->
+                <!-- 7. Mortalidade Infantil -->
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>Taxa de Mortalidade Infantil</h3>
@@ -138,7 +154,7 @@
                     </div>
                 </div>
 
-                <!-- 7. Envelhecimento -->
+                <!-- 8. Envelhecimento -->
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>Índice de Envelhecimento (%)</h3>
@@ -154,21 +170,22 @@
                     </div>
                 </div>
 
-                <!-- 8. IDH -->
+                <!-- 9. Mortalidade Materna -->
                 <div class="card-grafico">
                     <div class="grafico-info">
-                        <h3>IDH - Índice de Desenvolvimento Humano</h3>
-                        <p>Medida de renda, educação e saúde (0 a 1).</p>
+                        <h3>Mortalidade Materna</h3>
+                        <p>Mortes de mães por 100 mil nascidos vivos. Fonte: PNUD (HDR Data API).</p>
                     </div>
                     <div class="canvas-wrapper">
-                        <canvas id="graficoIdh"></canvas>
+                        <canvas id="graficoMortalidadeMaterna"></canvas>
                     </div>
                     <div class="grafico-explicacao">
-                        <p><strong>O que é:</strong> Uma medida resumida do progresso em três dimensões: renda, educação e saúde.</p>
-                        <p><strong>Por que é importante?</strong> Vai além do PIB, mostrando se o crescimento econômico está se traduzindo em bem-estar real para as pessoas.</p>
-                        <p class="tag-tendencia tendencia-boa">📈 Tendência ideal: Alta</p>
+                        <p><strong>O que é:</strong> O número de mortes de mulheres durante a gestação, parto ou puerpério para cada 100 mil bebês nascidos vivos.</p>
+                        <p><strong>Por que é importante?</strong> É um dos indicadores mais sensíveis da qualidade da saúde pública e do acesso ao pré-natal. Quase todas essas mortes são evitáveis.</p>
+                        <p class="tag-tendencia tendencia-boa">📉 Tendência ideal: Queda</p>
                     </div>
                 </div>
+
 
             </div>
         </div>
