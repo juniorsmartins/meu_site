@@ -42,7 +42,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 dados.expectativa_vida.mulheres || [], // dados1
                 dados.expectativa_vida.homens || [],   // dados2
                 'Mulheres',                            // label1
-                'Homens'                               // label2
+                'Homens',                              // label2
+                '#E91E63',                             // cor1 (Rosa)
+                '#2196F3'                              // cor2 (Azul)
             );
         }
 
@@ -104,7 +106,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 dados.idh.valores,   // dados1
                 dados.idhi.valores,  // dados2
                 'IDH',               // label1
-                'IDH Ajustado'       // label2
+                'IDH Ajustado',       // label2
+                '#0D47A1',
+                '#D32F2F'
             );
         }
 
@@ -223,7 +227,7 @@ function renderizarGraficoBarra(canvasId, rotulos, dados, labelDataset, corPrinc
     });
 }
 
-function renderizarGraficoLinhasDuplas(canvasId, rotulos, dados1, dados2, label1, label2) {
+function renderizarGraficoLinhasDuplas(canvasId, rotulos, dados1, dados2, label1, label2, cor1, cor2) {
 
     const ctx = document.getElementById(canvasId);
     if (!ctx) return;
@@ -236,8 +240,8 @@ function renderizarGraficoLinhasDuplas(canvasId, rotulos, dados1, dados2, label1
                 {
                     label: label1,
                     data: dados1,
-                    borderColor: '#E91E63', // Rosa/Vermelho
-                    backgroundColor: 'rgba(233, 30, 99, 0.1)',
+                    borderColor: cor1,
+                    backgroundColor: `${cor1}1A`,
                     borderWidth: 2.5,
                     tension: 0.3,
                     pointRadius: 3,
@@ -246,8 +250,8 @@ function renderizarGraficoLinhasDuplas(canvasId, rotulos, dados1, dados2, label1
                 {
                     label: label2,
                     data: dados2,
-                    borderColor: '#2196F3', // Azul
-                    backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                    borderColor: cor2,
+                    backgroundColor: `${cor2}1A`,
                     borderWidth: 2.5,
                     tension: 0.3,
                     pointRadius: 3,
