@@ -25,7 +25,7 @@ async function sincronizarIdh() {
         // A API do PNUD exige a consulta ano a ano.
         // Faremos requisições sequenciais com uma pequena pausa para evitar rate limit.
         for (let ano = anoInicio; ano <= anoFim; ano++) {
-            const url = `https://hdrdata.org/api/CompositeIndices/query?apikey=${UNDP_API_KEY}&countryOrAggregation=${PAIS_ISO}&year=${ano}&indicator=${UNDP_INDICATOR_ID}`;
+            const url = `https://hdrdata.org/api/CompositeIndices/query?apikey=${UNDP_API_KEY}&countryOrAggregation=${PAIS_ISO}&year=${ano}&indicator=${UNDP_INDICATOR_ID}&v=3.6`;
             
             const res = await httpClient(url);
 
