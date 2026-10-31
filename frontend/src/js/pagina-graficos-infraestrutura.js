@@ -1,7 +1,7 @@
 import { API_URL_ESTATISTICAS } from './constantsConfig.js';
 
 document.addEventListener("DOMContentLoaded", async () => {
-    
+
     try {
         const resposta = await fetch(API_URL_ESTATISTICAS);
         if (!resposta.ok) throw new Error("Erro ao buscar estatísticas de infraestrutura.");
@@ -24,12 +24,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             );
         }
 
-        // 2. Gráfico de Linha: Energia Elétrica
-        if (dados.energia && dados.energia.anos && dados.energia.anos.length > 0) {
+        // 2. Gráfico de Linha: Acesso à Energia
+        if (dados.energia_acesso && dados.energia_acesso.anos && dados.energia_acesso.anos.length > 0) {
             renderizarGraficoLinha(
-                'graficoEnergia', 
-                dados.energia.anos, 
-                dados.energia.valores, 
+                'graficoEnergiaAcesso', 
+                dados.energia_acesso.anos, 
+                dados.energia_acesso.valores, 
                 'Acesso à Energia (%)', 
                 '#F39C12', 
                 '#FEF9E7', 
@@ -37,7 +37,20 @@ document.addEventListener("DOMContentLoaded", async () => {
             );
         }
 
-        // 3. Gráfico de Linha: Internet
+        // 3. Gráfico de Linha: Perdas de Energia
+        if (dados.energia_perdas && dados.energia_perdas.anos && dados.energia_perdas.anos.length > 0) {
+            renderizarGraficoLinha(
+                'graficoEnergiaPerdas', 
+                dados.energia_perdas.anos, 
+                dados.energia_perdas.valores, 
+                'Perdas de Energia (%)', 
+                '#D32F2F', 
+                '#FDEDEC', 
+                '%'
+            );
+        }
+
+        // 4. Gráfico de Linha: Internet
         if (dados.internet && dados.internet.anos && dados.internet.anos.length > 0) {
             renderizarGraficoLinha(
                 'graficoInternet', 
@@ -50,7 +63,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             );
         }
 
-        // 4. Gráfico de Linha: Passageiros Aéreos
+        // 5. Gráfico de Linha: Passageiros Aéreos
         if (dados.aereo && dados.aereo.anos && dados.aereo.anos.length > 0) {
             renderizarGraficoLinha(
                 'graficoAereo', 

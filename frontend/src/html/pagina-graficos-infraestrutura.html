@@ -58,14 +58,14 @@
                     </div>
                 </div>
 
-                <!-- 2. Energia Elétrica -->
+                <!-- 2. Energia Elétrica (Acesso) -->
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>Acesso à Energia Elétrica (%)</h3>
                         <p>Percentual da população com acesso à eletricidade. Fonte: World Bank (Open Data).</p>
                     </div>
                     <div class="canvas-wrapper">
-                        <canvas id="graficoEnergia"></canvas>
+                        <canvas id="graficoEnergiaAcesso"></canvas>
                     </div>
                     <div class="grafico-explicacao">
                         <p><strong>O que é:</strong> A proporção da população com conexão à rede elétrica.</p>
@@ -74,7 +74,23 @@
                     </div>
                 </div>
 
-                <!-- 3. Internet -->
+                <!-- 3. Energia Elétrica (Perdas) -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>Perdas de Energia (%)</h3>
+                        <p>Percentual de energia perdida na transmissão e distribuição. Fonte: World Bank (Open Data).</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoEnergiaPerdas"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> A diferença entre a energia gerada e a energia efetivamente consumida, geralmente por ineficiências nas redes ou "gatos" (ligações clandestinas).</p>
+                        <p><strong>Por que é importante?</strong> Perdas altas encarecem a conta de luz para todos, geram prejuízos ao setor elétrico e indicam falta de investimento em infraestrutura e fiscalização.</p>
+                        <p class="tag-tendencia tendencia-boa">📉 Tendência ideal: Queda</p>
+                    </div>
+                </div>
+
+                <!-- 4. Internet -->
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>Usuários de Internet (%)</h3>
@@ -90,7 +106,7 @@
                     </div>
                 </div>
 
-                <!-- 4. Passageiros Aéreos -->
+                <!-- 5. Passageiros Aéreos -->
                 <div class="card-grafico">
                     <div class="grafico-info">
                         <h3>Passageiros Aéreos Transportados</h3>

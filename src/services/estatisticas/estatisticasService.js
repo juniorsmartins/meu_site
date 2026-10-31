@@ -32,6 +32,8 @@ export const estatisticasService = async () => {
         let envelhecimentoData = { anos: [], valores: [] }; 
         let saneamentoAguaData = { anos: [], valores: [] }; 
         let saneamentoEsgotoData = { anos: [], valores: [] };
+        let energiaAcessoData = { anos: [], valores: [] }; 
+        let energiaPerdasData = { anos: [], valores: [] };
 
         indicadores.forEach(ind => {
             if (ind.slug === 'pib') {
@@ -159,6 +161,16 @@ export const estatisticasService = async () => {
                     anos: ind.anos || [], 
                     valores: ind.valores || [] 
                 };
+            } else if (ind.slug === 'energia_acesso') { 
+                energiaAcessoData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
+            } else if (ind.slug === 'energia_perdas') { 
+                energiaPerdasData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
             }
         });
 
@@ -199,7 +211,9 @@ export const estatisticasService = async () => {
             urbanizacao: urbanizacaoData, 
             mortalidade_infantil: mortalidadeInfantilData,
             envelhecimento: envelhecimentoData,
-            saneamento: saneamentoUnificado
+            saneamento: saneamentoUnificado,
+            energia_acesso: energiaAcessoData, 
+            energia_perdas: energiaPerdasData
         };
 
     } catch (error) {
