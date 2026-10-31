@@ -34,6 +34,8 @@ export const estatisticasService = async () => {
         let saneamentoEsgotoData = { anos: [], valores: [] };
         let energiaAcessoData = { anos: [], valores: [] }; 
         let energiaPerdasData = { anos: [], valores: [] };
+        let internetData = { anos: [], valores: [] }; 
+        let bandaLargaData = { anos: [], valores: [] };
 
         indicadores.forEach(ind => {
             if (ind.slug === 'pib') {
@@ -171,6 +173,10 @@ export const estatisticasService = async () => {
                     anos: ind.anos || [], 
                     valores: ind.valores || [] 
                 };
+            } else if (ind.slug === 'internet') { 
+                internetData = { anos: ind.anos || [], valores: ind.valores || [] };
+            } else if (ind.slug === 'banda_larga') { 
+                bandaLargaData = { anos: ind.anos || [], valores: ind.valores || [] };
             }
         });
 
@@ -213,7 +219,9 @@ export const estatisticasService = async () => {
             envelhecimento: envelhecimentoData,
             saneamento: saneamentoUnificado,
             energia_acesso: energiaAcessoData, 
-            energia_perdas: energiaPerdasData
+            energia_perdas: energiaPerdasData,
+            internet: internetData, 
+            banda_larga: bandaLargaData 
         };
 
     } catch (error) {

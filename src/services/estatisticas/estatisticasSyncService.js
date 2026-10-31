@@ -23,6 +23,8 @@ import { sincronizarEnvelhecimento } from './adapters/envelhecimentoAdapter.js';
 import { sincronizarSaneamento } from './adapters/saneamentoAdapter.js'; 
 import { sincronizarEnergiaAcesso } from './adapters/energiaAcessoAdapter.js';
 import { sincronizarEnergiaPerdas } from './adapters/energiaPerdasAdapter.js';
+import { sincronizarInternet } from './adapters/internetAdapter.js';
+import { sincronizarBandaLarga } from './adapters/bandaLargaAdapter.js';
 
 const estatisticasSyncService = async (usuarioAutenticado, fonteFiltro = null) => {
 
@@ -56,7 +58,9 @@ const estatisticasSyncService = async (usuarioAutenticado, fonteFiltro = null) =
             // Infraestrutura
             { nome: 'Saneamento', fn: sincronizarSaneamento },
             { nome: 'Acesso à Energia', fn: sincronizarEnergiaAcesso },
-            { nome: 'Perdas de Energia', fn: sincronizarEnergiaPerdas }
+            { nome: 'Perdas de Energia', fn: sincronizarEnergiaPerdas },
+            { nome: 'Internet', fn: sincronizarInternet }, 
+            { nome: 'Banda Larga', fn: sincronizarBandaLarga }
         ];
 
         // Filtra os adaptadores com base na escolha do frontend

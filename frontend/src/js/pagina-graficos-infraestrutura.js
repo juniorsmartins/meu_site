@@ -50,20 +50,33 @@ document.addEventListener("DOMContentLoaded", async () => {
             );
         }
 
-        // 4. Gráfico de Linha: Internet
+        // 4. Gráfico de Linha: Usuários de Internet
         if (dados.internet && dados.internet.anos && dados.internet.anos.length > 0) {
             renderizarGraficoLinha(
                 'graficoInternet', 
                 dados.internet.anos, 
                 dados.internet.valores, 
                 'Usuários de Internet (%)', 
-                '#16A085', 
+                '#16A085', // Verde água
                 '#E8F8F5', 
                 '%'
             );
         }
 
-        // 5. Gráfico de Linha: Passageiros Aéreos
+        // 5. Gráfico de Linha: Banda Larga
+        if (dados.banda_larga && dados.banda_larga.anos && dados.banda_larga.anos.length > 0) {
+            renderizarGraficoLinha(
+                'graficoBandaLarga', 
+                dados.banda_larga.anos, 
+                dados.banda_larga.valores, 
+                'Banda Larga (por 100 hab.)', 
+                '#8E44AD', // Roxo
+                '#F4ECF7', 
+                '' // Sem prefixo (ex: 12,5 assinaturas)
+            );
+        }
+
+        // 6. Gráfico de Linha: Passageiros Aéreos
         if (dados.aereo && dados.aereo.anos && dados.aereo.anos.length > 0) {
             renderizarGraficoLinha(
                 'graficoAereo', 
