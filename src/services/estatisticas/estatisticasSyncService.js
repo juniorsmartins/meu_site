@@ -26,7 +26,7 @@ import { sincronizarEnergiaPerdas } from './adapters/energiaPerdasAdapter.js';
 import { sincronizarInternet } from './adapters/internetAdapter.js';
 import { sincronizarBandaLarga } from './adapters/bandaLargaAdapter.js';
 import { sincronizarPassageirosAereos } from './adapters/passageirosAereosAdapter.js';
-import { sincronizarMalhaRodoviaria } from './adapters/malhaRodoviariaAdapter.js';
+import { sincronizarConsumoDiesel } from './adapters/consumoDieselAdapter.js';
 
 const estatisticasSyncService = async (usuarioAutenticado, fonteFiltro = null) => {
 
@@ -64,7 +64,7 @@ const estatisticasSyncService = async (usuarioAutenticado, fonteFiltro = null) =
             { nome: 'Internet', fn: sincronizarInternet }, 
             { nome: 'Banda Larga', fn: sincronizarBandaLarga },
             { nome: 'Passageiros Aéreos', fn: sincronizarPassageirosAereos }, 
-            { nome: 'Malha Rodoviária', fn: sincronizarMalhaRodoviaria }
+            { nome: 'Consumo de Diesel', fn: sincronizarConsumoDiesel }
         ];
 
         // Filtra os adaptadores com base na escolha do frontend

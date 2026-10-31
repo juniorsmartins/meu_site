@@ -89,16 +89,16 @@ document.addEventListener("DOMContentLoaded", async () => {
             );
         }
 
-        // 7. Gráfico de Linha: Malha Rodoviária
-        if (dados.malha_rodoviaria && dados.malha_rodoviaria.anos && dados.malha_rodoviaria.anos.length > 0) {
+        // 7. Gráfico de Linha: Consumo de Diesel
+        if (dados.consumo_diesel && dados.consumo_diesel.anos && dados.consumo_diesel.anos.length > 0) {
             renderizarGraficoLinha(
-                'graficoMalhaRodoviaria', 
-                dados.malha_rodoviaria.anos, 
-                dados.malha_rodoviaria.valores, 
-                'Rodovias Pavimentadas (%)', 
+                'graficoConsumoDiesel', 
+                dados.consumo_diesel.anos, 
+                dados.consumo_diesel.valores, 
+                'Consumo de Diesel (kt)', 
                 '#8E44AD', 
                 '#F4ECF7', 
-                '%'
+                ' kt' 
             );
         }
 
