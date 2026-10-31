@@ -26,7 +26,7 @@ import { sincronizarEnergiaPerdas } from './adapters/energiaPerdasAdapter.js';
 import { sincronizarInternet } from './adapters/internetAdapter.js';
 import { sincronizarBandaLarga } from './adapters/bandaLargaAdapter.js';
 import { sincronizarPassageirosAereos } from './adapters/passageirosAereosAdapter.js';
-import { sincronizarConsumoEnergiaRodoviaria } from './adapters/consumoEnergiaRodoviariaAdapter.j
+import { sincronizarConsumoEnergiaRodoviaria } from './adapters/consumoEnergiaRodoviariaAdapter.js';
 
 const estatisticasSyncService = async (usuarioAutenticado, fonteFiltro = null) => {
 
