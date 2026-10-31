@@ -6,13 +6,13 @@ const SERIES = {
         codigo: 4513, 
         slug: 'divida_liquida', 
         titulo: 'Dívida Líquida do Setor Público (% do PIB)', 
-        fonte: 'Banco Central (Série 4513)' 
+        fonte: 'Banco Central do Brasil (Série 4513)' 
     },
     bruta: { 
         codigo: 13762, 
         slug: 'divida_bruta', 
         titulo: 'Dívida Bruta do Governo Geral (% do PIB)', 
-        fonte: 'Banco Central (Série 13762)' 
+        fonte: 'Banco Central do Brasil (Série 13762)' 
     }
 };
 
