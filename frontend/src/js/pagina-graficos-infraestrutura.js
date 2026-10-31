@@ -76,15 +76,29 @@ document.addEventListener("DOMContentLoaded", async () => {
             );
         }
 
-        // 6. Gráfico de Linha: Passageiros Aéreos
-        if (dados.aereo && dados.aereo.anos && dados.aereo.anos.length > 0) {
+        // 6. Gráfico de Linha: Transporte Aéreo
+        if (dados.passageiros_aereos && dados.passageiros_aereos.anos && dados.passageiros_aereos.anos.length > 0) {
             renderizarGraficoLinha(
-                'graficoAereo', 
-                dados.aereo.anos, 
-                dados.aereo.valores, 
+                'graficoTransporteAereo', 
+                dados.passageiros_aereos.anos, 
+                dados.passageiros_aereos.valores, 
                 'Passageiros (Milhões)', 
                 '#D35400', 
-                '#FADBD8'
+                '#FADBD8', 
+                ' milhões'
+            );
+        }
+
+        // 7. Gráfico de Linha: Malha Rodoviária
+        if (dados.malha_rodoviaria && dados.malha_rodoviaria.anos && dados.malha_rodoviaria.anos.length > 0) {
+            renderizarGraficoLinha(
+                'graficoMalhaRodoviaria', 
+                dados.malha_rodoviaria.anos, 
+                dados.malha_rodoviaria.valores, 
+                'Rodovias Pavimentadas (%)', 
+                '#8E44AD', 
+                '#F4ECF7', 
+                '%'
             );
         }
 
