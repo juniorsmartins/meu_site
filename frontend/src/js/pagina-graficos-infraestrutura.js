@@ -89,17 +89,17 @@ document.addEventListener("DOMContentLoaded", async () => {
             );
         }
 
-        // 7. Gráfico de Linha: Consumo de Energia Rodoviária
-        // A chave 'consumo_energia_rodoviaria' vem do novo backend
-        if (dados.consumo_energia_rodoviaria && dados.consumo_energia_rodoviaria.anos && dados.consumo_energia_rodoviaria.anos.length > 0) {
+        // 7. Gráfico de Linha: Frete Aéreo
+        // A chave 'frete_aereo' vem do novo backend
+        if (dados.frete_aereo && dados.frete_aereo.anos && dados.frete_aereo.anos.length > 0) {
             renderizarGraficoLinha(
-                'graficoConsumoEnergiaRodoviaria', // <-- ID alterado
-                dados.consumo_energia_rodoviaria.anos, 
-                dados.consumo_energia_rodoviaria.valores, 
-                'Consumo de Energia (kt)', 
-                '#8E44AD', 
-                '#F4ECF7', 
-                ' kt' 
+                'graficoFreteAereo', 
+                dados.frete_aereo.anos, 
+                dados.frete_aereo.valores, 
+                'Frete Aéreo (Milhões ton-km)', 
+                '#2980B9', 
+                '#EAF2F8', 
+                ' mi' 
             );
         }
 
