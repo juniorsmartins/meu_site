@@ -112,16 +112,6 @@
     background-color: #fdfdfd;
 }
 
-.status-badge {
-    display: inline-block;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    background-color: #E8F5E9;
-    color: #2E7D32;
-}
-
 /* ==========================================
    BOTÃO SPLIT E DROPDOWN DE SINCRONIZAÇÃO
    ========================================== */

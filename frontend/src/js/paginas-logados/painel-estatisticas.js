@@ -85,13 +85,19 @@ async function carregarDadosPainelAdmin() {
 
         indicadores.forEach(ind => {
             const tr = document.createElement("tr");
+            
+            // Formata a data para o padrão brasileiro (ex: 31/10/2026, 10:18:19)
+            const dataFormatada = ind.ultimaAtualizacao 
+                ? new Date(ind.ultimaAtualizacao).toLocaleString('pt-BR') 
+                : 'Nunca sincronizado';
+
             tr.innerHTML = `
                 <td><strong>${ind.titulo}</strong></td>
                 <td><code>${ind.slug}</code></td>
                 <td>${ind.fonte}</td>
                 <td>${ind.unidade}</td>
                 <td>${ind.anos ? ind.anos.length : 0} períodos</td>
-                <td><span class="status-badge">Sincronizado</span></td>
+                <td>${dataFormatada}</td> <!-- NOVO -->
             `;
             tbody.appendChild(tr);
         });
