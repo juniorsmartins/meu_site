@@ -5,12 +5,12 @@ const PAIS_ISO = 'BRA';
 const INDICADOR_FRETE = 'IS.AIR.GOOD.MT.K1'; // Air transport, freight (milhões ton-km)
 
 async function sincronizarFreteAereo() {
-    
+
     console.log(`[FRETE AÉREO ADAPTER] Iniciando sincronização via World Bank...`);
 
     try {
         const anoAtual = new Date().getFullYear();
-        const anoInicio = 1970;
+        const anoInicio = 1990; // Pode buscar desde 1970
         const anoFim = anoAtual - 1;
 
         const url = `https://api.worldbank.org/v2/country/${PAIS_ISO}/indicator/${INDICADOR_FRETE}?format=json&per_page=1000&date=${anoInicio}:${anoFim}`;
