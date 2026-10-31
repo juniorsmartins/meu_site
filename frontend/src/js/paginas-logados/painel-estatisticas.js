@@ -88,7 +88,7 @@ async function carregarDadosPainelAdmin() {
             
             // Formata a data para o padrão brasileiro (ex: 31/10/2026, 10:18:19)
             const dataFormatada = ind.ultimaAtualizacao 
-                ? new Date(ind.ultimaAtualizacao).toLocaleString('pt-BR') 
+                ? new Date(ind.ultimaAtualizacao).toLocaleDateString('pt-BR') 
                 : 'Nunca sincronizado';
 
             tr.innerHTML = `
@@ -97,7 +97,7 @@ async function carregarDadosPainelAdmin() {
                 <td>${ind.fonte}</td>
                 <td>${ind.unidade}</td>
                 <td>${ind.anos ? ind.anos.length : 0} períodos</td>
-                <td>${dataFormatada}</td> <!-- NOVO -->
+                <td>${dataFormatada}</td> 
             `;
             tbody.appendChild(tr);
         });
