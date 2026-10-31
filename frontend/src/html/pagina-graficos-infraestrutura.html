@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gajeiro - Indicadores de Infraestrutura do Brasil</title>
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/pagina-graficos-infraestrutura.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="shortcut icon" type="image/png" href="../img/favicon.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <!-- Scripts do Cabeçalho e Rodapé -->
+    <script type="module" src="../js/header.js"></script>
+    <script type="module" src="../js/pagina-graficos-infraestrutura.js"></script>  
+    <script type="module" src="../js/footer.js"></script> 
+
+    <div id="header-container"></div>
+
+    <main id="container-estatisticas-publico">
+        <div class="estatisticas-wrapper">
+            
+            <div class="estatisticas-header-titulo">
+                <h2>Infraestrutura e Conectividade</h2>
+                <p>Acompanhe a evolução do saneamento, energia, transporte e telecomunicações no Brasil com base em dados oficiais.</p>
+            </div>
+
+            <div class="grid-graficos">
+
+                <!-- 1. Saneamento Básico -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>Acesso a Água e Esgoto (%)</h3>
+                        <p>Percentual da população com acesso a água potável e coleta de esgoto. Fonte: World Bank (Open Data).</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoSaneamento"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> A proporção da população que tem acesso a serviços básicos de saneamento (água tratada e rede de esgoto).</p>
+                        <p><strong>Por que é importante?</strong> É o indicador mais direto de saúde pública e qualidade de vida. A falta de saneamento está ligada a doenças e à mortalidade infantil. O "abismo" entre as duas linhas mostra o desafio histórico do Brasil em universalizar o esgoto.</p>
+                        <p class="tag-tendencia tendencia-boa">📈 Tendência ideal: Linhas próximas e em alta</p>
+                    </div>
+                </div>
+
+                <!-- 2. Energia Elétrica -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>Acesso à Energia Elétrica (%)</h3>
+                        <p>Percentual da população com acesso à eletricidade. Fonte: World Bank (Open Data).</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoEnergia"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> A proporção da população com conexão à rede elétrica.</p>
+                        <p><strong>Por que é importante?</strong> A energia é a base para o desenvolvimento econômico, iluminação, conservação de alimentos e acesso à tecnologia. Quanto mais próximo de 100%, melhor.</p>
+                        <p class="tag-tendencia tendencia-boa">📈 Tendência ideal: Alta (Universalização)</p>
+                    </div>
+                </div>
+
+                <!-- 3. Internet -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>Usuários de Internet (%)</h3>
+                        <p>Percentual da população que utiliza a internet. Fonte: World Bank (Open Data).</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoInternet"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> A proporção de pessoas que tiveram acesso à internet nos últimos três meses.</p>
+                        <p><strong>Por que é importante?</strong> A inclusão digital é essencial para o acesso à educação, ao mercado de trabalho e aos serviços públicos na era moderna. Mostra a democratização da tecnologia no país.</p>
+                        <p class="tag-tendencia tendencia-boa">📈 Tendência ideal: Alta</p>
+                    </div>
+                </div>
+
+                <!-- 4. Passageiros Aéreos -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>Passageiros Aéreos Transportados</h3>
+                        <p>Número anual de passageiros transportados em voos domésticos e internacionais. Fonte: World Bank (Open Data).</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoAereo"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> O volume total de passageiros embarcados em companhias aéreas registradas no país.</p>
+                        <p><strong>Por que é importante?</strong> Reflete a mobilidade da população, a integração nacional e a saúde do setor de turismo e negócios. Quedas bruscas geralmente indicam crises econômicas ou pandemias.</p>
+                        <p class="tag-tendencia tendencia-boa">📈 Tendência ideal: Alta</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-container"></div>
+</body>
+</html>
+
