@@ -2,10 +2,10 @@ import { httpClient } from '../chamadaHttpClient.js';
 import { indicadorRepository } from '../../../repositories/estatisticas/indicadorRepository.js';
 
 const PAIS_ISO = 'BRA';
-// Indicador de Consumo de Energia no Setor Rodoviário
 const INDICADOR_ENERGIA = 'IS.ROD.ENGY.KT'; 
 
 async function sincronizarConsumoEnergiaRodoviaria() {
+    
     console.log(`[ENERGIA RODOVIÁRIA ADAPTER] Iniciando sincronização via World Bank...`);
 
     try {
@@ -34,7 +34,7 @@ async function sincronizarConsumoEnergiaRodoviaria() {
             dadosOrdenados.forEach(item => {
                 if (!isNaN(item.valor) && item.valor >= 0) {
                     anos.push(item.ano);
-                    valores.push(Number(item.valor.toFixed(0))); // Valores inteiros (kt)
+                    valores.push(Number(item.valor.toFixed(0))); 
                 }
             });
         }

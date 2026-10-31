@@ -22,7 +22,7 @@ export const estatisticasService = async () => {
         let populacaoTotalData = { anos: [], valores: [] };
         let crescimentoPopulacionalData = { anos: [], valores: [] };
         let idhData = { anos: [], valores: [] };
-        let idhiData = { anos: [], valores: [] }; // NOVO
+        let idhiData = { anos: [], valores: [] }; 
         let mortalidadeMaternaData = { anos: [], valores: [] };
         let expectativaVidaHomensData = { anos: [], valores: [] };
         let expectativaVidaMulheresData = { anos: [], valores: [] };
@@ -181,7 +181,7 @@ export const estatisticasService = async () => {
                 bandaLargaData = { anos: ind.anos || [], valores: ind.valores || [] };
             } else if (ind.slug === 'passageiros_aereos') { 
                 passageiroAereoData = { anos: ind.anos || [], valores: ind.valores || [] };
-            } else if (ind.slug === 'consumo_energia_rodoviaria') { // <-- ALTERADO
+            } else if (ind.slug === 'consumo_energia_rodoviaria') { 
                 consumoEnergiaRodoviariaData = { anos: ind.anos || [], valores: ind.valores || [] };
             }
         });
