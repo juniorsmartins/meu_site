@@ -37,7 +37,7 @@ export const estatisticasService = async () => {
         let internetData = { anos: [], valores: [] }; 
         let bandaLargaData = { anos: [], valores: [] };
         let passageiroAereoData = { anos: [], valores: [] }; 
-        let consumoDieselData = { anos: [], valores: [] };
+        let consumoEnergiaRodoviariaData = { anos: [], valores: [] };
 
         indicadores.forEach(ind => {
             if (ind.slug === 'pib') {
@@ -181,8 +181,8 @@ export const estatisticasService = async () => {
                 bandaLargaData = { anos: ind.anos || [], valores: ind.valores || [] };
             } else if (ind.slug === 'passageiros_aereos') { 
                 passageiroAereoData = { anos: ind.anos || [], valores: ind.valores || [] };
-            } else if (ind.slug === 'consumo_diesel') { 
-                consumoDieselData = { anos: ind.anos || [], valores: ind.valores || [] };
+            } else if (ind.slug === 'consumo_energia_rodoviaria') { // <-- ALTERADO
+                consumoEnergiaRodoviariaData = { anos: ind.anos || [], valores: ind.valores || [] };
             }
         });
 
@@ -229,7 +229,7 @@ export const estatisticasService = async () => {
             internet: internetData, 
             banda_larga: bandaLargaData,
             passageiros_aereos: passageiroAereoData,
-            consumo_diesel: consumoDieselData
+            consumo_energia_rodoviaria: consumoEnergiaRodoviariaData
         };
 
     } catch (error) {

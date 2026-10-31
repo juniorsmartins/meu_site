@@ -89,13 +89,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             );
         }
 
-        // 7. Gráfico de Linha: Consumo de Diesel
-        if (dados.consumo_diesel && dados.consumo_diesel.anos && dados.consumo_diesel.anos.length > 0) {
+        // 7. Gráfico de Linha: Consumo de Energia Rodoviária
+        // A chave 'consumo_energia_rodoviaria' vem do novo backend
+        if (dados.consumo_energia_rodoviaria && dados.consumo_energia_rodoviaria.anos && dados.consumo_energia_rodoviaria.anos.length > 0) {
             renderizarGraficoLinha(
-                'graficoConsumoDiesel', 
-                dados.consumo_diesel.anos, 
-                dados.consumo_diesel.valores, 
-                'Consumo de Diesel (kt)', 
+                'graficoConsumoEnergiaRodoviaria', // <-- ID alterado
+                dados.consumo_energia_rodoviaria.anos, 
+                dados.consumo_energia_rodoviaria.valores, 
+                'Consumo de Energia (kt)', 
                 '#8E44AD', 
                 '#F4ECF7', 
                 ' kt' 

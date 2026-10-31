@@ -2,23 +2,23 @@ import { httpClient } from '../chamadaHttpClient.js';
 import { indicadorRepository } from '../../../repositories/estatisticas/indicadorRepository.js';
 
 const PAIS_ISO = 'BRA';
-const INDICADOR_DIESEL = 'IS.ROD.DESL.KT'; 
+// Indicador de Consumo de Energia no Setor Rodoviário
+const INDICADOR_ENERGIA = 'IS.ROD.ENGY.KT'; 
 
-async function sincronizarConsumoDiesel() {
-    
-    console.log(`[CONSUMO DIESEL ADAPTER] Iniciando sincronização via World Bank...`);
+async function sincronizarConsumoEnergiaRodoviaria() {
+    console.log(`[ENERGIA RODOVIÁRIA ADAPTER] Iniciando sincronização via World Bank...`);
 
     try {
         const anoAtual = new Date().getFullYear();
         const anoInicio = 1990;
         const anoFim = anoAtual - 1;
 
-        const url = `https://api.worldbank.org/v2/country/${PAIS_ISO}/indicator/${INDICADOR_DIESEL}?format=json&per_page=1000&date=${anoInicio}:${anoFim}`;
+        const url = `https://api.worldbank.org/v2/country/${PAIS_ISO}/indicator/${INDICADOR_ENERGIA}?format=json&per_page=1000&date=${anoInicio}:${anoFim}`;
         const res = await httpClient(url);
 
         if (!res.ok || !Array.isArray(res.data) || res.data.length !== 2) {
-            console.warn("[CONSUMO DIESEL ADAPTER] Falha ao obter dados.");
-            return { sucesso: false, slug: 'consumo_diesel' };
+            console.warn("[ENERGIA RODOVIÁRIA ADAPTER] Falha ao obter dados.");
+            return { sucesso: false, slug: 'consumo_energia_rodoviaria' };
         }
 
         const dados = res.data[1];
@@ -39,26 +39,26 @@ async function sincronizarConsumoDiesel() {
             });
         }
 
-        if (anos.length === 0) return { sucesso: false, slug: 'consumo_diesel' };
+        if (anos.length === 0) return { sucesso: false, slug: 'consumo_energia_rodoviaria' };
 
-        await indicadorRepository.upsert('consumo_diesel', {
-            titulo: 'Consumo de Diesel no Setor Rodoviário (kt)',
+        await indicadorRepository.upsert('consumo_energia_rodoviaria', {
+            titulo: 'Consumo de Energia no Setor Rodoviário (kt)',
             fonte: 'World Bank Open Data',
             unidade: 'kt',
             anos,
             valores
         });
 
-        console.log(`[CONSUMO DIESEL ADAPTER] Sincronizado com sucesso! (${anos.length} anos)`);
-        return { sucesso: true, slug: 'consumo_diesel' };
+        console.log(`[ENERGIA RODOVIÁRIA ADAPTER] Sincronizado com sucesso! (${anos.length} anos)`);
+        return { sucesso: true, slug: 'consumo_energia_rodoviaria' };
 
     } catch (e) {
-        console.error("[CONSUMO DIESEL ADAPTER] Erro crítico: ", e.message);
-        return { sucesso: false, slug: 'consumo_diesel' };
+        console.error("[ENERGIA RODOVIÁRIA ADAPTER] Erro crítico: ", e.message);
+        return { sucesso: false, slug: 'consumo_energia_rodoviaria' };
     }
 }
 
 export { 
-    sincronizarConsumoDiesel 
+    sincronizarConsumoEnergiaRodoviaria 
 };
 
