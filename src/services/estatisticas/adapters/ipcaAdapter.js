@@ -47,7 +47,7 @@ async function sincronizarIpca() {
 
         await indicadorRepository.upsert('ipca', {
             titulo: 'Inflação Oficial - IPCA Acumulado Anual (%)',
-            fonte: 'Banco Central / IBGE (Série 433)',
+            fonte: 'Banco Central do Brasil / IBGE (Série 433)',
             unidade: '%',
             anos, 
             valores

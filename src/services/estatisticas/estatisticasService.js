@@ -22,11 +22,22 @@ export const estatisticasService = async () => {
         let populacaoTotalData = { anos: [], valores: [] };
         let crescimentoPopulacionalData = { anos: [], valores: [] };
         let idhData = { anos: [], valores: [] };
-        let idhiData = { anos: [], valores: [] }; // NOVO
+        let idhiData = { anos: [], valores: [] }; 
         let mortalidadeMaternaData = { anos: [], valores: [] };
         let expectativaVidaHomensData = { anos: [], valores: [] };
         let expectativaVidaMulheresData = { anos: [], valores: [] };
         let fecundidadeData = { anos: [], valores: [] };
+        let urbanizacaoData = { anos: [], valores: [] }; 
+        let mortalidadeInfantilData = { anos: [], valores: [] };
+        let envelhecimentoData = { anos: [], valores: [] }; 
+        let saneamentoAguaData = { anos: [], valores: [] }; 
+        let saneamentoEsgotoData = { anos: [], valores: [] };
+        let energiaAcessoData = { anos: [], valores: [] }; 
+        let energiaPerdasData = { anos: [], valores: [] };
+        let internetData = { anos: [], valores: [] }; 
+        let bandaLargaData = { anos: [], valores: [] };
+        let passageiroAereoData = { anos: [], valores: [] }; 
+        let freteAereoData = { anos: [], valores: [] };
 
         indicadores.forEach(ind => {
             if (ind.slug === 'pib') {
@@ -129,6 +140,49 @@ export const estatisticasService = async () => {
                     anos: ind.anos || [], 
                     valores: ind.valores || [] 
                 };
+            } else if (ind.slug === 'urbanizacao') { 
+                urbanizacaoData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
+            } else if (ind.slug === 'mortalidade_infantil') { 
+                mortalidadeInfantilData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
+            } else if (ind.slug === 'envelhecimento') { 
+                envelhecimentoData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
+            } else if (ind.slug === 'saneamento_agua') { 
+                saneamentoAguaData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
+            } else if (ind.slug === 'saneamento_esgoto') { 
+                saneamentoEsgotoData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
+            } else if (ind.slug === 'energia_acesso') { 
+                energiaAcessoData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
+            } else if (ind.slug === 'energia_perdas') { 
+                energiaPerdasData = { 
+                    anos: ind.anos || [], 
+                    valores: ind.valores || [] 
+                };
+            } else if (ind.slug === 'internet') { 
+                internetData = { anos: ind.anos || [], valores: ind.valores || [] };
+            } else if (ind.slug === 'banda_larga') { 
+                bandaLargaData = { anos: ind.anos || [], valores: ind.valores || [] };
+            } else if (ind.slug === 'passageiros_aereos') { 
+                passageiroAereoData = { anos: ind.anos || [], valores: ind.valores || [] };
+            } else if (ind.slug === 'frete_aereo') { // <-- NOVO
+                freteAereoData = { anos: ind.anos || [], valores: ind.valores || [] };
             }
         });
 
@@ -137,6 +191,13 @@ export const estatisticasService = async () => {
             anos: expectativaVidaHomensData.anos, // Usa os anos dos homens como base (são iguais)
             homens: expectativaVidaHomensData.valores,
             mulheres: expectativaVidaMulheresData.valores
+        };
+
+        // Junta os dados de Saneamento
+        const saneamentoUnificado = {
+            anos: saneamentoAguaData.anos,
+            agua: saneamentoAguaData.valores,
+            esgoto: saneamentoEsgotoData.valores
         };
 
         return {
@@ -158,7 +219,17 @@ export const estatisticasService = async () => {
             idhi: idhiData,
             mortalidade_materna: mortalidadeMaternaData,
             expectativa_vida: expectativaVidaUnificada,
-            fecundidade: fecundidadeData
+            fecundidade: fecundidadeData,
+            urbanizacao: urbanizacaoData, 
+            mortalidade_infantil: mortalidadeInfantilData,
+            envelhecimento: envelhecimentoData,
+            saneamento: saneamentoUnificado,
+            energia_acesso: energiaAcessoData, 
+            energia_perdas: energiaPerdasData,
+            internet: internetData, 
+            banda_larga: bandaLargaData,
+            passageiros_aereos: passageiroAereoData,
+            frete_aereo: freteAereoData
         };
 
     } catch (error) {

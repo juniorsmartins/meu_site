@@ -17,6 +17,16 @@ import { sincronizarIdh } from './adapters/idhAdapter.js';
 import { sincronizarMortalidadeMaterna } from './adapters/mortalidadeMaternaAdapter.js'; 
 import { sincronizarExpectativaVida } from './adapters/expectativaVidaAdapter.js';
 import { sincronizarFecundidade } from './adapters/fecundidadeAdapter.js';
+import { sincronizarUrbanizacao } from './adapters/urbanizacaoAdapter.js';
+import { sincronizarMortalidadeInfantil } from './adapters/mortalidadeInfantilAdapter.js';
+import { sincronizarEnvelhecimento } from './adapters/envelhecimentoAdapter.js';
+import { sincronizarSaneamento } from './adapters/saneamentoAdapter.js'; 
+import { sincronizarEnergiaAcesso } from './adapters/energiaAcessoAdapter.js';
+import { sincronizarEnergiaPerdas } from './adapters/energiaPerdasAdapter.js';
+import { sincronizarInternet } from './adapters/internetAdapter.js';
+import { sincronizarBandaLarga } from './adapters/bandaLargaAdapter.js';
+import { sincronizarPassageirosAereos } from './adapters/passageirosAereosAdapter.js';
+import { sincronizarFreteAereo } from './adapters/freteAereoAdapter.js';
 
 const estatisticasSyncService = async (usuarioAutenticado, fonteFiltro = null) => {
 
@@ -43,7 +53,18 @@ const estatisticasSyncService = async (usuarioAutenticado, fonteFiltro = null) =
             { nome: 'IDH', fn: sincronizarIdh }, // Adaptador para o Índice de Desenvolvimento Humano (IDH)
             { nome: 'Mortalidade Materna', fn: sincronizarMortalidadeMaterna },
             { nome: 'Expectativa de Vida', fn: sincronizarExpectativaVida },
-            { nome: 'Fecundidade', fn: sincronizarFecundidade }
+            { nome: 'Fecundidade', fn: sincronizarFecundidade },
+            { nome: 'Urbanização', fn: sincronizarUrbanizacao }, 
+            { nome: 'Mortalidade Infantil', fn: sincronizarMortalidadeInfantil },
+            { nome: 'Envelhecimento', fn: sincronizarEnvelhecimento },
+            // Infraestrutura
+            { nome: 'Saneamento', fn: sincronizarSaneamento },
+            { nome: 'Acesso à Energia', fn: sincronizarEnergiaAcesso },
+            { nome: 'Perdas de Energia', fn: sincronizarEnergiaPerdas },
+            { nome: 'Internet', fn: sincronizarInternet }, 
+            { nome: 'Banda Larga', fn: sincronizarBandaLarga },
+            { nome: 'Passageiros Aéreos', fn: sincronizarPassageirosAereos }, 
+            { nome: 'Frete Aéreo', fn: sincronizarFreteAereo }
         ];
 
         // Filtra os adaptadores com base na escolha do frontend
