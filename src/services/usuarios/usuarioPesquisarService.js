@@ -1,6 +1,7 @@
 import { usuarioRepository } from '../../repositories/usuarios/usuarioRepository.js';
 import { LIMITE_USUARIOS_POR_PAGINA } from '../../configs/constantsConfig.js';
 import { regraAutorizarApenasAdmin } from '../../helpers/usuarioUtils.js';
+import { escaparRegex } from '../../helpers/utils.js';
 
 const usuarioPesquisarService = async (queryParams = {}, usuarioAutenticado = {}) => {
     
@@ -44,11 +45,6 @@ const usuarioPesquisarService = async (queryParams = {}, usuarioAutenticado = {}
         totalPaginas,
         limitePorPagina
     };
-};
-
-// Função auxiliar para escapar caracteres especiais de regex e evitar ReDoS - Regular Expression Denial of Service - ataques de negação de serviço via expressões regulares maliciosas
-const escaparRegex = (texto) => {
-    return texto.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 };
 
 export { 

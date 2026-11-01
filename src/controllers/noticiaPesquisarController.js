@@ -1,23 +1,22 @@
 import { noticiaPesquisarService } from '../services/noticiaPesquisarService.js';
+import { MENSAGENS_SUCESSO } from '../configs/mensagensConfig.js';
 
-const noticiaPesquisarController = async (request, response) => {
+const noticiaPesquisarController = async (request, response, next) => {
 
     try {
         // Extrai os parâmetros de consulta da requisição
-        const { editoria, buscaTitulo, pagina, limite } = request.query;
+        const queryParams = request.query;
 
-        const resultadoPaginado = await noticiaPesquisarService({
-            editoria, 
-            buscaTitulo, 
-            pagina: pagina ? Number(pagina) : 1, 
-            limite: limite ? Number(limite) : 8
+        const resultadoPaginado = await noticiaPesquisarService(queryParams);
+
+        response.status(200).send({
+            sucesso: true,
+            mensagem: MENSAGENS_SUCESSO.NOTICIA.PESQUISADO,
+            ...resultadoPaginado
         });
 
-        response.status(200).send(resultadoPaginado);
-
     } catch (error) {
-        console.error("Erro ao pesquisar notícias:", error);
-        response.status(500).send({ error: "Erro ao buscar notícias" });
+        next(error);
     }
 };
 

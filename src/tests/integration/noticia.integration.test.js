@@ -265,5 +265,36 @@ describe('Testes de Integração - Notícias', () => {
             expect(response.body.mensagem).toBe(MENSAGENS_ERRO.NOTICIA.NAO_ENCONTRADO);
         });
     });
+
+    describe('Pesquisar Notícias', () => {
+
+        it('Deve pesquisar notícias com sucesso.', async () => {
+            const noticia = {
+                chapeu: 'Chapéu de Teste',
+                titulo: 'Título de Teste',
+                linhaFina: 'Linha Fina de Teste',
+                conteudo: 'Conteúdo de Teste',
+                autor: 'Autor de Teste',
+                imagemUrl: 'http://imagem.de.teste.com',
+                editoria: 'economia'
+            };
+
+            const noticiaExistente = await noticiaRepository.criar(noticia);
+            
+            const response = await request(app)
+                .get('/v1/noticias');
+
+            expect(response.status).toBe(200);
+            expect(response.body.sucesso).toBe(true);
+            expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.NOTICIA.PESQUISADO);
+            expect(Array.isArray(response.body.noticias)).toBe(true);
+            expect(response.body.noticias).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({ chapeu: noticiaExistente.chapeu }),
+                    expect.objectContaining({ titulo: noticiaExistente.titulo })
+                ])
+            );
+        });
+    });
 });
 
