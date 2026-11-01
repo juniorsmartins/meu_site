@@ -12,10 +12,10 @@ import { automacaoImportarNoticiaController } from './controllers/noticias/autom
 import { newsletterCriarController } from './controllers/newsletterCriarController.js';
 import { contatoLeitorCriarController } from './controllers/contatoLeitorCriarController.js';
 import { noticiaCriarController } from './controllers/noticias/noticiaCriarController.js';
-import { noticiaPesquisarController } from './controllers/noticiaPesquisarController.js';
-import { noticiaConsultarPorIdController } from './controllers/noticiaConsultarController.js';
+import { noticiaPesquisarController } from './controllers/noticias/noticiaPesquisarController.js';
+import { noticiaBuscarPorIdController } from './controllers/noticias/noticiaBuscarController.js';
 import { noticiaAtualizarController } from './controllers/noticias/noticiaAtualizarController.js';
-import { noticiaDeletarPorIdController } from './controllers/noticiaDeleteController.js';
+import { noticiaDeletarPorIdController } from './controllers/noticias/noticiaDeleteController.js';
 import { noticiaCapaController } from './controllers/noticiaCapaController.js';
 import { validarSchema } from './middlewares/validarSchemaMiddleware.js';
 import { usuarioCriarSchema, usuarioAtualizarSchema } from './validators/usuarioValidator.js';
@@ -51,7 +51,7 @@ comunicacaoRouter.post("/contato-leitor", contatoLeitorCriarController);
 noticiaRouter.get("/capa", noticiaCapaController);
 noticiaRouter.post("/", noticiaCriarController);
 noticiaRouter.get("/", noticiaPesquisarController);
-noticiaRouter.get("/:id", noticiaConsultarPorIdController);
+noticiaRouter.get("/:id", noticiaBuscarPorIdController);
 noticiaRouter.put("/:id", noticiaAtualizarController);
 noticiaRouter.delete("/:id", noticiaDeletarPorIdController);
 

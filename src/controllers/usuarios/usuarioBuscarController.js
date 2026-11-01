@@ -7,12 +7,12 @@ const usuarioBuscarController = async (request, response, next) => {
         const { id } = request.params;
         const usuarioAutenticado = request.usuario;
 
-        const usuarioBuscado = await usuarioBuscarService(id, usuarioAutenticado);
+        const usuario = await usuarioBuscarService(id, usuarioAutenticado);
 
         return response.status(200).json({ 
             sucesso: true,
             mensagem: MENSAGENS_SUCESSO.USUARIO.BUSCADO,
-            usuarioBuscado 
+            usuario
         });
 
     } catch (error) {

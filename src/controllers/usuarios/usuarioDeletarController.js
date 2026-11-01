@@ -23,4 +23,3 @@ const usuarioDeletarController = async (request, response, next) => {
 export { 
     usuarioDeletarController 
 };
-

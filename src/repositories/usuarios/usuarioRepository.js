@@ -67,4 +67,3 @@ const usuarioRepository = {
 export { 
     usuarioRepository 
 };
-
