@@ -81,7 +81,7 @@ const normalizarNoticiaBancoCentral = (item, editoriaPadrao = "economia", dataRe
     const titulo = item.title ? decodificarEntidadesBasicas(item.title.trim()) : "";
 
     return {
-        chapeu: "BANCO CENTRAL",
+        chapeu: "ECONOMIA",
         titulo,
         linhaFina: extrairLinhaFina(conteudoBruto, titulo),
         conteudo: conteudoBruto,
