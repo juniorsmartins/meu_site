@@ -210,5 +210,60 @@ describe('Testes de Integração - Notícias', () => {
             expect(response.body.mensagem).toBe(MENSAGENS_ERRO.NOTICIA.NAO_ENCONTRADO);
         });
     });
+
+    describe('Buscar Notícia', () => {
+
+        it('Deve buscar uma notícia com sucesso.', async () => {
+            const noticia = {
+                chapeu: 'Chapéu de Teste',
+                titulo: 'Título de Teste',
+                linhaFina: 'Linha Fina de Teste',
+                conteudo: 'Conteúdo de Teste',
+                autor: 'Autor de Teste',
+                imagemUrl: 'http://imagem.de.teste.com',
+                editoria: 'economia'
+            };
+
+            const noticiaExistente = await noticiaRepository.criar(noticia);
+
+            const response = await request(app)
+                .get(`/v1/noticias/${noticiaExistente._id}`);
+
+            expect(response.status).toBe(200);
+            expect(response.body.sucesso).toBe(true);
+            expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.NOTICIA.BUSCADO);
+            expect(response.body.noticia._id).toBe(noticiaExistente._id.toString());
+            expect(response.body.noticia.chapeu).toBe(noticia.chapeu);
+            expect(response.body.noticia.titulo).toBe(noticia.titulo);
+            expect(response.body.noticia.linhaFina).toBe(noticia.linhaFina);
+            expect(response.body.noticia.conteudo).toBe(noticia.conteudo);
+            expect(response.body.noticia.autor).toBe(noticia.autor);
+            expect(response.body.noticia.imagemUrl).toBe(noticia.imagemUrl);
+            expect(response.body.noticia.editoria).toBe(noticia.editoria);
+            expect(response.body.noticia).toMatchObject(noticia);
+        });
+
+        it('Deve lançar erro 400 por ID inválido.', async () => {
+            const idInvalido = 'id-invalido';
+
+            const response = await request(app)
+                .get(`/v1/noticias/${idInvalido}`);
+
+            expect(response.status).toBe(400);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.GERAL.ID_INVALIDO);
+        });
+
+        it('Deve lançar erro 404 por notícia não encontrada.', async () => {
+            const idValidoInexistente = new mongoose.Types.ObjectId();
+
+            const response = await request(app)
+                .get(`/v1/noticias/${idValidoInexistente}`);
+
+            expect(response.status).toBe(404);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.NOTICIA.NAO_ENCONTRADO);
+        });
+    });
 });
 
