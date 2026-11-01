@@ -1,4 +1,4 @@
-import { EDITORIAS } from '../configs/constantsConfig.js';
+import { EDITORIAS } from '../../configs/constantsConfig.js';
 
 /**
  * Remove acentos e converte para minúsculas

@@ -1,7 +1,7 @@
 import Parser from 'rss-parser';
-import { Noticia } from '../models/noticiaSchema.js';
-import { EDITORIAS } from '../configs/constantsConfig.js';
-import { FONTES_RSS } from '../configs/fontesRssConfig.js';
+import { Noticia } from '../../models/noticiaSchema.js';
+import { EDITORIAS } from '../../configs/constantsConfig.js';
+import { FONTES_RSS } from '../../configs/fontesRssConfig.js';
 
 const parser = new Parser({
     customFields: {
@@ -55,7 +55,7 @@ const automacaoImportarNoticiaService = async (portalFiltro = null) => {
                 ...resultado
             });
 
-            await aguardarMs(300); // Pequena pausa entre cada fonte RSS para evitar sobrecarga de requisições
+            await aguardarMs(500); // Pequena pausa entre cada fonte RSS para evitar sobrecarga de requisições
 
         } catch (error) {
             console.warn(`[Automação RSS] Aviso na fonte '${fonte.nome}': ${error.message}`);
