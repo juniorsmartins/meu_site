@@ -26,7 +26,7 @@ const usuarioAtualizarService = async (id, dadosAtualizacao, usuarioAutenticado)
     }
 
     // 3. Sanitização do Payload (Whitelisting / Mass Assignment Protection)
-    const dadosFiltrados = {
+    const dadosSanitizados = {
         ...(nome !== undefined && { nome }),
         ...(email !== undefined && { email }),
         ...(senha !== undefined && { senha: senhaCriptografada }),
@@ -34,7 +34,7 @@ const usuarioAtualizarService = async (id, dadosAtualizacao, usuarioAutenticado)
     };
 
     // 4. Persistência
-    return await usuarioRepository.atualizar(id, dadosFiltrados);
+    return await usuarioRepository.atualizar(id, dadosSanitizados);
 };
 
 const regraApenasAdminPodeAlterarFuncao = (usuarioAutenticado, dadosAtualizacao) => {

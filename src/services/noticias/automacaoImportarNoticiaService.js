@@ -1,7 +1,8 @@
 import Parser from 'rss-parser';
-import { Noticia } from '../models/noticiaSchema.js';
-import { EDITORIAS } from '../configs/constantsConfig.js';
-import { FONTES_RSS } from '../configs/fontesRssConfig.js';
+import { Noticia } from '../../models/noticiaSchema.js';
+import { noticiaRepository } from '../../repositories/noticias/noticiaRepository.js';
+import { EDITORIAS } from '../../configs/constantsConfig.js';
+import { FONTES_RSS } from '../../configs/fontesRssConfig.js';
 
 const parser = new Parser({
     customFields: {
@@ -55,7 +56,7 @@ const automacaoImportarNoticiaService = async (portalFiltro = null) => {
                 ...resultado
             });
 
-            await aguardarMs(300); // Pequena pausa entre cada fonte RSS para evitar sobrecarga de requisições
+            await aguardarMs(500); // Pequena pausa entre cada fonte RSS para evitar sobrecarga de requisições
 
         } catch (error) {
             console.warn(`[Automação RSS] Aviso na fonte '${fonte.nome}': ${error.message}`);
@@ -108,6 +109,13 @@ const processarFeedRssPadrão = async (urlFeed, funcaoNormalizacao) => {
 
     for (const item of feed.items) {
         const dadosNoticia = funcaoNormalizacao(item);
+
+        // Normalizadores podem devolver null para descartar o item (ex.: BC sem foto ou de dias anteriores)
+        if (!dadosNoticia) {
+            ignoradas++;
+            continue;
+        }
+
         const resultado = await salvarNoticiaInedita(dadosNoticia);
         if (resultado.salvo) importadas++;
         else ignoradas++;

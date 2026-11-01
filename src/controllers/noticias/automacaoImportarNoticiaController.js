@@ -1,4 +1,4 @@
-import { automacaoImportarNoticiaService } from "../services/automacaoImportarNoticiaService.js";
+import { automacaoImportarNoticiaService } from "../../services/noticias/automacaoImportarNoticiaService.js";
 
 const automacaoImportarNoticiaController = async (request, response) => {
 
