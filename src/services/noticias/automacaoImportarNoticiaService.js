@@ -1,5 +1,6 @@
 import Parser from 'rss-parser';
 import { Noticia } from '../../models/noticiaSchema.js';
+import { noticiaRepository } from '../../repositories/noticias/noticiaRepository.js';
 import { EDITORIAS } from '../../configs/constantsConfig.js';
 import { FONTES_RSS } from '../../configs/fontesRssConfig.js';
 

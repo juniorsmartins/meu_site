@@ -51,6 +51,14 @@ const MENSAGENS_SUCESSO = Object.freeze({
         DELETADO: "Usuário deletado com sucesso."
     }, 
 
+    NOTICIA: {
+        CRIADO: "Notícia criada com sucesso.",
+        ATUALIZADO: "Notícia atualizada com sucesso.",
+        PESQUISADO: "Notícia pesquisada com sucesso.",
+        BUSCADO: "Notícia buscada com sucesso.",
+        DELETADO: "Notícia deletada com sucesso."
+    }, 
+
     ESTATISTICAS: {
         CARREGADAS_COM_SUCESSO: "Indicadores econômicos carregados com sucesso."
     }

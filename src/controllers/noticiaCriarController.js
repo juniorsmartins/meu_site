@@ -1,15 +1,19 @@
 import { noticiaCriarService } from '../services/noticiaCriarService.js';
+import { MENSAGENS_SUCESSO } from '../configs/mensagensConfig.js';
 
 const noticiaCriarController = async (request, response) => {
 
-    const noticia = request.body;
-    const noticiaCriada = await noticiaCriarService(noticia);
+    const dadosNoticia = request.body;
+    const noticia = await noticiaCriarService(dadosNoticia);
 
-    response.status(201).json(noticiaCriada);
+    response.status(201).json({ 
+            sucesso: true,
+            mensagem: MENSAGENS_SUCESSO.NOTICIA.CRIADO,
+            noticia
+        });
 };
 
 export { 
     noticiaCriarController
 };
-
 
