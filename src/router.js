@@ -12,7 +12,7 @@ import { automacaoImportarNoticiaController } from './controllers/noticias/autom
 import { newsletterCriarController } from './controllers/newsletterCriarController.js';
 import { contatoLeitorCriarController } from './controllers/contatoLeitorCriarController.js';
 import { noticiaCriarController } from './controllers/noticias/noticiaCriarController.js';
-import { noticiaPesquisarController } from './controllers/noticiaPesquisarController.js';
+import { noticiaPesquisarController } from './controllers/noticias/noticiaPesquisarController.js';
 import { noticiaBuscarPorIdController } from './controllers/noticias/noticiaBuscarController.js';
 import { noticiaAtualizarController } from './controllers/noticias/noticiaAtualizarController.js';
 import { noticiaDeletarPorIdController } from './controllers/noticias/noticiaDeleteController.js';

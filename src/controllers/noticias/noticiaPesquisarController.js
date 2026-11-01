@@ -1,5 +1,5 @@
-import { noticiaPesquisarService } from '../services/noticiaPesquisarService.js';
-import { MENSAGENS_SUCESSO } from '../configs/mensagensConfig.js';
+import { noticiaPesquisarService } from '../../services/noticias/noticiaPesquisarService.js';
+import { MENSAGENS_SUCESSO } from '../../configs/mensagensConfig.js';
 
 const noticiaPesquisarController = async (request, response, next) => {
 

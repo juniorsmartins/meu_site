@@ -1,6 +1,6 @@
-import { escaparRegex } from '../helpers/utils.js';
-import { LIMITE_NOTICIAS_POR_PAGINA } from '../configs/constantsConfig.js';
-import { noticiaRepository } from '../repositories/noticias/noticiaRepository.js';
+import { escaparRegex } from '../../helpers/utils.js';
+import { LIMITE_NOTICIAS_POR_PAGINA } from '../../configs/constantsConfig.js';
+import { noticiaRepository } from '../../repositories/noticias/noticiaRepository.js';
 
 const noticiaPesquisarService = async (queryParams = {}) => {
 
