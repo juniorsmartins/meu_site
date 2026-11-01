@@ -4,7 +4,7 @@ import {
     API_URL_ADMIN_LIMPAR_DATABASE, 
     API_URL_NOTICIAS, 
     OPCOES_EDITORIA,
-    LIMITE_NOTICIAS_POR_PAGINA_ADMIN 
+    LIMITE_NOTICIAS_POR_PAGINA 
 } from '../constantsConfig.js';
 
 // Armazena o HTML original das linhas em edição para permitir a ação de cancelar
