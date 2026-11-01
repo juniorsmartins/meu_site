@@ -85,7 +85,7 @@ const normalizarNoticiaBancoCentral = (item, editoriaPadrao = "economia", dataRe
         titulo,
         linhaFina: extrairLinhaFina(conteudoBruto, titulo),
         conteudo: conteudoBruto,
-        autor: "Banco Central do Brasil",
+        autor: "Banco Central do Brasil - BCB",
         editoria: mapearEditoriaCompativel(editoriaPadrao),
         imagemUrl: imagemUrlExtraida,
         // O "alt" das imagens do BC é só o nome do arquivo, então não serve como legenda
