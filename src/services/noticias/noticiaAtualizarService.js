@@ -5,6 +5,7 @@ import { noticiaRepository } from "../../repositories/noticias/noticiaRepository
 const noticiaAtualizarPorIdService = async (id, dadosNoticia) => {
 
     // Validações
+    validarFormatoId(id);
     await verificarNoticiaExistePorId(id);
 
     const { 
