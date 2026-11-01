@@ -1,5 +1,5 @@
-import { noticiaAtualizarPorIdService } from '../services/noticiaAtualizarService.js';
-import { MENSAGENS_SUCESSO } from '../configs/mensagensConfig.js';
+import { noticiaAtualizarPorIdService } from '../../services/noticias/noticiaAtualizarService.js';
+import { MENSAGENS_SUCESSO } from '../../configs/mensagensConfig.js';
 
 const noticiaAtualizarController = async (request, response, next) => {
 

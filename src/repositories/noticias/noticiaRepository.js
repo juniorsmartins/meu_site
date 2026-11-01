@@ -63,7 +63,6 @@ const noticiaRepository = {
     // ---------------------------------------------------------------------
     // LISTAGEM / BUSCA
     // ---------------------------------------------------------------------
-
     async listarTodas() {
         return await Noticia.find()
             .sort({ createdAt: -1 })
