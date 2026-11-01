@@ -108,6 +108,13 @@ const processarFeedRssPadrão = async (urlFeed, funcaoNormalizacao) => {
 
     for (const item of feed.items) {
         const dadosNoticia = funcaoNormalizacao(item);
+
+        // Normalizadores podem devolver null para descartar o item (ex.: BC sem foto ou de dias anteriores)
+        if (!dadosNoticia) {
+            ignoradas++;
+            continue;
+        }
+
         const resultado = await salvarNoticiaInedita(dadosNoticia);
         if (resultado.salvo) importadas++;
         else ignoradas++;
