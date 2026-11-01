@@ -11,7 +11,7 @@ import { manutencaoLimparDatabaseController } from './controllers/manutencaoLimp
 import { automacaoImportarNoticiaController } from './controllers/noticias/automacaoImportarNoticiaController.js';
 import { newsletterCriarController } from './controllers/newsletterCriarController.js';
 import { contatoLeitorCriarController } from './controllers/contatoLeitorCriarController.js';
-import { noticiaCriarController } from './controllers/noticiaCriarController.js';
+import { noticiaCriarController } from './controllers/noticias/noticiaCriarController.js';
 import { noticiaPesquisarController } from './controllers/noticiaPesquisarController.js';
 import { noticiaConsultarPorIdController } from './controllers/noticiaConsultarController.js';
 import { noticiaAtualizarController } from './controllers/noticiaAtualizarController.js';

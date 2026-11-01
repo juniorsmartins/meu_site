@@ -1,24 +1,26 @@
 import { noticiaAtualizarPorIdService } from '../services/noticiaAtualizarService.js';
-import { isValidObjectId } from 'mongoose';
+import { MENSAGENS_SUCESSO } from '../configs/mensagensConfig.js';
 
-const noticiaAtualizarController = async (request, response) => {
+const noticiaAtualizarController = async (request, response, next) => {
 
-    const { id } = request.params;
-    const noticia = request.body;
+    try {
+        const { id } = request.params;
+        const dadosNoticia = request.body;
 
-    if (!isValidObjectId(id)) {
-        return response.status(400).send({ error: 'ID de notícia inválido.' });
+        const noticia = await noticiaAtualizarPorIdService(id, dadosNoticia);
+
+        return response.status(200).json({
+            sucesso: true,
+            mensagem: MENSAGENS_SUCESSO.NOTICIA.ATUALIZADO,
+            noticia: noticia
+        });
+
+    } catch (error) {
+        next(error);
     }
-
-    const noticiaAtualizada = await noticiaAtualizarPorIdService(id, noticia);
-
-    if (!noticiaAtualizada) {
-        return response.status(404).send({ error: 'Notícia não encontrada para atualização.' });
-    }
-
-    response.status(200).send(noticiaAtualizada);
 };
 
 export { 
     noticiaAtualizarController
 };
+

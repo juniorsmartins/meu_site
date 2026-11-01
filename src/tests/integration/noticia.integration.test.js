@@ -69,5 +69,89 @@ describe('Testes de Integração - Notícias', () => {
             expect(response.body.noticia.editoria).toBe(novaNoticia.editoria);
         });
     });
+
+    describe('Atualizar Notícia', () => {
+
+        it('Deve atualizar uma notícia com sucesso.', async () => {
+            
+            const noticiaOriginal = {
+                chapeu: 'Chapéu de Teste',
+                titulo: 'Título de Teste',
+                linhaFina: 'Linha Fina de Teste',
+                conteudo: 'Conteúdo de Teste',
+                autor: 'Autor de Teste',
+                imagemUrl: 'http://imagem.de.teste.com',
+                editoria: 'economia'
+            };
+
+            const noticiaOriginalNoBanco = await noticiaRepository.criar(noticiaOriginal);
+
+            const noticiaAtualizada = {
+                chapeu: 'Chapéu de Teste Atual',
+                titulo: 'Título de Teste Atual',
+                linhaFina: 'Linha Fina de Teste Atual',
+                conteudo: 'Conteúdo de Teste Atual',
+                autor: 'Autor de Teste Atual',
+                imagemUrl: 'http://imagem.de.teste.com/atual',
+                editoria: 'geral'
+            };
+
+            const response = await request(app)
+                .put(`/v1/noticias/${noticiaOriginalNoBanco._id}`)
+                .send(noticiaAtualizada);
+
+            expect(response.status).toBe(200);
+            expect(response.body.sucesso).toBe(true);
+            expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.NOTICIA.ATUALIZADO);
+            expect(response.body).toHaveProperty('noticia._id');
+            expect(response.body.noticia.chapeu).toBe(noticiaAtualizada.chapeu);
+            expect(response.body.noticia.titulo).toBe(noticiaAtualizada.titulo);
+            expect(response.body.noticia.linhaFina).toBe(noticiaAtualizada.linhaFina);
+            expect(response.body.noticia.conteudo).toBe(noticiaAtualizada.conteudo);
+            expect(response.body.noticia.autor).toBe(noticiaAtualizada.autor);
+            expect(response.body.noticia.imagemUrl).toBe(noticiaAtualizada.imagemUrl);
+            expect(response.body.noticia.editoria).toBe(noticiaAtualizada.editoria);
+        });
+
+        it('Deve lançar erro 400 por ID inválido.', async () => {
+            const noticiaAtualizada = {
+                chapeu: 'Chapéu de Teste Atual',
+                titulo: 'Título de Teste Atual',
+                linhaFina: 'Linha Fina de Teste Atual',
+                conteudo: 'Conteúdo de Teste Atual',
+                autor: 'Autor de Teste Atual',
+                imagemUrl: 'http://imagem.de.teste.com/atual',
+                editoria: 'geral'
+            };
+
+            const response = await request(app)
+                .put('/v1/noticias/invalid-id')
+                .send(noticiaAtualizada);
+
+            expect(response.status).toBe(400);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.GERAL.ID_INVALIDO);
+        });
+
+        it('Deve lançar erro 404 por notícia não encontrada.', async () => {
+            const noticiaAtualizada = {
+                chapeu: 'Chapéu de Teste Atual',
+                titulo: 'Título de Teste Atual',
+                linhaFina: 'Linha Fina de Teste Atual',
+                conteudo: 'Conteúdo de Teste Atual',
+                autor: 'Autor de Teste Atual',
+                imagemUrl: 'http://imagem.de.teste.com/atual',
+                editoria: 'geral'
+            };
+
+            const response = await request(app)
+                .put('/v1/noticias/609e129e8f1b2c0015b8b8b8') // ID que não existe no banco
+                .send(noticiaAtualizada);
+
+            expect(response.status).toBe(404);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.NOTICIA.NAO_ENCONTRADO);
+        });
+    });
 });
 

@@ -35,6 +35,10 @@ const MENSAGENS_ERRO = Object.freeze({ // Mensagens de erro padronizadas do sist
         CAMPO_EMAIL_FORMATO_INVALIDO: "O campo e-mail deve ter um formato válido."
     },
 
+    NOTICIA: {
+        NAO_ENCONTRADO: "Notícia não encontrada."
+    },
+
     ESTATISTICAS: {
         ERRO_AO_OBTER_DADOS: "Não foi possível obter as estatísticas no momento.", 
         FALHA_COM_API_BANCO_CENTRAL: "Falha ao comunicar com a API do Banco Central."
