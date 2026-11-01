@@ -41,7 +41,6 @@ describe('Testes de Integração - Notícias', () => {
     describe('Criar Notícia', () => {
 
         it('Deve criar uma notícia com sucesso.', async () => {
-
             const novaNoticia = {
                 chapeu: 'Chapéu de Teste',
                 titulo: 'Título de Teste',
@@ -73,7 +72,6 @@ describe('Testes de Integração - Notícias', () => {
     describe('Atualizar Notícia', () => {
 
         it('Deve atualizar uma notícia com sucesso.', async () => {
-            
             const noticiaOriginal = {
                 chapeu: 'Chapéu de Teste',
                 titulo: 'Título de Teste',
@@ -156,6 +154,56 @@ describe('Testes de Integração - Notícias', () => {
             const response = await request(app)
                 .put('/v1/noticias/609e129e8f1b2c0015b8b8b8') // ID que não existe no banco
                 .send(noticiaAtualizada);
+
+            expect(response.status).toBe(404);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toBe(MENSAGENS_ERRO.NOTICIA.NAO_ENCONTRADO);
+        });
+    });
+
+    describe('Deletar Notícia', () => {
+
+        it('Deve deletar uma notícia com sucesso.', async () => {
+            const noticia = {
+                chapeu: 'Chapéu de Teste',
+                titulo: 'Título de Teste',
+                linhaFina: 'Linha Fina de Teste',
+                conteudo: 'Conteúdo de Teste',
+                autor: 'Autor de Teste',
+                imagemUrl: 'http://imagem.de.teste.com',
+                editoria: 'economia'
+            };
+
+            const noticiaExistente = await noticiaRepository.criar(noticia);
+
+            const response = await request(app)
+                .delete(`/v1/noticias/${noticiaExistente._id}`);
+
+            expect(response.status).toBe(200);
+            expect(response.body.sucesso).toBe(true);
+            expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.NOTICIA.DELETADO);
+            expect(response.body.idDeletado).toEqual(String(noticiaExistente._id));
+
+            const noticiaDeletada = await noticiaRepository.buscarPorId(noticiaExistente._id);
+            expect(noticiaDeletada).toBeNull();
+        });
+
+        it('Deve lançar erro 400 por ID inválido.', async () => {
+            const idInvalido = 'id-invalido';
+
+            const response = await request(app)
+                .delete(`/v1/noticias/${idInvalido}`);
+
+            expect(response.status).toBe(400);
+            expect(response.body.sucesso).toBe(false);
+            expect(response.body.mensagem).toContain(MENSAGENS_ERRO.GERAL.ID_INVALIDO);
+        });
+
+        it('Deve lançar erro 404 por notícia não encontrada.', async () => {
+            const idValidoInexistente = new mongoose.Types.ObjectId();
+
+            const response = await request(app)
+                .delete(`/v1/noticias/${idValidoInexistente}`);
 
             expect(response.status).toBe(404);
             expect(response.body.sucesso).toBe(false);

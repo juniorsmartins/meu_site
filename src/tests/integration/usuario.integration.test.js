@@ -443,8 +443,11 @@ describe('Testes de Integração - Usuários', () => {
             // Assert (verificação)
             expect(response.status).toBe(200);
             expect(response.body.sucesso).toBe(true);
-            expect(response.body.idDeletado).toEqual(String(usuarioEditor._id));
             expect(response.body.mensagem).toContain(MENSAGENS_SUCESSO.USUARIO.DELETADO);
+            expect(response.body.idDeletado).toEqual(String(usuarioEditor._id));
+
+            const usuarioDeletado = await Usuario.findById(usuarioEditor._id);
+            expect(usuarioDeletado).toBeNull();
         });
 
         it('admin deve deletar a si próprio com sucesso.', async () => {

@@ -15,7 +15,7 @@ import { noticiaCriarController } from './controllers/noticias/noticiaCriarContr
 import { noticiaPesquisarController } from './controllers/noticiaPesquisarController.js';
 import { noticiaConsultarPorIdController } from './controllers/noticiaConsultarController.js';
 import { noticiaAtualizarController } from './controllers/noticias/noticiaAtualizarController.js';
-import { noticiaDeletarPorIdController } from './controllers/noticiaDeleteController.js';
+import { noticiaDeletarPorIdController } from './controllers/noticias/noticiaDeleteController.js';
 import { noticiaCapaController } from './controllers/noticiaCapaController.js';
 import { validarSchema } from './middlewares/validarSchemaMiddleware.js';
 import { usuarioCriarSchema, usuarioAtualizarSchema } from './validators/usuarioValidator.js';
