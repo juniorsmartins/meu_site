@@ -1,6 +1,7 @@
-import { normalizarNoticiaAgenciaBrasil } from '../helpers/rssParsers/agenciaBrasilParser.js';
-import { normalizarNoticiaAgenciaCamara } from '../helpers/rssParsers/agenciaCamaraParser.js';
-import { buscarEParsearTse } from '../helpers/rssParsers/tseParser.js'; 
+import { normalizarNoticiaAgenciaBrasil } from '../services/noticias/rssParsers/agenciaBrasilParser.js';
+import { normalizarNoticiaAgenciaCamara } from '../services/noticias/rssParsers/agenciaCamaraParser.js';
+import { buscarEParsearTse } from '../services/noticias/rssParsers/tseParser.js'; 
+import { normalizarNoticiaBancoCentral } from '../services/noticias/rssParsers/bancoCentralParser.js';
 
 /**
  * Registro de todas as fontes de RSS com suas URLs e funções de normalização específicas.
@@ -16,6 +17,17 @@ const FONTES_RSS = [
         portal: "TSE",
         url: "https://www.tse.jus.br/comunicacao/noticias/rss",
         buscarCustomizado: () => buscarEParsearTse("https://www.tse.jus.br/comunicacao/noticias/rss", "política")
+    },
+
+    // =========================================================================
+    // BANCO CENTRAL DO BRASIL (BCB)
+    // =========================================================================
+    {
+        chave: "BCB_NOTICIAS",
+        nome: "Banco Central - Notícias",
+        portal: "Banco Central",
+        url: "https://www.bcb.gov.br/api/feed/sitebcb/sitefeeds/noticias",
+        normalizador: (item) => normalizarNoticiaBancoCentral(item, "economia")
     },
     
     // =========================================================================

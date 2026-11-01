@@ -8,13 +8,13 @@ import { usuarioAtualizarController } from './controllers/usuarios/usuarioAtuali
 import { usuarioDeletarController } from './controllers/usuarios/usuarioDeletarController.js';
 import { adminMetricasController } from './controllers/adminMetricasController.js';
 import { manutencaoLimparDatabaseController } from './controllers/manutencaoLimparDatabaseController.js';
-import { automacaoImportarNoticiaController } from './controllers/automacaoImportarNoticiaController.js';
+import { automacaoImportarNoticiaController } from './controllers/noticias/automacaoImportarNoticiaController.js';
 import { newsletterCriarController } from './controllers/newsletterCriarController.js';
 import { contatoLeitorCriarController } from './controllers/contatoLeitorCriarController.js';
-import { noticiaCriarController } from './controllers/noticiaCriarController.js';
+import { noticiaCriarController } from './controllers/noticias/noticiaCriarController.js';
 import { noticiaPesquisarController } from './controllers/noticiaPesquisarController.js';
 import { noticiaConsultarPorIdController } from './controllers/noticiaConsultarController.js';
-import { noticiaAtualizarController } from './controllers/noticiaAtualizarController.js';
+import { noticiaAtualizarController } from './controllers/noticias/noticiaAtualizarController.js';
 import { noticiaDeletarPorIdController } from './controllers/noticiaDeleteController.js';
 import { noticiaCapaController } from './controllers/noticiaCapaController.js';
 import { validarSchema } from './middlewares/validarSchemaMiddleware.js';

@@ -64,6 +64,7 @@ const usuarioRepository = {
     }
 };
 
-export { usuarioRepository };
-
+export { 
+    usuarioRepository 
+};
 
