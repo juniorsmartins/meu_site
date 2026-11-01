@@ -10,7 +10,7 @@ const API_URL_NOTICIAS_CAPA = '/api/v1/noticias/capa';
 const API_URL_NOTICIAS = '/api/v1/noticias';
 
 // Limite de notícias exibidas por página
-const LIMITE_NOTICIAS_POR_PAGINA_ADMIN = 15;
+const LIMITE_NOTICIAS_POR_PAGINA = 15;
 const LIMITE_USUARIOS_POR_PAGINA = 15;
 
 // Dados Centrais do Portal (Fonte Única de Verdade)
@@ -62,7 +62,7 @@ export {
     OPCOES_EDITORIA, 
     SITE_CONFIG,
     FUNCOES_USUARIO,
-    LIMITE_NOTICIAS_POR_PAGINA_ADMIN,
+    LIMITE_NOTICIAS_POR_PAGINA,
     LIMITE_USUARIOS_POR_PAGINA
 };
 
