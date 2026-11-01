@@ -2,8 +2,26 @@ import { mapearEditoriaCompativel } from '../editoriaHelper.js';
 
 const URL_BASE_BCB = "https://www.bcb.gov.br";
 
-// ATENÇÃO: substitua por uma imagem que você tenha confirmado (ex.: logo hospedado no seu próprio servidor).
-const IMAGEM_PADRAO_BCB = "https://www.bcb.gov.br/favicon.ico";
+// Fuso usado para decidir o que é "hoje". O feed do BC publica em horário de Brasília (-03:00).
+const FUSO_HORARIO = "America/Sao_Paulo";
+
+/**
+ * Converte uma data para "AAAA-MM-DD" no fuso configurado.
+ * Retorna null se a data for inválida.
+ */
+const formatarDataNoFuso = (data) => {
+    const dataObj = new Date(data);
+    if (Number.isNaN(dataObj.getTime())) return null;
+    return dataObj.toLocaleDateString("en-CA", { timeZone: FUSO_HORARIO });
+};
+
+/**
+ * Verifica se a data do item cai no mesmo dia da data de referência.
+ */
+const ehDoDia = (dataItem, dataReferencia) => {
+    const diaItem = formatarDataNoFuso(dataItem);
+    return diaItem !== null && diaItem === formatarDataNoFuso(dataReferencia);
+};
 
 /**
  * Decodifica apenas as entidades que sobram no texto puro do feed do BC.
@@ -28,8 +46,13 @@ const extrairLinhaFina = (html = "", tituloFallback = "") => {
 
 /**
  * Normalizador exclusivo para o feed Atom de notícias do Banco Central do Brasil.
+ * Retorna null quando a notícia deve ser descartada (não é do dia ou não tem imagem).
+ * O 3º parâmetro existe para facilitar testes (permite simular outro "hoje").
  */
-const normalizarNoticiaBancoCentral = (item, editoriaPadrao = "economia") => {
+const normalizarNoticiaBancoCentral = (item, editoriaPadrao = "economia", dataReferencia = new Date()) => {
+
+    // FILTRO 1: só notícias do dia. O rss-parser converte o <updated> do Atom em isoDate/pubDate.
+    if (!ehDoDia(item.isoDate || item.pubDate, dataReferencia)) return null;
 
     // 1. No Atom, o corpo da notícia vem em <content type="html">, que o rss-parser expõe como item.content
     let conteudoBruto = item.content || item['content:encoded'] || item.description || "";
@@ -42,13 +65,13 @@ const normalizarNoticiaBancoCentral = (item, editoriaPadrao = "economia") => {
     // 3. Transforma links e imagens relativos (href="/..." e src="/...") em absolutos
     conteudoBruto = conteudoBruto.replace(/(href|src)=(["'])\/(?!\/)/gi, `$1=$2${URL_BASE_BCB}/`);
 
-    // 4. Extrai a primeira imagem como destaque e a remove do corpo para não duplicar na leitura
-    let imagemUrlExtraida = IMAGEM_PADRAO_BCB;
+    // FILTRO 2: só notícias com imagem. Sem imagem, não há fallback: o item é descartado.
     const matchImg = conteudoBruto.match(/<img[^>]+src=["']([^"']+)["'][^>]*>/i);
-    if (matchImg && matchImg[1]) {
-        imagemUrlExtraida = matchImg[1];
-        conteudoBruto = conteudoBruto.replace(matchImg[0], "");
-    }
+    if (!matchImg || !matchImg[1]) return null;
+
+    // 4. Usa a primeira imagem como destaque e a remove do corpo para não duplicar na leitura
+    const imagemUrlExtraida = matchImg[1];
+    conteudoBruto = conteudoBruto.replace(matchImg[0], "");
 
     // 5. Remove blocos vazios que sobram (div só com <br> ou &nbsp;)
     conteudoBruto = conteudoBruto
