@@ -111,6 +111,15 @@ describe('Testes de Integração - Notícias', () => {
             expect(response.body.noticia.autor).toBe(noticiaAtualizada.autor);
             expect(response.body.noticia.imagemUrl).toBe(noticiaAtualizada.imagemUrl);
             expect(response.body.noticia.editoria).toBe(noticiaAtualizada.editoria);
+
+            const noticiaNoBanco = await noticiaRepository.buscarPorId(noticiaOriginalNoBanco._id);
+            expect(noticiaNoBanco.chapeu).toBe(noticiaAtualizada.chapeu);
+            expect(noticiaNoBanco.titulo).toBe(noticiaAtualizada.titulo);
+            expect(noticiaNoBanco.linhaFina).toBe(noticiaAtualizada.linhaFina);
+            expect(noticiaNoBanco.conteudo).toBe(noticiaAtualizada.conteudo);
+            expect(noticiaNoBanco.autor).toBe(noticiaAtualizada.autor);
+            expect(noticiaNoBanco.imagemUrl).toBe(noticiaAtualizada.imagemUrl);
+            expect(noticiaNoBanco.editoria).toBe(noticiaAtualizada.editoria);
         });
 
         it('Deve lançar erro 400 por ID inválido.', async () => {
