@@ -17,6 +17,10 @@ let totalPaginas = 1;
 let aguardandoConfirmacaoLimpeza = false;
 let timerConfirmacaoLimpeza = null;
 
+// Armazena estados de confirmação para exclusão de cada notícia por ID
+const confirmacoesDelecao = {};
+const timersDelecao = {};
+
 document.addEventListener(`DOMContentLoaded`, async () => {
     configurarEventosPaginacao();
     configurarEventosManutencao();
@@ -496,19 +500,67 @@ async function salvarEdicao(idNoticia) {
 }
 
 async function deletarNoticia(idNoticia) {
-    if (!confirm("Tem certeza que deseja excluir esta notícia?")) return;
+    const tr = document.getElementById(`linha-noticia-${idNoticia}`);
+    if (!tr) return;
+
+    const btnDeletar = tr.querySelector(".btn-deletar");
+    if (!btnDeletar) return;
+
+    // --- PRIMEIRO CLIQUE: Entra em modo de confirmação na própria linha/botão ---
+    if (!confirmacoesDelecao[idNoticia]) {
+        confirmacoesDelecao[idNoticia] = true;
+        
+        // Altera o visual do botão de deletar para indicar que aguarda confirmação
+        btnDeletar.innerHTML = `<i class="bi bi-exclamation-triangle-fill"></i>`;
+        btnDeletar.title = "Clique novamente para confirmar a exclusão";
+        btnDeletar.classList.add("btn-confirmando-delecao");
+
+        // Se o usuário não confirmar em 4 segundos, reseta o botão para o ícone de lixeira
+        timersDelecao[idNoticia] = setTimeout(() => {
+            resetarBotaoDelecao(idNoticia);
+        }, 4000);
+
+        return;
+    }
+
+    // --- SEGUNDO CLIQUE (dentro dos 4s): Executa a exclusão de fato ---
+    clearTimeout(timersDelecao[idNoticia]);
+    delete confirmacoesDelecao[idNoticia];
+    delete timersDelecao[idNoticia];
 
     try {
+        btnDeletar.disabled = true;
+        btnDeletar.innerHTML = `<i class="bi bi-arrow-repeat spin"></i>`;
+
         const resposta = await fetch(`${API_URL_NOTICIAS}/${idNoticia}`, { method: "DELETE" });
         if (!resposta.ok) {
             throw new Error("Erro ao excluir notícia"); 
         }
 
+        // Recarrega a tabela e atualiza os contadores do painel
         await carregarTabelaNoticias();
+        await carregarPainelMetricas();
 
     } catch (error) {
         console.error("Erro ao deletar notícia:", error);
         alert("Não foi possível excluir a notícia.");
+        resetarBotaoDelecao(idNoticia);
+    }
+}
+
+function resetarBotaoDelecao(idNoticia) {
+    confirmacoesDelecao[idNoticia] = false;
+    if (timersDelecao[idNoticia]) clearTimeout(timersDelecao[idNoticia]);
+
+    const tr = document.getElementById(`linha-noticia-${idNoticia}`);
+    if (!tr) return;
+
+    const btnDeletar = tr.querySelector(".btn-deletar");
+    if (btnDeletar) {
+        btnDeletar.disabled = false;
+        btnDeletar.classList.remove("btn-confirmando-delecao");
+        btnDeletar.innerHTML = `<i class="bi bi-trash"></i>`;
+        btnDeletar.title = "Excluir Notícia";
     }
 }
 

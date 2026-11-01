@@ -137,6 +137,13 @@ td.col-acoes {
     transform: scale(1.05);
 }
 
+/* Estado de confirmação no botão individual de excluir */
+.btn-acao.btn-deletar.btn-confirmando-delecao {
+    background-color: #E67E22 !important;
+    transform: scale(1.1);
+    transition: all 0.2s ease;
+}
+
 .btn-editar {
     background-color: #F39C12;
     color: #FFFFFF;
