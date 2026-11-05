@@ -8,7 +8,7 @@ import { usuarioAtualizarController } from './controllers/usuarios/usuarioAtuali
 import { usuarioDeletarController } from './controllers/usuarios/usuarioDeletarController.js';
 import { adminMetricasController } from './controllers/adminMetricasController.js';
 import { manutencaoLimparDatabaseController } from './controllers/manutencaoLimparDatabaseController.js';
-import { automacaoImportarNoticiaController } from './controllers/noticias/automacaoImportarNoticiaController.js';
+import { noticiaImportarDeFontesController } from './controllers/noticias/noticiaImportarDeFontesController.js';
 import { newsletterCriarController } from './controllers/newsletterCriarController.js';
 import { contatoLeitorCriarController } from './controllers/contatoLeitorCriarController.js';
 import { noticiaCriarController } from './controllers/noticias/noticiaCriarController.js';
@@ -41,7 +41,7 @@ usuarioRouter.delete("/:id", autenticarToken, usuarioDeletarController);
 // ADMIN - Rotas de administração do sistema
 adminRouter.get("/metricas", adminMetricasController);
 adminRouter.delete("/manutencao/limpar-database", manutencaoLimparDatabaseController);
-adminRouter.post("/automacao/importar-noticias", automacaoImportarNoticiaController);
+adminRouter.post("/automacao/importar-noticias", noticiaImportarDeFontesController);
 
 // COMUNICAÇÃO - Rotas de comunicação (Newsletter e Contato do Leitor)
 comunicacaoRouter.post("/newsletter", newsletterCriarController);
