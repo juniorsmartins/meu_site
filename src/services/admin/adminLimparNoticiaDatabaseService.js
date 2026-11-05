@@ -1,7 +1,7 @@
-import { Noticia } from "../models/noticiaSchema.js";
-import { LIMITE_MAXIMO_NOTICIAS_DATABASE } from "../configs/constantsConfig.js";
+import { Noticia } from "../../models/noticiaSchema.js";
+import { LIMITE_MAXIMO_NOTICIAS_DATABASE } from "../../configs/constantsConfig.js";
 
-const manutencaoLimparDatabaseService = async () => {
+const adminLimparNoticiaDatabaseService = async () => {
 
     // Conta o total de notícias no banco de dados
     const totalNoticias = await Noticia.countDocuments();
@@ -39,7 +39,7 @@ const manutencaoLimparDatabaseService = async () => {
 }
 
 export {
-    manutencaoLimparDatabaseService
+    adminLimparNoticiaDatabaseService
 };
 
 

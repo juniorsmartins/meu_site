@@ -1,6 +1,6 @@
-import { noticiaImportarDeFontesService } from "../../services/noticias/noticiaImportarDeFontesService.js";
+import { adminImportarNoticiaDeFontesService } from "../../services/admin/adminImportarNoticiaDeFontesService.js";
 
-const noticiaImportarDeFontesController = async (request, response) => {
+const adminImportarNoticiaDeFontesController = async (request, response) => {
 
     try {
 
@@ -8,7 +8,7 @@ const noticiaImportarDeFontesController = async (request, response) => {
         const { portal } = request.query;
 
         // Repassar a intenção do usuário para a camada de regra de negócio.
-        const resultado = await noticiaImportarDeFontesService(portal);
+        const resultado = await adminImportarNoticiaDeFontesService(portal);
 
         return response.status(200).json(resultado);
         
@@ -21,6 +21,6 @@ const noticiaImportarDeFontesController = async (request, response) => {
 };
 
 export {
-    noticiaImportarDeFontesController
+    adminImportarNoticiaDeFontesController
 };
 

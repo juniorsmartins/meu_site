@@ -20,7 +20,7 @@ const aguardarMs = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 // ============================================================================
 
 // Aceitação do parâmetro 'portalFiltro' com valor padrão null
-const noticiaImportarDeFontesService = async (portalFiltro = null) => {
+const adminImportarNoticiaDeFontesService = async (portalFiltro = null) => {
 
     const relatorioFontes = [];
     let totalGeralImportadas = 0;
@@ -177,6 +177,6 @@ const removerAcentosECaixa = (texto = "") => {
 };
 
 export {
-    noticiaImportarDeFontesService
+    adminImportarNoticiaDeFontesService
 };
 
