@@ -5,6 +5,16 @@ const URL_BASE_BCB = "https://www.bcb.gov.br";
 // Fuso usado para decidir o que é "hoje". O feed do BC publica em horário de Brasília (-03:00).
 const FUSO_HORARIO = "America/Sao_Paulo";
 
+/**
+ * Converte uma data para "AAAA-MM-DD" no fuso configurado.
+ * Retorna null se a data for inválida.
+ */
+const formatarDataNoFuso = (data) => {
+    const dataObj = new Date(data);
+    if (Number.isNaN(dataObj.getTime())) return null;
+    return dataObj.toLocaleDateString("en-CA", { timeZone: FUSO_HORARIO });
+};
+
 const ehDoDiaOuAnterior = (dataItem, dataReferencia) => {
     const diaItem = formatarDataNoFuso(dataItem);
     if (diaItem === null) return false;
@@ -18,14 +28,6 @@ const ehDoDiaOuAnterior = (dataItem, dataReferencia) => {
 
     // Retorna verdadeiro se o item pertencer a hoje ou a ontem
     return diaItem === diaRefStr || diaItem === diaAnteriorStr;
-};
-
-/**
- * Verifica se a data do item cai no mesmo dia da data de referência.
- */
-const ehDoDia = (dataItem, dataReferencia) => {
-    const diaItem = formatarDataNoFuso(dataItem);
-    return diaItem !== null && diaItem === formatarDataNoFuso(dataReferencia);
 };
 
 /**
@@ -94,7 +96,7 @@ const normalizarNoticiaBancoCentral = (item, editoriaPadrao = "economia", dataRe
         editoria: mapearEditoriaCompativel(editoriaPadrao),
         imagemUrl: imagemUrlExtraida,
         // O "alt" das imagens do BC é só o nome do arquivo, então não serve como legenda
-        imagemLegenda: "Imagem: Banco Central do Brasil - BCB",
+        imagemLegenda: "Imagem: Banco Central do Brasil - B",
         linkOriginal: item.link || item.guid || item.id || ""
     };
 };
