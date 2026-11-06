@@ -6,7 +6,7 @@ import { usuarioPesquisarController } from './controllers/usuarios/usuarioPesqui
 import { usuarioBuscarController } from './controllers/usuarios/usuarioBuscarController.js';
 import { usuarioAtualizarController } from './controllers/usuarios/usuarioAtualizarController.js';
 import { usuarioDeletarController } from './controllers/usuarios/usuarioDeletarController.js';
-import { adminMetricasController } from './controllers/adminMetricasController.js';
+import { adminMetricasController } from './controllers/admin/adminMetricasController.js';
 import { adminImportarNoticiaDeFontesController } from './controllers/admin/adminImportarNoticiaDeFontesController.js';
 import { adminLimparNoticiaDatabaseController } from './controllers/admin/adminLimparNoticiaDatabaseController.js';
 import { newsletterCriarController } from './controllers/newsletterCriarController.js';

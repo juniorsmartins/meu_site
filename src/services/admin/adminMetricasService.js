@@ -1,6 +1,6 @@
-import { Noticia } from '../models/noticiaSchema.js';
-import { FONTES_RSS } from '../configs/fontesRssConfig.js';
-import { LIMITE_MAXIMO_NOTICIAS_DATABASE } from '../configs/constantsConfig.js';
+import { Noticia } from '../../models/noticiaSchema.js';
+import { FONTES_RSS } from '../../configs/fontesRssConfig.js';
+import { LIMITE_MAXIMO_NOTICIAS_DATABASE } from '../../configs/constantsConfig.js';
 
 /**
  * Service responsável por calcular e consolidar as métricas do painel administrativo
