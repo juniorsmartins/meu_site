@@ -1,5 +1,5 @@
-import { contatoLeitorCriarService } from "../services/contatoLeitorCriarService.js";
-import { EmailEnviarService } from "../services/emailEnviarService.js";
+import { contatoLeitorCriarService } from "../../services/comunicacoes/contatoLeitorCriarService.js";
+import { EmailEnviarService } from "../../services/comunicacoes/emailEnviarService.js";
 
 const contatoLeitorCriarController = async (request, response) => {
     try {

@@ -10,7 +10,7 @@ import { adminMetricasController } from './controllers/admin/adminMetricasContro
 import { adminImportarNoticiaDeFontesController } from './controllers/admin/adminImportarNoticiaDeFontesController.js';
 import { adminLimparNoticiaDatabaseController } from './controllers/admin/adminLimparNoticiaDatabaseController.js';
 import { newsletterCriarController } from './controllers/newsletterCriarController.js';
-import { contatoLeitorCriarController } from './controllers/contatoLeitorCriarController.js';
+import { contatoLeitorCriarController } from './controllers/comunicacoes/contatoLeitorCriarController.js';
 import { noticiaCriarController } from './controllers/noticias/noticiaCriarController.js';
 import { noticiaPesquisarController } from './controllers/noticias/noticiaPesquisarController.js';
 import { noticiaBuscarPorIdController } from './controllers/noticias/noticiaBuscarController.js';

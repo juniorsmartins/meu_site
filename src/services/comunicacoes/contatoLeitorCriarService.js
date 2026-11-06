@@ -1,4 +1,4 @@
-import { ContatoLeitor } from "../models/contatoLeitorSchema.js";
+import { ContatoLeitor } from "../../models/contatoLeitorSchema.js";
 
 const contatoLeitorCriarService = async (contatoLeitor) => {
 
