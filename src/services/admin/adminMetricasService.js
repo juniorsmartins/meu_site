@@ -1,13 +1,13 @@
-import { Noticia } from '../../models/noticiaSchema.js';
 import { FONTES_RSS } from '../../configs/fontesRssConfig.js';
 import { LIMITE_MAXIMO_NOTICIAS_DATABASE } from '../../configs/constantsConfig.js';
+import { noticiaRepository } from '../../repositories/noticias/noticiaRepository.js';
 
 /**
  * Service responsável por calcular e consolidar as métricas do painel administrativo
  */
 const adminMetricasService = async () => {
-    // 1. Métricas do Banco de Dados (MongoDB)
-    const totalNoticias = await Noticia.countDocuments();
+    // MODIFICAÇÃO: Utiliza o repository para contar o total de notícias ao invés de acionar o model diretamente
+    const totalNoticias = await noticiaRepository.contarTodas();
     const limiteCota = LIMITE_MAXIMO_NOTICIAS_DATABASE;
     const excedente = Math.max(0, totalNoticias - limiteCota);
 
