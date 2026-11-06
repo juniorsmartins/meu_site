@@ -9,7 +9,7 @@ import { usuarioDeletarController } from './controllers/usuarios/usuarioDeletarC
 import { adminMetricasController } from './controllers/admin/adminMetricasController.js';
 import { adminImportarNoticiaDeFontesController } from './controllers/admin/adminImportarNoticiaDeFontesController.js';
 import { adminLimparNoticiaDatabaseController } from './controllers/admin/adminLimparNoticiaDatabaseController.js';
-import { newsletterCriarController } from './controllers/newsletterCriarController.js';
+import { newsletterCriarController } from './controllers/comunicacoes/newsletterCriarController.js';
 import { contatoLeitorCriarController } from './controllers/comunicacoes/contatoLeitorCriarController.js';
 import { noticiaCriarController } from './controllers/noticias/noticiaCriarController.js';
 import { noticiaPesquisarController } from './controllers/noticias/noticiaPesquisarController.js';
