@@ -23,5 +23,7 @@ async function obterDadosCapa() {
     return promessaDadosCapa;
 }
 
-export { obterDadosCapa };
+export { 
+    obterDadosCapa 
+};
 

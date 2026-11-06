@@ -1,4 +1,4 @@
-import { adminMetricasService } from '../services/adminMetricasService.js';
+import { adminMetricasService } from '../../services/admin/adminMetricasService.js';
 
 const adminMetricasController = async (request, response) => {
 

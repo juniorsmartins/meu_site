@@ -1,4 +1,4 @@
-import { Newsletter } from '../models/newsletterSchema.js';
+import { Newsletter } from '../../models/newsletterSchema.js';
 
 const newsletterCriarService = async (email) => {
 

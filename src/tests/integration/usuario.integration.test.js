@@ -443,8 +443,11 @@ describe('Testes de Integração - Usuários', () => {
             // Assert (verificação)
             expect(response.status).toBe(200);
             expect(response.body.sucesso).toBe(true);
-            expect(response.body.idDeletado).toEqual(String(usuarioEditor._id));
             expect(response.body.mensagem).toContain(MENSAGENS_SUCESSO.USUARIO.DELETADO);
+            expect(response.body.idDeletado).toEqual(String(usuarioEditor._id));
+
+            const usuarioDeletado = await Usuario.findById(usuarioEditor._id);
+            expect(usuarioDeletado).toBeNull();
         });
 
         it('admin deve deletar a si próprio com sucesso.', async () => {
@@ -616,10 +619,10 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.status).toBe(200);
             expect(response.body.sucesso).toBe(true);
             expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.BUSCADO);
-            expect(response.body.usuarioBuscado._id).toBe(usuarioEditor._id.toString());
-            expect(response.body.usuarioBuscado.nome).toBe(usuarioEditor.nome);
-            expect(response.body.usuarioBuscado.email).toBe(usuarioEditor.email);
-            expect(response.body.usuarioBuscado.funcao).toBe(usuarioEditor.funcao);
+            expect(response.body.usuario._id).toBe(usuarioEditor._id.toString());
+            expect(response.body.usuario.nome).toBe(usuarioEditor.nome);
+            expect(response.body.usuario.email).toBe(usuarioEditor.email);
+            expect(response.body.usuario.funcao).toBe(usuarioEditor.funcao);
         });
 
         it ('leitor deve buscar a si próprio com sucesso.', async () => {
@@ -643,10 +646,10 @@ describe('Testes de Integração - Usuários', () => {
             expect(response.status).toBe(200);
             expect(response.body.sucesso).toBe(true);
             expect(response.body.mensagem).toBe(MENSAGENS_SUCESSO.USUARIO.BUSCADO);
-            expect(response.body.usuarioBuscado._id).toBe(usuarioLeitor._id.toString());
-            expect(response.body.usuarioBuscado.nome).toBe(usuarioLeitor.nome);
-            expect(response.body.usuarioBuscado.email).toBe(usuarioLeitor.email);
-            expect(response.body.usuarioBuscado.funcao).toBe(usuarioLeitor.funcao);
+            expect(response.body.usuario._id).toBe(usuarioLeitor._id.toString());
+            expect(response.body.usuario.nome).toBe(usuarioLeitor.nome);
+            expect(response.body.usuario.email).toBe(usuarioLeitor.email);
+            expect(response.body.usuario.funcao).toBe(usuarioLeitor.funcao);
         });
 
         it ('deve lançar erro 400 por ID inválido.', async () => {

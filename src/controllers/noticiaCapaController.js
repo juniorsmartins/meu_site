@@ -1,8 +1,8 @@
 import { noticiaCapaService } from '../services/noticiaCapaService.js';
 
 const noticiaCapaController = async (request, response) => {
-    try {
 
+    try {
         // Responder com a estrutura completa da Home pronta para renderização no frontend.
         const dadosCapa = await noticiaCapaService();
         return response.status(200).json(dadosCapa);
@@ -15,5 +15,7 @@ const noticiaCapaController = async (request, response) => {
     }
 };
 
-export { noticiaCapaController };
+export { 
+    noticiaCapaController 
+};
 

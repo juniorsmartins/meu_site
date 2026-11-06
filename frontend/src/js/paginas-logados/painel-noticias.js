@@ -4,7 +4,7 @@ import {
     API_URL_ADMIN_LIMPAR_DATABASE, 
     API_URL_NOTICIAS, 
     OPCOES_EDITORIA,
-    LIMITE_NOTICIAS_POR_PAGINA_ADMIN 
+    LIMITE_NOTICIAS_POR_PAGINA 
 } from '../constantsConfig.js';
 
 // Armazena o HTML original das linhas em edição para permitir a ação de cancelar
@@ -213,13 +213,13 @@ async function carregarTabelaNoticias() {
     if (!corpoTabela) return;
 
     try {
-        const dadosPaginados = await buscarNoticiasPaginadas(paginaAtual, LIMITE_NOTICIAS_POR_PAGINA_ADMIN);
+        const dadosPaginados = await buscarNoticiasPaginadas(paginaAtual, LIMITE_NOTICIAS_POR_PAGINA);
 
         const listaNoticias = dadosPaginados.noticias || [];
         totalPaginas = dadosPaginados.totalPaginas || 1;
 
-        if (kpiTotal && dadosPaginados.totalNoticias !== undefined) {
-            kpiTotal.textContent = `${dadosPaginados.totalNoticias}`;
+        if (kpiTotal && dadosPaginados.totalRegistros !== undefined) {
+            kpiTotal.textContent = `${dadosPaginados.totalRegistros}`;
         }
 
         if (listaNoticias.length === 0) {
@@ -233,7 +233,7 @@ async function carregarTabelaNoticias() {
         }
 
         renderizarLinhasTabela(corpoTabela, listaNoticias);
-        atualizarControlesPaginacao(dadosPaginados.totalNoticias, dadosPaginados.paginaAtual, dadosPaginados.totalPaginas);
+        atualizarControlesPaginacao(dadosPaginados.totalRegistros, dadosPaginados.paginaAtual, dadosPaginados.totalPaginas);
 
     } catch (error) {
         console.error(`Erro ao carregar tabela de notícias:`, error);
@@ -254,7 +254,7 @@ async function buscarNoticiasPaginadas(pagina, limite) {
     return await response.json();
 }
 
-function atualizarControlesPaginacao(totalNoticias, pagina, totalDePaginas) {
+function atualizarControlesPaginacao(totalRegistros, pagina, totalDePaginas) {
     const btnAnterior = document.getElementById("btn-pagina-anterior");
     const btnProxima = document.getElementById("btn-pagina-proxima");
     const infoPaginacao = document.getElementById("info-paginacao");
@@ -263,7 +263,7 @@ function atualizarControlesPaginacao(totalNoticias, pagina, totalDePaginas) {
     if (btnProxima) btnProxima.disabled = pagina >= totalDePaginas;
 
     if (infoPaginacao) {
-        infoPaginacao.textContent = `Página ${pagina} de ${totalDePaginas} (${totalNoticias} notícias)`;
+        infoPaginacao.textContent = `Página ${pagina} de ${totalDePaginas} (${totalRegistros} notícias)`;
     }
 }
 
@@ -565,7 +565,7 @@ function resetarBotaoDelecao(idNoticia) {
 }
 
 async function carregarPainelMetricas() {
-    const metricaTotalNoticias = document.getElementById("kpi-total-noticias");
+    const metricaTotalRegistros = document.getElementById("kpi-total-noticias");
     const metricaLimiteNoticias = document.getElementById("kpi-limite-cota");
     const metricaTotalFeeds = document.getElementById("kpi-total-feeds");
     const elDetalhePortais = document.getElementById("kpi-detalhe-portais");
@@ -577,8 +577,8 @@ async function carregarPainelMetricas() {
         const dados = await resposta.json();
 
         if (dados.sucesso) {
-            if (metricaTotalNoticias) {
-                metricaTotalNoticias.textContent = `${dados.bancoDados.totalNoticias}`;
+            if (metricaTotalRegistros) {
+                metricaTotalRegistros.textContent = `${dados.bancoDados.totalRegistros}`;
             }
 
             if (metricaLimiteNoticias) {

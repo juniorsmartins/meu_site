@@ -45,10 +45,10 @@ const EDITORIAS = [
 ];
 
 // Limite máximo de notícias mantidas no banco de dados
-const LIMITE_MAXIMO_NOTICIAS_DATABASE = 120;
+const LIMITE_MAXIMO_NOTICIAS_DATABASE = 150;
 
 // Limite de notícias exibidas por página
-const LIMITE_NOTICIAS_POR_PAGINA_ADMIN = 15;
+const LIMITE_NOTICIAS_POR_PAGINA = 15;
 const LIMITE_USUARIOS_POR_PAGINA = 15;
 
 export { 
@@ -56,7 +56,7 @@ export {
     FUNCOES_USUARIO,
     EDITORIAS,
     LIMITE_MAXIMO_NOTICIAS_DATABASE, 
-    LIMITE_NOTICIAS_POR_PAGINA_ADMIN,
+    LIMITE_NOTICIAS_POR_PAGINA,
     LIMITE_USUARIOS_POR_PAGINA,
     REGRAS_USUARIO
 };

@@ -6,16 +6,16 @@ import { usuarioPesquisarController } from './controllers/usuarios/usuarioPesqui
 import { usuarioBuscarController } from './controllers/usuarios/usuarioBuscarController.js';
 import { usuarioAtualizarController } from './controllers/usuarios/usuarioAtualizarController.js';
 import { usuarioDeletarController } from './controllers/usuarios/usuarioDeletarController.js';
-import { adminMetricasController } from './controllers/adminMetricasController.js';
-import { manutencaoLimparDatabaseController } from './controllers/manutencaoLimparDatabaseController.js';
-import { automacaoImportarNoticiaController } from './controllers/noticias/automacaoImportarNoticiaController.js';
-import { newsletterCriarController } from './controllers/newsletterCriarController.js';
-import { contatoLeitorCriarController } from './controllers/contatoLeitorCriarController.js';
+import { adminMetricasController } from './controllers/admin/adminMetricasController.js';
+import { adminImportarNoticiaDeFontesController } from './controllers/admin/adminImportarNoticiaDeFontesController.js';
+import { adminLimparNoticiaDatabaseController } from './controllers/admin/adminLimparNoticiaDatabaseController.js';
+import { newsletterCriarController } from './controllers/comunicacoes/newsletterCriarController.js';
+import { contatoLeitorCriarController } from './controllers/comunicacoes/contatoLeitorCriarController.js';
 import { noticiaCriarController } from './controllers/noticias/noticiaCriarController.js';
-import { noticiaPesquisarController } from './controllers/noticiaPesquisarController.js';
-import { noticiaConsultarPorIdController } from './controllers/noticiaConsultarController.js';
+import { noticiaPesquisarController } from './controllers/noticias/noticiaPesquisarController.js';
+import { noticiaBuscarPorIdController } from './controllers/noticias/noticiaBuscarController.js';
 import { noticiaAtualizarController } from './controllers/noticias/noticiaAtualizarController.js';
-import { noticiaDeletarPorIdController } from './controllers/noticiaDeleteController.js';
+import { noticiaDeletarPorIdController } from './controllers/noticias/noticiaDeleteController.js';
 import { noticiaCapaController } from './controllers/noticiaCapaController.js';
 import { validarSchema } from './middlewares/validarSchemaMiddleware.js';
 import { usuarioCriarSchema, usuarioAtualizarSchema } from './validators/usuarioValidator.js';
@@ -40,8 +40,8 @@ usuarioRouter.delete("/:id", autenticarToken, usuarioDeletarController);
 
 // ADMIN - Rotas de administração do sistema
 adminRouter.get("/metricas", adminMetricasController);
-adminRouter.delete("/manutencao/limpar-database", manutencaoLimparDatabaseController);
-adminRouter.post("/automacao/importar-noticias", automacaoImportarNoticiaController);
+adminRouter.delete("/manutencao/limpar-database", adminLimparNoticiaDatabaseController);
+adminRouter.post("/automacao/importar-noticias", adminImportarNoticiaDeFontesController);
 
 // COMUNICAÇÃO - Rotas de comunicação (Newsletter e Contato do Leitor)
 comunicacaoRouter.post("/newsletter", newsletterCriarController);
@@ -51,7 +51,7 @@ comunicacaoRouter.post("/contato-leitor", contatoLeitorCriarController);
 noticiaRouter.get("/capa", noticiaCapaController);
 noticiaRouter.post("/", noticiaCriarController);
 noticiaRouter.get("/", noticiaPesquisarController);
-noticiaRouter.get("/:id", noticiaConsultarPorIdController);
+noticiaRouter.get("/:id", noticiaBuscarPorIdController);
 noticiaRouter.put("/:id", noticiaAtualizarController);
 noticiaRouter.delete("/:id", noticiaDeletarPorIdController);
 
