@@ -1,4 +1,4 @@
-import { newsletterCriarService } from '../services/newsletterCriarService.js';
+import { newsletterCriarService } from '../../services/comunicacoes/newsletterCriarService.js';
 
 const newsletterCriarController = async (request, response) => {
 

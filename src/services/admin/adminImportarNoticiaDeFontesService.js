@@ -1,5 +1,4 @@
 import Parser from 'rss-parser';
-import { Noticia } from '../../models/noticiaSchema.js';
 import { noticiaRepository } from '../../repositories/noticias/noticiaRepository.js';
 import { EDITORIAS } from '../../configs/constantsConfig.js';
 import { FONTES_RSS } from '../../configs/fontesRssConfig.js';
@@ -20,7 +19,7 @@ const aguardarMs = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 // ============================================================================
 
 // Aceitação do parâmetro 'portalFiltro' com valor padrão null
-const automacaoImportarNoticiaService = async (portalFiltro = null) => {
+const adminImportarNoticiaDeFontesService = async (portalFiltro = null) => {
 
     const relatorioFontes = [];
     let totalGeralImportadas = 0;
@@ -141,17 +140,14 @@ const processarFonteCustomizada = async (fonte) => {
 
 const salvarNoticiaInedita = async (dadosNoticia) => {
 
-    const noticiaExistente = await Noticia.findOne({
-        $or: [
-            { titulo: dadosNoticia.titulo },
-            { linkOriginal: dadosNoticia.linkOriginal }
-        ]
+    const noticiaExistente = await noticiaRepository.buscarDuplicata({
+        linkOriginal: dadosNoticia.linkOriginal,
+        titulo: dadosNoticia.titulo
     });
 
     if (noticiaExistente) return { salvo: false, motivo: "duplicada" };
 
-    const novaNoticia = new Noticia(dadosNoticia);
-    await novaNoticia.save();
+    await noticiaRepository.criar(dadosNoticia);
 
     return { salvo: true };
 };
@@ -177,6 +173,6 @@ const removerAcentosECaixa = (texto = "") => {
 };
 
 export {
-    automacaoImportarNoticiaService
+    adminImportarNoticiaDeFontesService
 };
 

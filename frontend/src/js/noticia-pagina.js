@@ -21,7 +21,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             throw new Error(`Erro ao carregar a notícia (Status: ${response.status})`);
         }
 
-        const noticia = await response.json();
+        const resultado = await response.json();
+        const noticia = resultado.noticia;
 
         // Preenche os dados básicos
         document.getElementById("noticia-chapeu").textContent = noticia.chapeu || "";

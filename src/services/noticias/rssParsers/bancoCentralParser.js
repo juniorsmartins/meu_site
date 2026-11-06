@@ -15,12 +15,19 @@ const formatarDataNoFuso = (data) => {
     return dataObj.toLocaleDateString("en-CA", { timeZone: FUSO_HORARIO });
 };
 
-/**
- * Verifica se a data do item cai no mesmo dia da data de referência.
- */
-const ehDoDia = (dataItem, dataReferencia) => {
+const ehDoDiaOuAnterior = (dataItem, dataReferencia) => {
     const diaItem = formatarDataNoFuso(dataItem);
-    return diaItem !== null && diaItem === formatarDataNoFuso(dataReferencia);
+    if (diaItem === null) return false;
+
+    const diaRefStr = formatarDataNoFuso(dataReferencia);
+
+    // Calcula a data correspondente ao dia anterior à referência
+    const dataAnteriorObj = new Date(dataReferencia);
+    dataAnteriorObj.setDate(dataAnteriorObj.getDate() - 1);
+    const diaAnteriorStr = formatarDataNoFuso(dataAnteriorObj);
+
+    // Retorna verdadeiro se o item pertencer a hoje ou a ontem
+    return diaItem === diaRefStr || diaItem === diaAnteriorStr;
 };
 
 /**
@@ -51,8 +58,8 @@ const extrairLinhaFina = (html = "", tituloFallback = "") => {
  */
 const normalizarNoticiaBancoCentral = (item, editoriaPadrao = "economia", dataReferencia = new Date()) => {
 
-    // FILTRO 1: só notícias do dia. O rss-parser converte o <updated> do Atom em isoDate/pubDate.
-    if (!ehDoDia(item.isoDate || item.pubDate, dataReferencia)) return null;
+    // FILTRO 1: só notícias do dia ou do dia anterior. O rss-parser converte o <updated> do Atom em isoDate/pubDate.
+    if (!ehDoDiaOuAnterior(item.isoDate || item.pubDate, dataReferencia)) return null;
 
     // 1. No Atom, o corpo da notícia vem em <content type="html">, que o rss-parser expõe como item.content
     let conteudoBruto = item.content || item['content:encoded'] || item.description || "";
@@ -89,7 +96,7 @@ const normalizarNoticiaBancoCentral = (item, editoriaPadrao = "economia", dataRe
         editoria: mapearEditoriaCompativel(editoriaPadrao),
         imagemUrl: imagemUrlExtraida,
         // O "alt" das imagens do BC é só o nome do arquivo, então não serve como legenda
-        imagemLegenda: "Imagem: Banco Central do Brasil",
+        imagemLegenda: "Imagem: Banco Central do Brasil - B",
         linkOriginal: item.link || item.guid || item.id || ""
     };
 };
