@@ -4,8 +4,8 @@ import mongoose from 'mongoose';
 import request from 'supertest';
 import { app } from '../../index.js'; // Importa a aplicação Express
 import jwt from 'jsonwebtoken';
-import { MENSAGENS_ERRO, MENSAGENS_SUCESSO } from '../../configs/mensagensConfig.js';
 import { noticiaRepository } from '../../repositories/noticias/noticiaRepository.js';
+import { LIMITE_MAXIMO_NOTICIAS_DATABASE } from '../../configs/constantsConfig.js';
 
 process.env.NODE_ENV = 'test';
 process.env.JWT_SECRET = process.env.JWT_SECRET || 'chave_secreta_para_testes_unitarios_e_integracao';
@@ -38,10 +38,28 @@ afterAll(async () => {
 describe('Testes de Integração - Métricas', () => {
 
     it('Deve retornar as métricas do sistema com sucesso.', async () => {
+        const novaNoticia = {
+                chapeu: 'Chapéu de Teste',
+                titulo: 'Título de Teste',
+                linhaFina: 'Linha Fina de Teste',
+                conteudo: 'Conteúdo de Teste',
+                autor: 'Autor de Teste',
+                imagemUrl: 'http://imagem.de.teste.com',
+                editoria: 'economia'
+            };
+
+        await noticiaRepository.criar(novaNoticia);
 
         const response = await request(app)
             .get('/v1/admin/metricas');
 
         expect(response.status).toBe(200);
+        expect(response.body.bancoDados.totalNoticias).toBe(1);
+        expect(response.body.bancoDados.limiteCota).toBe(LIMITE_MAXIMO_NOTICIAS_DATABASE);
+        expect(response.body.bancoDados).toHaveProperty('excedente');
+        expect(response.body.rss).toHaveProperty('totalFeeds');
+        expect(response.body.rss).toHaveProperty('totalPortais');
+        expect(response.body.rss).toHaveProperty('portais');
+        expect(response.body.sistema).toHaveProperty('status');
     });
 });
