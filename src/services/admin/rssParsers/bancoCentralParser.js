@@ -1,4 +1,4 @@
-import { mapearEditoriaCompativel } from '../editoriaHelper.js';
+import { mapearEditoriaCompativel } from './editoriaHelper.js';
 
 const URL_BASE_BCB = "https://www.bcb.gov.br";
 
@@ -96,7 +96,7 @@ const normalizarNoticiaBancoCentral = (item, editoriaPadrao = "economia", dataRe
         editoria: mapearEditoriaCompativel(editoriaPadrao),
         imagemUrl: imagemUrlExtraida,
         // O "alt" das imagens do BC é só o nome do arquivo, então não serve como legenda
-        imagemLegenda: "Imagem: Banco Central do Brasil - B",
+        imagemLegenda: "Imagem: Banco Central do Brasil - BCB",
         linkOriginal: item.link || item.guid || item.id || ""
     };
 };
@@ -104,4 +104,5 @@ const normalizarNoticiaBancoCentral = (item, editoriaPadrao = "economia", dataRe
 export {
     normalizarNoticiaBancoCentral
 };
+
 
