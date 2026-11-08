@@ -218,8 +218,8 @@ async function carregarTabelaNoticias() {
         const listaNoticias = dadosPaginados.noticias || [];
         totalPaginas = dadosPaginados.totalPaginas || 1;
 
-        if (kpiTotal && dadosPaginados.totalRegistros !== undefined) {
-            kpiTotal.textContent = `${dadosPaginados.totalRegistros}`;
+        if (kpiTotal && dadosPaginados.totalNoticias !== undefined) {
+            kpiTotal.textContent = `${dadosPaginados.totalNoticias}`;
         }
 
         if (listaNoticias.length === 0) {
@@ -233,7 +233,7 @@ async function carregarTabelaNoticias() {
         }
 
         renderizarLinhasTabela(corpoTabela, listaNoticias);
-        atualizarControlesPaginacao(dadosPaginados.totalRegistros, dadosPaginados.paginaAtual, dadosPaginados.totalPaginas);
+        atualizarControlesPaginacao(dadosPaginados.totalNoticias, dadosPaginados.paginaAtual, dadosPaginados.totalPaginas);
 
     } catch (error) {
         console.error(`Erro ao carregar tabela de notícias:`, error);
@@ -254,7 +254,7 @@ async function buscarNoticiasPaginadas(pagina, limite) {
     return await response.json();
 }
 
-function atualizarControlesPaginacao(totalRegistros, pagina, totalDePaginas) {
+function atualizarControlesPaginacao(totalNoticias, pagina, totalDePaginas) {
     const btnAnterior = document.getElementById("btn-pagina-anterior");
     const btnProxima = document.getElementById("btn-pagina-proxima");
     const infoPaginacao = document.getElementById("info-paginacao");
@@ -263,7 +263,7 @@ function atualizarControlesPaginacao(totalRegistros, pagina, totalDePaginas) {
     if (btnProxima) btnProxima.disabled = pagina >= totalDePaginas;
 
     if (infoPaginacao) {
-        infoPaginacao.textContent = `Página ${pagina} de ${totalDePaginas} (${totalRegistros} notícias)`;
+        infoPaginacao.textContent = `Página ${pagina} de ${totalDePaginas} (${totalNoticias} notícias)`;
     }
 }
 
@@ -565,7 +565,7 @@ function resetarBotaoDelecao(idNoticia) {
 }
 
 async function carregarPainelMetricas() {
-    const metricaTotalRegistros = document.getElementById("kpi-total-noticias");
+    const metricaTotalNoticias = document.getElementById("kpi-total-noticias");
     const metricaLimiteNoticias = document.getElementById("kpi-limite-cota");
     const metricaTotalFeeds = document.getElementById("kpi-total-feeds");
     const elDetalhePortais = document.getElementById("kpi-detalhe-portais");
@@ -577,8 +577,8 @@ async function carregarPainelMetricas() {
         const dados = await resposta.json();
 
         if (dados.sucesso) {
-            if (metricaTotalRegistros) {
-                metricaTotalRegistros.textContent = `${dados.bancoDados.totalRegistros}`;
+            if (metricaTotalNoticias) {
+                metricaTotalNoticias.textContent = `${dados.bancoDados.totalNoticias}`;
             }
 
             if (metricaLimiteNoticias) {
