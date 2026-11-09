@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gajeiro - Indicadores de Educação do Brasil</title>
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="../../css/index.css">
+    <link rel="stylesheet" href="../../css/header.css">
+    <link rel="stylesheet" href="../../css/paginas-indicadores/pagina-graficos-educacao.css">
+    <link rel="stylesheet" href="../../css/footer.css">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" href="../../img/favicon.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <!-- Scripts do Cabeçalho e Rodapé -->
+    <script type="module" src="../../js/header.js"></script>
+    <script type="module" src="../../js/paginas-indicadores/pagina-graficos-educacao.js"></script>
+    <script type="module" src="../../js/footer.js"></script>
+
+    <div id="header-container"></div>
+
+    <main id="container-estatisticas-publico">
+        <div class="estatisticas-wrapper">
+
+            <div class="estatisticas-header-titulo">
+                <h2>Indicadores de Educação do Brasil</h2>
+                <p>Acompanhe a qualidade do ensino, a escolaridade da população e o investimento em educação com base em dados oficiais do INEP, IBGE e World Bank.</p>
+            </div>
+
+            <div class="grid-graficos">
+
+                <!-- 1. IDEB (destaque - ocupa 2 colunas) -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>IDEB — Anos Iniciais vs Anos Finais</h3>
+                        <p>Índice de Desenvolvimento da Educação Básica (0 a 10) por segmento do Ensino Fundamental. Fonte: INEP (Censo Escolar + Saeb).</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoIdeb"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> O IDEB combina dois fatores: o aprendizado dos alunos (notas no Saeb) e a taxa de aprovação escolar. Quanto mais perto de 10, melhor a qualidade do ensino.</p>
+                        <p><strong>Por que é importante?</strong> É o principal termômetro da educação básica brasileira. A comparação entre anos iniciais e finais revela em qual etapa o aprendizado costuma se perder — historicamente, os anos finais apresentam desempenho inferior, indicando um "gargalo" que precisa de atenção.</p>
+                        <p class="tag-tendencia tendencia-boa">📈 Tendência ideal: Alta (rumo à meta de 6,0)</p>
+                    </div>
+                </div>
+
+                <!-- 2. Taxa de Analfabetismo -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>Taxa de Analfabetismo (15+ anos)</h3>
+                        <p>Percentual da população de 15 anos ou mais que não sabe ler e escrever. Fonte: IBGE (PNAD Contínua / SIDRA).</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoAnalfabetismo"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> A proporção de adultos que não conseguem ler nem escrever um bilhete simples.</p>
+                        <p><strong>Por que é importante?</strong> O analfabetismo limita o acesso ao mercado de trabalho formal, à cidadania plena e à informação. Sua queda indica sucesso de políticas de educação de jovens e adultos (EJA) e da universalização do Ensino Fundamental nas décadas anteriores.</p>
+                        <p class="tag-tendencia tendencia-boa">📉 Tendência ideal: Queda</p>
+                    </div>
+                </div>
+
+                <!-- 3. Média de Anos de Estudo -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>Média de Anos de Estudo</h3>
+                        <p>Escolaridade média da população adulta em anos completos de estudo. Fonte: IBGE (PNAD Contínua / SIDRA).</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoAnosEstudo"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> A quantidade média de anos que uma pessoa adulta passou estudando formalmente.</p>
+                        <p><strong>Por que é importante?</strong> Países com maior escolaridade média têm renda per capita mais alta, menor desigualdade e mais inovação. É a base do chamado "capital humano" — o principal ativo das economias modernas.</p>
+                        <p class="tag-tendencia tendencia-boa">📈 Tendência ideal: Alta</p>
+                    </div>
+                </div>
+
+                <!-- 4. Taxa de Frequência Líquida -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>Taxa de Frequência Líquida (6–14 anos)</h3>
+                        <p>Percentual de crianças na idade certa frequentando o Ensino Fundamental. Fonte: INEP (Censo Escolar).</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoFrequenciaLiquida"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> A proporção de crianças de 6 a 14 anos matriculadas na etapa correta para sua idade (sem distorção idade-série).</p>
+                        <p><strong>Por que é importante?</strong> Quando um aluno está atrasado na série, o risco de evasão aumenta drasticamente. A frequência líquida próxima de 100% indica que o sistema está conseguindo manter as crianças na trajetória adequada — pré-requisito para um aprendizado sólido.</p>
+                        <p class="tag-tendencia tendencia-boa">📈 Tendência ideal: Alta (próximo a 100%)</p>
+                    </div>
+                </div>
+
+                <!-- 5. Taxa de Aprovação no Ensino Fundamental -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>Taxa de Aprovação — Ensino Fundamental</h3>
+                        <p>Percentual de alunos aprovados ao fim do ano letivo. Fonte: INEP (Censo Escolar).</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoAprovacao"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> A proporção de alunos que concluem o ano letivo sem reprovação ou abandono.</p>
+                        <p><strong>Por que é importante?</strong> A aprovação é um dos dois componentes do IDEB. Taxas baixas indicam que o aluno não aprendeu o suficiente para avançar — o que gera distorção idade-série e alimenta a evasão futura. Mas atenção: aprovação alta acompanhada de aprendizado baixo pode indicar "aprovação automática" sem qualidade.</p>
+                        <p class="tag-tendencia tendencia-boa">📈 Tendência ideal: Alta com aprendizado</p>
+                    </div>
+                </div>
+
+                <!-- 6. Taxa de Conclusão do Ensino Médio -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>Taxa de Conclusão do Ensino Médio (19 anos)</h3>
+                        <p>Percentual de jovens de 19 anos que concluíram o Ensino Médio. Fonte: IBGE (PNAD Contínua) / INEP.</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoConclusaoMedio"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> A proporção de jovens que, aos 19 anos, já terminaram a última etapa da educação básica.</p>
+                        <p><strong>Por que é importante?</strong> O Ensino Médio é o "divisor de águas" para o acesso ao ensino superior e a empregos com melhor remuneração. A taxa de conclusão é um dos indicadores do Plano Nacional de Educação e mostra se o país está conseguindo reter os jovens na escola até o fim da educação básica.</p>
+                        <p class="tag-tendencia tendencia-boa">📈 Tendência ideal: Alta</p>
+                    </div>
+                </div>
+
+                <!-- 7. Investimento Público em Educação -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>Investimento Público em Educação (% do PIB)</h3>
+                        <p>Gasto público direto em educação como proporção do PIB. Fonte: INEP / World Bank (`SE.XPD.TOTL.GD.ZS`).</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoInvestimentoEducacao"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> Quanto o poder público investe em educação para cada 100 reais produzidos pela economia brasileira.</p>
+                        <p><strong>Por que o equilíbrio é ideal?</strong> Mais investimento tende a melhorar a qualidade, mas o volume por si só não basta: é preciso gastar bem. O Plano Nacional de Educação (PNE) estabeleceu meta de 10% do PIB, e o Brasil está em torno de 6%. Países da OCDE investem, em média, 5%. O ideal é um gasto sustentável, bem distribuído e com foco em resultados.</p>
+                        <p class="tag-tendencia tendencia-neutra">⚖️ Tendência ideal: Crescimento com qualidade</p>
+                    </div>
+                </div>
+
+                <!-- 8. Evasão Escolar no Ensino Médio -->
+                <div class="card-grafico">
+                    <div class="grafico-info">
+                        <h3>Evasão Escolar no Ensino Médio (%)</h3>
+                        <p>Percentual de alunos que abandonam a escola ao longo do ano letivo. Fonte: INEP (Censo Escolar).</p>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="graficoEvasaoMedio"></canvas>
+                    </div>
+                    <div class="grafico-explicacao">
+                        <p><strong>O que é:</strong> A proporção de alunos matriculados no Ensino Médio que deixam a escola antes do fim do ano letivo.</p>
+                        <p><strong>Por que é importante?</strong> A evasão é o "sangramento" do sistema educacional: cada aluno que sai sem concluir perde qualificação, renda futura e oportunidades. As causas costumam ser socioeconômicas (necessidade de trabalhar) e pedagógicas (desinteresse). Reduzir a evasão é condição para aumentar a conclusão do Ensino Médio.</p>
+                        <p class="tag-tendencia tendencia-boa">📉 Tendência ideal: Queda</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-container"></div>
+</body>
+</html>
+
