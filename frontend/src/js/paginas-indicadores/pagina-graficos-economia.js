@@ -1,4 +1,4 @@
-import { API_URL_ESTATISTICAS } from './constantsConfig.js';
+import { API_URL_ESTATISTICAS } from '../constantsConfig.js';
 
 document.addEventListener("DOMContentLoaded", async () => {
     
