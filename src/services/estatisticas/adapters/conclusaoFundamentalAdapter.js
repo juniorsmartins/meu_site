@@ -5,6 +5,7 @@ async function sincronizarConclusaoFundamental() {
     console.log(`[CONCLUSÃO FUNDAMENTAL ADAPTER] Iniciando sincronização via SIDRA (Tabela 4731)...`);
 
     try {
+        // v/4721 = Taxa de conclusão de nível de ensino
         const url = 'https://apisidra.ibge.gov.br/values/t/4731/n3/all/v/4721/p/all/c582/all/f/a';
         const res = await httpClient(url);
 
@@ -13,26 +14,18 @@ async function sincronizarConclusaoFundamental() {
             return { sucesso: false, slug: 'conclusao_fundamental' };
         }
 
-        const cabecalho = res.data[0];
         const linhas = res.data.slice(1);
 
-        const idxValor = Object.keys(cabecalho).findIndex(k => k === 'V');
-        const idxAno = Object.keys(cabecalho).findIndex(k => k === 'D3N');
-        const idxCategoria = Object.keys(cabecalho).findIndex(k => k === 'D4N');
-
-        // Log para diagnóstico: quantas linhas vieram e quais categorias existem
-        console.log(`[CONCLUSÃO] Total de linhas: ${linhas.length}`);
-        const categoriasUnicas = [...new Set(linhas.map(l => l[idxCategoria]))];
-        console.log('[CONCLUSÃO] Categorias disponíveis:', categoriasUnicas);
-
+        // Substituímos o findIndex por acesso direto às propriedades do JSON.
+        // Isso é mais seguro e evita o erro "undefined" nas categorias.
         const pares = linhas
             .filter(linha => {
-                const cat = String(linha[idxCategoria] || '').toLowerCase();
+                const cat = String(linha['D4N'] || '').toLowerCase();
                 return cat.includes('ensino fundamental') && cat.includes('17 a 19');
             })
             .map(linha => ({
-                ano: linha[idxAno],
-                valor: Number(linha[idxValor])
+                ano: linha['D3N'],
+                valor: Number(linha['V'])
             }))
             .filter(p => p.ano && !isNaN(p.valor) && p.valor > 0)
             .sort((a, b) => Number(a.ano) - Number(b.ano));
