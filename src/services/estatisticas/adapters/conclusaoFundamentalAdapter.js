@@ -5,8 +5,8 @@ async function sincronizarConclusaoFundamental() {
     console.log(`[CONCLUSÃO FUNDAMENTAL ADAPTER] Iniciando sincronização via SIDRA (Tabela 4731)...`);
 
     try {
-        // v/4721 = Taxa de conclusão de nível de ensino
-        const url = 'https://apisidra.ibge.gov.br/values/t/4731/n3/all/v/4721/p/all/c582/all/f/a';
+        // c582/59996 = Filtra EXATAMENTE "Ensino fundamental - Pessoas de 17 a 19 anos"
+        const url = 'https://apisidra.ibge.gov.br/values/t/4731/n3/all/v/4721/p/all/c582/59996/f/a';
         const res = await httpClient(url);
 
         if (!res.ok || !Array.isArray(res.data) || res.data.length < 2) {
@@ -15,14 +15,8 @@ async function sincronizarConclusaoFundamental() {
         }
 
         const linhas = res.data.slice(1);
-
-        // Substituímos o findIndex por acesso direto às propriedades do JSON.
-        // Isso é mais seguro e evita o erro "undefined" nas categorias.
+        
         const pares = linhas
-            .filter(linha => {
-                const cat = String(linha['D4N'] || '').toLowerCase();
-                return cat.includes('ensino fundamental') && cat.includes('17 a 19');
-            })
             .map(linha => ({
                 ano: linha['D3N'],
                 valor: Number(linha['V'])
@@ -31,7 +25,7 @@ async function sincronizarConclusaoFundamental() {
             .sort((a, b) => Number(a.ano) - Number(b.ano));
 
         if (pares.length === 0) {
-            console.warn('[CONCLUSÃO FUNDAMENTAL ADAPTER] Nenhum dado válido após filtro.');
+            console.warn('[CONCLUSÃO FUNDAMENTAL ADAPTER] Nenhum dado válido encontrado.');
             return { sucesso: false, slug: 'conclusao_fundamental' };
         }
 
