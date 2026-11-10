@@ -1,7 +1,7 @@
-import { normalizarNoticiaAgenciaBrasil } from '../services/noticias/rssParsers/agenciaBrasilParser.js';
-import { normalizarNoticiaAgenciaCamara } from '../services/noticias/rssParsers/agenciaCamaraParser.js';
-import { buscarEParsearTse } from '../services/noticias/rssParsers/tseParser.js'; 
-import { normalizarNoticiaBancoCentral } from '../services/noticias/rssParsers/bancoCentralParser.js';
+import { normalizarNoticiaAgenciaBrasil } from '../services/admin/rssParsers/agenciaBrasilParser.js';
+import { normalizarNoticiaAgenciaCamara } from '../services/admin/rssParsers/agenciaCamaraParser.js';
+import { buscarEParsearTse } from '../services/admin/rssParsers/tseParser.js'; 
+import { normalizarNoticiaBancoCentral } from '../services/admin/rssParsers/bancoCentralParser.js';
 
 /**
  * Registro de todas as fontes de RSS com suas URLs e funções de normalização específicas.

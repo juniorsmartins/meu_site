@@ -1,4 +1,4 @@
-import { mapearEditoriaCompativel, extrairTextoCategoria } from '../editoriaHelper.js';
+import { mapearEditoriaCompativel, extrairTextoCategoria } from './editoriaHelper.js';
 
 /**
  * Transforma o item bruto do XML da Agência Brasil para o Schema do MongoDB.
@@ -61,5 +61,4 @@ const normalizarNoticiaAgenciaBrasil = (item, editoriaPadrao = "geral") => {
 export { 
     normalizarNoticiaAgenciaBrasil 
 };
-
 

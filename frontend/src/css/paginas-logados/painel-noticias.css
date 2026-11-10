@@ -456,3 +456,76 @@ table td input[type="checkbox"] {
     background-color: #E2E8F0;
     margin: 0.3rem 0;
 }
+
+/* ==========================================
+   TOAST / BANNER DE ALERTA FLUTUANTE
+   ========================================== */
+#toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.toast-notificacao {
+    background-color: #FFFFFF;
+    color: var(--blue-900);
+    padding: 0.85rem 1.25rem;
+    border-radius: 6px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    border-left: 4px solid var(--blue-700);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 280px;
+    max-width: 400px;
+    animation: slideInRight 0.3s ease, fadeOut 0.3s ease 3.7s forwards;
+}
+
+.toast-sucesso {
+    border-left-color: #27AE60;
+}
+
+.toast-erro {
+    border-left-color: #E74C3C;
+}
+
+.toast-notificacao i {
+    font-size: 1.1rem;
+}
+
+.toast-sucesso i {
+    color: #27AE60;
+}
+
+.toast-erro i {
+    color: #E74C3C;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+

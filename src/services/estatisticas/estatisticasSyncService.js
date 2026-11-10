@@ -27,6 +27,9 @@ import { sincronizarInternet } from './adapters/internetAdapter.js';
 import { sincronizarBandaLarga } from './adapters/bandaLargaAdapter.js';
 import { sincronizarPassageirosAereos } from './adapters/passageirosAereosAdapter.js';
 import { sincronizarFreteAereo } from './adapters/freteAereoAdapter.js';
+import { sincronizarInvestimentoEducacao } from './adapters/investimentoEducacaoAdapter.js';
+import { sincronizarDocentesSuperior } from './adapters/docentesSuperiorAdapter.js';
+import { sincronizarConclusaoFundamental } from './adapters/conclusaoFundamentalAdapter.js';
 
 const estatisticasSyncService = async (usuarioAutenticado, fonteFiltro = null) => {
 
@@ -64,7 +67,11 @@ const estatisticasSyncService = async (usuarioAutenticado, fonteFiltro = null) =
             { nome: 'Internet', fn: sincronizarInternet }, 
             { nome: 'Banda Larga', fn: sincronizarBandaLarga },
             { nome: 'Passageiros Aéreos', fn: sincronizarPassageirosAereos }, 
-            { nome: 'Frete Aéreo', fn: sincronizarFreteAereo }
+            { nome: 'Frete Aéreo', fn: sincronizarFreteAereo },
+            // Educação
+            { nome: 'Investimento Educação', fn: sincronizarInvestimentoEducacao },
+            { nome: 'Docentes Superior', fn: sincronizarDocentesSuperior },
+            { nome: 'Conclusão Fundamental', fn: sincronizarConclusaoFundamental }
         ];
 
         // Filtra os adaptadores com base na escolha do frontend

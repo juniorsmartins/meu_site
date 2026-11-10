@@ -1,4 +1,4 @@
-import { mapearEditoriaCompativel } from '../editoriaHelper.js';
+import { mapearEditoriaCompativel } from './editoriaHelper.js';
 
 /**
  * Módulo Específico para o TSE (Trata a estrutura RDF/RSS 1.0)
@@ -124,4 +124,5 @@ function decodificarEntidadesHTML(str = "") {
 export { 
     buscarEParsearTse 
 };
+
 

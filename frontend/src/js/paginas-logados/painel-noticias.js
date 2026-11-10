@@ -125,7 +125,7 @@ async function executarImportacaoRss(portal = "TODOS") {
     } catch (error) {
         console.error("Erro ao importar notícias:", error);
         atualizarCardStatus("Erro!", "Falha ao conectar com o serviço RSS", "Falhou");
-        alert("Não foi possível importar as notícias.");
+        mostrarToast("Não foi possível importar as notícias do portal selecionado.", "erro"); 
 
     } finally {
         btn.disabled = false;
@@ -181,7 +181,7 @@ async function executarLimpezaBanco() {
     } catch (error) {
         console.error("Erro ao limpar banco:", error);
         atualizarCardStatus("Erro!", "Falha ao executar limpeza no banco", "Falhou");
-        alert("Não foi possível executar a limpeza do banco.");
+        mostrarToast("Não foi possível executar a limpeza do banco.", "erro");
 
     } finally {
         resetarBotaoLimpeza(btn);
@@ -218,8 +218,8 @@ async function carregarTabelaNoticias() {
         const listaNoticias = dadosPaginados.noticias || [];
         totalPaginas = dadosPaginados.totalPaginas || 1;
 
-        if (kpiTotal && dadosPaginados.totalRegistros !== undefined) {
-            kpiTotal.textContent = `${dadosPaginados.totalRegistros}`;
+        if (kpiTotal && dadosPaginados.totalNoticias !== undefined) {
+            kpiTotal.textContent = `${dadosPaginados.totalNoticias}`;
         }
 
         if (listaNoticias.length === 0) {
@@ -233,7 +233,7 @@ async function carregarTabelaNoticias() {
         }
 
         renderizarLinhasTabela(corpoTabela, listaNoticias);
-        atualizarControlesPaginacao(dadosPaginados.totalRegistros, dadosPaginados.paginaAtual, dadosPaginados.totalPaginas);
+        atualizarControlesPaginacao(dadosPaginados.totalNoticias, dadosPaginados.paginaAtual, dadosPaginados.totalPaginas);
 
     } catch (error) {
         console.error(`Erro ao carregar tabela de notícias:`, error);
@@ -254,7 +254,7 @@ async function buscarNoticiasPaginadas(pagina, limite) {
     return await response.json();
 }
 
-function atualizarControlesPaginacao(totalRegistros, pagina, totalDePaginas) {
+function atualizarControlesPaginacao(totalNoticias, pagina, totalDePaginas) {
     const btnAnterior = document.getElementById("btn-pagina-anterior");
     const btnProxima = document.getElementById("btn-pagina-proxima");
     const infoPaginacao = document.getElementById("info-paginacao");
@@ -263,7 +263,7 @@ function atualizarControlesPaginacao(totalRegistros, pagina, totalDePaginas) {
     if (btnProxima) btnProxima.disabled = pagina >= totalDePaginas;
 
     if (infoPaginacao) {
-        infoPaginacao.textContent = `Página ${pagina} de ${totalDePaginas} (${totalRegistros} notícias)`;
+        infoPaginacao.textContent = `Página ${pagina} de ${totalDePaginas} (${totalNoticias} notícias)`;
     }
 }
 
@@ -377,7 +377,7 @@ async function alternarStatusDestaque(idNoticia, tipoAcao) {
 
     } catch (error) {
         console.error("Erro ao alterar destaque da notícia:", error);
-        alert("Não foi possível atualizar o destaque da notícia.");
+        mostrarToast("Não foi possível atualizar o destaque da notícia.", "erro");
     }
 }
 
@@ -495,7 +495,7 @@ async function salvarEdicao(idNoticia) {
 
     } catch (error) {
         console.error("Erro ao salvar notícia:", error);
-        alert("Não foi possível salvar as alterações da notícia.");
+        mostrarToast("Não foi possível salvar as alterações da notícia.", "erro");
     }
 }
 
@@ -543,7 +543,7 @@ async function deletarNoticia(idNoticia) {
 
     } catch (error) {
         console.error("Erro ao deletar notícia:", error);
-        alert("Não foi possível excluir a notícia.");
+        mostrarToast("Não foi possível excluir a notícia.", "erro");
         resetarBotaoDelecao(idNoticia);
     }
 }
@@ -565,7 +565,7 @@ function resetarBotaoDelecao(idNoticia) {
 }
 
 async function carregarPainelMetricas() {
-    const metricaTotalRegistros = document.getElementById("kpi-total-noticias");
+    const metricaTotalNoticias = document.getElementById("kpi-total-noticias");
     const metricaLimiteNoticias = document.getElementById("kpi-limite-cota");
     const metricaTotalFeeds = document.getElementById("kpi-total-feeds");
     const elDetalhePortais = document.getElementById("kpi-detalhe-portais");
@@ -577,8 +577,8 @@ async function carregarPainelMetricas() {
         const dados = await resposta.json();
 
         if (dados.sucesso) {
-            if (metricaTotalRegistros) {
-                metricaTotalRegistros.textContent = `${dados.bancoDados.totalRegistros}`;
+            if (metricaTotalNoticias) {
+                metricaTotalNoticias.textContent = `${dados.bancoDados.totalNoticias}`;
             }
 
             if (metricaLimiteNoticias) {
@@ -597,5 +597,37 @@ async function carregarPainelMetricas() {
     } catch (error) {
         console.error("Erro ao carregar /api/v1/admin/metricas:", error);
     }
+}
+
+/**
+ * Exibe um toast flutuante no canto da tela.
+ * @param {string} mensagem - Texto exibido no alerta.
+ * @param {'sucesso' | 'erro'} tipo - Tipo do alerta para definir a cor e ícone.
+ */
+function mostrarToast(mensagem, tipo = "sucesso") {
+    let container = document.getElementById("toast-container");
+    
+    // Cria o container global de toasts se ele ainda não existir na página
+    if (!container) {
+        container = document.createElement("div");
+        container.id = "toast-container";
+        document.body.appendChild(container);
+    }
+
+    const toast = document.createElement("div");
+    const iconeClass = tipo === "sucesso" ? "bi-check-circle-fill" : "bi-exclamation-triangle-fill";
+    
+    toast.className = `toast-notificacao toast-${tipo}`;
+    toast.innerHTML = `
+        <i class="bi ${iconeClass}"></i>
+        <span>${mensagem}</span>
+    `;
+
+    container.appendChild(toast);
+
+    // Remove o elemento do DOM automaticamente após 4 segundos (tempo da animação)
+    setTimeout(() => {
+        toast.remove();
+    }, 4000);
 }
 

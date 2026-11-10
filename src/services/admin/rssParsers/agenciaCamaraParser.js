@@ -1,4 +1,4 @@
-import { mapearEditoriaCompativel } from '../editoriaHelper.js';
+import { mapearEditoriaCompativel } from './editoriaHelper.js';
 
 /**
  * Normalizador exclusivo para os feeds RSS da Agência Câmara dos Deputados
@@ -68,4 +68,5 @@ const normalizarNoticiaAgenciaCamara = (item, editoriaPadrao = "geral") => {
 export {
     normalizarNoticiaAgenciaCamara
 };
+
 
