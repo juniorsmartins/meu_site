@@ -7,6 +7,9 @@ export const estatisticasService = async () => {
     try {
         const indicadores = await indicadorRepository.findAll();
 
+        // ==========================================================
+        // ECONÔMICO
+        // ==========================================================
         let pibData = { anos: [], valores: [] };
         let desempregoData = { anos: [], valores: [] };
         let ipcaData = { anos: [], valores: [] };
@@ -19,25 +22,57 @@ export const estatisticasService = async () => {
         let inadimplenciaData = { anos: [], valores: [] };
         let balancaComercialData = { anos: [], valores: [] };
         let vendasVarejoData = { anos: [], valores: [] };
+
+        // ==========================================================
+        // DEMOGRÁFICO
+        // ==========================================================
         let populacaoTotalData = { anos: [], valores: [] };
         let crescimentoPopulacionalData = { anos: [], valores: [] };
         let idhData = { anos: [], valores: [] };
-        let idhiData = { anos: [], valores: [] }; 
+        let idhiData = { anos: [], valores: [] };
         let mortalidadeMaternaData = { anos: [], valores: [] };
         let expectativaVidaHomensData = { anos: [], valores: [] };
         let expectativaVidaMulheresData = { anos: [], valores: [] };
         let fecundidadeData = { anos: [], valores: [] };
-        let urbanizacaoData = { anos: [], valores: [] }; 
+        let urbanizacaoData = { anos: [], valores: [] };
         let mortalidadeInfantilData = { anos: [], valores: [] };
-        let envelhecimentoData = { anos: [], valores: [] }; 
-        let saneamentoAguaData = { anos: [], valores: [] }; 
+        let envelhecimentoData = { anos: [], valores: [] };
+
+        // ==========================================================
+        // INFRAESTRUTURA
+        // ==========================================================
+        let saneamentoAguaData = { anos: [], valores: [] };
         let saneamentoEsgotoData = { anos: [], valores: [] };
-        let energiaAcessoData = { anos: [], valores: [] }; 
+        let energiaAcessoData = { anos: [], valores: [] };
         let energiaPerdasData = { anos: [], valores: [] };
-        let internetData = { anos: [], valores: [] }; 
+        let internetData = { anos: [], valores: [] };
         let bandaLargaData = { anos: [], valores: [] };
-        let passageiroAereoData = { anos: [], valores: [] }; 
+        let passageiroAereoData = { anos: [], valores: [] };
         let freteAereoData = { anos: [], valores: [] };
+
+        // ==========================================================
+        // EDUCAÇÃO (16 blocos)
+        // 6 com adapter pronto + 10 como placeholders até novos adapters
+        // ==========================================================
+        let pisaData = { anos: [], leitura: [], matematica: [], ciencias: [] };
+        let pisaGastoData = { paises: [], gasto: [], desempenho: [], destaque: 'Brasil', anos: [] };
+        let conclusaoFundamentalData = { anos: [], valores: [] };
+
+        // let idebData = { anos: [], anos_iniciais: [], anos_finais: [] };
+        // let idebMedioData = { anos: [], valores: [] };
+        // let proficienciaSaebData = { anos: [], portugues: [], matematica: [] };
+        // let insuficienteSaebData = { anos: [], portugues: [], matematica: [] };
+        // let frequenciaLiquidaData = { anos: [], valores: [] };
+        // let aprovacaoFundamentalData = { anos: [], valores: [] };
+        // let conclusaoMedioData = { anos: [], valores: [] };
+        // let evasaoMedioData = { anos: [], valores: [] };
+        // let analfabetismoData = { anos: [], valores: [] };
+        // let anosEstudoData = { anos: [], valores: [] };
+        // let docentesSuperiorData = { anos: [], valores: [] };
+        // let investimentoEducacaoData = { anos: [], valores: [] };
+        // let investimentoAlunoData = { anos: [], valores: [] };
+        
+        
 
         indicadores.forEach(ind => {
             if (ind.slug === 'pib') {
@@ -184,6 +219,28 @@ export const estatisticasService = async () => {
             } else if (ind.slug === 'frete_aereo') { // <-- NOVO
                 freteAereoData = { anos: ind.anos || [], valores: ind.valores || [] };
             }
+
+            // ----------------------------------------------------------
+            // EDUCAÇÃO
+            // ----------------------------------------------------------
+            else if (ind.slug === 'pisa') {
+                pisaData = {
+                    anos: ind.anos || [],
+                    leitura: ind.leitura || [],
+                    matematica: ind.matematica || [],
+                    ciencias: ind.ciencias || []
+                };
+            } else if (ind.slug === 'pisa_gasto_desempenho') {
+                pisaGastoData = {
+                    paises: ind.paises || [],
+                    gasto: ind.gasto || [],
+                    desempenho: ind.desempenho || [],
+                    destaque: ind.destaque || 'Brasil',
+                    anos: ind.anos || []
+                };
+            } else if (ind.slug === 'conclusao_fundamental') {
+                conclusaoFundamentalData = { anos: ind.anos || [], valores: ind.valores || [] };
+            }
         });
 
         // Junta os dados para o Frontend no formato que o Chart.js espera
@@ -229,7 +286,27 @@ export const estatisticasService = async () => {
             internet: internetData, 
             banda_larga: bandaLargaData,
             passageiros_aereos: passageiroAereoData,
-            frete_aereo: freteAereoData
+            frete_aereo: freteAereoData,
+
+            // Educação (16 blocos)
+            pisa: pisaData,
+            pisa_gasto_desempenho: pisaGastoData,
+            conclusao_medio: conclusaoMedioData,
+
+            // ideb: idebData,
+            // ideb_medio: idebMedioData,
+            // proficiencia_saeb: proficienciaSaebData,
+            // insuficiente_saeb: insuficienteSaebData,
+            // frequencia_liquida: frequenciaLiquidaData,
+            // aprovacao_fundamental: aprovacaoFundamentalData,
+            // conclusao_fundamental: conclusaoFundamentalData,
+            // evasao_medio: evasaoMedioData,
+            // analfabetismo: analfabetismoData,
+            // anos_estudo: anosEstudoData,
+            // docentes_superior: docentesSuperiorData,
+            // investimento_educacao: investimentoEducacaoData,
+            // investimento_aluno: investimentoAlunoData
+            
         };
 
     } catch (error) {
