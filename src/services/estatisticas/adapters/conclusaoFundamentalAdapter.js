@@ -5,8 +5,9 @@ async function sincronizarConclusaoFundamental() {
     console.log(`[CONCLUSÃO FUNDAMENTAL ADAPTER] Iniciando sincronização via SIDRA (Tabela 4731)...`);
 
     try {
+        // n1/all = Brasil (evita duplicar os dados com todos os estados)
         // c582/59996 = Filtra EXATAMENTE "Ensino fundamental - Pessoas de 17 a 19 anos"
-        const url = 'https://apisidra.ibge.gov.br/values/t/4731/n3/all/v/4721/p/all/c582/59996/f/a';
+        const url = 'https://apisidra.ibge.gov.br/values/t/4731/n1/all/v/4721/p/all/c582/59996/f/a';
         const res = await httpClient(url);
 
         if (!res.ok || !Array.isArray(res.data) || res.data.length < 2) {
