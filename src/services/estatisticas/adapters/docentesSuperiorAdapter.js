@@ -5,10 +5,10 @@ async function sincronizarDocentesSuperior() {
     console.log(`[DOCENTES SUPERIOR ADAPTER] Iniciando sincronização via SIDRA (Tabela 6676)...`);
 
     try {
-        // v/9609 = proporção de docentes com formação adequada
-        // n3/all = Brasil (nível 3)
-        // p/all = todos os períodos disponíveis
-        const url = 'https://apisidra.ibge.gov.br/values/t/6676/n3/all/v/9609/p/all/h/y/f/a/d/m';
+        // v/9607 = Percentual de docentes com formação adequada (%)
+        // c1205/0 = Total (Sexo)
+        // c1206/0 = Total (Etapa de ensino)
+        const url = 'https://apisidra.ibge.gov.br/values/t/6676/n3/all/v/9607/p/all/c1205/0/c1206/0/f/a';
         const res = await httpClient(url);
 
         if (!res.ok || !Array.isArray(res.data) || res.data.length < 2) {
@@ -19,16 +19,17 @@ async function sincronizarDocentesSuperior() {
         const cabecalho = res.data[0];
         const linhas = res.data.slice(1);
 
-        // Identifica os índices das colunas de ano e valor no cabeçalho
-        const idxAno = Object.values(cabecalho).findIndex(v => v === 'Ano');
-        const idxValor = Object.values(cabecalho).findIndex(v => v === 'Valor');
+        // Usa Object.keys para achar o índice exato, evitando conflitos com strings parecidas
+        const idxAno = Object.keys(cabecalho).findIndex(k => k === 'D3N');
+        const idxValor = Object.keys(cabecalho).findIndex(k => k === 'V');
 
         const pares = linhas
             .map(linha => ({
                 ano: linha[idxAno],
                 valor: Number(linha[idxValor])
             }))
-            .filter(p => p.ano && !isNaN(p.valor))
+            // Filtra nulos, textos e valores inválidos
+            .filter(p => p.ano && !isNaN(p.valor) && p.valor > 0)
             .sort((a, b) => Number(a.ano) - Number(b.ano));
 
         if (pares.length === 0) {

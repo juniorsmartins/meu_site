@@ -5,10 +5,8 @@ async function sincronizarConclusaoFundamental() {
     console.log(`[CONCLUSÃO FUNDAMENTAL ADAPTER] Iniciando sincronização via SIDRA (Tabela 4731)...`);
 
     try {
-        // v/4722 = Taxa de conclusão de nível de ensino
-        // c582/all = todas as categorias de "Grupos de idade e nível de ensino"
-        // f/a = formato JSON com cabeçalho na primeira linha
-        const url = 'https://apisidra.ibge.gov.br/values/t/4731/n3/all/v/4722/p/all/c582/all/f/a';
+        // v/4721 = Taxa de conclusão (o 4722 era Coeficiente de Variação)
+        const url = 'https://apisidra.ibge.gov.br/values/t/4731/n3/all/v/4721/p/all/c582/all/f/a';
         const res = await httpClient(url);
 
         if (!res.ok || !Array.isArray(res.data) || res.data.length < 2) {
@@ -19,12 +17,10 @@ async function sincronizarConclusaoFundamental() {
         const cabecalho = res.data[0];
         const linhas = res.data.slice(1);
 
-        // Mapeia dinamicamente os índices das colunas de interesse
-        const idxValor = Object.values(cabecalho).findIndex(v => v === 'Valor');
-        const idxAno = Object.values(cabecalho).findIndex(v => v === 'Ano');
-        
-        // AQUI ESTAVA O ERRO: A categoria está na coluna D4N, não na D3N (Variável)
-        const idxCategoria = Object.values(cabecalho).findIndex(v => v === 'Grupos de idade e nível de ensino');
+        // Mapeia dinamicamente os índices usando as chaves do objeto
+        const idxValor = Object.keys(cabecalho).findIndex(k => k === 'V');
+        const idxAno = Object.keys(cabecalho).findIndex(k => k === 'D3N');
+        const idxCategoria = Object.keys(cabecalho).findIndex(k => k === 'D4N');
 
         // Filtra pela categoria exata "Ensino fundamental - Pessoas de 17 a 19 anos"
         const pares = linhas
@@ -46,7 +42,7 @@ async function sincronizarConclusaoFundamental() {
 
         await indicadorRepository.upsert('conclusao_fundamental', {
             titulo: 'Taxa de Conclusão — Ensino Fundamental (17–19 anos)',
-            fonte: 'IBGE - PNAD Contínua / SIDRA (Tabela 4731, variável 4722)',
+            fonte: 'IBGE - PNAD Contínua / SIDRA (Tabela 4731)',
             unidade: '%',
             anos: pares.map(p => p.ano),
             valores: pares.map(p => p.valor)
