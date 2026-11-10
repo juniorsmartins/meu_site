@@ -7,7 +7,7 @@ import { usuarioBuscarController } from './controllers/usuarios/usuarioBuscarCon
 import { usuarioAtualizarController } from './controllers/usuarios/usuarioAtualizarController.js';
 import { usuarioDeletarController } from './controllers/usuarios/usuarioDeletarController.js';
 import { adminMetricasController } from './controllers/admin/adminMetricasController.js';
-import { adminImportarNoticiaDeFontesController } from './controllers/admin/adminImportarNoticiaDeFontesController.js';
+import { adminImportarNoticiaDeFontesController } from './controllers/admin/adminImportarNoticiaFontesController.js';
 import { adminLimparNoticiaDatabaseController } from './controllers/admin/adminLimparNoticiaDatabaseController.js';
 import { newsletterCriarController } from './controllers/comunicacoes/newsletterCriarController.js';
 import { contatoLeitorCriarController } from './controllers/comunicacoes/contatoLeitorCriarController.js';
@@ -68,5 +68,4 @@ export {
     noticiaRouter,
     estatisticasRouter
 };
-
 

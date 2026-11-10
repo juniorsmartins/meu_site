@@ -1,4 +1,4 @@
-import { adminImportarNoticiaDeFontesService } from "../../services/admin/adminImportarNoticiaDeFontesService.js";
+import { adminImportarNoticiaDeFontesService } from "../../services/admin/adminImportarNoticiaFontesService.js";
 
 const adminImportarNoticiaDeFontesController = async (request, response) => {
 
