@@ -7,7 +7,8 @@ async function sincronizarConclusaoFundamental() {
     try {
         // v/4722 = Taxa de conclusão de nível de ensino
         // c582/all = todas as categorias de "Grupos de idade e nível de ensino"
-        const url = 'https://apisidra.ibge.gov.br/values/t/4731/n3/all/v/4722/p/all/c582/all/h/y/f/a/d/m';
+        // f/a = formato JSON com cabeçalho na primeira linha
+        const url = 'https://apisidra.ibge.gov.br/values/t/4731/n3/all/v/4722/p/all/c582/all/f/a';
         const res = await httpClient(url);
 
         if (!res.ok || !Array.isArray(res.data) || res.data.length < 2) {
@@ -20,10 +21,12 @@ async function sincronizarConclusaoFundamental() {
 
         // Mapeia dinamicamente os índices das colunas de interesse
         const idxValor = Object.values(cabecalho).findIndex(v => v === 'Valor');
-        const idxCategoria = Object.values(cabecalho).findIndex(v => v === 'Grupos de idade e nível de ensino');
         const idxAno = Object.values(cabecalho).findIndex(v => v === 'Ano');
+        
+        // AQUI ESTAVA O ERRO: A categoria está na coluna D4N, não na D3N (Variável)
+        const idxCategoria = Object.values(cabecalho).findIndex(v => v === 'Grupos de idade e nível de ensino');
 
-        // Filtra a categoria "Ensino fundamental - Pessoas de 17 a 19 anos"
+        // Filtra pela categoria exata "Ensino fundamental - Pessoas de 17 a 19 anos"
         const pares = linhas
             .filter(linha => {
                 const nomeCategoria = String(linha[idxCategoria] || '').toLowerCase();
