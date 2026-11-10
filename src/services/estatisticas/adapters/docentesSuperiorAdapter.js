@@ -5,29 +5,53 @@ async function sincronizarDocentesSuperior() {
     console.log(`[DOCENTES SUPERIOR ADAPTER] Iniciando sincronização via SIDRA (Tabela 6676)...`);
 
     try {
-        // n1/all = Brasil
-        // v/9610 = Proporção de docentes com formação adequada (já vem em %)
-        const url = 'https://apisidra.ibge.gov.br/values/t/6676/n1/all/v/9610/p/all/f/a';
-        const res = await httpClient(url);
+        // Puxamos os valores absolutos no nível Brasil (n1) para calcular a proporção
+        const urlAdequados = 'https://apisidra.ibge.gov.br/values/t/6676/n1/all/v/9609/p/all/f/a';
+        const urlTotal = 'https://apisidra.ibge.gov.br/values/t/6676/n1/all/v/9608/p/all/f/a';
 
-        if (!res.ok || !Array.isArray(res.data) || res.data.length < 2) {
+        const [resAdequados, resTotal] = await Promise.all([
+            httpClient(urlAdequados),
+            httpClient(urlTotal)
+        ]);
+
+        if (!resAdequados.ok || !resTotal.ok || !Array.isArray(resAdequados.data) || !Array.isArray(resTotal.data)) {
             console.warn('[DOCENTES SUPERIOR ADAPTER] Falha ao obter dados.');
             return { sucesso: false, slug: 'docentes_superior' };
         }
 
-        const linhas = res.data.slice(1);
-        
-        // Na tabela 6676 usando n1, o ano fica na coluna D2N
-        const pares = linhas
-            .map(linha => ({
-                ano: linha['D2N'],
-                valor: Number(linha['V'])
-            }))
-            .filter(p => p.ano && !isNaN(p.valor) && p.valor > 0)
-            .sort((a, b) => Number(a.ano) - Number(b.ano));
+        // Função auxiliar para transformar o array do SIDRA em um mapa { "2007": 12345, ... }
+        const extrairPorAno = (dados) => {
+            const mapa = {};
+            const linhas = dados.slice(1); // Pula o cabeçalho
+            linhas.forEach(linha => {
+                const ano = linha['D3N'];
+                const valor = Number(linha['V']);
+                if (ano && !isNaN(valor)) {
+                    mapa[ano] = valor;
+                }
+            });
+            return mapa;
+        };
+
+        const adequadosMap = extrairPorAno(resAdequados.data);
+        const totalMap = extrairPorAno(resTotal.data);
+
+        const pares = [];
+        Object.keys(totalMap).forEach(ano => {
+            const total = totalMap[ano];
+            const adequados = adequadosMap[ano];
+
+            // Calcula a proporção apenas se o total for maior que zero
+            if (total > 0 && adequados !== undefined) {
+                const proporcao = (adequados / total) * 100;
+                pares.push({ ano, valor: Number(proporcao.toFixed(2)) });
+            }
+        });
+
+        pares.sort((a, b) => Number(a.ano) - Number(b.ano));
 
         if (pares.length === 0) {
-            console.warn('[DOCENTES SUPERIOR ADAPTER] Nenhum dado válido encontrado.');
+            console.warn('[DOCENTES SUPERIOR ADAPTER] Nenhum dado válido calculado.');
             return { sucesso: false, slug: 'docentes_superior' };
         }
 
