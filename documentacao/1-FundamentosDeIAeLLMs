@@ -2,7 +2,7 @@
 
 1. IA (Inteligência Artificial): são algoritmos que aprendem com dados. São sistemas que se comportam de forma inteligente e aprendem com humanos.
     - Machine Learning (ML): aprendizado de máquina. Subárea da IA focada em algoritmos que identificam padrões e fazem previsões a partir de dados. (obs: substitui os if-else de regras. Nova forma de fazê-los)
-    - Deep Learning: camada mais profunda na análise dos dados.
+        - Deep Learning: especialização dentro do ML, que utiliza redes neurais profundas para realizar tarefas mais complexas, como reconhecimento de imagem, voz ou movimentos. A ideia central é que, ao empilhar várias camadas de "neurônios artificiais", a rede se torna capaz de aprender padrões cada vez mais abstratos. 
 2. Redes Neurais
     - Tensores (vetores - arrays de arrays): representa tudo em números (0 a 1). Normaliza dados em números.
     - One Hot Take (uma das opções)
