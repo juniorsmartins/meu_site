@@ -99,3 +99,9 @@ npx vitest run -t "soma dois"   # roda testes cujo nome contém o texto
 npx vitest --ui                 # interface web (precisa de @vitest/ui)
 
 
+
+
+
+
+
+
