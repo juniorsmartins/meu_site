@@ -1,7 +1,7 @@
 # meu_site
 
 
-Endereço: https://meu-site-ashy-omega.vercel.app/ 
+Endereço temporário: https://meu-site-ashy-omega.vercel.app/ 
 
 
 
@@ -31,7 +31,7 @@ Endereço: https://meu-site-ashy-omega.vercel.app/
 
 
 -> Comandos para instalar biblibotecas
-npm i express
+npm install express
 npm install mongoose 
 npm install cors 
 npm install nodemailer
@@ -41,11 +41,12 @@ npm install bcryptjs
 npm install zod
 npm install --save-dev eslint
 npm install --save-dev @faker-js/faker 
-npm i -D nodemon
+npm install -D nodemon
 npm install -D vitest
 npm install -D supertest 
 npm install -D mongodb-memory-server
 npm install undici
+npm install -D typescript @types/node@24.12.0
 
 
 -> Comandos para acionar
@@ -53,6 +54,16 @@ npm start
 npm run start
 npm run dev
 
+
+npm test              # roda tudo uma vez e termina (ideal para CI)
+npm run test:watch    # modo watch: reroda ao salvar (ideal para TDD)
+npm run test:coverage # gera relatório de cobertura
+
+npx vitest                      # modo watch
+npx vitest run                  # roda uma vez
+npx vitest run tests/soma.test.js   # roda um arquivo específico
+npx vitest run -t "soma dois"   # roda testes cujo nome contém o texto
+npx vitest --ui                 # interface web (precisa de @vitest/ui)
 
 
 
@@ -88,20 +99,14 @@ SECURITY (login)
 
 
 
-npm test              # roda tudo uma vez e termina (ideal para CI)
-npm run test:watch    # modo watch: reroda ao salvar (ideal para TDD)
-npm run test:coverage # gera relatório de cobertura
-
-npx vitest                      # modo watch
-npx vitest run                  # roda uma vez
-npx vitest run tests/soma.test.js   # roda um arquivo específico
-npx vitest run -t "soma dois"   # roda testes cujo nome contém o texto
-npx vitest --ui                 # interface web (precisa de @vitest/ui)
 
 
 
 
-
+# REACT
+React é uma biblioteca Javascript para construção de interfaces interativas e dinâmicas, com uma abordagem declarativa.
+- DOM (Document Object Model ou Modelo de Documento por Objetos): é um modelo de representação de um documento HTML em estrutura em formato de árvore.
+- DOM Virtual: o React trabalho com uma Virtual DOM, que é uma representação em memória da DOM real, permitindo que o React calcule de maneira eficiente as mudanças necessárias na interface do usuário. Quando o estado de um componente muda, o React cria um novo Virtual Dom e o compara com o anterior. Ele então aplica as mudanças necessárias à DOM real de maneira otimizada. 
 
 
 
