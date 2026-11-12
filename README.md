@@ -54,7 +54,6 @@ npm start
 npm run start
 npm run dev
 
-
 npm test              # roda tudo uma vez e termina (ideal para CI)
 npm run test:watch    # modo watch: reroda ao salvar (ideal para TDD)
 npm run test:coverage # gera relatório de cobertura
@@ -96,17 +95,6 @@ SECURITY (login)
 - Passo 7: consumir rota no front-end.
 
 
-
-
-
-
-
-
-
-# REACT
-React é uma biblioteca Javascript para construção de interfaces interativas e dinâmicas, com uma abordagem declarativa.
-- DOM (Document Object Model ou Modelo de Documento por Objetos): é um modelo de representação de um documento HTML em estrutura em formato de árvore.
-- DOM Virtual: o React trabalho com uma Virtual DOM, que é uma representação em memória da DOM real, permitindo que o React calcule de maneira eficiente as mudanças necessárias na interface do usuário. Quando o estado de um componente muda, o React cria um novo Virtual Dom e o compara com o anterior. Ele então aplica as mudanças necessárias à DOM real de maneira otimizada. 
 
 
 
